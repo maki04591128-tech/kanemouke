@@ -75,7 +75,7 @@
     return {
       payoffMonth: payoffMonth,
       totalInterest: totalInterest,
-      finalAsset: invest,
+      finalAsset: invest - balance,
       series: series,
     };
   }
@@ -103,7 +103,7 @@
       }
     }
 
-    return { totalInterest: totalInterest, finalAsset: invest, series: series };
+    return { totalInterest: totalInterest, finalAsset: invest - balance, series: series };
   }
 
   function render() {

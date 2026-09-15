@@ -3,6 +3,8 @@
 
   var TOTAL_LIFETIME_CAP = 18000000; // 生涯投資枠（総枠）
   var GROWTH_LIFETIME_CAP = 12000000; // うち成長投資枠の上限
+  var TSUMITATE_MONTHLY_CAP = 100000; // 年間120万円を月額に均した上限
+  var GROWTH_MONTHLY_CAP = 200000; // 年間240万円を月額に均した上限
   var TAX_RATE = 0.20315; // 課税口座の運用益にかかる税率（所得税・復興特別所得税・住民税の合計）
 
   var els = {
@@ -98,10 +100,13 @@
   }
 
   function render() {
-    var tsumitateMonthly = Math.max(0, Number(els.tsumitate.value) || 0);
-    var growthMonthly = Math.max(0, Number(els.growth.value) || 0);
+    var tsumitateMonthly = Math.min(TSUMITATE_MONTHLY_CAP, Math.max(0, Number(els.tsumitate.value) || 0));
+    var growthMonthly = Math.min(GROWTH_MONTHLY_CAP, Math.max(0, Number(els.growth.value) || 0));
     var ratePct = Number(els.rate.value);
     var years = Number(els.years.value);
+
+    els.tsumitate.value = tsumitateMonthly;
+    els.growth.value = growthMonthly;
 
     els.rateOut.textContent = ratePct.toFixed(1) + " %";
     els.yearsOut.textContent = years + " 年";
