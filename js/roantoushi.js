@@ -70,6 +70,9 @@
         series.push({ year: m / 12, netWorth: invest - balance });
       }
     }
+    if (months % 12 !== 0 || series.length === 0) {
+      series.push({ year: months / 12, netWorth: invest - balance });
+    }
     if (!payoffReached) payoffMonth = months;
 
     return {
@@ -101,6 +104,9 @@
       if (m % 12 === 0) {
         series.push({ year: m / 12, netWorth: invest - balance });
       }
+    }
+    if (months % 12 !== 0 || series.length === 0) {
+      series.push({ year: months / 12, netWorth: invest - balance });
     }
 
     return { totalInterest: totalInterest, finalNetWorth: invest - balance, series: series };

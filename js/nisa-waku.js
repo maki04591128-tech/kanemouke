@@ -130,6 +130,16 @@
         });
       }
     }
+    if (months % 12 !== 0 || series.length === 0) {
+      var taxableGainLast = Math.max(0, taxableValue - taxablePrincipal);
+      var taxableNetLast = taxableValue - taxableGainLast * TAX_RATE;
+      series.push({
+        year: months / 12,
+        nisaValue: nisaValue,
+        taxableNet: taxableNetLast,
+        total: nisaValue + taxableNetLast,
+      });
+    }
 
     var taxableGain = Math.max(0, taxableValue - taxablePrincipal);
     var tax = taxableGain * TAX_RATE;
