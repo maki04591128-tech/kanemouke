@@ -1,27 +1,20 @@
 (function () {
   "use strict";
 
-  var PRESETS = {
-    custom: null,
-    allPublic: 10000000,
-    uniPrivateBunkei: 13000000,
-    uniPrivateRikei: 14500000,
-    allPrivate: 25000000,
-  };
-
   var els = {
-    preset: document.getElementById("preset"),
+    course: document.getElementById("course"),
     target: document.getElementById("target"),
+    childAge: document.getElementById("childAge"),
     initial: document.getElementById("initial"),
     rate: document.getElementById("rate"),
-    years: document.getElementById("years"),
+    childAgeOut: document.getElementById("childAgeOut"),
     rateOut: document.getElementById("rateOut"),
-    yearsOut: document.getElementById("yearsOut"),
     monthly: document.getElementById("result-monthly"),
     principal: document.getElementById("result-principal"),
     profit: document.getElementById("result-profit"),
   };
 
+  var GOAL_AGE = 18;
   var chart = null;
 
   function yen(n) {
@@ -33,14 +26,15 @@
     return man.toLocaleString("ja-JP", { maximumFractionDigits: 1 }) + " 万円";
   }
 
-  // Solve required monthly contribution (start-of-month, monthly compounding)
-  // so that initial + contributions grow to `target` after `years` years.
+  // Same annuity-solving approach as the 必要積立額 (hitsuyou-gaku) tool:
+  // start-of-month contribution, then one month of compounding.
   function requiredMonthly(target, initial, annualRatePct, years) {
     var r = annualRatePct / 100 / 12;
     var n = Math.round(years * 12);
+    if (n <= 0) return Math.max(0, target - initial);
+
     var fvInitial = initial * Math.pow(1 + r, n);
     var remaining = target - fvInitial;
-
     if (remaining <= 0) return 0;
 
     if (r === 0) {
@@ -68,21 +62,22 @@
     return yearly;
   }
 
-  function applyPreset() {
-    var amount = PRESETS[els.preset.value];
-    if (amount) {
-      els.target.value = amount;
-    }
+  function onCourseChange() {
+    if (els.course.value === "custom") return;
+    els.target.value = els.course.value;
+    render();
   }
 
   function render() {
-    var target = Math.max(0, Number(els.target.value) || 0);
+    var targetMan = Math.max(0, Number(els.target.value) || 0);
+    var target = targetMan * 10000;
+    var childAge = Number(els.childAge.value);
+    var years = Math.max(1, GOAL_AGE - childAge);
     var initial = Math.max(0, Number(els.initial.value) || 0);
     var rate = Number(els.rate.value);
-    var years = Number(els.years.value);
 
+    els.childAgeOut.textContent = childAge + " 歳";
     els.rateOut.textContent = rate.toFixed(1) + " %";
-    els.yearsOut.textContent = years + " 年";
 
     var monthly = requiredMonthly(target, initial, rate, years);
     var yearly = simulateSeries(initial, monthly, rate, years);
@@ -93,7 +88,7 @@
     els.principal.textContent = yen(finalPoint.principal);
     els.profit.textContent = (profit >= 0 ? "+" : "") + manYen(profit);
 
-    var labels = yearly.map(function (d) { return d.year + "年"; });
+    var labels = yearly.map(function (d) { return (childAge + d.year) + "歳"; });
     var principalData = yearly.map(function (d) { return Math.round(d.principal); });
     var balanceData = yearly.map(function (d) { return Math.round(d.balance); });
 
@@ -147,17 +142,8 @@
     }
   }
 
-  els.preset.addEventListener("change", function () {
-    applyPreset();
-    render();
-  });
-
-  els.target.addEventListener("input", function () {
-    els.preset.value = "custom";
-    render();
-  });
-
-  [els.initial, els.rate, els.years].forEach(function (el) {
+  els.course.addEventListener("change", onCourseChange);
+  [els.target, els.childAge, els.initial, els.rate].forEach(function (el) {
     el.addEventListener("input", render);
   });
 

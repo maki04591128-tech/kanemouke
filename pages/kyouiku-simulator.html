@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>教育資金シミュレーター | ふやすノート</title>
+<meta name="description" content="子どもの進路（公立・私立）に応じた教育費の目安から、大学卒業までに必要な毎月の積立額を無料で試算。現在の年齢・貯蓄額・想定利回りを入力するだけで計画が立てられます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>教育資金シミュレーター</h1>
+    <p>進路（公立・私立）に応じた教育費の目安と、お子さまの現在の年齢から、大学卒業までに毎月いくら積み立てればよいかを試算します。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="course">進路パターン（教育費の目安）</label>
+        <select id="course">
+          <option value="820">オール公立（幼稚園〜大学）目安 820万円</option>
+          <option value="980" selected>高校まで公立＋大学は私立文系　目安 980万円</option>
+          <option value="1120">高校まで公立＋大学は私立理系　目安 1,120万円</option>
+          <option value="2300">幼稚園〜大学まですべて私立　目安 2,300万円</option>
+          <option value="custom">カスタム（下の欄で金額を直接入力）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="target">教育費の目標総額 <span class="unit">万円</span></label>
+        <input type="number" id="target" value="980" min="0" step="10">
+      </div>
+
+      <div class="field">
+        <label for="childAge">お子さまの現在の年齢 <span id="childAgeOut" class="unit">3 歳</span></label>
+        <input type="range" id="childAge" value="3" min="0" max="17" step="1">
+      </div>
+
+      <div class="field">
+        <label for="initial">すでに準備できている金額 <span class="unit">円</span></label>
+        <input type="number" id="initial" value="500000" min="0" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="rate">想定利回り（年率） <span id="rateOut" class="unit">1.0 %</span></label>
+        <input type="range" id="rate" value="1" min="0" max="8" step="0.1">
+      </div>
+    </div>
+
+    <div>
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">大学卒業までに必要な毎月積立額</div>
+          <div class="value" id="result-monthly">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">積立元本（累計・現在の貯蓄含む）</div>
+          <div class="value" id="result-principal">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">運用益（想定）</div>
+          <div class="value" id="result-profit">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
+          <span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>教育資金づくりの口座を検討する</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で新NISA（つみたて投資枠）口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>学資保険・こども保険の資料請求をする</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>進路別の教育費の目安（幼稚園〜大学の合計）</h2>
+    <p>公的な学習費調査などで参照されることの多い数値をもとにした、幼稚園から大学卒業までの目安総額です。実際の費用は自治体・学校・下宿の有無などによって大きく変動するため、あくまで計画の出発点としてご活用ください。</p>
+    <dl>
+      <div class="faq-item">
+        <dt>オール公立（幼稚園〜大学まで国公立）</dt>
+        <dd>目安 約820万円</dd>
+      </div>
+      <div class="faq-item">
+        <dt>高校まで公立＋大学は私立文系</dt>
+        <dd>目安 約980万円</dd>
+      </div>
+      <div class="faq-item">
+        <dt>高校まで公立＋大学は私立理系</dt>
+        <dd>目安 約1,120万円</dd>
+      </div>
+      <div class="faq-item">
+        <dt>幼稚園〜大学まですべて私立</dt>
+        <dd>目安 約2,300万円（文系・理系や下宿の有無でさらに増減）</dd>
+      </div>
+    </dl>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>いつまでに準備すればいいですか？</dt>
+        <dd>大学入学時（18歳）に一時的な出費が集中しやすいため、多くのご家庭では子どもが18歳になるまでを目安に準備しています。本シミュレーターも18歳到達時点を目標時期として計算しています。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>想定利回りは何%にすればいいですか？</dt>
+        <dd>教育資金は使う時期が決まっているため、老後資金などに比べて低め・安全志向の利回り（0〜3%程度）で試算する方が多い傾向にあります。学資保険や預金中心なら0%、新NISA等での運用も組み合わせるなら1〜3%程度を目安にしてみてください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの教育費目安・試算結果はいずれも参考値であり、実際に必要な金額や将来の運用成果・元本を保証するものではありません。教育費は進学先・地域・下宿の有無等により大きく異なります。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../js/kyouiku.js"></script>
+</body>
+</html>
