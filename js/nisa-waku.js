@@ -29,6 +29,14 @@
     return man.toLocaleString("ja-JP", { maximumFractionDigits: 1 }) + " 万円";
   }
 
+  function formatFillPeriod(months) {
+    var years = Math.floor(months / 12);
+    var restMonths = months % 12;
+    if (restMonths === 0) return years + " 年";
+    if (years === 0) return restMonths + "ヶ月";
+    return years + " 年 " + restMonths + "ヶ月";
+  }
+
   function simulate(tsumitateMonthly, growthMonthly, ratePct, years) {
     var monthlyRate = ratePct / 100 / 12;
     var months = Math.round(years * 12);
@@ -127,9 +135,7 @@
     var result = simulate(tsumitateMonthly, growthMonthly, ratePct, years);
 
     if (result.fillMonth) {
-      var y = Math.floor(result.fillMonth / 12);
-      var mo = result.fillMonth % 12;
-      els.fillPeriod.textContent = mo === 0 ? y + " 年" : y + " 年 " + mo + "ヶ月";
+      els.fillPeriod.textContent = formatFillPeriod(result.fillMonth);
     } else {
       els.fillPeriod.textContent = "この期間内は使い切りません";
     }

@@ -75,7 +75,7 @@
     return {
       payoffMonth: payoffMonth,
       totalInterest: totalInterest,
-      finalAsset: invest,
+      finalNetWorth: invest - balance,
       series: series,
     };
   }
@@ -103,7 +103,7 @@
       }
     }
 
-    return { totalInterest: totalInterest, finalAsset: invest, series: series };
+    return { totalInterest: totalInterest, finalNetWorth: invest - balance, series: series };
   }
 
   function render() {
@@ -128,15 +128,15 @@
 
     var interestSaved = invest.totalInterest - prepay.totalInterest;
     var monthsShortened = months - prepay.payoffMonth;
-    var assetDiff = prepay.finalAsset - invest.finalAsset;
+    var assetDiff = prepay.finalNetWorth - invest.finalNetWorth;
 
     els.interestSaved.textContent = manYen(interestSaved);
     els.payoffShorten.textContent =
       monthsShortened > 0
         ? (monthsShortened / 12).toLocaleString("ja-JP", { maximumFractionDigits: 1 }) + " 年 短縮"
         : "短縮なし";
-    els.assetPrepay.textContent = manYen(prepay.finalAsset);
-    els.assetInvest.textContent = manYen(invest.finalAsset);
+    els.assetPrepay.textContent = manYen(prepay.finalNetWorth);
+    els.assetInvest.textContent = manYen(invest.finalNetWorth);
 
     if (surplus <= 0) {
       els.verdict.textContent = "毎月の金額を入力すると比較結果が表示されます";
