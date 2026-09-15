@@ -34,7 +34,7 @@
 - `privacy.html` … プライバシーポリシー（Cookie・広告配信・アフィリエイトの説明）
 - `disclosure.html` … アフィリエイト・広告表記について
 - `css/style.css` … 共通デザイン
-- `js/tsumitate.js`, `js/hitsuyou.js`, `js/ideco.js`, `js/kyouiku.js`, `js/loan-vs-invest.js`, `js/roantoushi.js`, `js/taishokukin.js`, `js/nisa-waku.js` … 各計算ロジック（Chart.js で推移グラフ表示）
+- `js/tsumitate.js`, `js/hitsuyou.js`, `js/ideco.js`, `js/kyouiku.js`, `js/loan-vs-invest.js`, `js/loan-vs-invest-monthly.js`, `js/roantoushi.js`, `js/taishokukin.js`, `js/nisa-waku.js` … 各計算ロジック（Chart.js で推移グラフ表示）
 - `sitemap.xml`, `robots.txt` … 検索エンジン向け（`sitemap.xml` 内のURLは仮の `https://example.com/` のため、本番ドメイン確定後に置換が必要）
 
 ## 収益化の実装状況

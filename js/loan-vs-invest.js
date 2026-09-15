@@ -1,21 +1,24 @@
 (function () {
   "use strict";
 
+  var CAPITAL_GAINS_TAX_RATE = 0.20315;
+
   var els = {
     balance: document.getElementById("balance"),
     loanRate: document.getElementById("loanRate"),
-    loanRateOut: document.getElementById("loanRateOut"),
-    years: document.getElementById("years"),
-    yearsOut: document.getElementById("yearsOut"),
-    extra: document.getElementById("extra"),
+    termYears: document.getElementById("termYears"),
+    lump: document.getElementById("lump"),
     investRate: document.getElementById("investRate"),
+    loanRateOut: document.getElementById("loanRateOut"),
+    termYearsOut: document.getElementById("termYearsOut"),
     investRateOut: document.getElementById("investRateOut"),
-    payoffMonths: document.getElementById("result-payoff"),
+    monthsSaved: document.getElementById("result-months-saved"),
     interestSaved: document.getElementById("result-interest-saved"),
-    assetA: document.getElementById("result-asset-a"),
-    assetB: document.getElementById("result-asset-b"),
-    winner: document.getElementById("result-winner"),
-    winnerDiff: document.getElementById("winner-diff"),
+    investProfit: document.getElementById("result-invest-profit"),
+    detailInterestSaved: document.getElementById("detail-interest-saved"),
+    detailInvestProfit: document.getElementById("detail-invest-profit"),
+    detailInvestProfitAfterTax: document.getElementById("detail-invest-profit-after-tax"),
+    conclusion: document.getElementById("conclusion"),
   };
 
   var chart = null;
@@ -29,132 +32,129 @@
     return man.toLocaleString("ja-JP", { maximumFractionDigits: 1 }) + " 万円";
   }
 
-  // Standard fixed-payment amortization formula.
-  function monthlyPayment(principal, annualRatePct, months) {
-    var r = annualRatePct / 100 / 12;
-    if (r === 0) return principal / months;
-    return (principal * r) / (1 - Math.pow(1 + r, -months));
+  function monthsToText(months) {
+    var y = Math.floor(months / 12);
+    var m = months % 12;
+    if (y === 0) return m + "ヶ月";
+    if (m === 0) return y + "年";
+    return y + "年" + m + "ヶ月";
   }
 
-  // Simulate paying down the loan with a fixed monthly payment plus a
-  // fixed extra amount toward principal every month, until it is paid off.
-  function simulatePrepayment(principal, annualRatePct, payment, extra) {
+  function monthlyPayment(balance, annualRatePct, months) {
     var r = annualRatePct / 100 / 12;
-    var balance = principal;
-    var totalInterest = 0;
-    var month = 0;
-    var maxMonths = 100 * 12;
-
-    while (balance > 0 && month < maxMonths) {
-      month++;
-      var interest = balance * r;
-      var principalPaid = payment - interest + extra;
-      if (principalPaid > balance) principalPaid = balance;
-      balance -= principalPaid;
-      totalInterest += interest;
-    }
-
-    return { months: month, totalInterest: totalInterest };
+    if (r === 0) return balance / months;
+    return (balance * r) / (1 - Math.pow(1 + r, -months));
   }
 
-  // Contribute `monthly` at the start of every month, then apply one
-  // month of growth (same convention as the other simulators on this site).
-  function futureValue(monthly, annualRatePct, months) {
+  // Simulates a fixed-payment amortization over `totalMonths`. Once the
+  // balance reaches zero the loan is treated as paid off (no further
+  // interest accrues), so the yearly series stays flat after payoff --
+  // this lets the shortened (prepaid) schedule be compared year-by-year
+  // against the original, full-length schedule.
+  function simulate(balance, annualRatePct, payment, totalMonths) {
     var r = annualRatePct / 100 / 12;
-    var balance = 0;
-    var series = [];
-    for (var m = 1; m <= months; m++) {
-      balance += monthly;
-      balance *= 1 + r;
-      series.push(balance);
+    var cumInterest = 0;
+    var payoffMonth = null;
+    var yearly = [];
+
+    for (var m = 1; m <= totalMonths; m++) {
+      if (balance > 0) {
+        var interest = balance * r;
+        var principalPaid = payment - interest;
+        if (principalPaid > balance) principalPaid = balance;
+        balance -= principalPaid;
+        cumInterest += interest;
+        if (balance <= 0.5) {
+          balance = 0;
+          if (payoffMonth === null) payoffMonth = m;
+        }
+      }
+      if (m % 12 === 0) {
+        yearly.push({ month: m, cumInterest: cumInterest });
+      }
     }
-    return { balance: balance, series: series };
+
+    return {
+      payoffMonth: payoffMonth === null ? totalMonths : payoffMonth,
+      totalInterest: cumInterest,
+      yearly: yearly,
+    };
   }
 
   function render() {
-    var principal = Math.max(0, Number(els.balance.value) || 0);
+    var balance = Math.max(0, Number(els.balance.value) || 0);
     var loanRate = Number(els.loanRate.value);
-    var years = Number(els.years.value);
-    var extra = Math.max(0, Number(els.extra.value) || 0);
+    var termYears = Number(els.termYears.value);
+    var lump = Math.min(Math.max(0, Number(els.lump.value) || 0), balance);
     var investRate = Number(els.investRate.value);
-    var totalMonths = Math.round(years * 12);
 
     els.loanRateOut.textContent = loanRate.toFixed(2) + " %";
-    els.yearsOut.textContent = years + " 年";
+    els.termYearsOut.textContent = termYears + " 年";
     els.investRateOut.textContent = investRate.toFixed(1) + " %";
 
-    if (principal <= 0 || totalMonths <= 0) return;
+    var termMonths = termYears * 12;
+    var payment = monthlyPayment(balance, loanRate, termMonths);
 
-    var payment = monthlyPayment(principal, loanRate, totalMonths);
-    var baselineTotalInterest = payment * totalMonths - principal;
+    var original = simulate(balance, loanRate, payment, termMonths);
+    var originalYearly = original.yearly;
 
-    // Scenario A: pay `extra` toward the loan every month, then once it is
-    // paid off, invest the freed-up payment + extra for the rest of the
-    // original loan term. Both scenarios end with the loan fully paid off
-    // at `totalMonths`, so the comparison at that point is investable assets only.
-    var prepay = simulatePrepayment(principal, loanRate, payment, extra);
-    var payoffMonths = Math.min(prepay.months, totalMonths);
-    var remainingMonths = totalMonths - payoffMonths;
-    var postPayoffInvestment = remainingMonths > 0
-      ? futureValue(payment + extra, investRate, remainingMonths)
-      : { balance: 0, series: [] };
-    var assetA = postPayoffInvestment.balance;
+    var withPrepay = simulate(balance - lump, loanRate, payment, termMonths);
+    var withPrepayYearly = withPrepay.yearly;
 
-    // Scenario B: keep the original repayment schedule (no prepayment) and
-    // invest `extra` every month for the full original loan term instead.
-    var investB = futureValue(extra, investRate, totalMonths);
-    var assetB = investB.balance;
+    var monthsSaved = termMonths - withPrepay.payoffMonth;
+    var interestSaved = original.totalInterest - withPrepay.totalInterest;
 
-    var interestSaved = baselineTotalInterest - prepay.totalInterest;
-    var diff = assetA - assetB;
+    var investMonthlyRate = investRate / 100 / 12;
+    var investFV = lump * Math.pow(1 + investMonthlyRate, termMonths);
+    var investProfit = investFV - lump;
+    var investProfitAfterTax = investProfit * (1 - CAPITAL_GAINS_TAX_RATE);
 
-    els.payoffMonths.textContent = (payoffMonths / 12).toLocaleString("ja-JP", { maximumFractionDigits: 1 }) + " 年" + (payoffMonths < totalMonths ? "（" + (totalMonths - payoffMonths) / 12 + "年短縮）" : "");
-    els.interestSaved.textContent = "+" + manYen(Math.max(0, interestSaved));
-    els.assetA.textContent = yen(assetA);
-    els.assetB.textContent = yen(assetB);
+    els.monthsSaved.textContent = monthsSaved > 0 ? monthsToText(monthsSaved) : "-";
+    els.interestSaved.textContent = manYen(interestSaved);
+    els.investProfit.textContent = manYen(investProfit);
+    els.detailInterestSaved.textContent = yen(interestSaved);
+    els.detailInvestProfit.textContent = yen(investProfit);
+    els.detailInvestProfitAfterTax.textContent = yen(investProfitAfterTax);
 
-    if (Math.abs(diff) < 1) {
-      els.winner.textContent = "ほぼ互角";
-      els.winnerDiff.textContent = "どちらの方法でも、期間終了時点の資産額はほぼ同じという試算結果です。";
+    var diff = investProfit - interestSaved;
+    var conclusionText;
+    if (lump <= 0) {
+      conclusionText = "繰上返済 or 投資に回す資金を入力すると、比較結果がここに表示されます。";
+    } else if (Math.abs(diff) < 1000) {
+      conclusionText = "この条件では、繰上返済と投資はほぼ同程度の効果です。";
     } else if (diff > 0) {
-      els.winner.textContent = "繰り上げ返済が有利";
-      els.winnerDiff.textContent = "この条件では、繰り上げ返済を優先した方が期間終了時点の資産が " + manYen(diff) + " 多くなる試算結果です。";
+      conclusionText = "この条件では、投資に回した場合の運用益（税引前）の方が、繰上返済による利息軽減額より約 " + manYen(diff) + " 大きくなります。ただし運用益には税金や価格変動リスクがある一方、繰上返済の効果はほぼ確定している点にご留意ください。";
     } else {
-      els.winner.textContent = "積立投資が有利";
-      els.winnerDiff.textContent = "この条件では、繰り上げ返済せず積立投資に回した方が期間終了時点の資産が " + manYen(-diff) + " 多くなる試算結果です。";
+      conclusionText = "この条件では、繰上返済による利息軽減額の方が、投資に回した場合の運用益（税引前）より約 " + manYen(-diff) + " 大きくなります。繰上返済はリスクなく確実に効果が得られる一方、手元資金の流動性は下がる点にご留意ください。";
     }
+    els.conclusion.textContent = conclusionText;
 
-    // Build yearly series for both scenarios over the full original term
-    // for the chart: A stays at 0 until payoff, then grows; B grows from month 1.
-    var labels = [];
-    var seriesA = [];
-    var seriesB = [];
-    for (var y = 1; y <= years; y++) {
-      var mo = Math.min(y * 12, totalMonths);
-      labels.push(y + "年");
-      var idxA = mo - payoffMonths;
-      seriesA.push(idxA > 0 ? Math.round(postPayoffInvestment.series[Math.min(idxA, postPayoffInvestment.series.length) - 1]) : 0);
-      seriesB.push(Math.round(investB.series[mo - 1] || 0));
-    }
+    var labels = originalYearly.map(function (d) { return d.month / 12 + "年"; });
+    var interestSavedCum = originalYearly.map(function (d, i) {
+      return Math.round(d.cumInterest - withPrepayYearly[i].cumInterest);
+    });
+    var investProfitCum = originalYearly.map(function (d) {
+      return Math.round(lump * Math.pow(1 + investMonthlyRate, d.month) - lump);
+    });
 
     var ctx = document.getElementById("growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [
         {
-          label: "A: 繰り上げ返済 → 完済後に積立投資",
-          data: seriesA,
+          label: "繰上返済による利息軽減額（累計）",
+          data: interestSavedCum,
           borderColor: "#0f5f4c",
           backgroundColor: "rgba(15, 95, 76, 0.12)",
           fill: true,
-          tension: 0.25,
+          tension: 0.15,
           pointRadius: 0,
         },
         {
-          label: "B: 繰り上げ返済せず積立投資",
-          data: seriesB,
+          label: "投資に回した場合の運用益（累計）",
+          data: investProfitCum,
           borderColor: "#d98e04",
-          backgroundColor: "rgba(217, 142, 4, 0.10)",
+          backgroundColor: "rgba(217, 142, 4, 0.1)",
           fill: true,
           tension: 0.25,
           pointRadius: 0,
@@ -190,7 +190,7 @@
     }
   }
 
-  [els.balance, els.loanRate, els.years, els.extra, els.investRate].forEach(function (el) {
+  [els.balance, els.loanRate, els.termYears, els.lump, els.investRate].forEach(function (el) {
     el.addEventListener("input", render);
   });
 
