@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>繰上返済 vs 投資 比較シミュレーター | ふやすノート</title>
+<meta name="description" content="住宅ローンの繰上返済に使うか、新NISAなどで運用に回すか。まとまった資金の使い道を、軽減できる利息総額と想定運用益を並べて無料で比較できるシミュレーターです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="loan-vs-invest-simulator.html">繰上返済 vs 投資</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>繰上返済 vs 投資 比較シミュレーター</h1>
+    <p>まとまった資金ができたとき、住宅ローンの繰上返済（期間短縮型）に使う場合と、新NISAなどで運用に回す場合とで、どちらが有利かを試算します。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="balance">住宅ローンの残高 <span class="unit">円</span></label>
+        <input type="number" id="balance" value="25000000" min="0" step="100000">
+      </div>
+
+      <div class="field">
+        <label for="loanRate">ローン金利（年率） <span id="loanRateOut" class="unit">1.0 %</span></label>
+        <input type="range" id="loanRate" value="1.0" min="0.1" max="4" step="0.05">
+      </div>
+
+      <div class="field">
+        <label for="termYears">残りの返済期間 <span id="termYearsOut" class="unit">25 年</span></label>
+        <input type="range" id="termYears" value="25" min="1" max="35" step="1">
+      </div>
+
+      <div class="field">
+        <label for="lump">繰上返済 or 投資に回す資金 <span class="unit">円</span></label>
+        <input type="number" id="lump" value="2000000" min="0" step="100000">
+      </div>
+
+      <div class="field">
+        <label for="investRate">想定運用利回り（年率） <span id="investRateOut" class="unit">5.0 %</span></label>
+        <input type="range" id="investRate" value="5" min="0" max="10" step="0.1">
+      </div>
+    </div>
+
+    <div>
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">短縮される返済期間</div>
+          <div class="value" id="result-months-saved">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">繰上返済で軽減できる利息総額</div>
+          <div class="value" id="result-interest-saved">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">同じ資金を運用した場合の運用益（税引前）</div>
+          <div class="value" id="result-invest-profit">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>繰上返済による利息軽減額（累計）</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>投資に回した場合の運用益（累計）</span>
+        </div>
+      </div>
+
+      <div class="disclaimer" id="conclusion" style="margin-top:20px;"></div>
+    </div>
+  </div>
+
+  <section class="article-section">
+    <h2>この試算の考え方</h2>
+    <p>「繰上返済」は返済期間を短くする<strong>期間短縮型</strong>を前提にしています。毎月の返済額は変えず、入力した資金を残高からその場で差し引くことで、完済までの期間と支払う利息の総額がどれだけ減るかを計算します。「投資」は同じ資金を、繰上返済していなければ支払い続けていたはずの期間（残りの返済期間）だけ複利で運用したと仮定した場合の評価額です。</p>
+    <dl>
+      <div class="faq-item">
+        <dt>繰り上げ返済で軽減できる利息総額</dt>
+        <dd id="detail-interest-saved">-</dd>
+      </div>
+      <div class="faq-item">
+        <dt>同じ資金を運用した場合の運用益（税引前）</dt>
+        <dd id="detail-invest-profit">-</dd>
+      </div>
+      <div class="faq-item">
+        <dt>運用益（税引後の目安・課税口座 20.315%の場合）</dt>
+        <dd id="detail-invest-profit-after-tax">-</dd>
+      </div>
+    </dl>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>繰上返済にはどんな種類がありますか？</dt>
+        <dd>大きく分けて、毎月の返済額を変えずに完済を早める「期間短縮型」と、返済期間は変えずに毎月の返済額を減らす「返済額軽減型」があります。総支払利息の軽減効果は一般に期間短縮型の方が大きいため、本シミュレーターは期間短縮型で試算しています。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>投資の運用益には税金がかかりますか？</dt>
+        <dd>新NISA口座での運用益は非課税ですが、非課税投資枠には上限があります。課税口座（特定口座など）の場合、運用益に対して約20.315%の税金がかかる点にご留意ください。本シミュレーターの「税引前」の値はこの税金を考慮していません。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>どちらを選べばいいですか？</dt>
+        <dd>数字の比較だけでなく、「団体信用生命保険による保障を維持したいか」「手元の現金流動性をどれだけ確保したいか」「金利変動のリスクをどう考えるか」なども踏まえた総合判断が大切です。本シミュレーターはあくまで機械的な試算の一つの目安としてご活用ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>資金の使い道を検討する</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>住宅ローンの借り換え・金利を比較する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で新NISA口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、実際のローン契約内容・将来の運用成果・元本を保証するものではありません。金利は将来変動する可能性があり、繰上返済には金融機関ごとの手数料や手続き条件が別途かかる場合があります。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../js/loan-vs-invest.js"></script>
+</body>
+</html>
