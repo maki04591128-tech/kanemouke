@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>積立複利シミュレーター | ふやすノート</title>
+<meta name="description" content="毎月の積立額・想定利回り・積立年数を入力するだけで、将来の資産額と運用益をグラフで確認できる無料の積立投資シミュレーターです。新NISAのつみたて投資枠の試算にも。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>積立複利シミュレーター</h1>
+    <p>毎月の積立額・想定利回り・積立年数から、将来の資産額を試算します。新NISAのつみたて投資枠やiDeCoの計画づくりにご活用ください。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="initial">初期投資額 <span class="unit">円</span></label>
+        <input type="number" id="initial" value="500000" min="0" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="monthly">毎月の積立額 <span class="unit">円</span></label>
+        <input type="number" id="monthly" value="30000" min="0" step="1000">
+      </div>
+
+      <div class="field">
+        <label for="rate">想定利回り（年率） <span id="rateOut" class="unit">5.0 %</span></label>
+        <input type="range" id="rate" value="5" min="0" max="12" step="0.1">
+      </div>
+
+      <div class="field">
+        <label for="years">積立期間 <span id="yearsOut" class="unit">20 年</span></label>
+        <input type="range" id="years" value="20" min="1" max="40" step="1">
+      </div>
+    </div>
+
+    <div>
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">将来の資産評価額</div>
+          <div class="value" id="result-total">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">積立元本（累計）</div>
+          <div class="value" id="result-principal">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">運用益</div>
+          <div class="value" id="result-profit">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
+          <span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>これから積立を始めるなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で新NISA口座を開設する（口座開設無料）</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ロボアドバイザーで自動積立を始める</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>複利計算の考え方</h2>
+    <p>積立投資では、運用で得た利益をさらに投資に回すことで「利益が利益を生む」複利効果が働きます。同じ利回りでも、積立期間が長いほど元本に対する運用益の割合が大きくなる傾向があります。本シミュレーターは毎月の積立額を月複利で運用したと仮定して計算しています。</p>
+    <h3>注意点</h3>
+    <p>実際の運用では相場変動により資産額が上下し、常に一定の利回りで増え続けるわけではありません。また本試算は運用益への課税を考慮していません（NISA口座は非課税、課税口座は運用益に約20％の税金がかかります）。</p>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、将来の運用成果や元本を保証するものではありません。特定の金融商品の勧誘・投資助言を目的としたものではなく、投資に関する最終判断はご自身の責任で行ってください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../js/tsumitate.js"></script>
+</body>
+</html>
