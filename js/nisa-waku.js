@@ -3,6 +3,8 @@
 
   var TOTAL_LIFETIME_CAP = 18000000; // 生涯投資枠（総枠）
   var GROWTH_LIFETIME_CAP = 12000000; // うち成長投資枠の上限
+  var TSUMITATE_YEARLY_CAP = 1200000; // つみたて投資枠の年間上限
+  var GROWTH_YEARLY_CAP = 2400000; // 成長投資枠の年間上限
   var TAX_RATE = 0.20315; // 課税口座の運用益にかかる税率（所得税・復興特別所得税・住民税の合計）
 
   var els = {
@@ -33,6 +35,8 @@
 
     var cGrowth = 0; // 成長投資枠 累計投入額
     var cTsumitate = 0; // つみたて投資枠 累計投入額
+    var yGrowth = 0; // 成長投資枠 その年の累計投入額
+    var yTsumitate = 0; // つみたて投資枠 その年の累計投入額
     var nisaValue = 0; // NISA口座の評価額（非課税）
     var taxablePrincipal = 0; // 枠を使い切った後、課税口座に回った累計投入額
     var taxableValue = 0; // 課税口座の評価額
@@ -41,16 +45,30 @@
     var series = [];
 
     for (var m = 1; m <= months; m++) {
+      if ((m - 1) % 12 === 0) {
+        yGrowth = 0;
+        yTsumitate = 0;
+      }
+
       var totalUsed = cGrowth + cTsumitate;
 
-      var growthRoom = Math.max(0, Math.min(GROWTH_LIFETIME_CAP - cGrowth, TOTAL_LIFETIME_CAP - totalUsed));
+      var growthRoom = Math.max(0, Math.min(
+        GROWTH_LIFETIME_CAP - cGrowth,
+        TOTAL_LIFETIME_CAP - totalUsed,
+        GROWTH_YEARLY_CAP - yGrowth
+      ));
       var growthIn = Math.min(growthMonthly, growthRoom);
       cGrowth += growthIn;
+      yGrowth += growthIn;
       totalUsed = cGrowth + cTsumitate;
 
-      var tsumitateRoom = Math.max(0, TOTAL_LIFETIME_CAP - totalUsed);
+      var tsumitateRoom = Math.max(0, Math.min(
+        TOTAL_LIFETIME_CAP - totalUsed,
+        TSUMITATE_YEARLY_CAP - yTsumitate
+      ));
       var tsumitateIn = Math.min(tsumitateMonthly, tsumitateRoom);
       cTsumitate += tsumitateIn;
+      yTsumitate += tsumitateIn;
 
       var nisaIn = growthIn + tsumitateIn;
       var overflow = growthMonthly - growthIn + (tsumitateMonthly - tsumitateIn);

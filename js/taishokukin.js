@@ -2,6 +2,7 @@
   "use strict";
 
   var RESIDENT_TAX_RATE = 0.10;
+  var BASIC_DEDUCTION = 480000;
 
   // 所得税の速算表（分離課税の退職所得・総合課税の雑所得ともに同じ税率区分を使用）
   var TAX_BRACKETS = [
@@ -120,8 +121,9 @@
     // --- B: 年金（分割）で受け取る場合 ---
     var payment = annualAnnuityPayment(principal, annuityRate, payoutYears);
     var pensionTaxable = pensionTaxableIncome(payment, isOver65);
-    var pensionIncomeTax = incomeTax(pensionTaxable);
-    var pensionResidentTax = pensionTaxable * RESIDENT_TAX_RATE;
+    var pensionTaxBase = Math.max(0, pensionTaxable - BASIC_DEDUCTION);
+    var pensionIncomeTax = incomeTax(pensionTaxBase);
+    var pensionResidentTax = pensionTaxBase * RESIDENT_TAX_RATE;
     var pensionTaxPerYear = pensionIncomeTax + pensionResidentTax;
     var netPayment = payment - pensionTaxPerYear;
 
