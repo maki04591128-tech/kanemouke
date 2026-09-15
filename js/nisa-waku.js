@@ -37,6 +37,35 @@
     return years + " 年 " + restMonths + "ヶ月";
   }
 
+  function allocateWithinTotal(growthWanted, tsumitateWanted, totalRoom) {
+    var wantedTotal = growthWanted + tsumitateWanted;
+    if (wantedTotal <= totalRoom) {
+      return { growthIn: growthWanted, tsumitateIn: tsumitateWanted };
+    }
+    if (wantedTotal <= 0 || totalRoom <= 0) {
+      return { growthIn: 0, tsumitateIn: 0 };
+    }
+
+    var growthIn = Math.floor(totalRoom * growthWanted / wantedTotal);
+    var tsumitateIn = Math.min(tsumitateWanted, totalRoom - growthIn);
+    var remaining = totalRoom - growthIn - tsumitateIn;
+
+    if (remaining > 0) {
+      var growthRemain = growthWanted - growthIn;
+      var tsumitateRemain = tsumitateWanted - tsumitateIn;
+      if (growthRemain >= tsumitateRemain && growthRemain > 0) {
+        var growthExtra = Math.min(growthRemain, remaining);
+        growthIn += growthExtra;
+        remaining -= growthExtra;
+      }
+      if (remaining > 0 && tsumitateRemain > 0) {
+        tsumitateIn += Math.min(tsumitateRemain, remaining);
+      }
+    }
+
+    return { growthIn: growthIn, tsumitateIn: tsumitateIn };
+  }
+
   function simulate(tsumitateMonthly, growthMonthly, ratePct, years) {
     var monthlyRate = ratePct / 100 / 12;
     var months = Math.round(years * 12);
@@ -59,22 +88,23 @@
       }
 
       var totalUsed = cGrowth + cTsumitate;
+      var totalRoom = Math.max(0, TOTAL_LIFETIME_CAP - totalUsed);
 
-      var growthRoom = Math.max(0, Math.min(
-        GROWTH_LIFETIME_CAP - cGrowth,
-        TOTAL_LIFETIME_CAP - totalUsed,
-        GROWTH_YEARLY_CAP - yGrowth
-      ));
-      var growthIn = Math.min(growthMonthly, growthRoom);
+      var growthWanted = Math.min(
+        growthMonthly,
+        Math.max(0, GROWTH_LIFETIME_CAP - cGrowth),
+        Math.max(0, GROWTH_YEARLY_CAP - yGrowth)
+      );
+      var tsumitateWanted = Math.min(
+        tsumitateMonthly,
+        Math.max(0, TSUMITATE_YEARLY_CAP - yTsumitate)
+      );
+      var allocation = allocateWithinTotal(growthWanted, tsumitateWanted, totalRoom);
+      var growthIn = allocation.growthIn;
+      var tsumitateIn = allocation.tsumitateIn;
+
       cGrowth += growthIn;
       yGrowth += growthIn;
-      totalUsed = cGrowth + cTsumitate;
-
-      var tsumitateRoom = Math.max(0, Math.min(
-        TOTAL_LIFETIME_CAP - totalUsed,
-        TSUMITATE_YEARLY_CAP - yTsumitate
-      ));
-      var tsumitateIn = Math.min(tsumitateMonthly, tsumitateRoom);
       cTsumitate += tsumitateIn;
       yTsumitate += tsumitateIn;
 

@@ -138,10 +138,7 @@
     els.assetPrepay.textContent = manYen(prepay.finalNetWorth);
     els.assetInvest.textContent = manYen(invest.finalNetWorth);
 
-    if (surplus <= 0) {
-      els.verdict.textContent = "毎月の金額を入力すると比較結果が表示されます";
-      els.verdictSub.textContent = "";
-    } else if (assetDiff > 0) {
+    if (assetDiff > 0) {
       els.verdict.textContent =
         "この条件では「繰り上げ返済」の方が " + manYen(assetDiff) + " 有利です";
       els.verdictSub.textContent =
