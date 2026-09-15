@@ -1,9 +1,9 @@
 (function () {
   "use strict";
 
-  var RESIDENT_TAX_RATE = 0.10;
   var INCOME_BASIC_DEDUCTION = 480000;
   var RESIDENT_BASIC_DEDUCTION = 430000;
+  var RESIDENT_TAX_RATE = 0.10;
   var RECONSTRUCTION_TAX_RATE = 0.021;
 
   // 所得税の速算表（分離課税の退職所得・総合課税の雑所得ともに同じ税率区分を使用）
@@ -160,8 +160,13 @@
 
     els.lumpNet.textContent = manYen(lumpNet);
     els.lumpTax.textContent = manYen(lumpTaxTotal);
-    els.pensionYearly.innerHTML =
-      manYen(netPayment) + "<br><small>（税引前 " + manYen(payment) + "）</small>";
+    var note = document.createElement("small");
+    note.textContent = "（税引前 " + manYen(payment) + "）";
+    els.pensionYearly.replaceChildren(
+      document.createTextNode(manYen(netPayment)),
+      document.createElement("br"),
+      note
+    );
     els.finalLump.textContent = manYen(finalLumpAsset);
     els.finalPension.textContent = manYen(finalPensionAsset);
     els.pensionTaxTotal.textContent = manYen(pensionTaxPerYear * payoutYears);
