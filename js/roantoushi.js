@@ -150,7 +150,7 @@
       els.verdict.textContent =
         "この条件では「積立投資」の方が " + manYen(-assetDiff) + " 有利です";
       els.verdictSub.textContent =
-        "想定運用利回り（" + investRatePct.toFixed(1) + "%）がローン金利を上回っているためです。ただし投資には元本割れのリスクがあります。";
+        "返済を急がず早い時期から投資に回せる効果が、この試算では上回っています。ただし投資には元本割れのリスクがあります。";
     } else {
       els.verdict.textContent = "どちらの方式でも将来資産はほぼ同じ試算結果です";
       els.verdictSub.textContent = "";
