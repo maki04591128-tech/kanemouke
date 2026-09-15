@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>教育資金シミュレーター | ふやすノート</title>
+<meta name="description" content="幼稚園から大学までの教育費目安（オール公立・大学だけ私立・オール私立）から、毎月いくら積み立てればよいかを逆算する無料シミュレーター。学資保険・NISAでの準備の検討に。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>教育資金シミュレーター</h1>
+    <p>幼稚園から大学までにかかる教育費の目安から、毎月いくら積み立てておけばよいかを逆算します。コースを選ぶだけで目標金額の目安が入力されます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="preset">進学コース（目安を自動入力）</label>
+        <select id="preset">
+          <option value="custom">カスタム（自分で目標金額を入力）</option>
+          <option value="allPublic">オール公立（幼稚園〜大学すべて国公立）</option>
+          <option value="uniPrivateBunkei" selected>大学だけ私立文系（幼稚園〜高校は公立）</option>
+          <option value="uniPrivateRikei">大学だけ私立理系（幼稚園〜高校は公立）</option>
+          <option value="allPrivate">オール私立（幼稚園〜大学すべて私立）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="target">目標金額（教育費総額の目安） <span class="unit">円</span></label>
+        <input type="number" id="target" value="13000000" min="0" step="100000">
+      </div>
+
+      <div class="field">
+        <label for="initial">現在の教育資金の貯蓄額 <span class="unit">円</span></label>
+        <input type="number" id="initial" value="500000" min="0" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="rate">想定利回り（年率） <span id="rateOut" class="unit">3.0 %</span></label>
+        <input type="range" id="rate" value="3" min="0" max="8" step="0.1">
+      </div>
+
+      <div class="field">
+        <label for="years">資金が必要になるまでの年数 <span id="yearsOut" class="unit">10 年</span></label>
+        <input type="range" id="years" value="10" min="1" max="18" step="1">
+      </div>
+    </div>
+
+    <div>
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">必要な毎月積立額</div>
+          <div class="value" id="result-monthly">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">積立元本（累計）</div>
+          <div class="value" id="result-principal">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">運用益（想定）</div>
+          <div class="value" id="result-profit">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
+          <span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>教育資金の準備方法を検討する</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>学資保険の資料請求・比較をする</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で新NISA口座を開設する（口座開設無料）</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>進学コース別・教育費総額の目安</h2>
+    <p>幼稚園から大学卒業までにかかる教育費（学校教育費・学校外活動費・大学の学費等を含む目安）は、公立・私立の組み合わせによって大きく変わります。あくまで一般的に紹介される目安であり、実際の金額は学校・地域・下宿の有無などにより異なります。</p>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>進学コース</th><th>総額の目安</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>オール公立（幼稚園〜大学すべて国公立）</td><td>約 1,000万円</td></tr>
+          <tr><td>大学だけ私立文系（幼稚園〜高校は公立）</td><td>約 1,300万円</td></tr>
+          <tr><td>大学だけ私立理系（幼稚園〜高校は公立）</td><td>約 1,450万円</td></tr>
+          <tr><td>オール私立（幼稚園〜大学すべて私立）</td><td>約 2,500万円</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>いつまでに準備するべきか</h3>
+    <p>特に負担が大きいのは大学の入学金・授業料です。一般的に「大学進学時（18歳）までに、大学4年間分の目安として300万円〜500万円程度」を目標に準備しておくと安心と言われています。児童手当を使わずに貯蓄・運用に回す、生まれた直後から積立を始めるなど、準備期間を長く取れるほど毎月の負担は軽くなります。</p>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、将来の運用成果や元本を保証するものではありません。教育費の目安は一般的に紹介される概算値であり、実際に必要な金額は進学先・地域・下宿の有無等により大きく異なります。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではなく、正確な情報は各校・各金融機関にご確認ください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../js/kyouiku.js"></script>
+</body>
+</html>

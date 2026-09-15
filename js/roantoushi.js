@@ -78,6 +78,7 @@
     return {
       payoffMonth: payoffMonth,
       totalInterest: totalInterest,
+      finalAsset: invest,
       finalNetWorth: invest - balance,
       series: series,
     };
@@ -109,7 +110,12 @@
       series.push({ year: months / 12, netWorth: invest - balance });
     }
 
-    return { totalInterest: totalInterest, finalNetWorth: invest - balance, series: series };
+    return {
+      totalInterest: totalInterest,
+      finalAsset: invest,
+      finalNetWorth: invest - balance,
+      series: series,
+    };
   }
 
   function render() {
