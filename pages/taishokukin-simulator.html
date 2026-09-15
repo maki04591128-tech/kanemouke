@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>退職金 一時金 vs 年金 比較シミュレーター | ふやすノート</title>
+<meta name="description" content="退職金・企業年金を「一時金」で受け取るか「年金（分割）」で受け取るか、税金の差と将来の資産額を無料で試算。退職所得控除・公的年金等控除を考慮した比較シミュレーターです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>退職金 一時金 vs 年金 比較シミュレーター</h1>
+    <p>退職金・企業年金を「一時金」でまとめて受け取るか、「年金」として分割で受け取るか。退職所得控除・公的年金等控除による税金の差と、将来の資産額をあわせて試算します。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="amount">退職金の総額 <span class="unit">万円</span></label>
+        <input type="number" id="amount" value="2000" min="0" step="50">
+      </div>
+
+      <div class="field">
+        <label for="serviceYears">勤続年数 <span id="serviceYearsOut" class="unit">30 年</span></label>
+        <input type="range" id="serviceYears" value="30" min="1" max="45" step="1">
+      </div>
+
+      <div class="field">
+        <label for="payoutYears">年金の受取期間 <span id="payoutYearsOut" class="unit">10 年</span></label>
+        <input type="range" id="payoutYears" value="10" min="5" max="20" step="1">
+      </div>
+
+      <div class="field">
+        <label for="ageGroup">受給開始時の年齢</label>
+        <select id="ageGroup">
+          <option value="under65">65歳未満</option>
+          <option value="65" selected>65歳以上</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="annuityRate">年金原資の据置運用利率（年率） <span id="annuityRateOut" class="unit">1.0 %</span></label>
+        <input type="range" id="annuityRate" value="1.0" min="0" max="3" step="0.1">
+      </div>
+
+      <div class="field">
+        <label for="investRate">手取り額を自分で運用する場合の利回り（年率） <span id="investRateOut" class="unit">3.0 %</span></label>
+        <input type="range" id="investRate" value="3.0" min="0" max="8" step="0.1">
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">一時金の税金（所得税＋住民税）</div>
+          <div class="value" id="result-lump-tax">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">一時金の手取り額</div>
+          <div class="value" id="result-lump-net">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">年金の毎年の手取り額</div>
+          <div class="value" id="result-pension-yearly">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">A：一時金を運用した場合の最終資産</div>
+          <div class="value" id="result-final-lump">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">B：年金として受け取った場合の最終資産</div>
+          <div class="value" id="result-final-pension">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>A：一時金を運用</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>B：年金＋再投資</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>受け取り後の資産運用を検討する</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で新NISA（退職金運用）口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>退職金の相談ができるIFA・専門家を探す</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>一時金と年金、税金の仕組みの違い</h2>
+    <p>退職金を<strong>一時金</strong>で受け取ると「退職所得」として分離課税され、勤続年数に応じた<strong>退職所得控除額</strong>（勤続20年以下は40万円×勤続年数、20年超は800万円＋70万円×(勤続年数－20)）を差し引いたうえで、さらに<strong>1/2</strong>を掛けた金額にのみ課税されるため、税負担がかなり軽くなるのが特徴です。一方、<strong>年金</strong>として分割で受け取ると「公的年金等の雑所得」として毎年課税され、年齢（65歳未満か65歳以上か）に応じた公的年金等控除額を差し引いた金額に、他の所得と合算した総合課税で税金がかかります。本シミュレーターでは、年金収入以外の所得がない前提で簡易的に試算しています。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>一時金の方が税金が安くなりやすいのはなぜですか？</dt>
+        <dd>退職所得控除に加えて課税対象を1/2にする優遇があるためです。勤続年数が長いほど控除額も大きくなるので、一時金の税負担はより軽くなる傾向があります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>会社の制度で「一部を一時金、残りを年金」に分けられる場合はどうすればいいですか？</dt>
+        <dd>本シミュレーターは「全額一時金」または「全額年金」の2パターンを比較するものです。一部を一時金・残りを年金とする併用パターンについては、それぞれの金額で本ツールを試算し、合算して比較する方法をおすすめします。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>年金で受け取ると社会保険料の負担は増えますか？</dt>
+        <dd>年金収入が増えると国民健康保険料や後期高齢者医療保険料などの算定基礎が上がり、負担が増える場合があります。本シミュレーターでは社会保険料への影響は考慮していません。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="article-section">
+    <h2>試算の前提条件</h2>
+    <p>
+      退職所得控除額：<span id="deduction-amount">-</span><br>
+      年金受取期間中の税金の合計（概算）：<span id="pension-tax-total">-</span>
+    </p>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の税額・将来の運用成果・元本を保証するものではありません。役員退職金等の特定役員退職手当等（勤続5年以下）には1/2課税が適用されない場合があるなど、実際の制度はより複雑です。住民税は一律10%、公的年金等以外の所得はないものと仮定するなど簡略化した試算のため、正確な税額については税務署・税理士等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../js/taishokukin.js"></script>
+</body>
+</html>
