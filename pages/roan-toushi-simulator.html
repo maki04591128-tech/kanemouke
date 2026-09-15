@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>住宅ローン繰り上げ返済 vs 積立投資 比較シミュレーター | ふやすノート</title>
+<meta name="description" content="住宅ローンの繰り上げ返済と、その分を積立投資に回した場合、どちらが将来の資産で有利になるかを無料で試算。ローン残高・金利・残り返済年数・想定運用利回りを入れるだけで比較できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>住宅ローン繰り上げ返済 vs 積立投資 比較シミュレーター</h1>
+    <p>毎月自由に使えるお金を「繰り上げ返済」に回すか「積立投資」に回すか。ローン残高・金利・残り返済年数・想定運用利回りを入力すると、将来の資産額でどちらが有利かを試算します。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="balance">住宅ローンの残高 <span class="unit">万円</span></label>
+        <input type="number" id="balance" value="2000" min="0" step="10">
+      </div>
+
+      <div class="field">
+        <label for="loanRate">ローン金利（年率） <span id="loanRateOut" class="unit">0.7 %</span></label>
+        <input type="range" id="loanRate" value="0.7" min="0" max="4" step="0.1">
+      </div>
+
+      <div class="field">
+        <label for="years">残りの返済期間 <span id="yearsOut" class="unit">25 年</span></label>
+        <input type="range" id="years" value="25" min="1" max="35" step="1">
+      </div>
+
+      <div class="field">
+        <label for="surplus">繰り上げ返済 or 積立に回せる毎月の金額 <span class="unit">円</span></label>
+        <input type="number" id="surplus" value="30000" min="0" step="1000">
+      </div>
+
+      <div class="field">
+        <label for="investRate">積立投資の想定利回り（年率） <span id="investRateOut" class="unit">5.0 %</span></label>
+        <input type="range" id="investRate" value="5" min="0" max="8" step="0.1">
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">繰り上げ返済による利息軽減額</div>
+          <div class="value" id="result-interest-saved">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">完済時期の短縮</div>
+          <div class="value" id="result-payoff-shorten">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">A：繰り上げ返済＋その後投資の最終資産</div>
+          <div class="value" id="result-asset-prepay">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">B：積立投資のみの最終資産</div>
+          <div class="value" id="result-asset-invest">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>A：繰り上げ返済＋その後投資</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>B：積立投資のみ</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>比較検討に役立つサービス</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>住宅ローンの借り換え・金利を比較する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で新NISA（つみたて投資枠）口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>繰り上げ返済と積立投資、どちらを優先すべき？</h2>
+    <p>このシミュレーターは、毎月の余裕資金を「住宅ローンの繰り上げ返済（期間短縮型）」に回した場合と、「積立投資」に回した場合とで、同じ返済期間が終わった時点の資産額（投資評価額－残債）を比較する試算です。ざっくりした目安としては、<strong>ローン金利より高い利回りで運用できる見込みが強いなら積立投資、そうでなければ繰り上げ返済が有利</strong>になりやすい傾向があります。ただし投資には元本割れのリスクがあり、繰り上げ返済には「精神的な安心感」「団体信用生命保険の保障が早く減る」といった数字に表れない側面もあるため、金額だけで機械的に決めるものではない点にご留意ください。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>ローン金利と運用利回りが同じくらいならどちらが得ですか？</dt>
+        <dd>数字上の差はほとんどなくなりますが、住宅ローン控除（借入残高に応じた税額控除）を利用中の場合は、控除期間中の繰り上げ返済によって控除額が減ることがあるため、控除終了後にまとめて繰り上げ返済する選択肢も検討されます。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>「期間短縮型」と「返済額軽減型」の違いは？</dt>
+        <dd>本シミュレーターは、毎月の返済額を維持したまま完済を早める「期間短縮型」を前提に試算しています。毎月の返済額自体を減らす「返済額軽減型」を選ぶと、利息軽減効果は期間短縮型よりやや小さくなります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>変動金利で将来金利が上がったらどうなりますか？</dt>
+        <dd>本シミュレーターは入力した金利が完済まで一定である前提の試算です。変動金利の場合、将来の金利上昇によって利息負担が試算より増える可能性がある点にご注意ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の金利動向・運用成果・元本を保証するものではありません。住宅ローン控除など税制の影響は考慮していません。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。実際の判断にあたっては金融機関・専門家にもご確認ください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../js/roantoushi.js"></script>
+</body>
+</html>
