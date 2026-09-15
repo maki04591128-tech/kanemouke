@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>住宅ローン繰り上げ返済 vs 積立投資 比較シミュレーター | ふやすノート</title>
+<meta name="description" content="住宅ローンの繰り上げ返済に回すお金を、そのまま積立投資に回した場合とで、どちらが将来の資産額を多くできるかを無料で比較シミュレーションできます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>住宅ローン繰り上げ返済 vs 積立投資 比較シミュレーター</h1>
+    <p>毎月の余剰資金を「繰り上げ返済」に回すか「積立投資」に回すか、ローン完済予定時点での資産額を試算して比較します。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="balance">住宅ローン残高 <span class="unit">円</span></label>
+        <input type="number" id="balance" value="30000000" min="0" max="200000000" step="100000">
+      </div>
+
+      <div class="field">
+        <label for="loanRate">住宅ローン金利（年率） <span id="loanRateOut" class="unit">1.00 %</span></label>
+        <input type="range" id="loanRate" value="1.0" min="0" max="5" step="0.05">
+      </div>
+
+      <div class="field">
+        <label for="years">残りの返済期間 <span id="yearsOut" class="unit">25 年</span></label>
+        <input type="range" id="years" value="25" min="1" max="40" step="1">
+      </div>
+
+      <div class="field">
+        <label for="extra">毎月の余剰資金 <span class="unit">円</span></label>
+        <input type="number" id="extra" value="30000" min="0" max="500000" step="1000">
+      </div>
+
+      <div class="field">
+        <label for="investRate">積立投資の想定利回り（年率） <span id="investRateOut" class="unit">4.0 %</span></label>
+        <input type="range" id="investRate" value="4" min="0" max="12" step="0.1">
+      </div>
+    </div>
+
+    <div>
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">繰り上げ返済した場合の完済時期</div>
+          <div class="value" id="result-payoff">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">繰り上げ返済による利息軽減額</div>
+          <div class="value" id="result-interest-saved">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">A: 繰り上げ返済コースの資産額</div>
+          <div class="value" id="result-asset-a">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">B: 積立投資コースの資産額</div>
+          <div class="value" id="result-asset-b">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>A: 繰り上げ返済 → 完済後に積立投資</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>B: 繰り上げ返済せず積立投資</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="article-section">
+    <h2>比較結果</h2>
+    <p>ローンの本来の完済予定時点（残り返済期間の満了時）で比較すると：</p>
+    <dl>
+      <div class="faq-item">
+        <dt id="result-winner">-</dt>
+        <dd id="winner-diff">-</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>住宅ローンの借り換え・見直しを検討する</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>住宅ローン一括比較・借り換えシミュレーション</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で新NISA口座を開設して積立投資を始める</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>この試算の考え方</h2>
+    <p>「A: 繰り上げ返済コース」は、毎月の余剰資金をすべて住宅ローンの繰り上げ返済（返済期間短縮型）に回し、ローン完済後は元の返済額＋余剰資金をそのまま積立投資に切り替えるという想定です。「B: 積立投資コース」は、繰り上げ返済をせず本来のスケジュールでローンを返済しつつ、余剰資金を最初から積立投資に回すという想定です。どちらのコースも残りの返済期間が終わる時点ではローンは完済済みになるため、その時点の投資資産額だけで単純に比較できます。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>どちらが有利になりやすいですか？</dt>
+        <dd>一般に、住宅ローン金利より積立投資の期待利回りが高いほど「積立投資コース」が有利になりやすく、逆にローン金利が投資利回りに近い・上回る場合は「繰り上げ返済コース」が有利になりやすい傾向があります。ただし投資の運用成果は保証されておらず、元本割れの可能性がある点にご注意ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>繰り上げ返済の「期間短縮型」と「返済額軽減型」の違いは？</dt>
+        <dd>本シミュレーターは、毎月の返済額はそのままに完済時期を早める「期間短縮型」を前提にしています。毎月の返済額を減らす「返済額軽減型」の場合は試算結果が変わります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>団体信用生命保険（団信）は考慮されていますか？</dt>
+        <dd>考慮していません。住宅ローンには万一の際に残債が保険でカバーされる団信が付帯している場合が多く、繰り上げ返済によってこの保障額（残高）が減る点も踏まえて判断することをおすすめします。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、実際のローン返済額・税金・将来の運用成果・元本を保証するものではありません。繰り上げ返済手数料や団体信用生命保険の保障内容、税制優遇（住宅ローン控除等）は考慮していません。実際の判断にあたっては、金融機関・ファイナンシャルプランナー等の専門家にご相談ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/loan-vs-invest-monthly.js"></script>
+</body>
+</html>
