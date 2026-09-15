@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>住宅ローン繰り上げ返済 vs 積立投資 比較シミュレーター | ふやすノート</title>
+<meta name="description" content="毎月の余裕資金を住宅ローンの繰り上げ返済に回すか、積立投資に回すか。利息軽減額と運用益をまとめて試算し、どちらが有利かの目安を無料で比較できるシミュレーターです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-vs-invest.html">繰上返済vs投資</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>住宅ローン繰り上げ返済 vs 積立投資 比較シミュレーター</h1>
+    <p>毎月の余裕資金を「住宅ローンの繰り上げ返済」に回した場合の利息軽減額と、「積立投資」に回した場合の運用益をまとめて試算し、どちらが有利かの目安を比較します。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="loanBalance">住宅ローン残高 <span class="unit">円</span></label>
+        <input type="number" id="loanBalance" value="30000000" min="0" max="200000000" step="100000">
+      </div>
+
+      <div class="field">
+        <label for="loanRate">住宅ローン金利（年率） <span id="loanRateOut" class="unit">1.00 %</span></label>
+        <input type="range" id="loanRate" value="1.0" min="0" max="5" step="0.05">
+      </div>
+
+      <div class="field">
+        <label for="remainingYears">残りの返済期間 <span id="remainingYearsOut" class="unit">25 年</span></label>
+        <input type="range" id="remainingYears" value="25" min="1" max="35" step="1">
+      </div>
+
+      <div class="field">
+        <label for="extra">繰り上げ返済・積立に回せる金額（毎月） <span class="unit">円</span></label>
+        <input type="number" id="extra" value="30000" min="0" max="500000" step="1000">
+      </div>
+
+      <div class="field">
+        <label for="investRate">積立投資の想定利回り（年率） <span id="investRateOut" class="unit">4.0 %</span></label>
+        <input type="range" id="investRate" value="4" min="0" max="12" step="0.1">
+      </div>
+    </div>
+
+    <div>
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">繰り上げ返済した場合の完済までの期間</div>
+          <div class="value" id="result-payoff-period">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">利息軽減額（繰り上げ返済）</div>
+          <div class="value" id="result-interest-saved">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">将来の資産額（積立投資）</div>
+          <div class="value" id="result-invest-future">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">運用益（積立投資）</div>
+          <div class="value" id="result-invest-profit">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="compareChart" height="280"></canvas>
+      </div>
+
+      <section class="article-section">
+        <p id="shortened-text">-</p>
+        <p id="result-verdict">-</p>
+      </section>
+    </div>
+  </div>
+
+  <section class="article-section">
+    <h2>どちらを選ぶかの考え方</h2>
+    <p id="break-even-text">-</p>
+    <dl>
+      <div class="faq-item">
+        <dt>繰り上げ返済のメリット</dt>
+        <dd>将来支払うはずだった利息を確実に減らせます。運用成果に左右されない「リスクゼロの利回り＝住宅ローン金利」を確保できるのが最大の強みです。団体信用生命保険（団信）の保障額が減る点には注意が必要です。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>積立投資のメリット</dt>
+        <dd>想定利回りがローン金利を上回れば、理論上は繰り上げ返済より資産が増える可能性があります。ただし投資には価格変動リスクがあり、想定通りの利回りが得られる保証はありません。新NISA口座であれば運用益が非課税になる点も考慮材料です。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>繰り上げ返済の方式による違い</dt>
+        <dd>本シミュレーターは毎月の返済額を変えずに完済を早める「期間短縮型」で計算しています。毎月の返済額そのものを減らす「返済額軽減型」の場合、利息軽減効果は期間短縮型よりも小さくなります。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>あわせて検討する</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>住宅ローンの借り換え・金利を比較する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で新NISA口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく単純化した参考値であり、実際の返済額・税金・手数料・投資成果を保証するものではありません。繰り上げ返済には金融機関所定の手数料がかかる場合があり、団体信用生命保険の保障額にも影響します。積立投資には元本割れのリスクがあり、将来の運用成果を保証するものではありません。実際の判断にあたっては、金融機関・ファイナンシャルプランナー等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../js/mortgage.js"></script>
+</body>
+</html>
