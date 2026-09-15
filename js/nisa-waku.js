@@ -52,9 +52,22 @@
       var growthIn = growthWanted;
       var tsumitateIn = tsumitateWanted;
       if (totalWanted > totalRoom) {
-        growthIn = Math.floor(totalRoom * (growthWanted / totalWanted));
-        tsumitateIn = Math.min(tsumitateWanted, totalRoom - growthIn);
-        growthIn += Math.min(totalRoom - growthIn - tsumitateIn, growthWanted - growthIn);
+        var growthShare = totalRoom * (growthWanted / totalWanted);
+        var tsumitateShare = totalRoom * (tsumitateWanted / totalWanted);
+        growthIn = Math.floor(growthShare);
+        tsumitateIn = Math.floor(tsumitateShare);
+
+        for (var remain = totalRoom - growthIn - tsumitateIn; remain > 0; remain--) {
+          var growthFraction = growthShare - growthIn;
+          var tsumitateFraction = tsumitateShare - tsumitateIn;
+          if (growthFraction > tsumitateFraction && growthIn < growthWanted) {
+            growthIn++;
+          } else if (tsumitateIn < tsumitateWanted) {
+            tsumitateIn++;
+          } else if (growthIn < growthWanted) {
+            growthIn++;
+          }
+        }
       }
 
       cGrowth += growthIn;

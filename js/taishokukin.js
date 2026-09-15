@@ -152,8 +152,13 @@
 
     els.lumpNet.textContent = manYen(lumpNet);
     els.lumpTax.textContent = manYen(lumpTaxTotal);
-    els.pensionYearly.innerHTML =
-      manYen(netPayment) + "<br><small>（税引前 " + manYen(payment) + "）</small>";
+    var note = document.createElement("small");
+    note.textContent = "（税引前 " + manYen(payment) + "）";
+    els.pensionYearly.replaceChildren(
+      document.createTextNode(manYen(netPayment)),
+      document.createElement("br"),
+      note
+    );
     els.finalLump.textContent = manYen(finalLumpAsset);
     els.finalPension.textContent = manYen(finalPensionAsset);
     els.pensionTaxTotal.textContent = manYen(pensionTaxPerYear * payoutYears);
