@@ -44,14 +44,20 @@
 
     for (var m = 1; m <= months; m++) {
       var totalUsed = cGrowth + cTsumitate;
+      var totalRoom = Math.max(0, TOTAL_LIFETIME_CAP - totalUsed);
+      var growthWanted = Math.min(growthMonthly, Math.max(0, GROWTH_LIFETIME_CAP - cGrowth));
+      var tsumitateWanted = tsumitateMonthly;
+      var totalWanted = growthWanted + tsumitateWanted;
 
-      var growthRoom = Math.max(0, Math.min(GROWTH_LIFETIME_CAP - cGrowth, TOTAL_LIFETIME_CAP - totalUsed));
-      var growthIn = Math.min(growthMonthly, growthRoom);
+      var growthIn = growthWanted;
+      var tsumitateIn = tsumitateWanted;
+      if (totalWanted > totalRoom) {
+        growthIn = Math.floor(totalRoom * (growthWanted / totalWanted));
+        tsumitateIn = Math.min(tsumitateWanted, totalRoom - growthIn);
+        growthIn += Math.min(totalRoom - growthIn - tsumitateIn, growthWanted - growthIn);
+      }
+
       cGrowth += growthIn;
-      totalUsed = cGrowth + cTsumitate;
-
-      var tsumitateRoom = Math.max(0, TOTAL_LIFETIME_CAP - totalUsed);
-      var tsumitateIn = Math.min(tsumitateMonthly, tsumitateRoom);
       cTsumitate += tsumitateIn;
 
       var nisaIn = growthIn + tsumitateIn;
