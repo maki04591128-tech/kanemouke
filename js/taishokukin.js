@@ -4,6 +4,7 @@
   var INCOME_BASIC_DEDUCTION = 480000;
   var RESIDENT_BASIC_DEDUCTION = 430000;
   var RESIDENT_TAX_RATE = 0.10;
+  var RECONSTRUCTION_TAX_RATE = 0.021;
 
   // 所得税の速算表（分離課税の退職所得・総合課税の雑所得ともに同じ税率区分を使用）
   var TAX_BRACKETS = [
@@ -60,6 +61,11 @@
     return 0;
   }
 
+  function incomeTaxWithReconstruction(taxable) {
+    var tax = incomeTax(taxable);
+    return tax <= 0 ? 0 : tax * (1 + RECONSTRUCTION_TAX_RATE);
+  }
+
   // 退職所得控除額（勤続年数に応じた速算表）
   function retirementDeduction(years) {
     var y = Math.max(1, Math.round(years));
@@ -114,16 +120,18 @@
     // --- A: 一時金で受け取る場合 ---
     var deduction = retirementDeduction(serviceYears);
     var retirementIncome = Math.max(0, principal - deduction) / 2;
-    var lumpIncomeTax = incomeTax(retirementIncome);
+    var lumpIncomeTax = incomeTaxWithReconstruction(retirementIncome);
     var lumpResidentTax = retirementIncome * RESIDENT_TAX_RATE;
     var lumpTaxTotal = lumpIncomeTax + lumpResidentTax;
     var lumpNet = principal - lumpTaxTotal;
 
     // --- B: 年金（分割）で受け取る場合 ---
     var payment = annualAnnuityPayment(principal, annuityRate, payoutYears);
-    var pensionMiscIncome = pensionTaxableIncome(payment, isOver65);
-    var pensionIncomeTax = incomeTax(Math.max(0, pensionMiscIncome - INCOME_BASIC_DEDUCTION));
-    var pensionResidentTax = Math.max(0, pensionMiscIncome - RESIDENT_BASIC_DEDUCTION) * RESIDENT_TAX_RATE;
+    var pensionTaxable = pensionTaxableIncome(payment, isOver65);
+    var pensionIncomeTaxBase = Math.max(0, pensionTaxable - INCOME_BASIC_DEDUCTION);
+    var pensionResidentTaxBase = Math.max(0, pensionTaxable - RESIDENT_BASIC_DEDUCTION);
+    var pensionIncomeTax = incomeTaxWithReconstruction(pensionIncomeTaxBase);
+    var pensionResidentTax = pensionResidentTaxBase * RESIDENT_TAX_RATE;
     var pensionTaxPerYear = pensionIncomeTax + pensionResidentTax;
     var netPayment = payment - pensionTaxPerYear;
 

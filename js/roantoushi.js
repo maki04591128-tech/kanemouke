@@ -70,6 +70,9 @@
         series.push({ year: m / 12, netWorth: invest - balance });
       }
     }
+    if (months % 12 !== 0 || series.length === 0) {
+      series.push({ year: months / 12, netWorth: invest - balance });
+    }
     if (!payoffReached) payoffMonth = months;
 
     return {
@@ -102,6 +105,9 @@
       if (m % 12 === 0) {
         series.push({ year: m / 12, netWorth: invest - balance });
       }
+    }
+    if (months % 12 !== 0 || series.length === 0) {
+      series.push({ year: months / 12, netWorth: invest - balance });
     }
 
     return {
@@ -144,10 +150,7 @@
     els.assetPrepay.textContent = manYen(prepay.finalNetWorth);
     els.assetInvest.textContent = manYen(invest.finalNetWorth);
 
-    if (surplus <= 0) {
-      els.verdict.textContent = "毎月の金額を入力すると比較結果が表示されます";
-      els.verdictSub.textContent = "";
-    } else if (assetDiff > 0) {
+    if (assetDiff > 0) {
       els.verdict.textContent =
         "この条件では「繰り上げ返済」の方が " + manYen(assetDiff) + " 有利です";
       els.verdictSub.textContent =
@@ -156,7 +159,7 @@
       els.verdict.textContent =
         "この条件では「積立投資」の方が " + manYen(-assetDiff) + " 有利です";
       els.verdictSub.textContent =
-        "想定運用利回り（" + investRatePct.toFixed(1) + "%）がローン金利を上回っているためです。ただし投資には元本割れのリスクがあります。";
+        "返済を急がず早い時期から投資に回せる効果が、この試算では上回っています。ただし投資には元本割れのリスクがあります。";
     } else {
       els.verdict.textContent = "どちらの方式でも将来資産はほぼ同じ試算結果です";
       els.verdictSub.textContent = "";

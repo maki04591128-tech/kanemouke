@@ -3,6 +3,8 @@
 
   var TOTAL_LIFETIME_CAP = 18000000; // 生涯投資枠（総枠）
   var GROWTH_LIFETIME_CAP = 12000000; // うち成長投資枠の上限
+  var TSUMITATE_YEARLY_CAP = 1200000; // つみたて投資枠の年間上限
+  var GROWTH_YEARLY_CAP = 2400000; // 成長投資枠の年間上限
   var TSUMITATE_MONTHLY_CAP = 100000; // 年間120万円を月額に均した上限
   var GROWTH_MONTHLY_CAP = 200000; // 年間240万円を月額に均した上限
   var TAX_RATE = 0.20315; // 課税口座の運用益にかかる税率（所得税・復興特別所得税・住民税の合計）
@@ -29,12 +31,51 @@
     return man.toLocaleString("ja-JP", { maximumFractionDigits: 1 }) + " 万円";
   }
 
+  function formatFillPeriod(months) {
+    var years = Math.floor(months / 12);
+    var restMonths = months % 12;
+    if (restMonths === 0) return years + " 年";
+    if (years === 0) return restMonths + "ヶ月";
+    return years + " 年 " + restMonths + "ヶ月";
+  }
+
+  function allocateWithinTotal(growthWanted, tsumitateWanted, totalRoom) {
+    var wantedTotal = growthWanted + tsumitateWanted;
+    if (wantedTotal <= totalRoom) {
+      return { growthIn: growthWanted, tsumitateIn: tsumitateWanted };
+    }
+    if (wantedTotal <= 0 || totalRoom <= 0) {
+      return { growthIn: 0, tsumitateIn: 0 };
+    }
+
+    var growthIn = Math.floor(totalRoom * growthWanted / wantedTotal);
+    var tsumitateIn = Math.min(tsumitateWanted, totalRoom - growthIn);
+    var remaining = totalRoom - growthIn - tsumitateIn;
+
+    if (remaining > 0) {
+      var growthRemain = growthWanted - growthIn;
+      var tsumitateRemain = tsumitateWanted - tsumitateIn;
+      if (growthRemain >= tsumitateRemain && growthRemain > 0) {
+        var growthExtra = Math.min(growthRemain, remaining);
+        growthIn += growthExtra;
+        remaining -= growthExtra;
+      }
+      if (remaining > 0 && tsumitateRemain > 0) {
+        tsumitateIn += Math.min(tsumitateRemain, remaining);
+      }
+    }
+
+    return { growthIn: growthIn, tsumitateIn: tsumitateIn };
+  }
+
   function simulate(tsumitateMonthly, growthMonthly, ratePct, years) {
     var monthlyRate = ratePct / 100 / 12;
     var months = Math.round(years * 12);
 
     var cGrowth = 0; // 成長投資枠 累計投入額
     var cTsumitate = 0; // つみたて投資枠 累計投入額
+    var yGrowth = 0; // 成長投資枠 その年の累計投入額
+    var yTsumitate = 0; // つみたて投資枠 その年の累計投入額
     var nisaValue = 0; // NISA口座の評価額（非課税）
     var taxablePrincipal = 0; // 枠を使い切った後、課税口座に回った累計投入額
     var taxableValue = 0; // 課税口座の評価額
@@ -43,35 +84,30 @@
     var series = [];
 
     for (var m = 1; m <= months; m++) {
-      var totalUsed = cGrowth + cTsumitate;
-      var totalRoom = Math.max(0, TOTAL_LIFETIME_CAP - totalUsed);
-      var growthWanted = Math.min(growthMonthly, Math.max(0, GROWTH_LIFETIME_CAP - cGrowth));
-      var tsumitateWanted = tsumitateMonthly;
-      var totalWanted = growthWanted + tsumitateWanted;
-
-      var growthIn = growthWanted;
-      var tsumitateIn = tsumitateWanted;
-      if (totalWanted > totalRoom) {
-        var growthShare = totalRoom * (growthWanted / totalWanted);
-        var tsumitateShare = totalRoom * (tsumitateWanted / totalWanted);
-        growthIn = Math.floor(growthShare);
-        tsumitateIn = Math.floor(tsumitateShare);
-
-        for (var remain = totalRoom - growthIn - tsumitateIn; remain > 0; remain--) {
-          var growthFraction = growthShare - growthIn;
-          var tsumitateFraction = tsumitateShare - tsumitateIn;
-          if (growthFraction > tsumitateFraction && growthIn < growthWanted) {
-            growthIn++;
-          } else if (tsumitateIn < tsumitateWanted) {
-            tsumitateIn++;
-          } else if (growthIn < growthWanted) {
-            growthIn++;
-          }
-        }
+      if ((m - 1) % 12 === 0) {
+        yGrowth = 0;
+        yTsumitate = 0;
       }
 
+      var totalUsed = cGrowth + cTsumitate;
+      var totalRoom = Math.max(0, TOTAL_LIFETIME_CAP - totalUsed);
+      var growthWanted = Math.min(
+        growthMonthly,
+        Math.max(0, GROWTH_LIFETIME_CAP - cGrowth),
+        Math.max(0, GROWTH_YEARLY_CAP - yGrowth)
+      );
+      var tsumitateWanted = Math.min(
+        tsumitateMonthly,
+        Math.max(0, TSUMITATE_YEARLY_CAP - yTsumitate)
+      );
+      var allocation = allocateWithinTotal(growthWanted, tsumitateWanted, totalRoom);
+      var growthIn = allocation.growthIn;
+      var tsumitateIn = allocation.tsumitateIn;
+
       cGrowth += growthIn;
+      yGrowth += growthIn;
       cTsumitate += tsumitateIn;
+      yTsumitate += tsumitateIn;
 
       var nisaIn = growthIn + tsumitateIn;
       var overflow = growthMonthly - growthIn + (tsumitateMonthly - tsumitateIn);
@@ -94,6 +130,16 @@
           total: nisaValue + taxableNetNow,
         });
       }
+    }
+    if (months % 12 !== 0 || series.length === 0) {
+      var taxableGainLast = Math.max(0, taxableValue - taxablePrincipal);
+      var taxableNetLast = taxableValue - taxableGainLast * TAX_RATE;
+      series.push({
+        year: months / 12,
+        nisaValue: nisaValue,
+        taxableNet: taxableNetLast,
+        total: nisaValue + taxableNetLast,
+      });
     }
 
     var taxableGain = Math.max(0, taxableValue - taxablePrincipal);
@@ -133,9 +179,7 @@
     var result = simulate(tsumitateMonthly, growthMonthly, ratePct, years);
 
     if (result.fillMonth) {
-      var y = Math.floor(result.fillMonth / 12);
-      var mo = result.fillMonth % 12;
-      els.fillPeriod.textContent = mo === 0 ? y + " 年" : y + " 年 " + mo + "ヶ月";
+      els.fillPeriod.textContent = formatFillPeriod(result.fillMonth);
     } else {
       els.fillPeriod.textContent = "この期間内は使い切りません";
     }
