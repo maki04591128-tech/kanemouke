@@ -3,6 +3,8 @@
 
   var TOTAL_LIFETIME_CAP = 18000000; // 生涯投資枠（総枠）
   var GROWTH_LIFETIME_CAP = 12000000; // うち成長投資枠の上限
+  var TSUMITATE_MONTHLY_CAP = 100000; // 年間120万円を月額に均した上限
+  var GROWTH_MONTHLY_CAP = 200000; // 年間240万円を月額に均した上限
   var TAX_RATE = 0.20315; // 課税口座の運用益にかかる税率（所得税・復興特別所得税・住民税の合計）
 
   var els = {
@@ -42,14 +44,33 @@
 
     for (var m = 1; m <= months; m++) {
       var totalUsed = cGrowth + cTsumitate;
+      var totalRoom = Math.max(0, TOTAL_LIFETIME_CAP - totalUsed);
+      var growthWanted = Math.min(growthMonthly, Math.max(0, GROWTH_LIFETIME_CAP - cGrowth));
+      var tsumitateWanted = tsumitateMonthly;
+      var totalWanted = growthWanted + tsumitateWanted;
 
-      var growthRoom = Math.max(0, Math.min(GROWTH_LIFETIME_CAP - cGrowth, TOTAL_LIFETIME_CAP - totalUsed));
-      var growthIn = Math.min(growthMonthly, growthRoom);
+      var growthIn = growthWanted;
+      var tsumitateIn = tsumitateWanted;
+      if (totalWanted > totalRoom) {
+        var growthShare = totalRoom * (growthWanted / totalWanted);
+        var tsumitateShare = totalRoom * (tsumitateWanted / totalWanted);
+        growthIn = Math.floor(growthShare);
+        tsumitateIn = Math.floor(tsumitateShare);
+
+        for (var remain = totalRoom - growthIn - tsumitateIn; remain > 0; remain--) {
+          var growthFraction = growthShare - growthIn;
+          var tsumitateFraction = tsumitateShare - tsumitateIn;
+          if (growthFraction > tsumitateFraction && growthIn < growthWanted) {
+            growthIn++;
+          } else if (tsumitateIn < tsumitateWanted) {
+            tsumitateIn++;
+          } else if (growthIn < growthWanted) {
+            growthIn++;
+          }
+        }
+      }
+
       cGrowth += growthIn;
-      totalUsed = cGrowth + cTsumitate;
-
-      var tsumitateRoom = Math.max(0, TOTAL_LIFETIME_CAP - totalUsed);
-      var tsumitateIn = Math.min(tsumitateMonthly, tsumitateRoom);
       cTsumitate += tsumitateIn;
 
       var nisaIn = growthIn + tsumitateIn;
@@ -98,10 +119,13 @@
   }
 
   function render() {
-    var tsumitateMonthly = Math.max(0, Number(els.tsumitate.value) || 0);
-    var growthMonthly = Math.max(0, Number(els.growth.value) || 0);
+    var tsumitateMonthly = Math.min(TSUMITATE_MONTHLY_CAP, Math.max(0, Number(els.tsumitate.value) || 0));
+    var growthMonthly = Math.min(GROWTH_MONTHLY_CAP, Math.max(0, Number(els.growth.value) || 0));
     var ratePct = Number(els.rate.value);
     var years = Number(els.years.value);
+
+    els.tsumitate.value = tsumitateMonthly;
+    els.growth.value = growthMonthly;
 
     els.rateOut.textContent = ratePct.toFixed(1) + " %";
     els.yearsOut.textContent = years + " 年";
