@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NISA つみたて投資枠 vs 成長投資枠 配分シミュレーター | ふやすノート</title>
+<meta name="description" content="毎月の投資予定額を「つみたて投資枠」と「成長投資枠」にどう配分すればよいかを4つの戦略で比較。生涯投資枠1,800万円を使い切るまでの期間・資産評価額・節税額の違いを無料で試算できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="nisa-haibun-simulator.html">つみたてvs成長投資枠</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
+      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
+      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
+      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>NISA つみたて投資枠 vs 成長投資枠 配分シミュレーター</h1>
+    <p>毎月の投資予定額（合計）を入力すると、「つみたて投資枠を優先」「成長投資枠を優先」「年間上限比率で按分」「つみたて投資枠のみ」の4つの配分方法について、生涯投資枠1,800万円を使い切るまでの期間・その時点の資産評価額・節税額の目安をまとめて比較できます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="total">毎月の投資予定額（合計） <span class="unit">円</span></label>
+        <input type="number" id="total" value="150000" min="0" max="300000" step="1000">
+        <p class="field-hint">つみたて投資枠は月10万円（年120万円）、成長投資枠は月20万円（年240万円）が上限です。合計で月30万円を超える分はどの配分でもNISA枠に入りません。</p>
+      </div>
+
+      <div class="field">
+        <label for="rate">想定利回り（年率） <span id="rateOut" class="unit">5.0 %</span></label>
+        <input type="range" id="rate" value="5" min="0" max="8" step="0.1">
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="table-wrap">
+        <h2>配分方法ごとの毎月の内訳</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th>配分方法</th><th>つみたて投資枠</th><th>成長投資枠</th><th>枠に入らない分（課税口座）</th></tr>
+          </thead>
+          <tbody id="split-body"></tbody>
+        </table>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>配分方法ごとの資産評価額の推移（50年間、生涯枠を使い切った1年後で打ち切り）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="table-wrap">
+    <h2>配分方法の比較</h2>
+    <table class="data-table wall-table">
+      <thead>
+        <tr><th>配分方法</th><th>生涯投資枠を使い切るまで</th><th>その時点の資産評価額</th><th>NISAによる節税額</th><th>使われない成長投資枠</th></tr>
+      </thead>
+      <tbody id="compare-body"></tbody>
+    </table>
+  </div>
+
+  <div class="affiliate-box">
+    <h3>配分方法が決まったら、NISA口座を開設して積立設定を</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券でNISA口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ロボアドバイザーで積立投資を始める</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>つみたて投資枠と成長投資枠、何が違う？</h2>
+    <p>新NISAの生涯投資枠1,800万円は「つみたて投資枠（年120万円まで）」と「成長投資枠（年240万円まで、ただし生涯の上限は1,200万円）」の2つで構成されています。単純に「早く枠を使い切りたいから成長投資枠だけに全額入れる」という配分は一見合理的に見えますが、成長投資枠には1,200万円という生涯上限があるため、つみたて投資枠を一切使わないと、残り600万円分の非課税枠が永久に使えないまま残ってしまいます。本ツールはこの落とし穴を含め、代表的な4つの配分方法を横並びで比較できるようにしました。</p>
+    <p>また、対象となる商品にも違いがあります。つみたて投資枠は金融庁が定めた基準を満たす投資信託・ETFに限られますが、成長投資枠は上場株式・REIT・投資信託など対象商品の幅が広い（ただし信託期間20年未満の投資信託や高レバレッジ型など一部除外あり）という特徴があります。配分は「非課税枠をどれだけ早く・無駄なく使い切れるか」と「どんな商品に投資したいか」の両方から考える必要があります。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>結局どの配分方法がいちばんお得ですか？</dt>
+        <dd>毎月の投資予定額が合計30万円（つみたて10万円＋成長20万円）以内であれば、「つみたて優先」「成長優先」「比率按分」のいずれも最終的に生涯投資枠1,800万円を同じように使い切るため、資産評価額に大きな差は生まれません。差が出やすいのは「つみたて投資枠のみ」を選んだ場合で、成長投資枠1,200万円分の非課税枠を使わないまま積立期間が長期化します。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>成長投資枠だけに全額を入れるとどうなりますか？</dt>
+        <dd>成長投資枠には生涯1,200万円という上限があるため、つみたて投資枠を使わずに積み立て続けると、成長投資枠の上限に達した時点でNISA口座への入金が止まり、それ以降の積立分は課税口座に回ります。生涯投資枠1,800万円のうち600万円分は使われないまま残ります（本ツールの「成長優先」で毎月の合計額が20万円以下の場合に、この状態を確認できます）。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>枠を使い切った後はどうすればいいですか？</dt>
+        <dd>生涯投資枠を使い切った後は、新たな非課税投資はできません（保有商品を売却すると翌年以降に取得価額分の枠が復活します。詳しくは「NISA枠の売却による復活シミュレーター」をご覧ください）。使い切った後の積立分は課税口座での運用となり、運用益に約20.315%の税金がかかります。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果や制度の継続を保証するものではありません。想定利回りは一定と仮定した単純計算であり、実際の運用は市場の変動により結果が異なります。税制・NISA制度は改正される可能性があります。本サイトは特定の金融商品の勧誘・助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/nisa-haibun.js"></script>
+</body>
+</html>
