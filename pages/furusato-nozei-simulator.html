@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ふるさと納税 控除上限額シミュレーター | ふやすノート</title>
+<meta name="description" content="年収・家族構成からふるさと納税で自己負担2,000円になる寄付上限額の目安を無料で試算。総務省公表の計算式に基づき、所得税率・住民税所得割額もあわせて確認できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>ふるさと納税 控除上限額シミュレーター</h1>
+    <p>ふるさと納税は、自己負担2,000円を超える部分が所得税・住民税から控除される制度ですが、控除される金額には年収や家族構成に応じた上限があります。上限を超えて寄付した分は全額自己負担になるため、寄付前に目安額を確認しておきましょう。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
+        <input type="number" id="salaryIncome" value="5000000" min="0" max="30000000" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="socialInsurance">社会保険料の年間支払額（概算） <span class="unit">円</span></label>
+        <input type="number" id="socialInsurance" value="750000" min="0" step="1000">
+        <p class="field-hint">目安がわからない場合は年収の約15%で概算しています（給与明細の社会保険料合計×12で置き換えるとより正確です）。</p>
+      </div>
+
+      <div class="field">
+        <label for="hasSpouse">配偶者控除の対象になる配偶者</label>
+        <select id="hasSpouse">
+          <option value="no">いない</option>
+          <option value="yes">いる（配偶者の年収が103万円以下など）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
+        <input type="number" id="dependents" value="0" min="0" max="6" step="1">
+      </div>
+
+      <div class="field">
+        <label for="donationPlan">寄付予定額 <span class="unit">円</span></label>
+        <input type="number" id="donationPlan" value="50000" min="0" step="1000">
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">控除上限額の目安</div>
+          <div class="value" id="result-limit">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">給与所得</div>
+          <div class="value" id="result-salary-income">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">課税所得（住民税ベース）</div>
+          <div class="value" id="result-taxable-income">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">所得税率（速算表）</div>
+          <div class="value" id="result-tax-rate">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">住民税所得割額（概算）</div>
+          <div class="value" id="result-resident-tax">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="220"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>寄付額に対する自己負担額</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>あなたの寄付予定額</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>区分</th><th>金額</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>ふるさと納税を始めるなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ふるさと納税サイトで返礼品を探す</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ワンストップ特例制度の申請方法を確認する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>控除上限額はどう決まる？</h2>
+    <p>ふるさと納税の控除上限額（自己負担2,000円で寄付できる金額の目安）は、住民税所得割額と所得税率から総務省が示す計算式で求められます。本ツールでは <strong>控除上限額 ＝ 住民税所得割額 × 20% ÷（90% − 所得税率 × 102.1%）＋ 2,000円</strong> という一般的な近似式を用いて試算しています。年収が高いほど、また扶養家族が少ないほど上限額は大きくなる傾向があります。ただし、これはあくまで給与所得者を前提にした概算であり、医療費控除や住宅ローン控除など他の控除を利用している場合、実際の上限額はここで示す金額より少なくなります。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>上限額を超えて寄付するとどうなりますか？</dt>
+        <dd>上限を超えた部分は控除の対象にならず、全額自己負担になります。返礼品は受け取れますが、税金の控除という観点では超過分がそのまま持ち出しになる点に注意してください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>社会保険料の金額がわからない場合はどうすればいいですか？</dt>
+        <dd>給与明細やねんきん定期便で確認するのが最も正確ですが、目安として年収のおよそ15%を社会保険料として概算しても大きくは外れません。本ツールも初期値としてこの概算値を表示しています。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>ワンストップ特例と確定申告で控除額は変わりますか？</dt>
+        <dd>控除の合計額自体はどちらの手続きでもほぼ同じです。ワンストップ特例では住民税からまとめて控除され、確定申告では所得税の還付と住民税の控除に分かれる点が異なります（ワンストップ特例は寄付先が5自治体以内などの条件があります）。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>この試算は正確ですか？</dt>
+        <dd>給与所得者を前提とした一般的な近似計算です。医療費控除・住宅ローン控除・iDeCoの掛金控除など他の控除がある場合や、給与以外の所得がある場合は上限額が変わります。正確な金額は自治体の窓口や税理士、ふるさと納税サイトの詳細シミュレーターでご確認ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の控除上限額を保証するものではありません。正確な金額は自治体・税務署・税理士等にご確認ください。本サイトは特定の自治体・返礼品の勧誘を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/furusato-nozei.js"></script>
+</body>
+</html>
