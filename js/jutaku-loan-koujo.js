@@ -27,17 +27,17 @@
     { limit: Infinity, rate: 0.45, deduct: 4796000 },
   ];
 
-  // 給与所得控除額（令和2年分以降の速算表）
+  // 給与所得控除額（2025年度税制改正後、最低保障額65万円）
   var SALARY_DEDUCTION_BRACKETS = [
-    { limit: 1625000, calc: function () { return 550000; } },
-    { limit: 1800000, calc: function (income) { return income * 0.4 - 100000; } },
+    { limit: 1900000, calc: function () { return 650000; } },
     { limit: 3600000, calc: function (income) { return income * 0.3 + 80000; } },
     { limit: 6600000, calc: function (income) { return income * 0.2 + 440000; } },
     { limit: 8500000, calc: function (income) { return income * 0.1 + 1100000; } },
     { limit: Infinity, calc: function () { return 1950000; } },
   ];
 
-  var INCOME_BASIC_DEDUCTION = 480000;
+  // 基礎控除は2025年分以降の58万円（合計所得金額2,350万円以下の場合）
+  var INCOME_BASIC_DEDUCTION = 580000;
   var INCOME_SPOUSE_DEDUCTION = 380000;
   var INCOME_DEPENDENT_DEDUCTION = 380000;
   var RESIDENT_TAX_RATE = 0.10;

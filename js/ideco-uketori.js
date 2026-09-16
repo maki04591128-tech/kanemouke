@@ -1,7 +1,8 @@
 (function () {
   "use strict";
 
-  var INCOME_BASIC_DEDUCTION = 480000;
+  // 基礎控除は2025年分以降の58万円（合計所得金額2,350万円以下の場合）
+  var INCOME_BASIC_DEDUCTION = 580000;
   var RESIDENT_BASIC_DEDUCTION = 430000;
   var RESIDENT_TAX_RATE = 0.10;
   var RECONSTRUCTION_TAX_RATE = 0.021;
