@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>扶養控除・年収の壁シミュレーター | ふやすノート</title>
+<meta name="description" content="パート・アルバイト収入がいくらになると税金や社会保険料がかかり始めるか、106万円・123万円（旧103万円）・130万円などの「年収の壁」を一度に確認できる無料シミュレーター。手取り額の推移もグラフで確認できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>扶養控除・年収の壁シミュレーター</h1>
+    <p>パート・アルバイト収入には、税金や社会保険料の負担が発生し始める「年収の壁」がいくつも存在します。年収と勤務先の条件を入力すると、住民税・所得税・社会保険料それぞれの壁を今の年収が超えているかどうかと、壁を超えた場合の手取り額の目安を一度に確認できます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="income">年間の給与収入（パート・アルバイト収入） <span class="unit">円</span></label>
+        <input type="number" id="income" value="1300000" min="0" max="3000000" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="insuranceApplies">勤務先の社会保険 加入条件（106万円の壁）</label>
+        <select id="insuranceApplies">
+          <option value="no">該当しない（130万円の壁が基準）</option>
+          <option value="yes">該当する（従業員51人以上・週20時間以上勤務など）</option>
+        </select>
+        <p class="field-hint">従業員数51人以上の企業に勤務し、週の所定労働時間が20時間以上、月額賃金が8.8万円以上などの条件をすべて満たす場合は「該当する」を選んでください。条件がわからない場合は勤務先に確認するのが確実です。</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">手取り額の目安</div>
+          <div class="value" id="result-take-home">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">給与所得</div>
+          <div class="value" id="result-salary-income">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">所得税（概算）</div>
+          <div class="value" id="result-income-tax">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">住民税（概算）</div>
+          <div class="value" id="result-resident-tax">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">社会保険料（概算）</div>
+          <div class="value" id="result-social-insurance">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="220"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>手取り額の目安</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>あなたの年収</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table wall-table">
+          <thead>
+            <tr><th>壁の種類</th><th>金額</th><th>現在の状態</th><th>補足</th></tr>
+          </thead>
+          <tbody id="wall-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>年収の壁を超えて働くなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>社会保険加入後も手取りを増やす働き方を求人サイトで探す</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>iDeCoで掛金を所得控除にして手取り減を抑える</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>「年収の壁」は1つではない</h2>
+    <p>「年収の壁」と呼ばれるラインは、実は税金の壁（住民税・所得税）と社会保険の壁（106万円・130万円）、さらに配偶者特別控除の壁（150万円・201万6千円）に分かれており、それぞれ超えたときの影響が異なります。税金の壁は超えた金額に応じて少しずつ税負担が増える「なだらかな坂」であるのに対し、社会保険の壁は超えた瞬間に保険料負担がまとまって発生する「崖」に近い構造です。グラフで手取り額がガクッと下がる箇所があるのは、この社会保険料の崖によるものです。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>「103万円の壁」はなくなったのですか？</dt>
+        <dd>なくなったわけではなく、2025年度税制改正で所得税の基礎控除と給与所得控除の引き上げにより、本人に所得税がかかり始めるラインが103万円から123万円に引き上げられました。本ツールもこの2025年分以降の制度に基づいて試算しています。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>106万円の壁と130万円の壁の違いは何ですか？</dt>
+        <dd>どちらも社会保険（厚生年金・健康保険）に自分で加入し保険料を負担することになる壁ですが、106万円の壁は従業員51人以上の企業に勤務し、週20時間以上働くなど一定の条件に該当する人が対象です。条件に該当しない場合は130万円を超えた時点で配偶者等の扶養（社会保険の被扶養者）から外れます。106万円の壁の適用条件は今後の制度改正で見直しが検討されているため、最新情報は日本年金機構や勤務先にご確認ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>150万円・201万6千円の壁とは何ですか？</dt>
+        <dd>これは自分自身の税金ではなく、配偶者（夫や妻）の税金に関わる壁です。配偶者特別控除は、パートで働く人の年収が150万円までは配偶者側が満額（最大38万円）の所得控除を受けられますが、150万円を超えると段階的に減り、201万6千円以上になると控除がゼロになります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>壁を超えたら必ず損をしますか？</dt>
+        <dd>社会保険料を負担する分、手取りが一時的に伸び悩む・減ることはありますが、厚生年金に加入すれば将来受け取る年金額が増える、傷病手当金などの保障が手厚くなるといったメリットもあります。単純な手取り額の比較だけでなく、将来の年金額や保障内容もあわせて考えることをおすすめします。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>この試算は正確ですか？</dt>
+        <dd>給与所得者を前提とした一般的な近似計算です。住民税の非課税ラインは自治体により異なり、社会保険料も加入する制度や地域によって金額が変わります。正確な金額は勤務先の給与担当者や年金事務所、税務署にご確認ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の税額・社会保険料を保証するものではありません。制度は改正される場合があります。正確な金額は勤務先・年金事務所・税務署等にご確認ください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/nenshu-no-kabe.js"></script>
+</body>
+</html>

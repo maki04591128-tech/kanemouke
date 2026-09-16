@@ -353,6 +353,18 @@ a { color: var(--color-primary); }
   color: var(--color-primary-dark);
   white-space: nowrap;
 }
+.data-table.wall-table td:last-child {
+  font-weight: 400;
+  color: var(--color-text);
+  white-space: normal;
+}
+.data-table.wall-table tr.wall-crossed {
+  background: #fdf3e0;
+}
+.data-table.wall-table tr.wall-crossed td:nth-child(3) {
+  color: var(--color-accent);
+  font-weight: 700;
+}
 
 /* Article / explainer sections */
 .article-section {
