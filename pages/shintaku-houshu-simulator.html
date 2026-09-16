@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>投資信託 信託報酬（コスト）比較シミュレーター | ふやすノート</title>
+<meta name="description" content="信託報酬（運用コスト）が異なる2つのファンドを、毎月の積立額・想定利回り・積立期間から比較する無料シミュレーター。わずかなコスト差が長期の複利運用でどれだけの資産差になるかを試算できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="shintaku-houshu-simulator.html">信託報酬コスト比較</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="gakushihoken-nisa-simulator.html">学資保険vs積立NISA</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="nisa-haibun-simulator.html">つみたてvs成長投資枠</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
+      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
+      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
+      <a href="torikuzushi-simulator.html">資産取り崩し方式比較</a>
+      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
+      <a href="souzokuzei-simulator.html">相続税シミュレーター</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>投資信託 信託報酬（コスト）比較シミュレーター</h1>
+    <p>信託報酬（運用管理費用）が異なる2つのファンドを、同じ積立額・同じ想定利回り（信託報酬控除前）で積み立てた場合の将来の資産額を比較します。一見小さなコスト差が、長期の複利運用でどれだけの金額差になるかを確認できます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="initial">初期投資額 <span class="unit">円</span></label>
+        <input type="number" id="initial" value="0" min="0" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="monthly">毎月の積立額 <span class="unit">円</span></label>
+        <input type="number" id="monthly" value="30000" min="0" step="1000">
+      </div>
+
+      <div class="field">
+        <label for="years">積立期間 <span id="yearsOut" class="unit">30 年</span></label>
+        <input type="range" id="years" value="30" min="1" max="40" step="1">
+      </div>
+
+      <div class="field">
+        <label for="grossRate">想定利回り（信託報酬控除前・グロス） <span id="grossRateOut" class="unit">5.0 %</span></label>
+        <input type="range" id="grossRate" value="5.0" min="0" max="10" step="0.1">
+        <p class="field-hint">同じ市場・同じ指数に連動する商品であれば、信託報酬控除前のグロスの運用成果はほぼ同じという前提で試算します。</p>
+      </div>
+
+      <div class="field">
+        <label for="feeA">ファンドAの信託報酬（年率） <span id="feeAOut" class="unit">0.20 %</span></label>
+        <input type="range" id="feeA" value="0.20" min="0" max="3" step="0.01">
+        <p class="field-hint">低コストのインデックスファンドは年0.1〜0.3%程度のものが多く見られます。目論見書の「運用管理費用（信託報酬）」欄で確認できます。</p>
+      </div>
+
+      <div class="field">
+        <label for="feeB">ファンドBの信託報酬（年率） <span id="feeBOut" class="unit">1.50 %</span></label>
+        <input type="range" id="feeB" value="1.50" min="0" max="3" step="0.01">
+        <p class="field-hint">アクティブファンドや旧型の商品では信託報酬が年1%台後半〜2%台になっているケースもあります。実際の商品の数値に置き換えて比較してください。</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">積立元本（累計）</div>
+          <div class="value" id="result-principal">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">ファンドA：資産評価額</div>
+          <div class="value" id="result-a">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">ファンドB：資産評価額</div>
+          <div class="value" id="result-b">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">コストによる資産差額</div>
+          <div class="value" id="result-diff">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>ファンドA 評価額</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>ファンドB 評価額</span>
+          <span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>項目</th><th>ファンドA</th><th>ファンドB</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件をそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>低コストのファンドで積み立てを始めるなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で信託報酬の低いインデックスファンドを探す（口座開設無料）</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>保有中の投資信託の手数料を見直す・乗り換えを相談する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>信託報酬はなぜ運用成果に大きく影響するのか</h2>
+    <p>信託報酬（運用管理費用）は、投資信託を保有している間、毎日の基準価額から自動的に差し引かれるコストです。購入時手数料のように一度だけ支払うものではなく、保有し続ける限り、資産残高に対して毎年一定の割合がかかり続けます。そのため信託報酬が高い商品ほど「複利で増えるはずだった部分」が毎年少しずつ削られ、積立期間が長くなるほどその差が雪だるま式に拡大していきます。本シミュレーターは、信託報酬控除前の想定利回り（グロス）が同じである2つのファンドを比較することで、コストの差だけがどれだけ最終的な資産額に影響するかを試算します。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>信託報酬が低いファンドを選べば必ず得をしますか？</dt>
+        <dd>同じ指数（例：同じ株価指数）に連動するインデックスファンドを比較する場合は、信託報酬が低いほど手元に残る運用成果は大きくなる傾向があります。ただし、アクティブファンドのように運用方針そのものが異なる商品を比較する場合は、信託報酬の高さが必ずしも不利とは限らず、運用成果（グロスの利回り）自体に差が出ることもあります。本シミュレーターは「グロスの利回りが同じ場合」を前提にした試算である点にご留意ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>信託報酬以外にかかるコストはありますか？</dt>
+        <dd>購入時手数料（ノーロード商品は無料）、信託財産留保額（解約時に差し引かれる商品があります）、また信託報酬に含まれない「その他費用」（監査費用や売買委託手数料など）が実質的にかかる商品もあります。より正確に比較したい場合は、目論見書や運用報告書に記載されている「実質コスト」もあわせて確認することをおすすめします。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>NISA口座でも信託報酬はかかりますか？</dt>
+        <dd>はい、NISA口座（非課税口座）で保有していても信託報酬は通常どおりかかります。NISAが非課税にするのは運用益に対する税金（約20%）であり、信託報酬などの運用コストとは別のものです。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、将来の運用成果や元本を保証するものではありません。信託報酬控除前の想定利回り（グロス）が2つのファンドで同一であることを前提とした試算であり、購入時手数料・信託財産留保額・実質コスト・運用益への課税は考慮していません。特定の金融商品の勧誘・投資助言を目的としたものではなく、投資に関する最終判断はご自身の責任で行ってください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/shintaku-houshu.js"></script>
+<script src="../js/share.js"></script>
+</body>
+</html>
