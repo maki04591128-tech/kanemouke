@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学資保険 vs 積立NISA（つみたて投資枠） 比較シミュレーター | ふやすノート</title>
+<meta name="description" content="教育資金の準備方法として人気の学資保険と積立NISAを、返戻率・想定利回り・払込期間から将来の受取額で無料比較。元本保証と市場変動リスクの違いもあわせて確認できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="gakushihoken-nisa-simulator.html">学資保険vs積立NISA</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="nisa-haibun-simulator.html">つみたてvs成長投資枠</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
+      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
+      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
+      <a href="torikuzushi-simulator.html">資産取り崩し方式比較</a>
+      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
+      <a href="souzokuzei-simulator.html">相続税シミュレーター</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>学資保険 vs 積立NISA（つみたて投資枠） 比較シミュレーター</h1>
+    <p>教育資金の準備方法として根強い人気がある「学資保険」と、既存の教育資金シミュレーターが前提とする「積立NISA（つみたて投資枠）」を、同じ毎月の積立額で比較します。学資保険は返戻率どおりの受取額が契約時に確定するのに対し、積立NISAは想定利回りで運用した場合の試算値である点が大きな違いです。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="monthly">毎月の払込・積立額 <span class="unit">万円</span></label>
+        <input type="number" id="monthly" value="1.5" min="0" step="0.1">
+      </div>
+
+      <div class="field">
+        <label for="years">払込・積立期間 <span id="yearsOut" class="unit">18 年</span></label>
+        <input type="range" id="years" value="18" min="5" max="22" step="1">
+        <p class="field-hint">学資保険は0歳から加入し18歳満期（払込18年）が一般的です。払込期間を短くして据置く商品もありますが、本シミュレーターでは払込期間＝満期までの期間として簡略化しています。</p>
+      </div>
+
+      <div class="field">
+        <label for="returnRate">学資保険の返戻率 <span id="returnRateOut" class="unit">105.0 %</span></label>
+        <input type="range" id="returnRate" value="105.0" min="90" max="115" step="0.5">
+        <p class="field-hint">返戻率＝受取総額÷払込保険料総額。保障を厚くするほど返戻率は下がり、100%未満（元本割れ）になる商品もあります。加入予定の商品のパンフレット記載値を入力してください。</p>
+      </div>
+
+      <div class="field">
+        <label for="nisaRate">積立NISAの想定利回り（年率・複利） <span id="nisaRateOut" class="unit">5.0 %</span></label>
+        <input type="range" id="nisaRate" value="5.0" min="0" max="10" step="0.1">
+        <p class="field-hint">つみたて投資枠の運用益は非課税のため、税金は考慮していません。将来の運用成果を保証するものではない点にご留意ください。</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">払込・積立累計額（元本）</div>
+          <div class="value" id="result-principal">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">学資保険：満期受取額</div>
+          <div class="value" id="result-hoken">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">積立NISA：運用終了時点の評価額</div>
+          <div class="value" id="result-nisa">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">受取額の差</div>
+          <div class="value" id="result-diff">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>積立NISA 評価額</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>学資保険 満期受取額（参考）</span>
+          <span><span class="legend-dot" style="background:#7a8899"></span>払込・積立累計額（元本）</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>項目</th><th>学資保険</th><th>積立NISA</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件をそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>教育資金の準備を検討するなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>学資保険の資料請求・見積もり比較をする</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券でつみたて投資枠の口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>学資保険と積立NISA、金額以外に何が違うのか</h2>
+    <p>学資保険は、契約時に定めた返戻率どおりの受取額が（保険会社の破綻等がない限り）確定している「元本保証型」の商品です。一方、積立NISAは投資信託などで運用するため、将来の受取額は市場の値動きによって変動し、想定利回りを下回る（元本割れする）可能性もあります。本シミュレーターの試算結果はどちらが「得」かを断定するものではなく、条件を変えて金額の傾向を確認するための参考値です。</p>
+    <p>また、学資保険には積立NISAにはない「保障」の機能があります。代表的なのが<strong>保険料払込免除特約</strong>で、契約者（多くは親）が死亡・高度障害になった場合、それ以降の保険料の払い込みが免除されたうえで、満期時には契約どおりの満額の学資金を受け取れます。積立NISAでこれと同等の保障を得るには、別途生命保険への加入が必要です。逆に積立NISAには、いつでも売却して資金を引き出せる流動性の高さや、学資保険の返戻率が110%を超えることは少ないのに対し長期の株式運用ではより高いリターンが期待できる可能性があるという特徴があります。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>学資保険の保険料は生命保険料控除の対象になりますか？</dt>
+        <dd>多くの学資保険は「一般生命保険料控除」の対象です。年間の払込保険料に応じて所得税・住民税が軽減されますが、本シミュレーターでは金額を簡略化するため控除額を試算に含めていません。控除額の目安は「生命保険料控除・地震保険料控除シミュレーター」で別途ご確認ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>満期保険金を受け取ると税金がかかりますか？</dt>
+        <dd>契約者本人が保険料を払い込み、契約者本人が満期保険金を受け取る場合は「一時所得」として扱われます。一時所得は「（受取額－払込保険料総額－特別控除50万円）÷2」が課税対象で、多くの学資保険は受取額と払込保険料の差が50万円以下に収まるため、実際には課税されないケースが大半です。一方、積立NISA（つみたて投資枠）は運用益が非課税のため、この論点自体が生じません。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>払込期間の途中で解約したらどうなりますか？</dt>
+        <dd>学資保険を途中解約すると、解約返戻金が払込保険料の総額を下回ることが多く、大きく元本割れするのが一般的です。本シミュレーターは満期まで契約を継続した場合の試算のみを対象としています。積立NISAはいつでも時価で売却できる点が対照的です。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・保険会社の商品内容・元本を保証するものではありません。学資保険の返戻率は入力値をそのまま満期時に確定するものとして計算し、途中解約・保障内容・生命保険料控除・満期保険金の課税は考慮していません。積立NISAは運用益非課税として月次複利で計算した税引前の試算値です。実際の商品選び・税額については保険会社・税理士等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/gakushihoken-nisa.js"></script>
+<script src="../js/share.js"></script>
+</body>
+</html>
