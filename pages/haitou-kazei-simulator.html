@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>年収から手取り額シミュレーター | ふやすノート</title>
-<meta name="description" content="額面年収・年齢区分・配偶者控除の有無・扶養人数から、社会保険料・所得税・住民税を差し引いた手取り年収と手取り率を無料で試算。内訳を円グラフで確認でき、年収別の手取り早見表も表示します。">
+<title>配当所得 課税方式シミュレーター（総合課税 vs 申告分離課税 vs 申告不要） | ふやすノート</title>
+<meta name="description" content="上場株式の配当金を「確定申告不要制度」「申告分離課税」「総合課税」のどれで受け取るのが得かを、給与収入・配当金額・配当控除から無料で試算。3方式の手取り配当額をグラフと表で比較できます。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
@@ -53,8 +53,8 @@
 
 <main class="container">
   <div class="page-title">
-    <h1>年収から手取り額シミュレーター</h1>
-    <p>額面の年収から、社会保険料（健康保険・厚生年金・雇用保険・介護保険）・所得税・住民税を差し引いた「手取り年収」の目安を試算します。年齢区分・配偶者控除の有無・扶養親族の人数を反映し、内訳を円グラフで、年収別の手取り早見表もあわせて確認できます。</p>
+    <h1>配当所得 課税方式シミュレーター</h1>
+    <p>上場株式の配当金は「確定申告不要制度」「申告分離課税」「総合課税」の3つの方式から選んで受け取ることができます。給与収入・配当金額を入力すると、総合課税で配当控除を使った場合の手取り額を、申告不要（源泉徴収のみ）の場合と比較し、どちらが有利かを試算します。</p>
   </div>
 
   <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
@@ -64,17 +64,22 @@
       <h2>条件を入力</h2>
 
       <div class="field">
-        <label for="income">額面年収 <span class="unit">万円</span></label>
+        <label for="income">給与年収（配当以外の収入） <span class="unit">万円</span></label>
         <input type="number" id="income" value="500" min="0" step="10">
       </div>
 
       <div class="field">
-        <label for="ageGroup">年齢区分</label>
+        <label for="dividend">年間の配当金額（税引前） <span class="unit">万円</span></label>
+        <input type="number" id="dividend" value="30" min="0" step="1">
+        <p class="field-hint">証券会社の年間取引報告書に記載される、上場株式・株式投資信託等の分配金の合計額（税引前）を入力してください。</p>
+      </div>
+
+      <div class="field">
+        <label for="ageGroup">年齢区分（社会保険料の計算に使用）</label>
         <select id="ageGroup">
           <option value="under40">40歳未満</option>
           <option value="40to64">40歳以上65歳未満（介護保険あり）</option>
         </select>
-        <p class="field-hint">65歳以上の方は雇用形態により保険料の扱いが異なるため、本シミュレーターでは対象外としています。</p>
       </div>
 
       <div class="field">
@@ -98,37 +103,37 @@
       </div>
 
       <div class="result-summary">
+        <div class="result-card">
+          <div class="label">確定申告不要（源泉徴収のみ）の手取り</div>
+          <div class="value" id="result-net-withholding">-</div>
+        </div>
         <div class="result-card accent">
-          <div class="label">手取り年収</div>
-          <div class="value" id="result-take-home">-</div>
+          <div class="label">総合課税（配当控除あり）の手取り</div>
+          <div class="value" id="result-net-comprehensive">-</div>
         </div>
         <div class="result-card">
-          <div class="label">手取り率</div>
-          <div class="value" id="result-take-home-rate">-</div>
+          <div class="label">総合課税との差額</div>
+          <div class="value" id="result-diff">-</div>
         </div>
         <div class="result-card">
-          <div class="label">月あたりの手取り目安</div>
-          <div class="value" id="result-take-home-monthly">-</div>
-        </div>
-        <div class="result-card">
-          <div class="label">額面との差額（社会保険料＋税金）</div>
-          <div class="value" id="result-total-deduction">-</div>
+          <div class="label">総合課税での配当への実効税率</div>
+          <div class="value" id="result-effective-rate">-</div>
         </div>
       </div>
 
       <div class="chart-wrap">
         <canvas id="growthChart" height="280"></canvas>
         <div class="legend-note">
-          <span><span class="legend-dot" style="background:#0f5f4c"></span>手取り／社会保険料／所得税／住民税の内訳</span>
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>方式ごとの手取り配当額</span>
         </div>
       </div>
 
       <div class="table-wrap">
         <table class="data-table">
           <thead>
-            <tr><th>項目</th><th>金額・割合</th></tr>
+            <tr><th>課税方式</th><th>配当への税額</th><th>手取り配当額</th><th>特徴</th></tr>
           </thead>
-          <tbody id="breakdown-body"></tbody>
+          <tbody id="compare-body"></tbody>
         </table>
       </div>
     </div>
@@ -148,25 +153,15 @@
 
   <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
 
-  <div class="table-wrap">
-    <h2>年収別の手取り早見表（同じ条件で試算）</h2>
-    <table class="data-table wall-table">
-      <thead>
-        <tr><th>額面年収</th><th>手取り年収の目安</th><th>手取り率</th></tr>
-      </thead>
-      <tbody id="table-body"></tbody>
-    </table>
-  </div>
-
   <div class="affiliate-box">
-    <h3>手取り額を把握したら、余った分を積立投資に</h3>
+    <h3>配当金を再投資して雪だるま式に増やすなら</h3>
     <div class="affiliate-list">
       <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
         <span>ネット証券でNISA口座を開設する</span>
         <span class="cta">詳細を見る →</span>
       </a>
       <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
-        <span>ロボアドバイザーで積立投資を始める</span>
+        <span>高配当株の取扱いが豊富な証券会社を見る</span>
         <span class="cta">詳細を見る →</span>
       </a>
     </div>
@@ -174,27 +169,31 @@
   </div>
 
   <section class="article-section">
-    <h2>額面年収と手取り年収の違い</h2>
-    <p>求人票や源泉徴収票に記載される「年収」は、税金や社会保険料が引かれる前の「額面」の金額です。実際に自由に使える「手取り」は、額面から健康保険・厚生年金・雇用保険（40〜64歳の場合は介護保険も）といった社会保険料と、所得税・住民税を差し引いた金額になります。一般的な会社員の場合、手取り率はおおむね75〜80%程度になることが多く、年収が上がるほど所得税が累進的に高くなるため手取り率はやや下がる傾向があります。本シミュレーターは、給与所得控除・基礎控除・配偶者控除・扶養控除を踏まえて、この手取り額を試算します。</p>
+    <h2>配当金の3つの課税方式とは</h2>
+    <p>上場株式等の配当金は、証券会社の特定口座（源泉徴収あり）で受け取ると、通常は自動的に20.315%（所得税15.315%＋住民税5%）が源泉徴収され、それだけで課税関係が終了します（確定申告不要制度）。これとは別に、確定申告をすることで「申告分離課税」または「総合課税」を選ぶこともできます。申告分離課税は税率が源泉徴収と同じ20.315%で、上場株式等の譲渡損失がある場合に損益通算・繰越控除ができるのが主なメリットです。総合課税は配当所得を給与所得などと合算して累進税率で課税する代わりに「配当控除」（課税所得1,000万円以下の部分は所得税10%・住民税2.8%を税額控除）が使えるため、課税所得が低い人ほど有利になりやすい方式です。なお2024年（令和6年度）以降、所得税と住民税の課税方式は一致させる必要があり、どちらか一方だけ総合課税・もう一方だけ申告不要、といった選択はできません。</p>
     <h3>よくある質問</h3>
     <dl>
       <div class="faq-item">
-        <dt>賞与（ボーナス）は年収に含めてよいですか？</dt>
-        <dd>本シミュレーターの「額面年収」は、毎月の給与と賞与の合計を想定しています。賞与にかかる社会保険料・所得税は毎月の給与とは別の計算方法（賞与に対する源泉徴収税額の算出率）が使われるため、実際の手取り額とは多少ずれる場合がある目安値としてご利用ください。</dd>
+        <dt>総合課税を選ぶと必ず得になりますか？</dt>
+        <dd>いいえ。総合課税は配当所得が他の所得と合算されるため、給与所得などがもともと多い方（課税所得が高い方）ほど適用される所得税率が上がり、配当控除を差し引いても源泉徴収より不利になるケースが多くなります。本シミュレーターの試算結果がプラスの場合のみ、総合課税を検討する価値があります。</dd>
       </div>
       <div class="faq-item">
-        <dt>社会保険料率が実際と違う気がします</dt>
-        <dd>健康保険料率は加入している健康保険組合や都道府県によって異なり、厚生年金には標準報酬月額・賞与額に上限があります。本シミュレーターは協会けんぽの全国平均目安に基づく概算のため、実際の給与明細の金額とは差が生じます。</dd>
+        <dt>総合課税を選ぶと配当以外にどんな影響がありますか？</dt>
+        <dd>総合課税を選ぶと配当所得が「合計所得金額」に加算されるため、扶養控除・配偶者控除の所得要件、国民健康保険料・後期高齢者医療保険料、保育料の算定などに影響が及ぶ場合があります。手取り額だけでなく、こうした副次的な影響も踏まえて判断することをおすすめします。</dd>
       </div>
       <div class="faq-item">
-        <dt>配偶者控除・扶養控除の金額が実際と違う場合は？</dt>
-        <dd>配偶者控除・配偶者特別控除は配偶者の年収に応じて段階的に減っていく仕組みですが、本シミュレーターは配偶者の年収が103万円以下で満額（所得税38万円・住民税33万円）が適用されるケースのみを簡易的に試算しています。扶養控除も、19〜22歳の特定扶養親族（63万円）や70歳以上の老人扶養親族（58万円）などの上乗せは考慮せず、一般の扶養親族として一律で計算しています。</dd>
+        <dt>NISA口座で受け取った配当金も対象ですか？</dt>
+        <dd>いいえ。NISA口座内の配当金・分配金は非課税のため、そもそも確定申告の対象外です。本シミュレーターは課税口座（特定口座・一般口座）で受け取った上場株式等の配当金を前提としています。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>大口株主が受け取る配当金も同じ計算ですか？</dt>
+        <dd>発行済株式総数の3%以上を保有する大口株主が受け取る配当金は、源泉徴収の対象外で総合課税が強制されるなど扱いが異なります。本シミュレーターは、それ以外の一般的な上場株式等の配当金を前提としています。</dd>
       </div>
     </dl>
   </section>
 
   <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の給与明細・源泉徴収票の金額と一致するものではありません。社会保険料率は協会けんぽの全国平均目安による概算であり、厚生年金・健康保険には標準報酬月額に基づく上限があるなど、実際の計算はより複雑です。配偶者控除・配偶者特別控除・扶養控除は簡略化した条件で試算しています。正確な金額は勤務先の給与担当者・税理士・年金事務所等にご確認ください。本サイトは税務・社会保険に関する助言を目的とするものではありません。
+    本シミュレーターの試算結果は入力条件に基づく参考値です。所得税率・配当控除率は2025年分の制度に基づく概算であり、社会保険料率は協会けんぽの全国平均目安による概算です。配偶者控除・扶養控除は簡略化した条件で試算しており、実際の確定申告書上の税額とは差が生じる場合があります。総合課税を選んだ場合に生じうる扶養控除・国民健康保険料等への副次的な影響は試算に含めていません。正確な金額は税務署・税理士にご確認ください。本サイトは税務・投資に関する助言を目的とするものではありません。
   </div>
 </main>
 
@@ -211,7 +210,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
-<script src="../js/nenshu-tedori.js"></script>
+<script src="../js/haitou-kazei.js"></script>
 <script src="../js/share.js"></script>
 </body>
 </html>
