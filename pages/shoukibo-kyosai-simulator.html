@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小規模企業共済 節税シミュレーター | ふやすノート</title>
+<meta name="description" content="自営業者・フリーランス・中小企業の役員向け「小規模企業共済」の掛金月額・加入年数・課税所得から、掛金全額所得控除による節税額と、共済金の受取時の税金（一括：退職所得扱い／分割：公的年金等の雑所得扱い）の目安を無料でシミュレーションします。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ikkatsu-tsumitate-simulator.html">一括vs積立投資</a>
+      <a href="shintaku-houshu-simulator.html">信託報酬コスト比較</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="ideco-nisa-yuusen-simulator.html">iDeCovsNISA優先度</a>
+      <a href="shoukibo-kyosai-simulator.html">小規模企業共済</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="gakushihoken-nisa-simulator.html">学資保険vs積立NISA</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="nisa-haibun-simulator.html">つみたてvs成長投資枠</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
+      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
+      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
+      <a href="torikuzushi-simulator.html">資産取り崩し方式比較</a>
+      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
+      <a href="souzokuzei-simulator.html">相続税シミュレーター</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>小規模企業共済 節税シミュレーター</h1>
+    <p>「小規模企業共済」は、自営業者・フリーランスや中小企業の役員が加入できる、いわば経営者・個人事業主向けの退職金制度です。掛金の全額が所得控除の対象になるため、iDeCoと並ぶ代表的な節税手段として知られています。掛金月額・加入年数・課税所得を入力するだけで、加入期間中の節税額と、共済金を受け取るときの税金の目安がわかります。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="monthly">掛金月額 <span id="monthlyOut" class="unit">30,000 円</span></label>
+        <input type="range" id="monthly" value="30000" min="1000" max="70000" step="500">
+        <p class="field-hint">小規模企業共済の掛金は月額1,000円〜70,000円の範囲で500円単位で自由に設定でき、加入後も増減額できます。</p>
+      </div>
+
+      <div class="field">
+        <label for="years">加入年数（掛金拠出年数） <span id="yearsOut" class="unit">20 年</span></label>
+        <input type="range" id="years" value="20" min="1" max="40" step="1">
+      </div>
+
+      <div class="field">
+        <label for="taxableIncome">年間の事業所得等の課税所得の目安 <span class="unit">円</span></label>
+        <input type="number" id="taxableIncome" value="3000000" min="0" step="10000">
+        <p class="field-hint">事業所得等から各種控除を差し引いたあとの課税所得の目安です。所得税の限界税率（速算表）の算出にのみ使用します。</p>
+      </div>
+
+      <div class="field">
+        <label for="rate">共済金試算に使う想定利率（年率） <span id="rateOut" class="unit">1.0 %</span></label>
+        <input type="range" id="rate" value="1.0" min="0" max="3" step="0.1">
+        <p class="field-hint">中小機構が基本共済金の算定基準としている予定利率（年1.0%）を初期値にしています。実際の共済金額は基本共済金に加え、その時々の運用状況に応じた付加共済金が上乗せ・削減されるため、本ツールの金額はあくまで目安です。</p>
+      </div>
+
+      <div class="field">
+        <label for="payoutMethod">共済金の受取方法</label>
+        <select id="payoutMethod">
+          <option value="lump" selected>一括受取（退職所得扱い）</option>
+          <option value="installment10">分割受取・10年（公的年金等の雑所得扱い）</option>
+          <option value="installment15">分割受取・15年（公的年金等の雑所得扱い）</option>
+        </select>
+      </div>
+
+      <div class="field" id="ageGroupRow">
+        <label for="ageGroup">受取開始時の年齢</label>
+        <select id="ageGroup">
+          <option value="under65">65歳未満</option>
+          <option value="65" selected>65歳以上</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">年間節税額（所得税＋住民税）</div>
+          <div class="value" id="result-annual-saving">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">加入期間中の累計節税額</div>
+          <div class="value" id="result-total-saving">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">掛金累計額（元本）</div>
+          <div class="value" id="result-principal">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">共済金の目安</div>
+          <div class="value" id="result-kyosaikin">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">実質負担額（掛金累計－累計節税額）</div>
+          <div class="value" id="result-net-cost">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">受取時の手取り額の目安</div>
+          <div class="value" id="result-net-payout">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="220"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>共済金の目安（掛金＋運用益）</span>
+          <span><span class="legend-dot" style="background:#7a8899"></span>掛金（累計拠出額）</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>区分</th><th>金額</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件をそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>確定申告・会計ソフトの準備を効率化するなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>確定申告ソフトで小規模企業共済等掛金控除の入力を自動化する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>税理士紹介サービスで自分に合った税理士を探す</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>小規模企業共済とは？iDeCoとの違いは？</h2>
+    <p>小規模企業共済は、独立行政法人中小企業基盤整備機構（中小機構）が運営する、小規模企業の経営者・役員・個人事業主のための積立制度です。従業員数などの要件を満たす個人事業主や会社役員が加入でき、廃業・退任時などに「共済金」として積み立てた掛金を受け取れます。iDeCoと同様に掛金の全額が所得控除（小規模企業共済等掛金控除）の対象になる点は共通していますが、iDeCoが自分で運用商品を選ぶ制度であるのに対し、小規模企業共済は中小機構が定める予定利率をベースに共済金額が決まる、いわば「退職金の積み立て」に近い制度です。掛金は月額1,000円〜70,000円の範囲で自由に設定でき、確定申告や年末調整で所得控除を受けられます。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>「共済金の目安」はどのように計算していますか？</dt>
+        <dd>本ツールでは、中小機構が基本共済金の算定に用いている予定利率（年1.0%）を初期値とし、掛金を毎月積み立てて複利運用したものと仮定して試算しています。実際の共済金額は「基本共済金」に加え、その時々の運用状況に応じて増減する「付加共済金」が上乗せされるため、中小機構が公表する基準額表に基づく正確な金額とは異なります。正確な金額は中小機構の公式サイトの試算ツールや、加入時の資料でご確認ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>途中で任意解約すると元本割れしますか？</dt>
+        <dd>廃業・法人成りなど所定の理由（共済事由）による受け取りではなく、事業を続けながら任意に解約する場合、掛金の納付月数が240カ月（20年）未満だと、解約手当金が掛金合計額を下回る「元本割れ」になります。長期の継続を前提とした制度である点に注意してください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>共済金は一括・分割のどちらで受け取るのが有利ですか？</dt>
+        <dd>一括受取は退職所得として扱われ、勤続年数に相当する「加入年数」に応じた退職所得控除が適用されたうえで、控除後の金額の1/2にのみ課税されるため、多くの場合税負担が軽くなります。分割受取は公的年金等の雑所得として毎年課税されますが、受給開始年齢（65歳以上か未満か）によって公的年金等控除額が変わり、他の年金収入と合算して課税される点に注意が必要です。本ツールで受取方法を切り替えて、ご自身の状況に近い条件で比較してみてください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>iDeCoと両方に加入できますか？</dt>
+        <dd>小規模企業共済とiDeCoは別制度のため、要件を満たせば両方に加入できます。ただし掛金はそれぞれ別に拠出する必要があり、合算した所得控除額もそれぞれの掛金の合計になります。自営業者の方の掛金配分の考え方は「<a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額シミュレーター</a>」もあわせてご確認ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の共済金額・節税額・税額を保証するものではありません。共済金の目安は中小機構が公表する基準額表に基づく正確な金額ではなく、予定利率を用いた概算です。本サイトは特定の共済・金融商品の勧誘を目的とするものではなく、投資助言も行いません。正確な内容は中小機構・税務署・税理士にご確認ください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/shoukibo-kyosai.js"></script>
+<script src="../js/share.js"></script>
+</body>
+</html>
