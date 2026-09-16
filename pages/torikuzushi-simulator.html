@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>資産取り崩し（デキュムレーション）シミュレーター | ふやすノート</title>
+<meta name="description" content="リタイア後の資産の取り崩し方（定額・定率・定率＋下限額の3方式）を比較。想定運用利回り・取り崩し額（率）・インフレ率を入力すると、それぞれの方式で資産が何年もつかをグラフと表で無料シミュレーションできます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="nisa-haibun-simulator.html">つみたてvs成長投資枠</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
+      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
+      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
+      <a href="torikuzushi-simulator.html">資産取り崩し方式比較</a>
+      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
+      <a href="souzokuzei-simulator.html">相続税シミュレーター</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>資産取り崩し（デキュムレーション）シミュレーター</h1>
+    <p>リタイア後（またはFIRE達成後）に資産を取り崩しながら暮らす際、「定額」「定率」「定率＋下限額」のどの方式を選ぶかで資産の持続年数は大きく変わります。取り崩し開始時点の資産額・想定運用利回り・各方式のパラメータを入力すると、3方式それぞれで資産が何年もつかをまとめて比較できます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="startAssets">取り崩し開始時点の資産額 <span class="unit">万円</span></label>
+        <input type="number" id="startAssets" value="3000" min="0" step="100">
+      </div>
+
+      <div class="field">
+        <label for="returnPct">想定運用利回り（取り崩しながら運用を続ける・年率） <span id="returnPctOut" class="unit">3.0 %</span></label>
+        <input type="range" id="returnPct" value="3.0" min="0" max="8" step="0.5">
+      </div>
+
+      <div class="field">
+        <label for="maxYears">シミュレーション上限年数 <span class="unit">年</span></label>
+        <input type="number" id="maxYears" value="30" min="1" max="70" step="1">
+        <p class="field-hint">資産が尽きない場合は、この年数までの推移を表示します（最大70年）。</p>
+      </div>
+
+      <div class="field">
+        <label for="fixedAmount">【定額方式】年間取り崩し額 <span class="unit">万円</span></label>
+        <input type="number" id="fixedAmount" value="120" min="0" step="10">
+        <p class="field-hint">毎年ほぼ一定の金額を取り崩す方式です。月あたりの目安は、この金額の12分の1です。</p>
+      </div>
+
+      <div class="field">
+        <label for="applyInflation">定額方式の取り崩し額をインフレ率で毎年増額する</label>
+        <select id="applyInflation">
+          <option value="yes" selected>増額する（生活費が毎年上昇する前提）</option>
+          <option value="no">増額しない（金額を一定に保つ）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="inflationPct">生活費の上昇率（インフレ率・年率） <span id="inflationPctOut" class="unit">1.0 %</span></label>
+        <input type="range" id="inflationPct" value="1.0" min="0" max="3" step="0.5">
+        <p class="field-hint">上の「増額する」を選んだ場合に、定額方式の取り崩し額へ適用されます。</p>
+      </div>
+
+      <div class="field">
+        <label for="fixedRatePct">【定率方式】取り崩し率（残高に対して毎年） <span id="fixedRatePctOut" class="unit">4.0 %</span></label>
+        <input type="range" id="fixedRatePct" value="4.0" min="1" max="10" step="0.5">
+        <p class="field-hint">「定率取り崩し」「定率＋下限額」の両方式で共通して使う取り崩し率です。</p>
+      </div>
+
+      <div class="field">
+        <label for="floorAmount">【定率＋下限額方式】年間の下限額 <span class="unit">万円</span></label>
+        <input type="number" id="floorAmount" value="80" min="0" step="10">
+        <p class="field-hint">「残高×取り崩し率」と「この下限額」のうち大きい方を、その年の取り崩し額とします。</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">定額取り崩し</div>
+          <div class="value" id="result-fixed">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">定率取り崩し</div>
+          <div class="value" id="result-percent">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">定率＋下限額</div>
+          <div class="value" id="result-floor">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>定額取り崩し</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>定率取り崩し</span>
+          <span><span class="legend-dot" style="background:#c96b3f"></span>定率＋下限額</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件をそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="table-wrap">
+    <h2>3方式の比較</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>取り崩し方式</th><th>初年度の取り崩し額</th><th>資産の持続年数</th></tr>
+      </thead>
+      <tbody id="compare-body"></tbody>
+    </table>
+  </div>
+
+  <div id="verdict-box" class="verdict-box">
+    <h3>取り崩し方式ごとの一般的な特徴</h3>
+    <div id="note-body"></div>
+  </div>
+
+  <div class="affiliate-box">
+    <h3>資産の取り崩しを始める前に、口座・運用方針を見直すなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券でNISA口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ロボアドバイザーで運用を任せる</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>資産の「取り崩し方式」はなぜ重要か</h2>
+    <p>「セミリタイア（FIRE）達成シミュレーター」では、目標資産額を「年間生活費 ÷ 引き出し率」という一定のルール（4%ルールなど）で計算し、達成後もその引き出し率どおりに取り崩す前提で試算しています。しかし実際には、資産の取り崩し方には複数の考え方があり、どれを選ぶかによって資産が持続する年数は大きく変わります。本ツールでは代表的な3つの方式を取り上げます。</p>
+    <p><strong>①定額取り崩し</strong>は、毎年（またはインフレ率で増額しながら）一定の金額を取り崩す方式です。生活費の見通しが立てやすい一方、相場が下落した年も取り崩し額を減らさないため、資産の減り方が急になりやすい方式です。<strong>②定率取り崩し</strong>は、残高に対して毎年一定の割合だけを取り崩す方式です。残高が減れば取り崩し額も自動的に減るため、理論上は資産が完全にゼロにはなりにくい一方、晩年に向けて使えるお金が目減りしていきます。<strong>③定率＋下限額</strong>は、定率方式をベースにしつつ「最低限これだけは取り崩す」という下限額を設けることで、取り崩し額が下がりすぎないようにする折衷案です。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>結局どの方式を選べばよいですか？</dt>
+        <dd>本ツールは特定の方式を推奨するものではなく、入力条件に基づく機械的な試算結果を比較できるようにしたものです。一般的には「定額方式は生活費が読みやすい代わりに資産が尽きるリスクが相対的に高い」「定率方式は資産が尽きにくい代わりに取り崩し額が変動する」というトレードオフがあるため、ご自身の生活設計に合わせて検討してください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>定率方式で「資産が尽きない」と表示されるのはなぜですか？</dt>
+        <dd>定率方式は毎年「残高×取り崩し率」だけを取り崩すため、残高が減れば取り崩し額も比例して減り、数式の上では資産が限りなくゼロに近づいても完全にはゼロになりません。本ツールではこの性質を反映し、上限年数まで残高が残る場合はその旨を表示します。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>FIRE達成シミュレーターとの違いは何ですか？</dt>
+        <dd>「FIRE達成シミュレーター」は積立期間から目標資産額への到達時期を試算し、達成後の取り崩しは「引き出し率どおりに定額を取り崩す」という単一の前提で計算しています。本ツールはその取り崩し局面だけを取り出し、定額・定率・定率＋下限額という複数の方式を比較できるようにした、補完的な位置づけのツールです。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果や資産の持続期間を保証するものではありません。想定運用利回り・取り崩し率・インフレ率はいずれも毎年一定という単純化した仮定に基づいており、実際の相場は変動します。運用益への課税や売買手数料・信託報酬等のコストは考慮していません。本サイトは特定の取り崩し方式や金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/torikuzushi.js"></script>
+<script src="../js/share.js"></script>
+</body>
+</html>
