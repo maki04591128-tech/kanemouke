@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iDeCo vs NISA どっちを優先すべき？配分シミュレーター | ふやすノート</title>
+<meta name="description" content="毎月の投資可能額をiDeCo優先・NISA優先・半分ずつの3パターンに配分し、資産評価額・節税額・60歳まで引き出せない金額の違いを無料で比較。iDeCoとNISAどちらを先に埋めるべきか判断の目安がわかります。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ikkatsu-tsumitate-simulator.html">一括vs積立投資</a>
+      <a href="shintaku-houshu-simulator.html">信託報酬コスト比較</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="ideco-nisa-yuusen-simulator.html">iDeCovsNISA優先度</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="gakushihoken-nisa-simulator.html">学資保険vs積立NISA</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="nisa-haibun-simulator.html">つみたてvs成長投資枠</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
+      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
+      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
+      <a href="torikuzushi-simulator.html">資産取り崩し方式比較</a>
+      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
+      <a href="souzokuzei-simulator.html">相続税シミュレーター</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>iDeCo vs NISA どっちを優先すべき？配分シミュレーター</h1>
+    <p>毎月の投資に回せる金額を「iDeCo優先」「NISA優先」「半分ずつ」の3パターンに配分すると、資産評価額・節税額・60歳まで引き出せなくなる金額にどんな違いが出るかを比較できます。iDeCoの拠出上限は職業区分によって異なるため、あなたの区分を選ぶだけで自動的に反映されます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="category">あなたの職業区分（iDeCoの拠出上限に影響）</label>
+        <select id="category">
+          <option value="self_employed">自営業者・フリーランス・学生（国民年金第1号被保険者）</option>
+          <option value="employee_no_pension" selected>会社員（お勤め先に企業年金制度がない）</option>
+          <option value="employee_dc_only">会社員（企業型確定拠出年金（企業型DC）のみ加入）</option>
+          <option value="employee_db">会社員（確定給付企業年金（DB）に加入、またはDBと企業型DCの両方に加入）</option>
+          <option value="civil_servant">公務員（国民年金第2号被保険者）</option>
+          <option value="dependent_spouse">専業主婦・主夫（国民年金第3号被保険者）</option>
+          <option value="voluntary">国民年金任意加入被保険者（60歳以降の任意加入など）</option>
+        </select>
+      </div>
+
+      <div class="field" id="offsetRow">
+        <label for="offsetAmount">他制度の掛金相当額の月額 <span class="unit">円</span></label>
+        <input type="number" id="offsetAmount" value="0" min="0" step="1000">
+        <p class="field-hint">企業型DC事業主掛金やDBの掛金相当額など、iDeCoと合算枠を共有する他制度の月額掛金です。不明な場合は0のままで構いません。詳しくは「iDeCo拠出限度額シミュレーター」をご覧ください。</p>
+      </div>
+
+      <div class="field">
+        <label for="budget">毎月の投資に回せる金額（合計） <span class="unit">円</span></label>
+        <input type="number" id="budget" value="30000" min="0" max="300000" step="1000">
+      </div>
+
+      <div class="field">
+        <label for="taxableIncome">年間の課税所得の目安 <span class="unit">円</span></label>
+        <input type="number" id="taxableIncome" value="3000000" min="0" step="10000">
+        <p class="field-hint">所得税の限界税率（速算表）の算出にのみ使用します。給与所得者は給与所得から社会保険料控除・基礎控除など各種控除を差し引いた金額の目安です。</p>
+      </div>
+
+      <div class="field">
+        <label for="rate">想定利回り（年率） <span id="rateOut" class="unit">5.0 %</span></label>
+        <input type="range" id="rate" value="5" min="0" max="8" step="0.1">
+      </div>
+
+      <div class="field">
+        <label for="years">積立期間 <span id="yearsOut" class="unit">20 年</span></label>
+        <input type="range" id="years" value="20" min="5" max="40" step="1">
+      </div>
+
+      <div class="field">
+        <label for="liquidityNeed">60歳より前にこの資金を使う可能性は？</label>
+        <select id="liquidityNeed">
+          <option value="no" selected>ない（老後資金として長期運用する）</option>
+          <option value="yes">ある（教育費・住宅購入など、途中で使う可能性がある）</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">あなたのiDeCo拠出上限</div>
+          <div class="value" id="result-ideco-cap">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">節税率（所得税＋住民税10%）</div>
+          <div class="value" id="result-marginal-rate">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">資産評価額（iDeCo優先・節税再投資なし）</div>
+          <div class="value" id="result-base-asset">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">資産評価額（iDeCo優先・節税額を再投資）</div>
+          <div class="value" id="result-bonus-asset">-</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <h2>配分方法ごとの毎月の内訳</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th>配分方法</th><th>iDeCo（月額）</th><th>NISA（月額）</th><th>考え方</th></tr>
+          </thead>
+          <tbody id="split-body"></tbody>
+        </table>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="260"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>節税額の再投資なし／<span class="legend-dot" style="background:#d98e04"></span>節税額を毎年NISAに再投資</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件をそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="table-wrap">
+    <h2>配分方法の比較</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>配分方法</th><th>資産評価額（節税再投資なし）</th><th>年間節税額</th><th>節税額の合計（単純合計）</th><th>60歳まで引き出せない金額（iDeCo分）</th></tr>
+      </thead>
+      <tbody id="compare-body"></tbody>
+    </table>
+  </div>
+
+  <div class="affiliate-box">
+    <h3>配分方法が決まったら、iDeCo・NISAの口座を開設しよう</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>SBI証券のiDeCo公式サイトを見る（口座管理手数料0円）</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>楽天証券でNISA口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>iDeCoとNISA、どちらを優先すべき？</h2>
+    <p>毎月の投資に回せる金額が、iDeCoの拠出上限とNISAの上限（合計で月30万円）の両方をまかなえるほど多くない場合、「どちらを先に埋めるべきか」という配分の悩みが出てきます。実は、配分方法を変えても運用期間終了時点の資産評価額そのものはほとんど変わりません（同じ利回りで運用する限り、iDeCoとNISAどちらに入れても増え方は同じため）。差が生まれるのは、iDeCoの掛金が全額所得控除の対象になる「節税効果」と、iDeCoが原則60歳まで引き出せない「流動性の制約」の2点です。</p>
+    <p>老後資金として長期間動かす予定がないお金であれば、節税額を毎年NISAなどに上乗せ投資することで、NISA優先よりも将来の資産を増やせる可能性があります。一方で、教育費・住宅購入・転職時の生活費など、60歳より前に使う可能性がある資金をiDeCoに入れてしまうと、必要なときに引き出せず困ることになります。本ツールはこの2つの視点を数値で確認できるようにしています。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>なぜ配分を変えても資産評価額（節税再投資なし）がほぼ同じなのですか？</dt>
+        <dd>iDeCoもNISAも運用期間中は運用益が非課税で、同じ想定利回りで複利運用すると仮定しているためです。毎月の合計投資額が同じであれば、iDeCoとNISAのどちらに何円入れても、単純な資産評価額の合計は基本的に変わりません。実際に差がつくのは、節税効果を活かせるかどうかと、受け取り時にかかる税金の違いです。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>iDeCoの受け取り時にかかる税金は考慮されていますか？</dt>
+        <dd>本ツールは積立フェーズ（拠出時点まで）の比較に特化しており、受け取り時の税金は考慮していません。iDeCoの資産は一時金・年金・併用のいずれで受け取っても税金がかかる場合があります。詳しくは「<a href="ideco-uketori-simulator.html">iDeCoの受け取り方シミュレーター</a>」でご確認ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>NISAの生涯投資枠（1,800万円）を使い切るタイミングは考慮されていますか？</dt>
+        <dd>本ツールでは考慮していません。NISA優先で長期間積み立てる場合、生涯投資枠の消化ペースが気になる方は「<a href="nisa-waku-simulator.html">NISA生涯投資枠 使いきりシミュレーター</a>」や「<a href="nisa-haibun-simulator.html">つみたて投資枠 vs 成長投資枠 配分シミュレーター</a>」もあわせてご覧ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>そもそも自分のiDeCoの拠出上限はいくらですか？</dt>
+        <dd>職業区分や企業年金の加入状況によって月額20,000円〜68,000円の間で異なります。詳しい判定条件は「<a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額シミュレーター</a>」で確認できます。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果や制度の継続を保証するものではありません。想定利回りは一定と仮定した単純計算であり、実際の運用は市場の変動により結果が異なります。iDeCoの受け取り時にかかる税金は考慮していません。税制・NISA・iDeCo制度は改正される可能性があります。本サイトは特定の金融商品の勧誘・助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/ideco-nisa-yuusen.js"></script>
+<script src="../js/share.js"></script>
+</body>
+</html>
