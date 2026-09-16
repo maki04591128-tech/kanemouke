@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>生命保険料控除・地震保険料控除シミュレーター | ふやすノート</title>
+<meta name="description" content="年間に支払った生命保険料（一般生命・介護医療・個人年金）と地震保険料から、所得税・住民税の控除額と還付額の目安を無料で試算。年末調整・確定申告の保険料控除申告書の準備に使えます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>生命保険料控除・地震保険料控除シミュレーター</h1>
+    <p>1年間（1月〜12月）に支払った生命保険料・地震保険料は、年末調整や確定申告で所得控除の対象になります。契約ごとの年間払込保険料を入力するだけで、所得税・住民税それぞれの控除額と、還付・軽減される税額の目安をまとめて試算できます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
+        <input type="number" id="salaryIncome" value="5000000" min="0" max="30000000" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="socialInsurance">社会保険料の年間支払額（概算） <span class="unit">円</span></label>
+        <input type="number" id="socialInsurance" value="750000" min="0" step="1000">
+        <p class="field-hint">目安がわからない場合は年収の約15%で概算しています（給与明細の社会保険料合計×12で置き換えるとより正確です）。</p>
+      </div>
+
+      <div class="field">
+        <label for="hasSpouse">配偶者控除の対象になる配偶者</label>
+        <select id="hasSpouse">
+          <option value="no">いない</option>
+          <option value="yes">いる（配偶者の年収が123万円以下など）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
+        <input type="number" id="dependents" value="0" min="0" max="6" step="1">
+      </div>
+
+      <div class="field">
+        <label for="generalLife">一般生命保険料の年間払込額 <span class="unit">円</span></label>
+        <input type="number" id="generalLife" value="80000" min="0" step="1000">
+        <p class="field-hint">死亡保障などの生命保険。2012年（平成24年）以降に契約した「新制度」の保険料を前提に計算します。</p>
+      </div>
+
+      <div class="field">
+        <label for="medicalCare">介護医療保険料の年間払込額 <span class="unit">円</span></label>
+        <input type="number" id="medicalCare" value="40000" min="0" step="1000">
+        <p class="field-hint">医療保険・がん保険・介護保険など。新制度で新設された区分です。</p>
+      </div>
+
+      <div class="field">
+        <label for="personalPension">個人年金保険料の年間払込額 <span class="unit">円</span></label>
+        <input type="number" id="personalPension" value="0" min="0" step="1000">
+        <p class="field-hint">「個人年金保険料税制適格特約」が付いた契約のみが対象です。特約のない個人年金保険は一般生命保険料の扱いになります。</p>
+      </div>
+
+      <div class="field">
+        <label for="earthquake">地震保険料の年間払込額 <span class="unit">円</span></label>
+        <input type="number" id="earthquake" value="20000" min="0" step="1000">
+        <p class="field-hint">火災保険とセットで加入する地震保険の保険料部分のみが対象です（火災保険料単体は対象外）。</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">生命保険料控除額（所得税）</div>
+          <div class="value" id="result-life-income">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">生命保険料控除額（住民税）</div>
+          <div class="value" id="result-life-resident">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">地震保険料控除額（所得税）</div>
+          <div class="value" id="result-eq-income">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">地震保険料控除額（住民税）</div>
+          <div class="value" id="result-eq-resident">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">所得税率（速算表）</div>
+          <div class="value" id="result-tax-rate">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">合計の軽減額（概算）</div>
+          <div class="value" id="result-total-reduction">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="220"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>所得税の控除額</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>住民税の控除額</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>区分</th><th>金額</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>保険の見直し・年末調整の準備を効率化するなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>保険料控除証明書をまとめてデジタル管理できる年末調整サービスを見る</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>無料の保険相談で今の保障内容・保険料を見直す</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>生命保険料控除・地震保険料控除はどう決まる？</h2>
+    <p>2012年（平成24年）以降に契約した生命保険（新制度）は、「一般生命保険料」「介護医療保険料」「個人年金保険料」の3区分に分かれ、それぞれ所得税は年間払込額80,000円で控除額40,000円が上限、3区分合計の上限は120,000円です。住民税は区分ごとに56,000円で控除額28,000円が上限、3区分合計の上限は70,000円です。地震保険料控除は所得税が支払額全額（上限50,000円）、住民税が支払額の1/2（上限25,000円）です。本ツールはこれらの控除額から、給与収入・家族構成に基づく所得税の限界税率（速算表）を用いて還付額・軽減額の目安を試算します。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>2011年以前に契約した「旧制度」の保険はどうなりますか？</dt>
+        <dd>旧制度（一般生命保険料・個人年金保険料の2区分、それぞれ上限50,000円）は控除額の計算式が異なります。本ツールは新制度の保険料を前提に試算しているため、旧制度の契約が多い場合は実際の控除額と差が生じます。正確な金額は保険会社から届く「保険料控除証明書」に記載の区分・金額をご確認ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>会社員でも申告は必要ですか？</dt>
+        <dd>会社員の場合は、年末調整の際に「給与所得者の保険料控除申告書」に保険料控除証明書の内容を記入して提出すれば、確定申告をしなくても控除が適用されます。年末調整に間に合わなかった場合は、翌年以降5年以内であれば確定申告（還付申告）で控除を受けられます。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>火災保険料も控除の対象になりますか？</dt>
+        <dd>火災保険料そのものは地震保険料控除の対象外です。地震保険とセットの契約でも、地震保険料部分のみが控除の対象になります。保険料控除証明書に地震保険料の金額が別途記載されているので、その金額を入力してください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>この試算は正確ですか？</dt>
+        <dd>給与所得者を前提とした一般的な近似計算です。生命保険料控除・地震保険料控除以外の各種控除（住宅ローン控除・医療費控除・iDeCoの掛金控除など）や、旧制度の契約がある場合は実際の還付額・軽減額が変わります。正確な金額は年末調整の結果や確定申告書等作成コーナー、税務署でご確認ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の控除額・還付額・軽減額を保証するものではありません。正確な金額は保険料控除証明書・年末調整結果・税務署等でご確認ください。本サイトは特定の保険商品の勧誘を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/hoken-koujo.js"></script>
+</body>
+</html>
