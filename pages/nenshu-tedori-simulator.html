@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>年収から手取り額シミュレーター | ふやすノート</title>
+<meta name="description" content="額面年収・年齢区分・配偶者控除の有無・扶養人数から、社会保険料・所得税・住民税を差し引いた手取り年収と手取り率を無料で試算。内訳を円グラフで確認でき、年収別の手取り早見表も表示します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
+      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
+      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
+      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>年収から手取り額シミュレーター</h1>
+    <p>額面の年収から、社会保険料（健康保険・厚生年金・雇用保険・介護保険）・所得税・住民税を差し引いた「手取り年収」の目安を試算します。年齢区分・配偶者控除の有無・扶養親族の人数を反映し、内訳を円グラフで、年収別の手取り早見表もあわせて確認できます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="income">額面年収 <span class="unit">万円</span></label>
+        <input type="number" id="income" value="500" min="0" step="10">
+      </div>
+
+      <div class="field">
+        <label for="ageGroup">年齢区分</label>
+        <select id="ageGroup">
+          <option value="under40">40歳未満</option>
+          <option value="40to64">40歳以上65歳未満（介護保険あり）</option>
+        </select>
+        <p class="field-hint">65歳以上の方は雇用形態により保険料の扱いが異なるため、本シミュレーターでは対象外としています。</p>
+      </div>
+
+      <div class="field">
+        <label for="hasSpouse">配偶者控除の対象となる配偶者</label>
+        <select id="hasSpouse">
+          <option value="no">いない</option>
+          <option value="yes">いる（配偶者の年収が目安103万円以下）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="dependents">扶養親族の人数（16歳以上・一般の扶養親族） <span class="unit">人</span></label>
+        <input type="number" id="dependents" value="0" min="0" max="5" step="1">
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">手取り年収</div>
+          <div class="value" id="result-take-home">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">手取り率</div>
+          <div class="value" id="result-take-home-rate">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">月あたりの手取り目安</div>
+          <div class="value" id="result-take-home-monthly">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">額面との差額（社会保険料＋税金）</div>
+          <div class="value" id="result-total-deduction">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>手取り／社会保険料／所得税／住民税の内訳</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>項目</th><th>金額・割合</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="table-wrap">
+    <h2>年収別の手取り早見表（同じ条件で試算）</h2>
+    <table class="data-table wall-table">
+      <thead>
+        <tr><th>額面年収</th><th>手取り年収の目安</th><th>手取り率</th></tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+  <div class="affiliate-box">
+    <h3>手取り額を把握したら、余った分を積立投資に</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券でNISA口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ロボアドバイザーで積立投資を始める</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>額面年収と手取り年収の違い</h2>
+    <p>求人票や源泉徴収票に記載される「年収」は、税金や社会保険料が引かれる前の「額面」の金額です。実際に自由に使える「手取り」は、額面から健康保険・厚生年金・雇用保険（40〜64歳の場合は介護保険も）といった社会保険料と、所得税・住民税を差し引いた金額になります。一般的な会社員の場合、手取り率はおおむね75〜80%程度になることが多く、年収が上がるほど所得税が累進的に高くなるため手取り率はやや下がる傾向があります。本シミュレーターは、給与所得控除・基礎控除・配偶者控除・扶養控除を踏まえて、この手取り額を試算します。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>賞与（ボーナス）は年収に含めてよいですか？</dt>
+        <dd>本シミュレーターの「額面年収」は、毎月の給与と賞与の合計を想定しています。賞与にかかる社会保険料・所得税は毎月の給与とは別の計算方法（賞与に対する源泉徴収税額の算出率）が使われるため、実際の手取り額とは多少ずれる場合がある目安値としてご利用ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>社会保険料率が実際と違う気がします</dt>
+        <dd>健康保険料率は加入している健康保険組合や都道府県によって異なり、厚生年金には標準報酬月額・賞与額に上限があります。本シミュレーターは協会けんぽの全国平均目安に基づく概算のため、実際の給与明細の金額とは差が生じます。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>配偶者控除・扶養控除の金額が実際と違う場合は？</dt>
+        <dd>配偶者控除・配偶者特別控除は配偶者の年収に応じて段階的に減っていく仕組みですが、本シミュレーターは配偶者の年収が103万円以下で満額（所得税38万円・住民税33万円）が適用されるケースのみを簡易的に試算しています。扶養控除も、19〜22歳の特定扶養親族（63万円）や70歳以上の老人扶養親族（58万円）などの上乗せは考慮せず、一般の扶養親族として一律で計算しています。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の給与明細・源泉徴収票の金額と一致するものではありません。社会保険料率は協会けんぽの全国平均目安による概算であり、厚生年金・健康保険には標準報酬月額に基づく上限があるなど、実際の計算はより複雑です。配偶者控除・配偶者特別控除・扶養控除は簡略化した条件で試算しています。正確な金額は勤務先の給与担当者・税理士・年金事務所等にご確認ください。本サイトは税務・社会保険に関する助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/nenshu-tedori.js"></script>
+</body>
+</html>
