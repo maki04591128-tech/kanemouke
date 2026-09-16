@@ -92,6 +92,18 @@
     </div>
   </div>
 
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件をそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
   <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
 
   <div class="table-wrap">
@@ -159,5 +171,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
 <script src="../js/nisa-haibun.js"></script>
+<script src="../js/share.js"></script>
 </body>
 </html>
