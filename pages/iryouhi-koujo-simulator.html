@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>医療費控除シミュレーター | ふやすノート</title>
+<meta name="description" content="1年間に支払った医療費と年収から、医療費控除額と所得税の還付額・住民税の軽減額の目安を無料で試算。セルフメディケーション税制との比較にも対応した確定申告向けツールです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>医療費控除シミュレーター</h1>
+    <p>1年間（1月〜12月）に本人や生計を一にする家族のために支払った医療費が一定額を超えると、確定申告により所得税の還付・住民税の軽減が受けられます。年収と医療費の合計額を入力するだけで、控除額と税金の軽減額の目安をまとめて試算できます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
+        <input type="number" id="salaryIncome" value="5000000" min="0" max="30000000" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="socialInsurance">社会保険料の年間支払額（概算） <span class="unit">円</span></label>
+        <input type="number" id="socialInsurance" value="750000" min="0" step="1000">
+        <p class="field-hint">目安がわからない場合は年収の約15%で概算しています（給与明細の社会保険料合計×12で置き換えるとより正確です）。</p>
+      </div>
+
+      <div class="field">
+        <label for="hasSpouse">配偶者控除の対象になる配偶者</label>
+        <select id="hasSpouse">
+          <option value="no">いない</option>
+          <option value="yes">いる（配偶者の年収が103万円以下など）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
+        <input type="number" id="dependents" value="0" min="0" max="6" step="1">
+      </div>
+
+      <div class="field">
+        <label for="medicalTotal">1年間に支払った医療費の合計額 <span class="unit">円</span></label>
+        <input type="number" id="medicalTotal" value="300000" min="0" step="1000">
+        <p class="field-hint">本人・生計を一にする配偶者や親族の分も合算できます。通院の交通費や市販薬の一部も対象になる場合があります。</p>
+      </div>
+
+      <div class="field">
+        <label for="insuranceReimbursement">保険金などで補填される金額 <span class="unit">円</span></label>
+        <input type="number" id="insuranceReimbursement" value="0" min="0" step="1000">
+        <p class="field-hint">生命保険の入院給付金、健康保険の高額療養費・出産育児一時金など、医療費の支払いに対して別途受け取った金額を入力します。</p>
+      </div>
+
+      <div class="field">
+        <label for="otcAmount">スイッチOTC医薬品の購入額（セルフメディケーション税制用・任意） <span class="unit">円</span></label>
+        <input type="number" id="otcAmount" value="0" min="0" step="1000">
+        <p class="field-hint">対象の市販薬（スイッチOTC医薬品）の購入額です。通常の医療費控除とは選択制（併用不可）のため、参考として両方の控除額を比較表示します。</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">医療費控除額（通常制度）</div>
+          <div class="value" id="result-deduction">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">セルフメディケーション税制の控除額</div>
+          <div class="value" id="result-selfmed">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">所得税率（速算表）</div>
+          <div class="value" id="result-tax-rate">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">所得税の還付額（概算）</div>
+          <div class="value" id="result-income-tax-refund">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">住民税の軽減額（概算）</div>
+          <div class="value" id="result-resident-tax-reduction">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">合計の軽減額（概算）</div>
+          <div class="value" id="result-total-reduction">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="220"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>医療費合計に対する控除額（通常制度）</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>あなたの医療費合計額</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>区分</th><th>金額</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>確定申告の準備を効率化するなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>確定申告ソフトで医療費控除の明細書を自動作成する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ふるさと納税とあわせて控除額をまとめて確認する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>医療費控除額はどう決まる？</h2>
+    <p>医療費控除額は <strong>実際に支払った医療費の合計額 − 保険金などで補填される金額 − 10万円（総所得金額等が200万円未満の場合はその5%）</strong> で計算され、上限は200万円です。生命保険の入院給付金や健康保険の高額療養費・出産育児一時金を受け取った場合は、その金額を差し引く必要がある点に注意してください。また、対象となる医薬品を購入した場合に使える「セルフメディケーション税制」は、通常の医療費控除と選択制（どちらか一方のみ）のため、本ツールでは両方の控除額を試算して有利な方を自動で案内します。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>医療費控除は誰でも申告が必要ですか？</dt>
+        <dd>会社員で年末調整を受けている方でも、医療費控除は年末調整の対象外のため、控除を受けるには別途確定申告（還付申告）が必要です。申告の時期を問わず、対象となる年の翌年から5年間はさかのぼって申告できます。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>通院のための交通費も対象になりますか？</dt>
+        <dd>電車・バスなど公共交通機関による通院の交通費は対象になります。ただし、自家用車のガソリン代や駐車場代は原則として対象外です。領収書が出ない交通費は、日付・区間・金額をメモに残しておくと申告時に役立ちます。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>セルフメディケーション税制との違いは何ですか？</dt>
+        <dd>セルフメディケーション税制は、健康診断や予防接種など一定の取り組みを行っている人が対象のスイッチOTC医薬品を購入した場合に使える特例で、控除額の上限は88,000円と通常の医療費控除より小さいですが、下限が12,000円と低いため、医療費総額が少ない年でも使いやすいのが特徴です。両方の要件を満たしていても、どちらか一方しか選択できません。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>この試算は正確ですか？</dt>
+        <dd>給与所得者を前提とした一般的な近似計算です。医療費控除以外の各種控除（住宅ローン控除・iDeCoの掛金控除など）や、給与以外の所得がある場合は実際の還付額・軽減額が変わります。正確な金額は確定申告書等作成コーナーや税務署、税理士にご確認ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の控除額・還付額・軽減額を保証するものではありません。正確な金額は税務署・税理士等にご確認ください。本サイトは特定の医療機関・商品の勧誘を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/iryouhi-koujo.js"></script>
+</body>
+</html>
