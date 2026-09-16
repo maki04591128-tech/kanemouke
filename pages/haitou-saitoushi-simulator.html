@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>配当金・分配金 受取型 vs 無分配型 再投資 比較シミュレーター | ふやすノート</title>
+<meta name="description" content="分配金・配当金を受け取って再投資する「受取型」と、分配せず自動で複利運用する「無分配型」で将来の資産額がどれだけ変わるかを無料で試算。分配のたびに課税される「税の繰り延べ効果」の差を数字とグラフで確認できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>配当金・分配金 受取型 vs 無分配型 比較シミュレーター</h1>
+    <p>配当金・分配金を受け取って再投資する「受取型」と、分配せず自動で複利運用する「無分配型（再投資型）」。同じ運用利回りでも、分配のたびに税金が引かれる「受取型」は複利で増える前に資産が目減りします。将来の資産額にどれだけ差が出るかを試算しましょう。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="initial">初期投資額 <span class="unit">万円</span></label>
+        <input type="number" id="initial" value="100" min="0" step="10">
+      </div>
+
+      <div class="field">
+        <label for="monthly">毎月の積立額 <span class="unit">万円</span></label>
+        <input type="number" id="monthly" value="3" min="0" step="0.5">
+      </div>
+
+      <div class="field">
+        <label for="years">運用期間 <span id="yearsOut" class="unit">20 年</span></label>
+        <input type="range" id="years" value="20" min="5" max="40" step="1">
+      </div>
+
+      <div class="field">
+        <label for="totalReturn">想定利回り（値上がり益＋分配、税引前・年率） <span id="totalReturnOut" class="unit">5.0 %</span></label>
+        <input type="range" id="totalReturn" value="5.0" min="0" max="10" step="0.1">
+      </div>
+
+      <div class="field">
+        <label for="distYield">分配金利回り（基準価額に対する年率） <span id="distYieldOut" class="unit">4.0 %</span></label>
+        <input type="range" id="distYield" value="4.0" min="0" max="10" step="0.1">
+        <p class="field-hint">分配金利回りが想定利回りを上回ると、運用益を超えて元本の一部を取り崩して分配する「タコ足配当」の状態になります。</p>
+      </div>
+
+      <div class="field">
+        <label for="accountType">口座区分</label>
+        <select id="accountType">
+          <option value="taxable" selected>課税口座（特定口座・一般口座）</option>
+          <option value="nisa">NISA口座（非課税）</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">A：分配型（受取・再投資）の最終手取り資産</div>
+          <div class="value" id="result-final-a">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">B：無分配型（自動再投資）の最終手取り資産</div>
+          <div class="value" id="result-final-b">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">最終資産の差額</div>
+          <div class="value" id="result-diff">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">分配型で先に課税された税額の累計（参考）</div>
+          <div class="value" id="result-tax-paid">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#d98e04"></span>A：分配型（受取・再投資）</span>
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>B：無分配型（自動再投資）</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>項目</th><th>A：分配型</th><th>B：無分配型</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>無分配型（再投資型）の商品を探すなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券でインデックスファイル（再投資型）を探す</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>NISA成長投資枠で高配当株・分配型ファンドを検討する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>分配型と無分配型で資産額に差がつく理由</h2>
+    <p>投資信託や株式には、運用益の一部を定期的に「分配金」「配当金」として払い出すタイプと、払い出さずにそのまま自動で再投資するタイプがあります。同じ運用利回りであっても、課税口座（特定口座・一般口座）では分配金・配当金を受け取るたびに20.315%（所得税15%＋復興特別所得税0.315%＋住民税5%）の税金が差し引かれます。受け取った後に自分で再投資したとしても、<strong>先に税金を払った分だけ複利で増える元手が減ってしまう</strong>ため、無分配型（売却するまで課税が繰り延べられるタイプ）に比べて最終的な資産額が小さくなりやすい傾向があります。これは「税の繰り延べ効果（タックス・ディファード効果）」と呼ばれる複利運用の基本原則の一つです。一方、<strong>NISA口座など運用益が非課税になる口座では、分配のタイミングによる差は理論上生まれません。</strong></p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>分配金利回りを高くすると必ず損をしますか？</dt>
+        <dd>いいえ。分配金として先に受け取るか、そのまま含み益として保有し続けるかの違いであり、生活費として使う予定があるなら分配型にも意味があります。ただし「将来のためにすべて再投資する」前提であれば、課税口座では無分配型の方が税負担を抑えやすくなります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>分配金利回りが想定利回りより高いのはおかしいですか？</dt>
+        <dd>実際の運用益を上回る分配は、元本の一部を取り崩して支払う「特別分配金（元本払戻金）」に該当する場合があります。特別分配金は本来非課税・かつ元本の払い戻しであるため課税対象になりませんが、本シミュレーターでは簡略化のため分配金をすべて課税対象の「普通分配金」として計算しています。分配金利回りが想定利回りを大きく上回る条件では、実際の税負担は試算より軽くなる可能性がある点にご留意ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>NISA口座なら分配型を選んでも問題ないですか？</dt>
+        <dd>NISA口座内では分配金にも売却益にも税金がかからないため、本シミュレーターの計算上、分配型と無分配型の最終資産額に理論上の差はありません。ただし、信託報酬など商品ごとのコストは本シミュレーターでは考慮していないため、実際の商品選びでは費用面も比較することをおすすめします。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・分配金の継続・元本を保証するものではありません。分配金はすべて課税対象の普通分配金として計算し、信託報酬等の運用コストは考慮していません。月次の利回りは年率を単純に12で割った概算値を使用しています。実際の税額・商品選びについては税理士・金融機関等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/haitou-saitoushi.js"></script>
+</body>
+</html>
