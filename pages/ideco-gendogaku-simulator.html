@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iDeCo（イデコ）拠出限度額シミュレーター | ふやすノート</title>
+<meta name="description" content="会社員・公務員・自営業者・専業主婦（主夫）など職業区分ごとに異なるiDeCoの拠出限度額（月額・年額）を無料で試算。2024年12月の制度改正後の最新の上限額と、上限まで拠出した場合の節税額の目安がわかります。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>iDeCo（イデコ）拠出限度額シミュレーター</h1>
+    <p>iDeCoの掛金の上限額は、会社員・公務員・自営業者・専業主婦（主夫）など、加入者の職業区分によって異なります。2024年12月の制度改正で会社員・公務員の上限が引き上げられたため、以前の上限額のまま把握している方も少なくありません。職業区分を選ぶだけで、最新のルールに基づく月額・年額の拠出限度額と、上限まで拠出した場合の節税額の目安がわかります。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="category">あなたの職業区分</label>
+        <select id="category">
+          <option value="self_employed">自営業者・フリーランス・学生（国民年金第1号被保険者）</option>
+          <option value="employee_no_pension" selected>会社員（お勤め先に企業年金制度がない）</option>
+          <option value="employee_dc_only">会社員（企業型確定拠出年金（企業型DC）のみ加入）</option>
+          <option value="employee_db">会社員（確定給付企業年金（DB）に加入、またはDBと企業型DCの両方に加入）</option>
+          <option value="civil_servant">公務員（国民年金第2号被保険者）</option>
+          <option value="dependent_spouse">専業主婦・主夫（国民年金第3号被保険者）</option>
+          <option value="voluntary">国民年金任意加入被保険者（60歳以降の任意加入など）</option>
+        </select>
+      </div>
+
+      <div class="field" id="offsetRow">
+        <label for="offsetAmount" id="offsetLabel">他制度の掛金相当額の月額</label>
+        <input type="number" id="offsetAmount" value="0" min="0" step="1000">
+        <p class="field-hint" id="offsetHint">勤務先の企業型DC事業主掛金やDBの掛金相当額など、iDeCoと合算枠を共有する他制度の月額掛金です。不明な場合は0のまま（上限まで拠出できるものとして）試算します。正確な金額は勤務先の担当部署にご確認ください。</p>
+      </div>
+
+      <div class="field">
+        <label for="taxableIncome">年間の課税所得の目安 <span class="unit">円</span></label>
+        <input type="number" id="taxableIncome" value="3000000" min="0" step="10000">
+        <p class="field-hint">給与所得者は給与所得から社会保険料控除・基礎控除など各種控除を差し引いた金額、自営業者は事業所得から各種控除を差し引いた金額です。所得税の限界税率（速算表）の算出にのみ使用し、正確な節税額は「iDeCo節税シミュレーター」でご確認ください。</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">拠出限度額（月額）</div>
+          <div class="value" id="result-monthly-cap">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">拠出限度額（年額）</div>
+          <div class="value" id="result-annual-cap">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">合算枠に対する残り（月額）</div>
+          <div class="value" id="result-remaining">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">所得税率（速算表）</div>
+          <div class="value" id="result-tax-rate">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">上限まで拠出した場合の年間節税額の目安</div>
+          <div class="value" id="result-tax-saving">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="220"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>職業区分ごとの拠出限度額（月額・目安）</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>区分</th><th>金額</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>iDeCoの口座開設を検討するなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>SBI証券のiDeCo公式サイトを見る（口座管理手数料0円）</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>楽天証券のiDeCo公式サイトを見る（口座管理手数料0円）</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>iDeCoの拠出限度額はなぜ職業区分で異なる？</h2>
+    <p>iDeCoは国民年金・厚生年金に上乗せする私的年金制度のため、既に他の企業年金制度でどれだけ準備できているかによって、拠出できる上限額が調整されています。2024年12月の制度改正で、会社員（企業型DBやDBと企業型DCの両方に加入している場合）と公務員の上限が月額12,000円から20,000円に引き上げられ、あわせて企業型DCの事業主掛金・DB等の掛金相当額とiDeCoの掛金を合算した上限も月額55,000円に統一されました。自営業者・フリーランスは国民年金基金や国民年金の付加保険料と合算で月額68,000円、会社員（企業年金なし）・専業主婦（主夫）は月額23,000円が上限です。本ツールはこれらの最新ルールに基づき、月額・年額の拠出限度額の目安を試算します。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>会社員が転職・退職した場合、上限額はどうなりますか？</dt>
+        <dd>転職先の企業年金制度の有無によって上限額の区分が変わります。転職・退職のタイミングでiDeCoの「加入者資格取得届」等の手続きが必要になる場合があるため、運営管理機関（金融機関）に確認してください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>「他制度の掛金相当額」がわからない場合はどうすればいいですか？</dt>
+        <dd>企業型DCの事業主掛金額は毎年の「掛金額のお知らせ」や給与明細で確認できます。DBの掛金相当額は制度ごとの給付設計から算出される金額のため、勤務先の人事・総務部門や制度の運営窓口にご確認ください。本ツールでは不明な場合の初期値を0円（＝上限まで拠出できるものとして試算）にしています。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>拠出限度額まで積み立てると、実際にいくら節税できますか？</dt>
+        <dd>iDeCoの掛金は全額が小規模企業共済等掛金控除として所得控除の対象になり、所得税・住民税が軽減されます。より詳しい節税額や将来の資産評価額は「<a href="ideco-simulator.html">iDeCo節税シミュレーター</a>」で試算できます。受け取り方（一時金・年金・併用）による税金の違いは「<a href="ideco-uketori-simulator.html">iDeCoの受け取り方シミュレーター</a>」をご覧ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>この試算は正確ですか？</dt>
+        <dd>2024年12月時点の制度に基づく一般的な近似計算です。他制度の掛金相当額の算出方法や、年途中での職業区分の変更などにより、実際の上限額は変わる場合があります。正確な金額は加入している運営管理機関（金融機関）や国民年金基金連合会にご確認ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の拠出限度額・節税額を保証するものではありません。本サイトは特定の金融商品の勧誘を目的とするものではなく、投資助言も行いません。正確な金額は運営管理機関（金融機関）・国民年金基金連合会・税務署等でご確認ください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/ideco-gendogaku.js"></script>
+</body>
+</html>
