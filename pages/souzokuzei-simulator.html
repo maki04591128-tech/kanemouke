@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>相続税シミュレーター（概算） | ふやすノート</title>
+<meta name="description" content="遺産総額・配偶者の有無・子の人数から、相続税の基礎控除額・課税遺産総額・相続税の総額・配偶者の税額軽減後の納税額を無料で概算。相続税の速算表に基づく試算です。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="nisa-haibun-simulator.html">つみたてvs成長投資枠</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
+      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
+      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
+      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
+      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
+      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
+      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
+      <a href="souzokuzei-simulator.html">相続税シミュレーター</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>相続税シミュレーター（概算）</h1>
+    <p>相続税は、遺産総額から「基礎控除額（3,000万円＋600万円×法定相続人の数）」を差し引いた「課税遺産総額」に対してかかります。基礎控除の範囲内であれば相続税はかかりません。配偶者には「配偶者の税額軽減」という大きな非課税枠もあります。遺産総額と相続人の構成を入力するだけで、相続税の総額と実際の納税額の目安を試算できます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="estateTotal">遺産総額（課税価格の合計額） <span class="unit">万円</span></label>
+        <input type="number" id="estateTotal" value="6000" min="0" max="500000" step="100">
+        <p class="field-hint">預貯金・不動産（相続税評価額）・有価証券などの合計から、非課税財産（お墓など）や債務・葬式費用を差し引いた後のおおよその金額です。</p>
+      </div>
+
+      <div class="field">
+        <label for="hasSpouse">配偶者の有無</label>
+        <select id="hasSpouse">
+          <option value="yes" selected>いる</option>
+          <option value="no">いない</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="childCount">子の人数 <span class="unit">人</span></label>
+        <input type="number" id="childCount" value="2" min="0" max="10" step="1">
+        <p class="field-hint">本ツールは「配偶者＋子（第1順位）」が相続人となるケースを想定しています。子がおらず父母・兄弟姉妹のみが相続人になるケース（第2・第3順位）は対象外です。</p>
+      </div>
+
+      <div class="field" id="spouseShareRow">
+        <label for="spouseSharePct">配偶者の遺産取得割合（実際の分割割合） <span id="spouseSharePctOut" class="unit">50 %</span></label>
+        <input type="range" id="spouseSharePct" value="50" min="0" max="100" step="5">
+        <p class="field-hint">法定相続分どおりに分ける場合は50%です。遺産分割協議で割合を変える場合はスライダーで調整してください（子の取得分は残りを均等に按分するものとして試算します）。</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">家族全体の納税額合計</div>
+          <div class="value" id="result-family-payable">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">相続税の総額（速算表ベース）</div>
+          <div class="value" id="result-total-tax">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">基礎控除額</div>
+          <div class="value" id="result-basic-deduction">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">課税遺産総額</div>
+          <div class="value" id="result-taxable-estate">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>区分</th><th>金額</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件をそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>相続対策を検討するなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>相続に詳しい税理士に無料相談する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>生命保険の非課税枠（500万円×法定相続人数）を活用した相続対策を調べる</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>相続税はどう計算される？</h2>
+    <p>相続税は、まず遺産総額から「基礎控除額＝3,000万円＋600万円×法定相続人の数」を差し引いた「課税遺産総額」を求めます。次に、課税遺産総額を各法定相続人が法定相続分どおりに取得したと仮定して、それぞれの取得金額に相続税の速算表（10%〜55%の8段階の超過累進税率）を当てはめて計算した税額を合計したものが「相続税の総額」です。最後に、相続税の総額を実際の遺産の取得割合に応じて按分し、配偶者には「配偶者の税額軽減」（取得した財産のうち1億6,000万円と配偶者の法定相続分相当額のいずれか多い金額までは非課税）を適用して、各人が実際に納める税額を求めます。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>基礎控除内なら何もしなくていいですか？</dt>
+        <dd>相続税の申告・納税は原則不要ですが、小規模宅地等の特例や配偶者の税額軽減など「申告することで初めて適用される」特例を使って税額を0円にする場合は、基礎控除を超えていなくても申告が必要になるケースがあります。詳しくは税理士にご確認ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>配偶者の税額軽減はどんな制度ですか？</dt>
+        <dd>配偶者が実際に取得した財産のうち、1億6,000万円と配偶者の法定相続分相当額のいずれか多い金額までは相続税がかからない制度です。多くのケースで配偶者の納税額は0円になりますが、次の相続（二次相続）では配偶者自身の財産と合算されて相続税が発生しやすくなる点に注意が必要です。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>不動産はどう評価すればいいですか？</dt>
+        <dd>土地は路線価（または倍率方式）、建物は固定資産税評価額をもとに評価するのが原則で、時価（市場で売買される価格）とは異なります。本ツールでは相続税評価額をすでに算出済みの金額として遺産総額に含めて入力してください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>この試算は正確ですか？</dt>
+        <dd>相続税の基本的な計算構造（基礎控除・速算表・配偶者の税額軽減）に基づく概算です。小規模宅地等の特例、生命保険金・死亡退職金の非課税枠、未成年者控除・障害者控除、2割加算（孫や兄弟姉妹が相続する場合など）は考慮していません。実際の税額はこれらの特例により大きく変わるため、正確な金額は税理士にご確認ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の相続税額を保証するものではありません。相続財産の評価や各種特例の適用可否を含め、正確な税額は税理士等の専門家にご確認ください。本サイトは特定の商品・サービスの勧誘を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/souzokuzei.js"></script>
+<script src="../js/share.js"></script>
+</body>
+</html>
