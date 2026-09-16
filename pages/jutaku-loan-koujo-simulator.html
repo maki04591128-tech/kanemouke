@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>住宅ローン控除シミュレーター | ふやすノート</title>
+<meta name="description" content="住宅ローン控除（住宅借入金等特別控除）の年間控除額・13年間または10年間の合計控除額を無料で試算。年末残高・住宅の区分（認定住宅/ZEH水準省エネ住宅など）・年収から、所得税・住民税それぞれの控除額の目安がわかります。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>住宅ローン控除（住宅借入金等特別控除）シミュレーター</h1>
+    <p>住宅ローン控除は、年末のローン残高に応じて所得税・住民税が軽減される制度です。控除額は「年末残高（借入限度額が上限）×0.7%」で計算されますが、住宅の種類によって借入限度額や控除期間が異なり、所得税額が少ないと控除しきれない場合もあります。条件を入力して、控除期間全体の見込み額を確認しましょう。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="principal">借入額（当初） <span class="unit">円</span></label>
+        <input type="number" id="principal" value="35000000" min="0" step="100000">
+      </div>
+
+      <div class="field">
+        <label for="loanRate">借入金利（年率） <span class="unit">%</span></label>
+        <input type="number" id="loanRate" value="1.0" min="0" max="10" step="0.01">
+      </div>
+
+      <div class="field">
+        <label for="loanYears">返済期間 <span class="unit">年</span></label>
+        <input type="number" id="loanYears" value="35" min="1" max="50" step="1">
+      </div>
+
+      <div class="field">
+        <label for="category">住宅の区分</label>
+        <select id="category">
+          <option value="new-nintei">新築：認定住宅（長期優良住宅・低炭素住宅）</option>
+          <option value="new-zeh">新築：ZEH水準省エネ住宅</option>
+          <option value="new-shoene" selected>新築：省エネ基準適合住宅</option>
+          <option value="new-sonota">新築：その他の住宅（2023年末までに建築確認・経過措置）</option>
+          <option value="used-nintei">既存（中古）：認定住宅等・ZEH水準省エネ住宅・省エネ基準適合住宅</option>
+          <option value="used-sonota">既存（中古）：その他の住宅</option>
+        </select>
+        <p class="field-hint">2024年・2025年に入居する場合の現行制度に基づく区分です。証明書の種類は住宅の売買契約書や建築確認の書類でご確認ください。</p>
+      </div>
+
+      <div class="field" id="kosodateRow">
+        <label for="kosodate">子育て世帯・若者夫婦世帯に該当</label>
+        <select id="kosodate">
+          <option value="no">該当しない</option>
+          <option value="yes">該当する（19歳未満の子がいる、または夫婦のいずれかが40歳未満）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
+        <input type="number" id="salaryIncome" value="6000000" min="0" max="30000000" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="hasSpouse">配偶者控除の対象になる配偶者</label>
+        <select id="hasSpouse">
+          <option value="no">いない</option>
+          <option value="yes">いる（配偶者の年収が103万円以下など）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
+        <input type="number" id="dependents" value="0" min="0" max="6" step="1">
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">控除期間合計の見込み額</div>
+          <div class="value" id="result-total">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">初年度の控除見込み額</div>
+          <div class="value" id="result-first-year">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">借入限度額（区分適用後）</div>
+          <div class="value" id="result-limit">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">控除期間</div>
+          <div class="value" id="result-period">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">所得税額（概算・年間）</div>
+          <div class="value" id="result-income-tax">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="creditChart" height="220"></canvas>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>経過年</th><th>年末残高</th><th>控除額（枠）</th><th>所得税から控除</th><th>住民税から控除</th><th>控除しきれない額</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>住宅購入・住み替えを検討するなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>住宅ローンの一括比較サービスを見る</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット銀行の住宅ローン金利を確認する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>住宅ローン控除はどう計算される？</h2>
+    <p>住宅ローン控除（住宅借入金等特別控除）は、毎年12月末時点のローン残高（住宅の区分ごとの借入限度額が上限）に0.7%を掛けた金額が、その年の所得税額から控除される制度です。所得税額から引ききれない分は、一定の上限（原則は課税総所得金額等の5%、上限97,500円）まで翌年度の住民税からも控除できます。控除できる期間は、新築で認定住宅・ZEH水準省エネ住宅・省エネ基準適合住宅に該当する場合は13年間、それ以外の新築（経過措置）や中古（既存）住宅の場合は10年間です。</p>
+    <p>借入限度額は住宅の性能が高いほど大きく設定されており、2024年・2025年に入居する場合はさらに「子育て世帯・若者夫婦世帯」向けの上乗せ措置があります。本ツールはこの現行制度（2024・2025年入居）を前提に、入力された借入条件から元利均等返済の年末残高を試算し、各年の控除額・所得税と住民税への充当額・控除しきれない金額を計算します。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>「控除しきれない額」が出るのはなぜですか？</dt>
+        <dd>住宅ローン控除は所得税額・住民税所得割額（上限あり）からしか引けないため、年末残高から計算される控除枠が所得税・住民税の負担額より大きい場合、その差額は控除に使いきれず、原則として翌年以降に繰り越すこともできません。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>住宅の区分はどうやって確認すればいいですか？</dt>
+        <dd>認定長期優良住宅・低炭素住宅は所管行政庁が交付する認定通知書、ZEH水準省エネ住宅・省エネ基準適合住宅は住宅性能証明書や建設住宅性能評価書などで確認できます。不明な場合は施工会社や不動産会社に確認しましょう。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>子育て世帯・若者夫婦世帯の上乗せ措置はいつまで対象ですか？</dt>
+        <dd>2024年・2025年に入居する場合の措置です。本ツールもこの期間の入居を前提としています。制度は税制改正で変更される可能性があるため、入居予定年の最新情報を国税庁のサイト等でご確認ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>この試算は正確ですか？</dt>
+        <dd>元利均等返済・給与所得者であることを前提にした概算です。繰り上げ返済を行った場合の残高変動、ふるさと納税など他の控除との兼ね合い、年収の変動、連帯債務・ペアローンの持分按分などは考慮していません。正確な控除額は確定申告時の計算や税務署・税理士にご確認ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の控除額を保証するものではありません。制度内容は税制改正により変更される場合があります。正確な金額は税務署・税理士等にご確認ください。本サイトは特定の金融機関・住宅の勧誘を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/jutaku-loan-koujo.js"></script>
+</body>
+</html>
