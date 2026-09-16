@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NISA枠の売却による復活シミュレーター | ふやすノート</title>
+<meta name="description" content="新NISAで商品を売却すると生涯投資枠がいくら復活するか、いつから使えるかを無料で試算。復活するのは時価ではなく取得価額（簿価）分だけという誤解しやすいルールを、数字で確認できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>NISA枠の売却による復活シミュレーター</h1>
+    <p>新NISAの生涯投資枠は、保有商品を売却すると翌年以降に復活します。ただし復活するのは<strong>売却時の評価額（時価）ではなく取得価額（簿価）</strong>分だけです。現在の枠の使用状況と、売却する商品の取得価額を入力して、復活後の枠と翌年の投資可能額を確認しましょう。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="lifetimeUsed">現在の生涯投資枠 使用額（総枠） <span class="unit">円</span></label>
+        <input type="number" id="lifetimeUsed" value="10000000" min="0" max="18000000" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="growthUsed">うち成長投資枠の使用額 <span class="unit">円</span></label>
+        <input type="number" id="growthUsed" value="6000000" min="0" max="12000000" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="saleType">売却する商品を購入した枠</label>
+        <select id="saleType">
+          <option value="growth">成長投資枠</option>
+          <option value="tsumitate">つみたて投資枠</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="saleCostBasis">売却する商品の取得価額（簿価） <span class="unit">円</span></label>
+        <input type="number" id="saleCostBasis" value="3000000" min="0" step="10000">
+      </div>
+
+      <div class="field">
+        <label for="saleMarketValue">売却時の評価額（時価・任意） <span class="unit">円</span></label>
+        <input type="number" id="saleMarketValue" value="4000000" min="0" step="10000">
+      </div>
+    </div>
+
+    <div>
+      <div id="errorBox" class="error-box"></div>
+
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card accent">
+          <div class="label">翌年以降に復活する生涯投資枠</div>
+          <div class="value" id="result-revived-amount">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">復活後の生涯投資枠 残り</div>
+          <div class="value" id="result-lifetime-remain-after">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">復活後の成長投資枠 残り</div>
+          <div class="value" id="result-growth-remain-after">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">翌年に新たに投資できる上限額</div>
+          <div class="value" id="result-next-year-investable">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="200"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>成長投資枠 使用額</span>
+          <span><span class="legend-dot" style="background:#5fa88f"></span>つみたて投資枠 使用額</span>
+          <span><span class="legend-dot" style="background:#e4ece9"></span>残り枠</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>区分</th><th>売却前</th><th>売却後（翌年以降）</th></tr>
+          </thead>
+          <tbody id="breakdown-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>復活した枠で次の投資先を探すなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で新NISA口座の枠を確認する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ロボアドバイザーで枠の使い分けを自動化する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>NISA枠の「復活」で誤解しやすいポイント</h2>
+    <p>新NISAでは、保有商品を売却するとその商品の<strong>取得価額（簿価）</strong>分だけ、生涯投資枠が翌年以降に復活します。ここで最も誤解されやすいのが、「復活するのは売却時の評価額（時価）ではなく取得価額」という点です。例えば100万円で買った商品が値上がりして150万円で売却できた場合でも、枠に戻るのはあくまで100万円分であり、値上がり益の50万円分は枠に反映されません。逆に80万円に値下がりして売却した場合も、復活するのは取得価額の100万円分です。また、枠が復活するタイミングも即座ではなく、<strong>売却した年の翌年（1月1日以降）</strong>である点に注意が必要です。年内に売却しても、その年の年間投資枠（つみたて投資枠120万円・成長投資枠240万円）を超えて追加投資することはできません。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>売却したその日のうちに、復活した枠で買い直せますか？</dt>
+        <dd>いいえ、できません。枠が復活するのは売却した年の翌年からです。同じ年のうちに買い直す場合は、その年にまだ残っている年間投資枠（新規の未使用分）の範囲でのみ購入できます。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>含み損の商品を売却した場合はどうなりますか？</dt>
+        <dd>含み損があっても、復活する枠は売却時の評価額ではなく取得価額（簿価）分です。損失が出ていても、投資した金額分の枠がそのまま翌年に戻ってくる点は含み益の場合と同じです。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>成長投資枠で買った商品を売却すれば、成長投資枠の上限（1,200万円）も戻りますか？</dt>
+        <dd>はい。成長投資枠で購入した商品を売却した場合、生涯投資枠（総枠1,800万円）だけでなく、成長投資枠専用の上限（1,200万円）についても、取得価額分が翌年以降に復活します。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>翌年、復活した枠をすべて使い切って投資できますか？</dt>
+        <dd>翌年の投資額は、復活を含めた生涯投資枠の残りだけでなく、その年の年間投資枠（つみたて投資枠120万円・成長投資枠240万円）の上限にも制限されます。復活額が大きくても、1年で使い切れるとは限りません。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値です。実際の枠管理は証券会社の口座画面や国税庁・金融庁の公表資料でご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/nisa-fukkatsu.js"></script>
+</body>
+</html>

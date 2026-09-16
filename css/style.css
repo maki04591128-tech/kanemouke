@@ -390,6 +390,18 @@ a { color: var(--color-primary); }
   margin: 32px 0;
 }
 
+.error-box {
+  display: none;
+  font-size: 0.85rem;
+  color: #8a4b06;
+  background: #fdf3e2;
+  border: 1px solid #f0d9a8;
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 18px;
+}
+.error-box p { margin: 4px 0; }
+
 /* Footer */
 .site-footer {
   border-top: 1px solid var(--color-border);
