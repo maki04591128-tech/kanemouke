@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iDeCoの受け取り方 一時金 vs 年金 vs 併用 比較シミュレーター | ふやすノート</title>
+<meta name="description" content="iDeCo（個人型確定拠出年金）を「一時金」「年金」「併用」のどの方法で受け取ると有利か、退職所得控除・公的年金等控除を考慮して無料で試算。3パターンの将来資産額をグラフで比較できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <nav class="site-nav">
+      <a href="tsumitate-simulator.html">積立シミュレーター</a>
+      <a href="hitsuyou-gaku.html">必要積立額</a>
+      <a href="ideco-simulator.html">iDeCo節税</a>
+      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
+      <a href="kyouiku-simulator.html">教育資金</a>
+      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
+      <a href="roan-simulator.html">ローンvs投資</a>
+      <a href="loan-vs-invest.html">繰上返済vs投資</a>
+      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
+      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
+      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
+      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>iDeCoの受け取り方 一時金 vs 年金 vs 併用 比較シミュレーター</h1>
+    <p>iDeCo（個人型確定拠出年金）の資産を「一時金」でまとめて受け取るか、「年金」として分割受け取りするか、「併用」で組み合わせるか。退職所得控除・公的年金等控除による税金の差を踏まえ、3パターンの将来資産額を比較します。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
+
+  <div class="calc-layout">
+    <div class="panel">
+      <h2>条件を入力</h2>
+
+      <div class="field">
+        <label for="amount">受け取り時のiDeCo資産評価額 <span class="unit">万円</span></label>
+        <input type="number" id="amount" value="1500" min="0" step="50">
+      </div>
+
+      <div class="field">
+        <label for="contribYears">iDeCo加入者等期間（掛金拠出年数） <span id="contribYearsOut" class="unit">25 年</span></label>
+        <input type="range" id="contribYears" value="25" min="1" max="43" step="1">
+      </div>
+
+      <div class="field">
+        <label for="payoutYears">年金部分の受取期間 <span id="payoutYearsOut" class="unit">10 年</span></label>
+        <input type="range" id="payoutYears" value="10" min="5" max="20" step="1">
+      </div>
+
+      <div class="field">
+        <label for="ageGroup">受給開始時の年齢</label>
+        <select id="ageGroup">
+          <option value="under65">65歳未満</option>
+          <option value="65" selected>65歳以上</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="annuityRate">年金原資（据置分）の運用利率（年率） <span id="annuityRateOut" class="unit">1.0 %</span></label>
+        <input type="range" id="annuityRate" value="1.0" min="0" max="3" step="0.1">
+      </div>
+
+      <div class="field">
+        <label for="investRate">受け取った手取り額を自分で運用する場合の利回り（年率） <span id="investRateOut" class="unit">3.0 %</span></label>
+        <input type="range" id="investRate" value="3.0" min="0" max="8" step="0.1">
+      </div>
+
+      <div class="field">
+        <label for="lumpRatio">併用パターンの一時金割合 <span id="lumpRatioOut" class="unit">50 %</span></label>
+        <input type="range" id="lumpRatio" value="50" min="0" max="100" step="5">
+      </div>
+    </div>
+
+    <div>
+      <div class="verdict-banner">
+        <span id="verdict">-</span>
+        <span id="verdictSub" class="sub"></span>
+      </div>
+
+      <div class="result-summary">
+        <div class="result-card">
+          <div class="label">A：全額一時金の最終資産</div>
+          <div class="value" id="result-final-lump">-</div>
+        </div>
+        <div class="result-card">
+          <div class="label">B：全額年金の最終資産</div>
+          <div class="value" id="result-final-pension">-</div>
+        </div>
+        <div class="result-card accent">
+          <div class="label">C：併用（指定割合）の最終資産</div>
+          <div class="value" id="result-final-mix">-</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="growthChart" height="280"></canvas>
+        <div class="legend-note">
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>A：全額一時金</span>
+          <span><span class="legend-dot" style="background:#d98e04"></span>B：全額年金</span>
+          <span><span class="legend-dot" style="background:#2563eb"></span>C：併用</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
+
+  <div class="affiliate-box">
+    <h3>受け取り後の資産運用を検討する</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>ネット証券で新NISA（iDeCo受取金の運用）口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>iDeCoの受け取り方を相談できるIFA・専門家を探す</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>iDeCoの受け取り方と税金の仕組み</h2>
+    <p>iDeCoの資産は<strong>一時金</strong>（一括）・<strong>年金</strong>（分割）・その<strong>併用</strong>のいずれかで受け取れます。一時金は「退職所得」として分離課税され、加入者等期間に応じた<strong>退職所得控除額</strong>（20年以下は40万円×年数、20年超は800万円＋70万円×(年数－20)）を差し引いた金額の<strong>1/2</strong>にのみ課税されるため、税負担が軽くなりやすい方式です。年金は「公的年金等の雑所得」として毎年課税され、年齢に応じた公的年金等控除額を差し引いた金額に総合課税がかかります。併用の場合、<strong>退職所得控除は一時金として受け取る金額にのみ適用される</strong>ため、控除額を使い切る範囲で一時金を受け取り、残りを年金にすると税負担を抑えやすい傾向があります。本シミュレーターでは、年金収入・退職所得以外の所得がない前提で簡易的に試算しています。</p>
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>会社の退職金と同じ年にiDeCoの一時金を受け取るとどうなりますか？</dt>
+        <dd>退職所得控除は会社の退職金とiDeCoの一時金で合算して計算され、受け取るタイミングによって控除額の使える範囲が変わる複雑なルールがあります。本シミュレーターはiDeCo単独で受け取る場合を前提としており、会社の退職金と同時期に受け取る場合は結果が変わる可能性があるため、税理士等の専門家にご確認ください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>併用の一時金割合はどう決めればいいですか？</dt>
+        <dd>「併用パターンの一時金割合」のスライダーを動かしながら結果グラフを見比べ、退職所得控除額（画面下部に表示）をちょうど使い切る前後の割合を試してみると、税負担を抑えやすい目安がわかります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>iDeCoの受け取り開始年齢はいつからいつまでですか？</dt>
+        <dd>原則60歳から75歳までの間で受け取り開始時期を選べます（加入期間が短いと受給開始年齢が引き上げられる場合があります）。受け取り方法や時期は、他の年金収入・退職金の受け取り時期とあわせて検討することをおすすめします。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="article-section">
+    <h2>試算の前提条件</h2>
+    <p>
+      退職所得控除額（加入者等期間ベース）：<span id="deduction-amount">-</span><br>
+      併用パターンで一時金部分に使われた控除額：<span id="deduction-used">-</span>
+    </p>
+  </section>
+
+  <div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の税額・将来の運用成果・元本を保証するものではありません。会社の退職一時金と同一年またはその前後に受け取る場合の退職所得控除の合算調整など、実際の制度はより複雑です。住民税は一律10%、所得税には復興特別所得税を含み、公的年金等・退職所得以外の所得はないものと仮定するなど簡略化した試算のため、正確な税額については税務署・税理士等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/ideco-uketori.js"></script>
+</body>
+</html>
