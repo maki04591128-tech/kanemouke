@@ -8,6 +8,38 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "結局どの方式を選べばよいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "本ツールは特定の方式を推奨するものではなく、入力条件に基づく機械的な試算結果を比較できるようにしたものです。一般的には「定額方式は生活費が読みやすい代わりに資産が尽きるリスクが相対的に高い」「定率方式は資産が尽きにくい代わりに取り崩し額が変動する」というトレードオフがあるため、ご自身の生活設計に合わせて検討してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "定率方式で「資産が尽きない」と表示されるのはなぜですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "定率方式は毎年「残高×取り崩し率」だけを取り崩すため、残高が減れば取り崩し額も比例して減り、数式の上では資産が限りなくゼロに近づいても完全にはゼロになりません。本ツールではこの性質を反映し、上限年数まで残高が残る場合はその旨を表示します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "FIRE達成シミュレーターとの違いは何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「FIRE達成シミュレーター」は積立期間から目標資産額への到達時期を試算し、達成後の取り崩しは「引き出し率どおりに定額を取り崩す」という単一の前提で計算しています。本ツールはその取り崩し局面だけを取り出し、定額・定率・定率＋下限額という複数の方式を比較できるようにした、補完的な位置づけのツールです。"
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
