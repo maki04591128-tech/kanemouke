@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>年収から手取り額シミュレーター | ふやすノート</title>
-<meta name="description" content="額面年収・年齢区分・配偶者控除の有無・扶養人数から、社会保険料・所得税・住民税を差し引いた手取り年収と手取り率を無料で試算。内訳を円グラフで確認でき、年収別の手取り早見表も表示します。">
-<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/nenshu-tedori-simulator.html">
+<title>賞与（ボーナス）手取りシミュレーター | ふやすノート</title>
+<meta name="description" content="賞与（ボーナス）の額面・前月の給与額・扶養人数から、社会保険料と源泉徴収税額を差し引いた手取り賞与額を無料で試算。国税庁「賞与に対する源泉徴収税額の算出率の表」に基づく計算で、住民税がかからない理由もあわせて解説します。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/shoyo-tedori-simulator.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ふやすノート">
 <meta property="og:locale" content="ja_JP">
-<meta property="og:title" content="年収から手取り額シミュレーター | ふやすノート">
-<meta property="og:description" content="額面年収・年齢区分・配偶者控除の有無・扶養人数から、社会保険料・所得税・住民税を差し引いた手取り年収と手取り率を無料で試算。内訳を円グラフで確認でき、年収別の手取り早見表も表示します。">
-<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/nenshu-tedori-simulator.html">
+<meta property="og:title" content="賞与（ボーナス）手取りシミュレーター | ふやすノート">
+<meta property="og:description" content="賞与（ボーナス）の額面・前月の給与額・扶養人数から、社会保険料と源泉徴収税額を差し引いた手取り賞与額を無料で試算。国税庁「賞与に対する源泉徴収税額の算出率の表」に基づく計算で、住民税がかからない理由もあわせて解説します。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/shoyo-tedori-simulator.html">
 <meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="年収から手取り額シミュレーター | ふやすノート">
-<meta name="twitter:description" content="額面年収・年齢区分・配偶者控除の有無・扶養人数から、社会保険料・所得税・住民税を差し引いた手取り年収と手取り率を無料で試算。内訳を円グラフで確認でき、年収別の手取り早見表も表示します。">
+<meta name="twitter:title" content="賞与（ボーナス）手取りシミュレーター | ふやすノート">
+<meta name="twitter:description" content="賞与（ボーナス）の額面・前月の給与額・扶養人数から、社会保険料と源泉徴収税額を差し引いた手取り賞与額を無料で試算。国税庁「賞与に対する源泉徴収税額の算出率の表」に基づく計算で、住民税がかからない理由もあわせて解説します。">
 <meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -29,26 +29,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "賞与（ボーナス）は年収に含めてよいですか？",
+      "name": "賞与（ボーナス）からは住民税が引かれないのですか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "本シミュレーターの「額面年収」は、毎月の給与と賞与の合計を想定しています。賞与にかかる社会保険料・所得税は毎月の給与とは別の計算方法（賞与に対する源泉徴収税額の算出率）が使われるため、実際の手取り額とは多少ずれる場合がある目安値としてご利用ください。"
+        "text": "はい。会社員の住民税は前年の所得をもとに計算され、特別徴収では毎月の給与から12回に分けて天引きされる仕組みのため、原則として賞与からは天引きされません。本シミュレーターも住民税は0円として計算しています。"
       }
     },
     {
       "@type": "Question",
-      "name": "社会保険料率が実際と違う気がします",
+      "name": "賞与にかかる所得税はどうやって決まりますか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "健康保険料率は加入している健康保険組合や都道府県によって異なり、厚生年金には標準報酬月額・賞与額に上限があります。本シミュレーターは協会けんぽの全国平均目安に基づく概算のため、実際の給与明細の金額とは差が生じます。"
+        "text": "国税庁が公表する「賞与に対する源泉徴収税額の算出率の表」を使い、前月の給与から社会保険料を差し引いた金額と扶養親族等の人数に応じた「賞与の金額に乗ずべき率」を、社会保険料控除後の賞与額に掛けて源泉徴収税額を求めます。毎月の給与にかかる所得税とは異なる、賞与専用の計算方法です。"
       }
     },
     {
       "@type": "Question",
-      "name": "配偶者控除・扶養控除の金額が実際と違う場合は？",
+      "name": "前月に給与がない場合や、賞与が前月給与の10倍を超える場合はどうなりますか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "配偶者控除・配偶者特別控除は配偶者の年収に応じて段階的に減っていく仕組みですが、本シミュレーターは配偶者の年収が103万円以下で満額（所得税38万円・住民税33万円）が適用されるケースのみを簡易的に試算しています。扶養控除も、19〜22歳の特定扶養親族（63万円）や70歳以上の老人扶養親族（58万円）などの上乗せは考慮せず、一般の扶養親族として一律で計算しています。"
+        "text": "国税庁の定めにより、このようなケースでは賞与用の速算表ではなく、毎月の給与に使う「月額表」で計算することになっています。本シミュレーターは月額表には対応していないため、該当する場合は最も高い税率で概算した参考値である旨を画面に表示します。正確な金額は給与担当者にご確認ください。"
       }
     }
   ]
@@ -138,8 +138,8 @@
 
 <main class="container">
   <div class="page-title">
-    <h1>年収から手取り額シミュレーター</h1>
-    <p>額面の年収から、社会保険料（健康保険・厚生年金・雇用保険・介護保険）・所得税・住民税を差し引いた「手取り年収」の目安を試算します。年齢区分・配偶者控除の有無・扶養親族の人数を反映し、内訳を円グラフで、年収別の手取り早見表もあわせて確認できます。</p>
+    <h1>賞与（ボーナス）手取りシミュレーター</h1>
+    <p>賞与の額面・前月の給与額面・年齢区分・扶養親族等の人数から、社会保険料と所得税（源泉徴収）を差し引いた「手取り賞与額」の目安を試算します。国税庁が公表する「賞与に対する源泉徴収税額の算出率の表」（令和8年分）に基づいて計算しています。</p>
   </div>
 
   <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
@@ -149,8 +149,14 @@
       <h2>条件を入力</h2>
 
       <div class="field">
-        <label for="income">額面年収 <span class="unit">万円</span></label>
-        <input type="number" id="income" value="500" min="0" step="10">
+        <label for="bonus">賞与の額面 <span class="unit">万円</span></label>
+        <input type="number" id="bonus" value="50" min="0" step="1">
+      </div>
+
+      <div class="field">
+        <label for="prevSalary">前月の給与額面（賞与を除く） <span class="unit">万円</span></label>
+        <input type="number" id="prevSalary" value="30" min="0" step="1">
+        <p class="field-hint">賞与にかかる所得税率は「前月の給与から社会保険料を引いた金額」を基準に決まります。基本給・各種手当を含む前月分の額面を入力してください。</p>
       </div>
 
       <div class="field">
@@ -159,20 +165,21 @@
           <option value="under40">40歳未満</option>
           <option value="40to64">40歳以上65歳未満（介護保険あり）</option>
         </select>
-        <p class="field-hint">65歳以上の方は雇用形態により保険料の扱いが異なるため、本シミュレーターでは対象外としています。</p>
       </div>
 
       <div class="field">
-        <label for="hasSpouse">配偶者控除の対象となる配偶者</label>
-        <select id="hasSpouse">
-          <option value="no">いない</option>
-          <option value="yes">いる（配偶者の年収が目安103万円以下）</option>
+        <label for="dependents">扶養親族等の人数（「給与所得者の扶養控除等申告書」を提出している方向け） <span class="unit">人</span></label>
+        <select id="dependents">
+          <option value="0">0人</option>
+          <option value="1">1人</option>
+          <option value="2">2人</option>
+          <option value="3">3人</option>
+          <option value="4">4人</option>
+          <option value="5">5人</option>
+          <option value="6">6人</option>
+          <option value="7">7人以上</option>
         </select>
-      </div>
-
-      <div class="field">
-        <label for="dependents">扶養親族の人数（16歳以上・一般の扶養親族） <span class="unit">人</span></label>
-        <input type="number" id="dependents" value="0" min="0" max="5" step="1">
+        <p class="field-hint">副業先など「扶養控除等申告書」を提出していない場合（乙欄）は、本シミュレーターの対象外です。</p>
       </div>
     </div>
 
@@ -182,9 +189,13 @@
         <span id="verdictSub" class="sub"></span>
       </div>
 
+      <p id="over-limit-note" class="field-hint" style="display:none;color:#c96b3f;font-weight:700;">
+        ※ 前月の給与が0円、またはその他の理由により国税庁の表に定める「賞与用の速算表を使えない」条件に該当するため、最も高い税率区分で概算した参考値を表示しています。実際は「月額表」を使った別の計算方法になるため、正確な金額は給与担当者にご確認ください。
+      </p>
+
       <div class="result-summary">
         <div class="result-card accent">
-          <div class="label">手取り年収</div>
+          <div class="label">手取り賞与額</div>
           <div class="value" id="result-take-home">-</div>
         </div>
         <div class="result-card">
@@ -192,12 +203,12 @@
           <div class="value" id="result-take-home-rate">-</div>
         </div>
         <div class="result-card">
-          <div class="label">月あたりの手取り目安</div>
-          <div class="value" id="result-take-home-monthly">-</div>
+          <div class="label">賞与にかかる社会保険料</div>
+          <div class="value" id="result-social-insurance">-</div>
         </div>
         <div class="result-card">
-          <div class="label">額面との差額（社会保険料＋税金）</div>
-          <div class="value" id="result-total-deduction">-</div>
+          <div class="label">賞与にかかる所得税（源泉徴収）</div>
+          <div class="value" id="result-income-tax">-</div>
         </div>
       </div>
 
@@ -206,7 +217,7 @@
           <canvas id="growthChart" height="280"></canvas>
         </div>
         <div class="legend-note">
-          <span><span class="legend-dot" style="background:#0f5f4c"></span>手取り／社会保険料／所得税／住民税の内訳</span>
+          <span><span class="legend-dot" style="background:#0f5f4c"></span>手取り／社会保険料／所得税の内訳</span>
         </div>
       </div>
 
@@ -236,17 +247,17 @@
   <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
 
   <div class="table-wrap">
-    <h2>年収別の手取り早見表（同じ条件で試算）</h2>
+    <h2>賞与額面別の手取り早見表（同じ条件で試算）</h2>
     <table class="data-table wall-table">
       <thead>
-        <tr><th>額面年収</th><th>手取り年収の目安</th><th>手取り率</th></tr>
+        <tr><th>賞与の額面</th><th>手取り賞与額の目安</th><th>手取り率</th></tr>
       </thead>
       <tbody id="table-body"></tbody>
     </table>
   </div>
 
   <div class="affiliate-box">
-    <h3>手取り額を把握したら、余った分を積立投資に</h3>
+    <h3>手取り賞与の使い道を決めたら、一部を積立投資に</h3>
     <div class="affiliate-list">
       <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
         <span>ネット証券でNISA口座を開設する</span>
@@ -261,67 +272,64 @@
   </div>
 
   <section class="article-section">
-    <h2>額面年収と手取り年収の違い</h2>
-    <p>求人票や源泉徴収票に記載される「年収」は、税金や社会保険料が引かれる前の「額面」の金額です。実際に自由に使える「手取り」は、額面から健康保険・厚生年金・雇用保険（40〜64歳の場合は介護保険も）といった社会保険料と、所得税・住民税を差し引いた金額になります。一般的な会社員の場合、手取り率はおおむね75〜80%程度になることが多く、年収が上がるほど所得税が累進的に高くなるため手取り率はやや下がる傾向があります。本シミュレーターは、給与所得控除・基礎控除・配偶者控除・扶養控除を踏まえて、この手取り額を試算します。</p>
+    <h2>賞与の手取り額はどうやって決まるのか</h2>
+    <p>毎月の給与とは異なり、賞与（ボーナス）にかかる社会保険料・所得税は専用の計算方法が使われます。社会保険料（健康保険・厚生年金・雇用保険、40〜64歳は介護保険も）は毎月の給与と同じ料率で賞与額に直接かかりますが、所得税（源泉徴収税額）は、国税庁が公表する「賞与に対する源泉徴収税額の算出率の表」を使って計算します。この表は、①前月の給与から社会保険料を差し引いた金額と、②扶養親族等の人数の組み合わせから「賞与の金額に乗ずべき率」を求め、その率を社会保険料控除後の賞与額に掛けることで源泉徴収税額を算出する仕組みです。</p>
+    <h3>住民税は賞与から引かれない</h3>
+    <p>会社員の住民税は前年の所得をもとに市区町村が金額を確定し、給与天引き（特別徴収）の場合は毎年6月から翌年5月までの12回で均等に天引きされます。この仕組みのため、賞与からは原則として住民税は天引きされません。額面年収に対する手取りを知りたい場合は「<a href="nenshu-tedori-simulator.html">年収から手取り額シミュレーター</a>」もあわせてご利用ください。</p>
     <h3>よくある質問</h3>
     <dl>
       <div class="faq-item">
-        <dt>賞与（ボーナス）は年収に含めてよいですか？</dt>
-        <dd>本シミュレーターの「額面年収」は、毎月の給与と賞与の合計を想定しています。賞与にかかる社会保険料・所得税は毎月の給与とは別の計算方法（賞与に対する源泉徴収税額の算出率）が使われるため、実際の手取り額とは多少ずれる場合がある目安値としてご利用ください。</dd>
+        <dt>賞与（ボーナス）からは住民税が引かれないのですか？</dt>
+        <dd>はい。会社員の住民税は前年の所得をもとに計算され、特別徴収では毎月の給与から12回に分けて天引きされる仕組みのため、原則として賞与からは天引きされません。本シミュレーターも住民税は0円として計算しています。</dd>
       </div>
       <div class="faq-item">
-        <dt>社会保険料率が実際と違う気がします</dt>
-        <dd>健康保険料率は加入している健康保険組合や都道府県によって異なり、厚生年金には標準報酬月額・賞与額に上限があります。本シミュレーターは協会けんぽの全国平均目安に基づく概算のため、実際の給与明細の金額とは差が生じます。</dd>
+        <dt>賞与にかかる所得税はどうやって決まりますか？</dt>
+        <dd>国税庁が公表する「賞与に対する源泉徴収税額の算出率の表」を使い、前月の給与から社会保険料を差し引いた金額と扶養親族等の人数に応じた「賞与の金額に乗ずべき率」を、社会保険料控除後の賞与額に掛けて源泉徴収税額を求めます。毎月の給与にかかる所得税とは異なる、賞与専用の計算方法です。</dd>
       </div>
       <div class="faq-item">
-        <dt>配偶者控除・扶養控除の金額が実際と違う場合は？</dt>
-        <dd>配偶者控除・配偶者特別控除は配偶者の年収に応じて段階的に減っていく仕組みですが、本シミュレーターは配偶者の年収が103万円以下で満額（所得税38万円・住民税33万円）が適用されるケースのみを簡易的に試算しています。扶養控除も、19〜22歳の特定扶養親族（63万円）や70歳以上の老人扶養親族（58万円）などの上乗せは考慮せず、一般の扶養親族として一律で計算しています。</dd>
+        <dt>前月に給与がない場合や、賞与が前月給与の10倍を超える場合はどうなりますか？</dt>
+        <dd>国税庁の定めにより、このようなケースでは賞与用の速算表ではなく、毎月の給与に使う「月額表」で計算することになっています。本シミュレーターは月額表には対応していないため、該当する場合は最も高い税率で概算した参考値である旨を画面に表示します。正確な金額は給与担当者にご確認ください。</dd>
       </div>
     </dl>
   </section>
   <section class="article-section">
     <h2>あわせて使いたい関連ツール（年収・手取り・退職金）</h2>
     <div class="tool-grid">
-      <a class="tool-card" href="shoyo-tedori-simulator.html">
+      <a class="tool-card" href="nenshu-tedori-simulator.html">
         <span class="badge">手取り計算</span>
-        <h3>賞与（ボーナス）手取りシミュレーター</h3>
-        <p>賞与の額面・前月の給与額・扶養人数から、国税庁の算出率の表に基づく手取り賞与額を試算します。</p>
+        <h3>年収から手取り額シミュレーター</h3>
+        <p>額面年収・年齢区分・配偶者控除の有無・扶養人数から、社会保険料・所得税・住民税を差し引いた手取り年収を試算します。</p>
+      </a>
+      <a class="tool-card" href="nenshu-no-kabe-simulator.html">
+        <span class="badge">扶養・パート収入</span>
+        <h3>扶養控除・年収の壁シミュレーター</h3>
+        <p>106万円・123万円（旧103万円）・130万円など複数ある「年収の壁」を一度に確認できます。</p>
       </a>
       <a class="tool-card" href="taishokukin-simulator.html">
         <span class="badge">比較シミュレーター</span>
         <h3>退職金 一時金 vs 年金 比較</h3>
         <p>退職金・企業年金を一時金でもらうか年金でもらうか、税金の差と将来の資産額をあわせて試算します。</p>
       </a>
-      <a class="tool-card" href="nenshu-no-kabe-simulator.html">
-        <span class="badge">扶養・パート収入</span>
-        <h3>扶養控除・年収の壁シミュレーター</h3>
-        <p>106万円・123万円（旧103万円）・130万円など複数ある「年収の壁」を一度に確認。壁を超えた場合の手取り額の目安もグラフで試算します。</p>
-      </a>
-      <a class="tool-card" href="nenshu-no-kabe-guide.html">
+      <a class="tool-card" href="nenmatsu-chosei-guide.html">
         <span class="badge">解説記事</span>
-        <h3>年収の壁とは？103万・106万・130万・150万円の壁の違いを一覧で 完全ガイド</h3>
-        <p>住民税・所得税・社会保険・配偶者特別控除、それぞれの「年収の壁」の金額と影響を一覧で整理し、壁を超えるかどうかの考え方を解説します。</p>
-      </a>
-      <a class="tool-card" href="taishoku-shotoku-koujo-guide.html">
-        <span class="badge">解説記事</span>
-        <h3>退職所得控除とは？計算方法と退職金にかかる税金の仕組み 完全ガイド</h3>
-        <p>勤続年数ごとの控除額の計算方法、2分の1課税の仕組み、一時金と年金どちらが得かの考え方まで解説します。</p>
-      </a>
-      <a class="tool-card" href="haiguusha-fuyou-koujo-guide.html">
-        <span class="badge">解説記事</span>
-        <h3>配偶者控除・扶養控除とは？対象となる条件と控除額 完全ガイド</h3>
-        <p>配偶者控除・配偶者特別控除・扶養控除の対象条件と控除額を早見表で整理し、年収の壁や年末調整での手続きまで解説します。</p>
+        <h3>年末調整とは？ 完全ガイド</h3>
+        <p>年末調整の仕組みと、賞与・給与から源泉徴収された所得税が年末に精算される流れを解説します。</p>
       </a>
       <a class="tool-card" href="shakaihoken-guide.html">
         <span class="badge">解説記事</span>
-        <h3>社会保険料とは？健康保険・厚生年金・雇用保険の仕組みと計算方法 完全ガイド</h3>
-        <p>健康保険・厚生年金・雇用保険・介護保険の保険料率の目安と、106万円・130万円の壁との関係、社会保険料控除の仕組みまで解説します。</p>
+        <h3>社会保険料とは？ 完全ガイド</h3>
+        <p>健康保険・厚生年金・雇用保険・介護保険の保険料率の目安と、社会保険料控除の仕組みまで解説します。</p>
+      </a>
+      <a class="tool-card" href="kyuyo-shotoku-koujo-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>給与所得控除とは？ 完全ガイド</h3>
+        <p>給与収入から差し引かれる給与所得控除の仕組みと、所得税・住民税の計算への影響を解説します。</p>
       </a>
     </div>
   </section>
 
   <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の給与明細・源泉徴収票の金額と一致するものではありません。社会保険料率は協会けんぽの全国平均目安による概算であり、厚生年金・健康保険には標準報酬月額に基づく上限があるなど、実際の計算はより複雑です。配偶者控除・配偶者特別控除・扶養控除は簡略化した条件で試算しています。正確な金額は勤務先の給与担当者・税理士・年金事務所等にご確認ください。本サイトは税務・社会保険に関する助言を目的とするものではありません。
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の給与明細・賞与明細の金額と一致するものではありません。社会保険料率は協会けんぽの全国平均目安による概算であり、厚生年金・健康保険には標準報酬月額・標準賞与額に基づく上限があるなど、実際の計算はより複雑です。「給与所得者の扶養控除等申告書」を提出していない場合（乙欄が適用される場合）や、前月給与がない場合・賞与が前月給与の10倍を超える場合（月額表を使う場合）には対応していません。正確な金額は勤務先の給与担当者・税理士にご確認ください。本サイトは税務・社会保険に関する助言を目的とするものではありません。
   </div>
 </main>
 
@@ -338,7 +346,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
-<script src="../js/nenshu-tedori.js"></script>
+<script src="../js/shoyo-tedori.js"></script>
 <script src="../js/share.js"></script>
 <script src="../js/nav-toggle.js"></script>
 </body>
