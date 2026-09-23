@@ -467,15 +467,14 @@ a { color: var(--color-primary); }
   font-weight: 700;
 }
 .data-table tbody tr:last-child td { border-bottom: none; }
-.data-table td:last-child {
+/* data-table--result: JS生成の試算結果テーブル（最終列が短い金額）専用。
+   記事内の解説テーブル（最終列が長文）にnowrapを適用すると、
+   auto table layoutで他の列が極端に圧縮されCJK見出しが1文字ずつ縦積みになる不具合が起きるため、
+   結果テーブルにのみ限定して適用する。 */
+.data-table.data-table--result td:last-child {
   font-weight: 700;
   color: var(--color-primary-dark);
   white-space: nowrap;
-}
-.data-table.wall-table td:last-child {
-  font-weight: 400;
-  color: var(--color-text);
-  white-space: normal;
 }
 .data-table.wall-table tr.wall-crossed {
   background: #fdf3e0;
