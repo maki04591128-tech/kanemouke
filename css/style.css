@@ -221,9 +221,19 @@ a { color: var(--color-primary); }
   position: relative;
   max-width: 420px;
 }
+.tool-search-icon {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
 .tool-search-input {
   width: 100%;
-  padding: 12px 40px 12px 16px;
+  padding: 12px 40px 12px 40px;
   border: 1px solid var(--color-border);
   border-radius: 999px;
   font-size: 1rem;
@@ -234,6 +244,9 @@ a { color: var(--color-primary); }
 .tool-search-input:focus {
   outline: 2px solid var(--color-primary);
   outline-offset: 1px;
+}
+.tool-search-input:focus ~ .tool-search-icon {
+  color: var(--color-primary);
 }
 .tool-search-input::-webkit-search-cancel-button {
   display: none;
@@ -505,12 +518,20 @@ a { color: var(--color-primary); }
 .ad-slot {
   margin: 28px 0;
   padding: 14px;
+  min-height: 20px;
   border: 1px dashed var(--color-border);
   border-radius: 10px;
   text-align: center;
   font-size: 0.78rem;
   color: var(--color-text-muted);
   background: #fbfcfd;
+}
+.ad-slot::before {
+  content: "広告";
+  display: block;
+  letter-spacing: 0.15em;
+  font-size: 0.7rem;
+  color: #aab3bd;
 }
 
 /* Affiliate section */
