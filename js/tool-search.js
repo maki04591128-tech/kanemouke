@@ -9,10 +9,18 @@
   var categories = Array.prototype.slice.call(document.querySelectorAll(".tool-category"));
   if (!input || !status || categories.length === 0) return;
 
-  var noResults = document.createElement("p");
+  var noResults = document.createElement("div");
   noResults.className = "tool-search-no-results is-search-hidden";
-  noResults.textContent = "該当するツール・ガイドが見つかりませんでした。カテゴリー一覧からお探しください。";
+  noResults.innerHTML =
+    '<svg class="tool-search-no-results-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">' +
+    '<circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.6"></circle>' +
+    '<line x1="14" y1="14" x2="18" y2="18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></line>' +
+    '<line x1="6.5" y1="9" x2="11.5" y2="9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></line>' +
+    '</svg>' +
+    '<p>該当するツール・ガイドが見つかりませんでした。<br>別のキーワードでお試しいただくか、下のボタンから一覧をご覧ください。</p>' +
+    '<button type="button" class="tool-search-no-results-reset">すべてのツール・ガイドを表示</button>';
   categoryNav.insertAdjacentElement("afterend", noResults);
+  var noResultsReset = noResults.querySelector(".tool-search-no-results-reset");
 
   // 表記ゆれ（読み方・略称違い）を吸収するための同義語辞書。
   // キーの語がテキストに含まれていたら、値の語をすべて検索対象テキストに追加する。
@@ -113,6 +121,12 @@
   });
 
   clearBtn.addEventListener("click", function () {
+    input.value = "";
+    reset();
+    input.focus();
+  });
+
+  noResultsReset.addEventListener("click", function () {
     input.value = "";
     reset();
     input.focus();
