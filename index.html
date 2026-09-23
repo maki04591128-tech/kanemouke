@@ -112,6 +112,7 @@
   </section>
 
   <section class="container">
+    <div id="featured-section">
     <h2 class="section-lead">よく使われているツール</h2>
     <div class="featured-grid">
       <a class="tool-card featured" href="pages/tsumitate-simulator.html">
@@ -145,8 +146,18 @@
         <p>遺産総額と家族構成から、相続税の目安を試算します。</p>
       </a>
     </div>
+    </div>
 
-    <nav class="category-nav" aria-label="カテゴリー一覧">
+    <div class="tool-search" role="search">
+      <label for="tool-search-input" class="tool-search-label">キーワードでツール・ガイドを探す</label>
+      <div class="tool-search-box">
+        <input type="search" id="tool-search-input" class="tool-search-input" placeholder="例：ふるさと納税、住宅ローン、相続税…" autocomplete="off">
+        <button type="button" id="tool-search-clear" class="tool-search-clear" aria-label="検索条件をクリア" hidden>&times;</button>
+      </div>
+      <p id="tool-search-status" class="tool-search-status" aria-live="polite"></p>
+    </div>
+
+    <nav class="category-nav" id="category-nav" aria-label="カテゴリー一覧">
       <a href="#cat-tsumitate">積立・新NISA</a>
       <a href="#cat-ideco">iDeCo・小規模企業共済</a>
       <a href="#cat-jutaku">住宅ローン</a>
@@ -540,5 +551,6 @@
 </footer>
 
 <script src="js/nav-toggle.js"></script>
+<script src="js/tool-search.js"></script>
 </body>
 </html>
