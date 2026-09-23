@@ -377,6 +377,10 @@ a { color: var(--color-primary); }
   padding: 20px;
   box-shadow: var(--shadow);
 }
+.chart-canvas-wrap {
+  position: relative;
+  width: 100%;
+}
 .chart-wrap canvas { max-width: 100%; }
 
 .legend-note {
