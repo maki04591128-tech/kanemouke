@@ -29,6 +29,11 @@
     annuityRateOut: document.getElementById("annuityRateOut"),
     investRate: document.getElementById("investRate"),
     investRateOut: document.getElementById("investRateOut"),
+    overlapEnable: document.getElementById("overlapEnable"),
+    overlapFields: document.getElementById("overlapFields"),
+    overlapType: document.getElementById("overlapType"),
+    overlapYear: document.getElementById("overlapYear"),
+    overlapServiceYears: document.getElementById("overlapServiceYears"),
     verdict: document.getElementById("verdict"),
     verdictSub: document.getElementById("verdictSub"),
     lumpNet: document.getElementById("result-lump-net"),
@@ -38,7 +43,10 @@
     finalPension: document.getElementById("result-final-pension"),
     pensionTaxTotal: document.getElementById("pension-tax-total"),
     deductionAmount: document.getElementById("deduction-amount"),
+    overlapNote: document.getElementById("overlap-note"),
   };
+
+  var THIS_YEAR = new Date().getFullYear();
 
   var chart = null;
 
@@ -72,6 +80,34 @@
     var y = Math.max(1, Math.round(years));
     if (y <= 20) return Math.max(800000, y * 400000);
     return 8000000 + (y - 20) * 700000;
+  }
+
+  // 他の退職一時金との受け取り時期が近い場合の退職所得控除額の調整（所得税法施行令第70条）
+  // 今回（今年）勤務先の退職金を一時金として受け取り、過去に別の退職一時金（勤務先の退職金 or
+  // iDeCo等の確定拠出年金の老齢一時金）を受け取っている場合、勤続期間の重複部分に対応する控除額が
+  // 差し引かれる。重複期間は、双方の勤続（拠出）年数のうち短い方とみなして簡易的に算出する。
+  function overlapAdjustedDeduction(baseYears, enabled, otherType, otherYear, otherServiceYears) {
+    var baseDeduction = retirementDeduction(baseYears);
+    var result = {
+      deduction: baseDeduction,
+      reduction: 0,
+      overlapYears: 0,
+      applied: false,
+      threshold: otherType === "dc" ? (otherYear >= 2026 ? 9 : 4) : 4,
+    };
+    if (!enabled) return result;
+
+    var gap = THIS_YEAR - otherYear;
+    if (gap < 1 || gap > result.threshold) return result;
+    if (!(otherServiceYears > 0)) return result;
+
+    var overlapYears = Math.min(baseYears, otherServiceYears);
+    var reduction = retirementDeduction(overlapYears);
+    result.deduction = Math.max(0, baseDeduction - reduction);
+    result.reduction = reduction;
+    result.overlapYears = overlapYears;
+    result.applied = true;
+    return result;
   }
 
   // 公的年金等の雑所得（令和2年分以降の速算表、その他の所得合計が1,000万円以下の前提）
@@ -119,7 +155,16 @@
     var investRate = investRatePct / 100;
 
     // --- A: 一時金で受け取る場合 ---
-    var deduction = retirementDeduction(serviceYears);
+    var overlapEnabled = els.overlapEnable.value === "yes";
+    els.overlapFields.hidden = !overlapEnabled;
+    var overlapResult = overlapAdjustedDeduction(
+      serviceYears,
+      overlapEnabled,
+      els.overlapType.value,
+      Number(els.overlapYear.value),
+      Number(els.overlapServiceYears.value)
+    );
+    var deduction = overlapResult.deduction;
     var retirementIncome = Math.max(0, principal - deduction) / 2;
     var lumpIncomeTax = incomeTaxWithReconstruction(retirementIncome);
     var lumpResidentTax = retirementIncome * RESIDENT_TAX_RATE;
@@ -172,6 +217,17 @@
     els.finalPension.textContent = manYen(finalPensionAsset);
     els.pensionTaxTotal.textContent = manYen(pensionTaxPerYear * payoutYears);
     els.deductionAmount.textContent = manYen(deduction);
+
+    if (overlapResult.applied) {
+      els.overlapNote.textContent =
+        "重複期間（" + overlapResult.overlapYears + "年分）の控除額 " + manYen(overlapResult.reduction) +
+        " が差し引かれています（調整前の退職所得控除額：" + manYen(retirementDeduction(serviceYears)) + "）。";
+    } else if (overlapEnabled) {
+      els.overlapNote.textContent =
+        "入力された条件では受け取り時期の間隔が" + overlapResult.threshold + "年を超えているため、控除額の調整は発生しません。";
+    } else {
+      els.overlapNote.textContent = "";
+    }
 
     if (Math.abs(diff) < 1) {
       els.verdict.textContent = "どちらの受け取り方でもほぼ同じ試算結果です";
@@ -240,7 +296,18 @@
     }
   }
 
-  [els.amount, els.serviceYears, els.payoutYears, els.ageGroup, els.annuityRate, els.investRate].forEach(function (el) {
+  [
+    els.amount,
+    els.serviceYears,
+    els.payoutYears,
+    els.ageGroup,
+    els.annuityRate,
+    els.investRate,
+    els.overlapEnable,
+    els.overlapType,
+    els.overlapYear,
+    els.overlapServiceYears,
+  ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
