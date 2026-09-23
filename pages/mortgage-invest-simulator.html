@@ -3,286 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>繰り上げ返済 vs 積立投資 比較シミュレーター | ふやすノート</title>
-<meta name="description" content="住宅ローンの毎月の余剰資金を「繰り上げ返済」に使うか「積立投資（新NISAなど）」に回すか、どちらが将来の資産形成で有利かを無料で比較できるシミュレーターです。">
+<title>統合のお知らせ｜「繰り上げ返済 vs 積立投資」 | ふやすノート</title>
+<meta name="description" content="このツールは機能重複の整理により「住宅ローン繰り上げ返済 vs 積立投資シミュレーター」に統合されました。自動的に移動します。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/roan-simulator.html">
+<meta http-equiv="refresh" content="3; url=roan-simulator.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "どちらが得かは何で決まりますか？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "おおまかには「ローンの金利」と「積立投資の想定利回り」の差で決まります。ローンの金利が低く、投資の想定利回りが高いほど「積立投資のみコース」が有利になりやすく、逆にローンの金利が高いほど「繰り上げ返済コース」が有利になりやすい傾向があります。"
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "繰り上げ返済には金利以外のメリットもありますか？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "あります。繰り上げ返済は将来の毎月の返済負担をなくす・減らす効果があり、投資と違って結果が変動しない「確実な効果」という安心感があります。本シミュレーターは資産額の試算のみを示すものであり、リスク許容度や心理的な安心感までは数値化していません。"
-      }
-    }
-  ]
-}
-</script>
 </head>
 <body>
 
 <header class="site-header">
   <div class="container">
     <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
-        <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false">
-      <span class="icon" aria-hidden="true"></span>
-      <span>メニュー</span>
-    </button>
-    <nav class="site-nav" id="site-nav">
-      <span class="nav-group-label">積立・新NISA</span>
-      <a href="tsumitate-simulator.html">積立シミュレーター</a>
-      <a href="hitsuyou-gaku.html">必要積立額</a>
-      <a href="ikkatsu-tsumitate-simulator.html">一括vs積立投資</a>
-      <a href="shintaku-houshu-simulator.html">信託報酬コスト比較</a>
-      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
-      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
-      <a href="nisa-haibun-simulator.html">つみたてvs成長投資枠</a>
-      <a href="bouraku-tsumitate-simulator.html">暴落シナリオ比較</a>
-      <a href="shin-nisa-hajimekata-guide.html">新NISAの始め方ガイド</a>
-      <a href="nisa-deguchi-senryaku-guide.html">NISA出口戦略ガイド</a>
-      <a href="nisa-ideco-chigai-guide.html">NISAとiDeCoの違い</a>
-      <span class="nav-group-label">iDeCo・小規模企業共済</span>
-      <a href="ideco-simulator.html">iDeCo節税</a>
-      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
-      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
-      <a href="ideco-nisa-yuusen-simulator.html">iDeCovsNISA優先度</a>
-      <a href="shoukibo-kyosai-simulator.html">小規模企業共済</a>
-      <a href="ideco-hajimekata-guide.html">iDeCoの始め方ガイド</a>
-      <a href="ideco-tesuryou-guide.html">iDeCoの手数料まとめ</a>
-      <a href="shoukibo-kyosai-guide.html">小規模企業共済とは</a>
-      <span class="nav-group-label">住宅ローン</span>
-      <a href="mortgage-invest-simulator.html">繰り上げ返済 vs 投資</a>
-      <a href="roan-simulator.html">ローンvs投資</a>
-      <a href="loan-vs-invest.html">繰上返済vs投資</a>
-      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
-      <a href="roan-toushi-simulator.html">住宅ローン比較</a>
-      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
-      <a href="kinri-hikaku-simulator.html">変動vs固定金利</a>
-      <a href="kinri-erabikata-guide.html">住宅ローン金利タイプの選び方</a>
-      <span class="nav-group-label">教育資金・保険</span>
-      <a href="kyouiku-simulator.html">教育資金</a>
-      <a href="gakushihoken-nisa-simulator.html">学資保険vs積立NISA</a>
-      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
-      <span class="nav-group-label">節税・控除・確定申告</span>
-      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
-      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
-      <a href="furusato-nozei-hajimekata-guide.html">ふるさと納税のやり方ガイド</a>
-      <a href="kakutei-shinkoku-hajimekata-guide.html">確定申告のやり方ガイド</a>
-      <a href="juminzei-guide.html">住民税とは</a>
-      <a href="nenmatsu-chosei-guide.html">年末調整とは</a>
-      <a href="iryouhi-koujo-selfmedication-guide.html">医療費控除とセルフメディケーションの違い</a>
-      <a href="kyuyo-shotoku-koujo-guide.html">給与所得控除とは</a>
-      <a href="fukugyo-20man-simulator.html">副業20万円ルール</a>
-      <span class="nav-group-label">配当・高配当株</span>
-      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
-      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
-      <a href="haitou-kazei-simulator.html">配当課税方式比較</a>
-      <a href="haitou-kazei-guide.html">配当所得の課税方式とは</a>
-      <span class="nav-group-label">FIRE・資産取り崩し</span>
-      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
-      <a href="torikuzushi-simulator.html">資産取り崩し方式比較</a>
-      <a href="fire-hajimekata-guide.html">FIREの始め方ガイド</a>
-      <span class="nav-group-label">相続・贈与</span>
-      <a href="souzokuzei-simulator.html">相続税シミュレーター</a>
-      <a href="zouyo-souzoku-simulator.html">生前贈与vs相続比較</a>
-      <a href="seisan-kazei-simulator.html">精算課税vs暦年贈与</a>
-      <a href="seizen-zouyo-hajimekata-guide.html">生前贈与のやり方ガイド</a>
-      <a href="souzokuzei-guide.html">相続税とは</a>
-      <span class="nav-group-label">年収・手取り・退職金</span>
-      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
-      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
-      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
-      <a href="nenshu-no-kabe-guide.html">年収の壁とは（一覧）</a>
-      <a href="taishoku-shotoku-koujo-guide.html">退職所得控除とは</a>
-      <a href="haiguusha-fuyou-koujo-guide.html">配偶者控除・扶養控除とは</a>
-      <a href="shakaihoken-guide.html">社会保険料とは</a>
-    </nav>
   </div>
 </header>
 
-<main class="container">
-  <div class="page-title">
-    <h1>繰り上げ返済 vs 積立投資 比較シミュレーター</h1>
-    <p>住宅ローンの毎月の余剰資金を「繰り上げ返済」に使う場合と、「積立投資」に回す場合で、どちらが将来の資産形成の面で有利かを試算します。</p>
-  </div>
-
-  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
-
-  <div class="calc-layout">
-    <div class="panel">
-      <h2>条件を入力</h2>
-
-      <div class="field">
-        <label for="principal">ローン残高 <span class="unit">円</span></label>
-        <input type="number" id="principal" value="25000000" min="1000000" max="100000000" step="100000">
-      </div>
-
-      <div class="field">
-        <label for="loanRate">ローンの年利 <span id="loanRateOut" class="unit">0.70 %</span></label>
-        <input type="range" id="loanRate" value="0.7" min="0" max="3" step="0.05">
-      </div>
-
-      <div class="field">
-        <label for="years">残りの返済期間 <span id="yearsOut" class="unit">25 年</span></label>
-        <input type="range" id="years" value="25" min="1" max="35" step="1">
-      </div>
-
-      <div class="field">
-        <label for="extra">毎月使える追加資金 <span class="unit">円</span></label>
-        <input type="number" id="extra" value="30000" min="0" max="500000" step="1000">
-      </div>
-
-      <div class="field">
-        <label for="investRate">積立投資の想定利回り（年率） <span id="investRateOut" class="unit">5.0 %</span></label>
-        <input type="range" id="investRate" value="5" min="0" max="12" step="0.1">
-      </div>
-
-      <p class="legend-note" style="margin-top:4px;">現在の毎月返済額（概算）：<strong id="monthly-payment">-</strong></p>
-    </div>
-
-    <div>
-      <div class="result-summary">
-        <div class="result-card">
-          <div class="label">完済までの期間（繰り上げ返済コース）</div>
-          <div class="value" id="result-payoff-years">-</div>
-        </div>
-        <div class="result-card accent">
-          <div class="label">節約できる利息（総額）</div>
-          <div class="value" id="result-interest-saved">-</div>
-        </div>
-        <div class="result-card">
-          <div class="label">返済期間終了時の差額</div>
-          <div class="value" id="result-diff">-</div>
-        </div>
-      </div>
-
-      <div class="chart-wrap">
-        <canvas id="compareChart" height="280"></canvas>
-        <div class="legend-note">
-          <span><span class="legend-dot" style="background:#0f5f4c"></span>繰り上げ返済 → 積立コース</span>
-          <span><span class="legend-dot" style="background:#d98e04"></span>積立投資のみコース</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <section class="article-section">
-    <h2>試算結果の内訳</h2>
-    <p id="diff-note">-</p>
-    <dl>
-      <div class="faq-item">
-        <dt>返済期間終了時点の資産額（繰り上げ返済 → 完済後は積立投資に回すコース）</dt>
-        <dd id="result-asset-prepay">-</dd>
-      </div>
-      <div class="faq-item">
-        <dt>返済期間終了時点の資産額（繰り上げ返済せず、最初から積立投資に回すコース）</dt>
-        <dd id="result-asset-invest">-</dd>
-      </div>
-    </dl>
+<main>
+  <section class="hero container">
+    <h1>このツールは統合されました</h1>
+    <p>機能が重複していたため、「繰り上げ返済 vs 積立投資」は「<a href="roan-simulator.html">住宅ローン繰り上げ返済 vs 積立投資シミュレーター</a>」に統合しました。3秒後に自動的に移動します。移動しない場合は下のリンクからお進みください。</p>
+    <p><a href="roan-simulator.html">今すぐ住宅ローン繰り上げ返済 vs 積立投資シミュレーターへ移動する →</a></p>
   </section>
-
-  <div class="share-box" id="share-box">
-    <div class="share-box-text">
-      <strong>この条件の結果をURLで共有</strong>
-      <p>入力した条件をそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
-    </div>
-    <div class="share-box-controls">
-      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
-      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
-    </div>
-    <span id="share-url-feedback" class="share-feedback" role="status"></span>
-  </div>
-
-  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
-
-  <div class="affiliate-box">
-    <h3>積立投資の口座を検討する</h3>
-    <div class="affiliate-list">
-      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
-        <span>新NISA口座をネット証券で開設する（手数料比較）</span>
-        <span class="cta">詳細を見る →</span>
-      </a>
-      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
-        <span>住宅ローンの借り換え・金利を比較する</span>
-        <span class="cta">詳細を見る →</span>
-      </a>
-    </div>
-    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
-  </div>
-
-  <section class="article-section">
-    <h2>この試算の考え方</h2>
-    <p>「繰り上げ返済コース」は、毎月の追加資金をすべてローンの繰り上げ返済（期間短縮型）に充て、完済後はそれまでローン返済に充てていたお金（返済額＋追加資金）を積立投資に回すという想定です。「積立投資のみコース」は、繰り上げ返済をせず、追加資金だけを最初から積立投資に回し、ローンは当初の期間どおり返済するという想定です。どちらのコースも毎月の支出総額（返済額＋追加資金）は同じになるように設計しているため、公平な比較になります。</p>
-    <h3>よくある質問</h3>
-    <dl>
-      <div class="faq-item">
-        <dt>どちらが得かは何で決まりますか？</dt>
-        <dd>おおまかには「ローンの金利」と「積立投資の想定利回り」の差で決まります。ローンの金利が低く、投資の想定利回りが高いほど「積立投資のみコース」が有利になりやすく、逆にローンの金利が高いほど「繰り上げ返済コース」が有利になりやすい傾向があります。</dd>
-      </div>
-      <div class="faq-item">
-        <dt>繰り上げ返済には金利以外のメリットもありますか？</dt>
-        <dd>あります。繰り上げ返済は将来の毎月の返済負担をなくす・減らす効果があり、投資と違って結果が変動しない「確実な効果」という安心感があります。本シミュレーターは資産額の試算のみを示すものであり、リスク許容度や心理的な安心感までは数値化していません。</dd>
-      </div>
-    </dl>
-  </section>
-  <section class="article-section">
-    <h2>あわせて使いたい関連ツール（住宅ローン）</h2>
-    <div class="tool-grid">
-      <a class="tool-card" href="roan-simulator.html">
-        <span class="badge">比較ツール</span>
-        <h3>住宅ローン繰り上げ返済 vs 積立投資（利息比較）</h3>
-        <p>毎月の余裕資金を繰り上げ返済に回すのと積立投資に回すのとで、どちらが得になるかを試算・比較します。</p>
-      </a>
-      <a class="tool-card" href="loan-vs-invest.html">
-        <span class="badge">住宅ローン</span>
-        <h3>繰上返済vs投資</h3>
-        <p>毎月の余剰資金を繰り上げ返済に回すか積立投資に回すか、完済時点の資産額で比較します。</p>
-      </a>
-      <a class="tool-card" href="loan-vs-invest-simulator.html">
-        <span class="badge">住宅ローン</span>
-        <h3>まとまった資金 繰上返済vs投資</h3>
-        <p>ボーナスなどまとまった資金を、繰上返済（期間短縮型）に使うか新NISAなどで運用に回すか、軽減できる利息と想定運用益を比較します。</p>
-      </a>
-      <a class="tool-card" href="roan-toushi-simulator.html">
-        <span class="badge">比較シミュレーター</span>
-        <h3>住宅ローン繰り上げ返済 vs 積立投資（資産比較）</h3>
-        <p>毎月の余裕資金を繰り上げ返済に回すか積立投資に回すか、将来の資産額でどちらが有利かを試算します。</p>
-      </a>
-      <a class="tool-card" href="jutaku-loan-koujo-simulator.html">
-        <span class="badge">節税シミュレーター</span>
-        <h3>住宅ローン控除シミュレーター</h3>
-        <p>借入額・住宅の区分（認定住宅/ZEH水準省エネ住宅など）・年収から、13年間または10年間の住宅ローン控除の見込み額を試算します。</p>
-      </a>
-      <a class="tool-card" href="kinri-hikaku-simulator.html">
-        <span class="badge">住宅ローン</span>
-        <h3>変動金利 vs 固定金利 比較シミュレーター</h3>
-        <p>金利上昇シナリオを選んで、全期間固定金利と変動金利の総返済額を比較。「5年ルール・125%ルール」による未払利息の発生リスクも試算できます。</p>
-      </a>
-      <a class="tool-card" href="kinri-erabikata-guide.html">
-        <span class="badge">解説記事</span>
-        <h3>住宅ローンの金利タイプの選び方｜変動金利・固定金利・固定期間選択型の違い 完全ガイド</h3>
-        <p>3つの金利タイプのメリット・デメリット、5年ルール・125%ルールと未払利息の注意点、自分に合った選び方の考え方を解説します。</p>
-      </a>
-    </div>
-  </section>
-
-  <div class="disclaimer">
-    本シミュレーターの結果は入力条件に基づく参考値であり、実際のローン返済スケジュール・税金・手数料・将来の運用成果を保証するものではありません。積立投資には元本割れのリスクがあり、想定利回りどおりに推移しない可能性があります。繰り上げ返済の手数料や、住宅ローン控除への影響は考慮していません。実際の判断にあたっては、金融機関・ファイナンシャルプランナー等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
-  </div>
 </main>
 
 <footer class="site-footer">
@@ -296,9 +38,5 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
-<script src="../js/mortgage-invest.js"></script>
-<script src="../js/share.js"></script>
-<script src="../js/nav-toggle.js"></script>
 </body>
 </html>
