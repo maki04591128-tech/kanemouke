@@ -34,6 +34,7 @@
     overlapType: document.getElementById("overlapType"),
     overlapYear: document.getElementById("overlapYear"),
     overlapServiceYears: document.getElementById("overlapServiceYears"),
+    overlapAmount: document.getElementById("overlapAmount"),
     verdict: document.getElementById("verdict"),
     verdictSub: document.getElementById("verdictSub"),
     lumpNet: document.getElementById("result-lump-net"),
@@ -82,16 +83,33 @@
     return 8000000 + (y - 20) * 700000;
   }
 
+  // 前の退職一時金の受取額が、重複を考慮しない場合の退職所得控除額に満たないときの追加調整
+  // （所得税法施行令第70条第2項）。この場合、前の一時金の勤続期間等の全期間ではなく、受取額を
+  // 基に逆算した年数（800万円以下なら受取額÷40万円、800万円超なら(受取額-800万円)÷70万円+20）
+  // を重複期間の算定に使う勤続年数とみなす。
+  function deemedOverlapServiceYears(otherServiceYears, otherAmount) {
+    if (!(otherAmount > 0)) return otherServiceYears;
+    var standardDeduction = retirementDeduction(otherServiceYears);
+    if (otherAmount >= standardDeduction) return otherServiceYears;
+    var deemed =
+      otherAmount <= 8000000
+        ? Math.floor(otherAmount / 400000)
+        : Math.floor((otherAmount - 8000000) / 700000) + 20;
+    return Math.max(0, Math.min(deemed, otherServiceYears));
+  }
+
   // 他の退職一時金との受け取り時期が近い場合の退職所得控除額の調整（所得税法施行令第70条）
   // 今回（今年）勤務先の退職金を一時金として受け取り、過去に別の退職一時金（勤務先の退職金 or
   // iDeCo等の確定拠出年金の老齢一時金）を受け取っている場合、勤続期間の重複部分に対応する控除額が
-  // 差し引かれる。重複期間は、双方の勤続（拠出）年数のうち短い方とみなして簡易的に算出する。
-  function overlapAdjustedDeduction(baseYears, enabled, otherType, otherYear, otherServiceYears) {
+  // 差し引かれる。重複期間は、双方の勤続（拠出）年数のうち短い方（前の一時金側は上記の逆算調整後の
+  // 年数）とみなして簡易的に算出する。
+  function overlapAdjustedDeduction(baseYears, enabled, otherType, otherYear, otherServiceYears, otherAmount) {
     var baseDeduction = retirementDeduction(baseYears);
     var result = {
       deduction: baseDeduction,
       reduction: 0,
       overlapYears: 0,
+      otherEffectiveYears: otherServiceYears,
       applied: false,
       threshold: otherType === "dc" ? (otherYear >= 2026 ? 9 : 4) : 4,
     };
@@ -101,11 +119,13 @@
     if (gap < 1 || gap > result.threshold) return result;
     if (!(otherServiceYears > 0)) return result;
 
-    var overlapYears = Math.min(baseYears, otherServiceYears);
+    var otherEffectiveYears = deemedOverlapServiceYears(otherServiceYears, otherAmount);
+    var overlapYears = Math.min(baseYears, otherEffectiveYears);
     var reduction = retirementDeduction(overlapYears);
     result.deduction = Math.max(0, baseDeduction - reduction);
     result.reduction = reduction;
     result.overlapYears = overlapYears;
+    result.otherEffectiveYears = otherEffectiveYears;
     result.applied = true;
     return result;
   }
@@ -162,7 +182,8 @@
       overlapEnabled,
       els.overlapType.value,
       Number(els.overlapYear.value),
-      Number(els.overlapServiceYears.value)
+      Number(els.overlapServiceYears.value),
+      Math.max(0, Number(els.overlapAmount.value) || 0) * 10000
     );
     var deduction = overlapResult.deduction;
     var retirementIncome = Math.max(0, principal - deduction) / 2;
@@ -219,9 +240,17 @@
     els.deductionAmount.textContent = manYen(deduction);
 
     if (overlapResult.applied) {
+      var overlapAmountNote = "";
+      if (overlapResult.otherEffectiveYears < Number(els.overlapServiceYears.value)) {
+        overlapAmountNote =
+          "他の一時金の受取額が少ないため、重複期間の算定では勤続（拠出）年数を実際の" +
+          els.overlapServiceYears.value + "年ではなく" + overlapResult.otherEffectiveYears +
+          "年とみなしています（所得税法施行令第70条第2項）。";
+      }
       els.overlapNote.textContent =
         "重複期間（" + overlapResult.overlapYears + "年分）の控除額 " + manYen(overlapResult.reduction) +
-        " が差し引かれています（調整前の退職所得控除額：" + manYen(retirementDeduction(serviceYears)) + "）。";
+        " が差し引かれています（調整前の退職所得控除額：" + manYen(retirementDeduction(serviceYears)) + "）。" +
+        overlapAmountNote;
     } else if (overlapEnabled) {
       els.overlapNote.textContent =
         "入力された条件では受け取り時期の間隔が" + overlapResult.threshold + "年を超えているため、控除額の調整は発生しません。";
@@ -307,6 +336,7 @@
     els.overlapType,
     els.overlapYear,
     els.overlapServiceYears,
+    els.overlapAmount,
   ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
