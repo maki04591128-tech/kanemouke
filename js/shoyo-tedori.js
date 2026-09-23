@@ -35,10 +35,24 @@
     [45.945, [[3495000,null],[3527000,null],[3559000,null],[3590000,null],[3622000,null],[3654000,null],[3685000,null],[3717000,null]]],
   ];
 
+  // 賞与に対する源泉徴収税額の算出率の表（令和8年分、乙欄）
+  // 「給与所得者の扶養控除等申告書」の提出がない人（副業先など「従たる給与」を含む）向け。
+  // 甲欄と異なり扶養親族等の人数は考慮せず、前月の社会保険料等控除後の給与等の金額のみで一律の率が決まる。
+  // 出典：甲欄と同じ国税庁「源泉徴収税額表」（財務省告示第115号別表第三、令和7年4月30日財務省告示第122号改正）
+  var OTSU_TABLE = [
+    [10.210, [0, 224000]],
+    [20.420, [224000, 295000]],
+    [30.630, [295000, 527000]],
+    [38.798, [527000, 1118000]],
+    [45.945, [1118000, null]],
+  ];
+
   var els = {
     bonus: document.getElementById("bonus"),
     prevSalary: document.getElementById("prevSalary"),
     ageGroup: document.getElementById("ageGroup"),
+    taxColumn: document.getElementById("taxColumn"),
+    dependentsField: document.getElementById("dependents-field"),
     dependents: document.getElementById("dependents"),
     verdict: document.getElementById("verdict"),
     verdictSub: document.getElementById("verdictSub"),
@@ -72,7 +86,7 @@
     return rate;
   }
 
-  // 前月の社会保険料等控除後の給与等の金額と扶養親族等の数から、賞与の金額に乗ずべき率（%）を求める。
+  // 前月の社会保険料等控除後の給与等の金額と扶養親族等の数から、賞与の金額に乗ずべき率（%）を求める（甲欄）。
   function lookupRate(prevNet, dependentsCol) {
     for (var i = 0; i < BONUS_TABLE.length; i++) {
       var range = BONUS_TABLE[i][1][dependentsCol];
@@ -84,8 +98,20 @@
     return BONUS_TABLE[BONUS_TABLE.length - 1][0];
   }
 
-  // 賞与額面・前月給与額面・年齢区分・扶養親族等の数から、賞与にかかる社会保険料・所得税・手取り額を試算する。
-  function calc(bonus, prevSalary, ageGroup, dependents) {
+  // 前月の社会保険料等控除後の給与等の金額から、賞与の金額に乗ずべき率（%）を求める（乙欄、扶養親族等の人数は考慮しない）。
+  function lookupRateOtsu(prevNet) {
+    for (var i = 0; i < OTSU_TABLE.length; i++) {
+      var range = OTSU_TABLE[i][1];
+      var lo = range[0], hi = range[1];
+      if (prevNet >= lo && (hi === null || prevNet < hi)) {
+        return OTSU_TABLE[i][0];
+      }
+    }
+    return OTSU_TABLE[OTSU_TABLE.length - 1][0];
+  }
+
+  // 賞与額面・前月給与額面・年齢区分・扶養親族等の数・甲欄or乙欄区分から、賞与にかかる社会保険料・所得税・手取り額を試算する。
+  function calc(bonus, prevSalary, ageGroup, dependents, taxColumn) {
     var rate = socialInsuranceRateFor(ageGroup);
     var prevSocialInsurance = prevSalary * rate;
     var prevNet = Math.max(0, prevSalary - prevSocialInsurance);
@@ -98,7 +124,12 @@
     // 国税庁の表（備考4）：前月給与がない、または賞与（社会保険料控除後）が前月給与（同控除後）の10倍を超える場合は
     // この速算表ではなく月額表を使う決まりのため、対象外として最高税率で概算し注意書きを表示する。
     var overLimit = prevSalary <= 0 || prevNet <= 0 || (prevNet > 0 && bonusAfterSocial > prevNet * 10);
-    var bonusRate = overLimit ? BONUS_TABLE[BONUS_TABLE.length - 1][0] : lookupRate(prevNet, dependentsCol);
+    var isOtsu = taxColumn === "otsu";
+    var bonusRate = overLimit
+      ? BONUS_TABLE[BONUS_TABLE.length - 1][0]
+      : isOtsu
+        ? lookupRateOtsu(prevNet)
+        : lookupRate(prevNet, dependentsCol);
 
     var incomeTax = bonusAfterSocial * (bonusRate / 100);
     var takeHome = bonus - bonusSocialInsurance - incomeTax;
@@ -118,9 +149,14 @@
     var bonus = clampNonNegative(els.bonus.value) * 10000;
     var prevSalary = clampNonNegative(els.prevSalary.value) * 10000;
     var ageGroup = els.ageGroup.value;
+    var taxColumn = els.taxColumn ? els.taxColumn.value : "kou";
     var dependents = Math.max(0, Math.min(7, Math.round(Number(els.dependents.value) || 0)));
 
-    var r = calc(bonus, prevSalary, ageGroup, dependents);
+    if (els.dependentsField) {
+      els.dependentsField.style.display = taxColumn === "otsu" ? "none" : "";
+    }
+
+    var r = calc(bonus, prevSalary, ageGroup, dependents, taxColumn);
     var rate = bonus > 0 ? (r.takeHome / bonus) * 100 : 0;
 
     els.takeHome.textContent = manYen(r.takeHome);
@@ -132,13 +168,14 @@
       "賞与額面 " + manYen(bonus) + " に対する手取りの目安は " + manYen(r.takeHome) + "（手取り率 約" + rate.toFixed(1) + "%）です";
     els.verdictSub.textContent =
       "賞与にかかる社会保険料 " + manYen(r.bonusSocialInsurance) + "、所得税（源泉徴収） " + manYen(r.incomeTax) +
-      "（賞与の金額に乗ずべき率 " + r.bonusRate.toFixed(3) + "%）を差し引いた金額です。住民税は原則として賞与からは天引きされません。";
+      "（" + (taxColumn === "otsu" ? "乙欄" : "甲欄") + "・賞与の金額に乗ずべき率 " + r.bonusRate.toFixed(3) + "%）を差し引いた金額です。住民税は原則として賞与からは天引きされません。";
 
     if (els.overLimitNote) {
       els.overLimitNote.style.display = r.overLimit ? "" : "none";
     }
 
     els.breakdownBody.innerHTML =
+      "<tr><td>適用する税額表</td><td>" + (taxColumn === "otsu" ? "乙欄（扶養控除等申告書の提出なし）" : "甲欄（扶養控除等申告書の提出あり）") + "</td></tr>" +
       "<tr><td>前月の社会保険料等控除後の給与等の金額（目安）</td><td>" + manYen(r.prevNet) + "</td></tr>" +
       "<tr><td>賞与の金額に乗ずべき率</td><td>" + r.bonusRate.toFixed(3) + " %</td></tr>" +
       "<tr><td>賞与にかかる社会保険料（健康保険・厚生年金・雇用保険" + (ageGroup === "40to64" ? "・介護保険" : "") + "）</td><td>" + manYen(r.bonusSocialInsurance) + "</td></tr>" +
@@ -150,7 +187,7 @@
 
     var refBonuses = [100000, 300000, 500000, 700000, 1000000, 1500000, 2000000, 3000000];
     var rows = refBonuses.map(function (x) {
-      var res = calc(x, prevSalary, ageGroup, dependents);
+      var res = calc(x, prevSalary, ageGroup, dependents, taxColumn);
       var xRate = x > 0 ? (res.takeHome / x) * 100 : 0;
       var isCurrent = Math.abs(x - bonus) < 1;
       return (
@@ -201,7 +238,8 @@
     }
   }
 
-  [els.bonus, els.prevSalary, els.ageGroup, els.dependents].forEach(function (el) {
+  [els.bonus, els.prevSalary, els.ageGroup, els.taxColumn, els.dependents].forEach(function (el) {
+    if (!el) return;
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
