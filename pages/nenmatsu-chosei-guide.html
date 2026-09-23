@@ -70,7 +70,11 @@
 <header class="site-header">
   <div class="container">
     <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
-    <nav class="site-nav">
+        <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false">
+      <span class="icon" aria-hidden="true"></span>
+      <span>メニュー</span>
+    </button>
+    <nav class="site-nav" id="site-nav">
       <a href="tsumitate-simulator.html">積立シミュレーター</a>
       <a href="hitsuyou-gaku.html">必要積立額</a>
       <a href="ikkatsu-tsumitate-simulator.html">一括vs積立投資</a>
@@ -309,5 +313,6 @@
   </div>
 </footer>
 
+<script src="../js/nav-toggle.js"></script>
 </body>
 </html>
