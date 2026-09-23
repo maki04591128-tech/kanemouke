@@ -132,6 +132,23 @@ a { color: var(--color-primary); }
 @media (min-width: 900px) {
   .site-nav a { font-size: 0.85rem; margin: 0 14px 8px 0; }
 }
+/* メニュー内をカテゴリーごとに改行してグルーピングするラベル
+   （flex-basis:100%で必ず単独行になり、リンクの折り返しとは別に区切りが入る） */
+.nav-group-label {
+  flex-basis: 100%;
+  margin: 14px 0 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+.site-nav .nav-group-label:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
 
 /* Hero */
 .hero {
@@ -149,6 +166,47 @@ a { color: var(--color-primary); }
   max-width: 560px;
   margin: 0 auto;
   font-size: 1.02rem;
+}
+
+/* カテゴリークイックナビ（トップページ、ツール一覧の先頭） */
+.category-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 28px 0 0;
+}
+.category-nav a {
+  display: inline-block;
+  padding: 7px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.category-nav a:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* カテゴリー別ツールセクション */
+.tool-category {
+  scroll-margin-top: 76px;
+}
+.tool-category + .tool-category {
+  margin-top: 8px;
+}
+.category-title {
+  margin: 40px 0 4px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border);
+  font-size: 1.3rem;
+  color: var(--color-primary-dark);
+}
+.tool-category:first-of-type .category-title {
+  margin-top: 32px;
 }
 
 /* Tool cards */
