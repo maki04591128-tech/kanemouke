@@ -23,7 +23,16 @@
     ["確定拠出年金", ["ideco"]],
     ["イデコ", ["ideco"]],
     ["nisa", ["ニーサ"]],
-    ["ニーサ", ["nisa"]]
+    ["ニーサ", ["nisa"]],
+    ["ボーナス", ["賞与"]],
+    ["賞与", ["ボーナス"]],
+    ["ふるさと納税", ["寄付金控除", "寄付"]],
+    ["退職金", ["退職所得", "退職一時金"]],
+    ["退職所得", ["退職金"]],
+    ["セミリタイア", ["fire"]],
+    ["fire", ["セミリタイア"]],
+    ["投資信託", ["ファンド"]],
+    ["ファンド", ["投資信託"]]
   ];
 
   function expandWithSynonyms(text) {
@@ -44,9 +53,11 @@
       items: Array.prototype.slice.call(section.querySelectorAll(".tool-card")).map(function (card) {
         var title = card.querySelector("h3");
         var desc = card.querySelector("p");
+        var badge = card.querySelector(".badge");
         var base = (
           (title ? title.textContent : "") + " " +
           (desc ? desc.textContent : "") + " " +
+          (badge ? badge.textContent : "") + " " +
           categoryText
         ).toLowerCase();
         return {
