@@ -3,366 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>相続時精算課税制度 vs 暦年贈与 比較シミュレーター | ふやすノート</title>
-<meta name="description" content="生前贈与をするなら「暦年贈与」と「相続時精算課税制度」どちらが有利かを無料で比較。年110万円の基礎控除の扱いの違い（持ち戻しの有無）・特別控除2,500万円・特別控除超過分の20%課税を反映して試算できます。">
-<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/seisan-kazei-simulator.html">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="ふやすノート">
-<meta property="og:locale" content="ja_JP">
-<meta property="og:title" content="相続時精算課税制度 vs 暦年贈与 比較シミュレーター | ふやすノート">
-<meta property="og:description" content="生前贈与をするなら「暦年贈与」と「相続時精算課税制度」どちらが有利かを無料で比較。年110万円の基礎控除の扱いの違い（持ち戻しの有無）・特別控除2,500万円・特別控除超過分の20%課税を反映して試算できます。">
-<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/seisan-kazei-simulator.html">
-<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="相続時精算課税制度 vs 暦年贈与 比較シミュレーター | ふやすノート">
-<meta name="twitter:description" content="生前贈与をするなら「暦年贈与」と「相続時精算課税制度」どちらが有利かを無料で比較。年110万円の基礎控除の扱いの違い（持ち戻しの有無）・特別控除2,500万円・特別控除超過分の20%課税を反映して試算できます。">
-<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<title>統合のお知らせ｜「相続時精算課税制度 vs 暦年贈与 比較」 | ふやすノート</title>
+<meta name="description" content="このツールは機能重複の整理により「生前贈与 vs 相続 比較シミュレーター」に統合されました。自動的に移動します。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/zouyo-souzoku-simulator.html">
+<meta name="robots" content="noindex, follow">
+<meta http-equiv="refresh" content="3; url=zouyo-souzoku-simulator.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "相続時精算課税制度とは何ですか？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "60歳以上の父母・祖父母（直系尊属）から18歳以上の子・孫への贈与について選択できる贈与税の制度です。累計2,500万円までの特別控除があり、これを超えた部分には一律20%の贈与税がかかります。贈与財産は（基礎控除部分を除き）贈与時の価額で相続財産に加算され、相続税を計算したうえで、すでに納めた贈与税額を相続税額から差し引きます（差し引ききれない分は還付されます）。2024年1月以降の贈与からは、この制度に加えて年110万円の基礎控除が新設されました。"
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "年110万円の基礎控除は、暦年贈与の基礎控除と何が違うのですか？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "どちらも年110万円という金額は同じですが、相続開始直前の贈与に対する扱いが異なります。暦年贈与の基礎控除は、相続開始前一定期間内（3年または7年）の贈与であれば、110万円以下の金額であっても相続財産に加算し直される「生前贈与加算（持ち戻し）」の対象になります。一方、相続時精算課税制度の年110万円の基礎控除は、贈与がいつ行われたかに関係なく、相続財産に一切加算されません。相続開始が近いタイミングでの贈与でも非課税枠を確実に使い切れる点が、相続時精算課税制度の大きな特徴です。"
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "相続時精算課税制度を一度選ぶと、暦年課税には戻れないのですか？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "はい。同じ贈与者・受贈者の組み合わせについて相続時精算課税制度を選択すると、その後は同じ贈与者からの贈与について暦年課税に戻すことはできません（届出は贈与者ごと・受贈者ごとに行います）。将来まとまった贈与を行う可能性がある場合や、他の贈与者からの贈与で暦年課税の基礎控除を使いたい場合との兼ね合いも踏まえて選ぶ必要があります。"
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "特別控除2,500万円を使い切った後はどうなりますか？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "年110万円の基礎控除を超える部分は、まず累計2,500万円の特別控除に充当されます。特別控除を使い切った後の超過分には一律20%の贈与税がかかります。この20%の贈与税は、相続時に相続税額から全額が控除され、相続税額より多く納めていた場合は還付されるため、特別控除超過分については実質的に贈与税を「先払い」しているのに近い仕組みになります。"
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "贈与財産の値上がりは節税につながりますか？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "相続時精算課税制度で贈与した財産（基礎控除を除く部分）は、相続発生時の時価ではなく「贈与時の価額」で相続財産に加算されます。そのため、株式や不動産など将来値上がりが期待できる財産を先に贈与しておくと、値上がり分には相続税がかからず結果的に節税になる可能性があります。逆に贈与後に値下がりした場合は、贈与時の高い価額で加算されてしまうため不利になります。本ツールはこの値上がり・値下がりの効果を試算対象に含めておらず、贈与財産の価値が変わらない前提で計算しています。"
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "この試算は正確ですか？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "暦年贈与・相続時精算課税制度それぞれの基礎控除・税率構造と、相続税の基礎控除・速算表・配偶者の税額軽減という基本的な計算構造に基づく概算です。実際の遺産分割は法定相続分どおりに行われ、贈与は単一の贈与者から行われるものと仮定しており、贈与財産の値上がり・値下がり、教育資金・結婚子育て資金の一括贈与の非課税特例、小規模宅地等の特例、生命保険金の非課税枠、複数の贈与者からの贈与などは考慮していません。正確な税額・対策の要否は税理士にご確認ください。"
-      }
-    }
-  ]
-}
-</script>
 </head>
 <body>
 
 <header class="site-header">
   <div class="container">
     <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
-        <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false">
-      <span class="icon" aria-hidden="true"></span>
-      <span>メニュー</span>
-    </button>
-    <nav class="site-nav" id="site-nav">
-      <span class="nav-group-label">積立・新NISA</span>
-      <a href="tsumitate-simulator.html">積立シミュレーター</a>
-      <a href="hitsuyou-gaku.html">必要積立額</a>
-      <a href="ikkatsu-tsumitate-simulator.html">一括vs積立投資</a>
-      <a href="shintaku-houshu-simulator.html">信託報酬コスト比較</a>
-      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
-      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
-      <a href="nisa-haibun-simulator.html">つみたてvs成長投資枠</a>
-      <a href="bouraku-tsumitate-simulator.html">暴落シナリオ比較</a>
-      <a href="shin-nisa-hajimekata-guide.html">新NISAの始め方ガイド</a>
-      <a href="nisa-deguchi-senryaku-guide.html">NISA出口戦略ガイド</a>
-      <a href="nisa-ideco-chigai-guide.html">NISAとiDeCoの違い</a>
-      <span class="nav-group-label">iDeCo・小規模企業共済</span>
-      <a href="ideco-simulator.html">iDeCo節税</a>
-      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
-      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
-      <a href="ideco-nisa-yuusen-simulator.html">iDeCovsNISA優先度</a>
-      <a href="shoukibo-kyosai-simulator.html">小規模企業共済</a>
-      <a href="ideco-hajimekata-guide.html">iDeCoの始め方ガイド</a>
-      <a href="ideco-tesuryou-guide.html">iDeCoの手数料まとめ</a>
-      <a href="shoukibo-kyosai-guide.html">小規模企業共済とは</a>
-      <span class="nav-group-label">住宅ローン</span>
-      <a href="roan-simulator.html">ローンvs投資</a>
-      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
-      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
-      <a href="kinri-hikaku-simulator.html">変動vs固定金利</a>
-      <a href="kinri-erabikata-guide.html">住宅ローン金利タイプの選び方</a>
-      <span class="nav-group-label">教育資金・保険</span>
-      <a href="kyouiku-simulator.html">教育資金</a>
-      <a href="gakushihoken-nisa-simulator.html">学資保険vs積立NISA</a>
-      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
-      <a href="hoken-koujo-guide.html">生命保険料控除とは</a>
-      <a href="kyouiku-shikin-junbi-guide.html">教育資金の準備方法</a>
-      <span class="nav-group-label">節税・控除・確定申告</span>
-      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
-      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
-      <a href="furusato-nozei-hajimekata-guide.html">ふるさと納税のやり方ガイド</a>
-      <a href="kakutei-shinkoku-hajimekata-guide.html">確定申告のやり方ガイド</a>
-      <a href="juminzei-guide.html">住民税とは</a>
-      <a href="nenmatsu-chosei-guide.html">年末調整とは</a>
-      <a href="iryouhi-koujo-selfmedication-guide.html">医療費控除とセルフメディケーションの違い</a>
-      <a href="kyuyo-shotoku-koujo-guide.html">給与所得控除とは</a>
-      <a href="fukugyo-20man-simulator.html">副業20万円ルール</a>
-      <span class="nav-group-label">配当・高配当株</span>
-      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
-      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
-      <a href="haitou-kazei-simulator.html">配当課税方式比較</a>
-      <a href="haitou-kazei-guide.html">配当所得の課税方式とは</a>
-      <span class="nav-group-label">FIRE・資産取り崩し</span>
-      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
-      <a href="torikuzushi-simulator.html">資産取り崩し方式比較</a>
-      <a href="fire-hajimekata-guide.html">FIREの始め方ガイド</a>
-      <span class="nav-group-label">相続・贈与</span>
-      <a href="souzokuzei-simulator.html">相続税シミュレーター</a>
-      <a href="zouyo-souzoku-simulator.html">生前贈与vs相続比較</a>
-      <a href="seisan-kazei-simulator.html">精算課税vs暦年贈与</a>
-      <a href="seizen-zouyo-hajimekata-guide.html">生前贈与のやり方ガイド</a>
-      <a href="souzokuzei-guide.html">相続税とは</a>
-      <span class="nav-group-label">年収・手取り・退職金</span>
-      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
-      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
-      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
-      <a href="nenshu-no-kabe-guide.html">年収の壁とは（一覧）</a>
-      <a href="taishoku-shotoku-koujo-guide.html">退職所得控除とは</a>
-      <a href="haiguusha-fuyou-koujo-guide.html">配偶者控除・扶養控除とは</a>
-      <a href="shakaihoken-guide.html">社会保険料とは</a>
-    </nav>
   </div>
 </header>
 
-<main class="container">
-  <div class="page-title">
-    <h1>相続時精算課税制度 vs 暦年贈与 比較シミュレーター</h1>
-    <p>生前贈与をするなら「暦年贈与」と「相続時精算課税制度」のどちらを選ぶべきかを試算します。同じ贈与額・贈与期間を前提に、年110万円の基礎控除の扱いの違い（相続開始直前の贈与でも加算されない相続時精算課税 vs 3年・7年の持ち戻し対象になりうる暦年贈与）や、特別控除2,500万円・その超過分への一律20%課税を反映して、家族全体の負担額（贈与税＋相続税）を比較します。</p>
-  </div>
-
-  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
-
-  <div class="calc-layout">
-    <div class="panel">
-      <h2>条件を入力</h2>
-
-      <div class="field">
-        <label for="estateTotal">相続財産の総額（生前贈与を行わなかった場合の想定額） <span class="unit">万円</span></label>
-        <input type="number" id="estateTotal" value="10000" min="0" max="500000" step="100">
-      </div>
-
-      <div class="field">
-        <label for="hasSpouse">配偶者の有無</label>
-        <select id="hasSpouse">
-          <option value="yes" selected>いる</option>
-          <option value="no">いない</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="childCount">子の人数 <span class="unit">人</span></label>
-        <input type="number" id="childCount" value="2" min="0" max="10" step="1">
-        <p class="field-hint">本ツールは「配偶者＋子（第1順位）」が相続人となるケースを想定しています。実際の遺産分割は法定相続分どおりに行われるものと仮定して試算します。</p>
-      </div>
-
-      <div class="field">
-        <label for="giftRecipients">生前贈与の受贈者数（子・孫など） <span class="unit">人</span></label>
-        <input type="number" id="giftRecipients" value="2" min="0" max="10" step="1">
-        <p class="field-hint">1人の贈与者から、18歳以上の子・孫への贈与を想定しています。暦年贈与・相続時精算課税制度のどちらを選んだ場合も、同じ受贈者数・同じ贈与額で比較します。</p>
-      </div>
-
-      <div class="field">
-        <label for="annualGift">受贈者1人あたりの年間贈与額 <span class="unit">万円</span></label>
-        <input type="number" id="annualGift" value="200" min="0" max="5000" step="10">
-        <p class="field-hint">暦年贈与・相続時精算課税制度とも、基礎控除は受贈者1人あたり年間110万円です。</p>
-      </div>
-
-      <div class="field">
-        <label for="giftYears">生前贈与を続ける年数 <span class="unit">年</span></label>
-        <input type="number" id="giftYears" value="10" min="0" max="50" step="1">
-      </div>
-
-      <div class="field">
-        <label for="yearsUntilInheritance">相続開始（想定）までの残り年数 <span class="unit">年</span></label>
-        <input type="number" id="yearsUntilInheritance" value="15" min="0" max="60" step="1">
-        <p class="field-hint">生前贈与を始めてから実際に相続が発生するまでの年数です。生前贈与を行う年数と同じか、それより長い値を入力してください。</p>
-      </div>
-
-      <div class="field">
-        <label for="lookbackPeriod">【暦年贈与の場合】生前贈与加算（持ち戻し）対象期間</label>
-        <select id="lookbackPeriod">
-          <option value="7" selected>7年（2031年以降の相続に適用される期間）</option>
-          <option value="3">3年（2024年の税制改正前からのルール）</option>
-        </select>
-        <p class="field-hint">相続時精算課税制度を選んだ場合は、この設定に関係なく（年110万円の基礎控除を除き）全期間の贈与が加算対象になります。2024年の税制改正で暦年贈与の加算対象期間は「3年以内」から「7年以内」に延長されましたが、実際に7年分が適用されるのは2031年以降の相続からで、それより前は経過措置により短くなります。</p>
-      </div>
-    </div>
-
-    <div>
-      <div class="verdict-banner">
-        <span id="verdict">-</span>
-        <span id="verdictSub" class="sub"></span>
-      </div>
-
-      <div class="result-summary">
-        <div class="result-card">
-          <div class="label">B：暦年贈与を選んだ場合の負担額合計</div>
-          <div class="value" id="result-scenario-b-total">-</div>
-        </div>
-        <div class="result-card accent">
-          <div class="label">C：相続時精算課税制度を選んだ場合の負担額合計</div>
-          <div class="value" id="result-scenario-c-total">-</div>
-        </div>
-        <div class="result-card">
-          <div class="label">負担額の差（Bとの比較）</div>
-          <div class="value" id="result-diff">-</div>
-        </div>
-        <div class="result-card">
-          <div class="label">相続時精算課税：相続財産から永久に除外される額（累計）</div>
-          <div class="value" id="result-permanent-exclusion">-</div>
-        </div>
-      </div>
-
-      <div class="chart-wrap">
-        <div class="chart-canvas-wrap" style="height:280px">
-          <canvas id="growthChart" height="280"></canvas>
-        </div>
-      </div>
-
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr><th>区分</th><th>金額</th></tr>
-          </thead>
-          <tbody id="breakdown-body"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="share-box" id="share-box">
-    <div class="share-box-text">
-      <strong>この条件の結果をURLで共有</strong>
-      <p>入力した条件をそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
-    </div>
-    <div class="share-box-controls">
-      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
-      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
-    </div>
-    <span id="share-url-feedback" class="share-feedback" role="status"></span>
-  </div>
-
-  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
-
-  <div class="affiliate-box">
-    <h3>相続時精算課税・生前贈与を検討するなら</h3>
-    <div class="affiliate-list">
-      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
-        <span>相続時精算課税制度の選択に詳しい税理士に無料相談する</span>
-        <span class="cta">詳細を見る →</span>
-      </a>
-      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
-        <span>値上がりが期待できる株式・投資信託を生前贈与する際の証券口座を比較する</span>
-        <span class="cta">詳細を見る →</span>
-      </a>
-    </div>
-    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
-  </div>
-
-  <section class="article-section">
-    <h2>暦年贈与と相続時精算課税制度、何が違う？</h2>
-    <p>どちらも「生きている間に財産を子や孫に移す」ための制度ですが、税金の計算の仕組みが大きく異なります。暦年贈与（暦年課税）は受贈者1人あたり年間110万円までの基礎控除を毎年使え、贈与者ごとの制限もなく手軽に使える一方、相続開始前の一定期間（3年または7年）内の贈与は、110万円以下の金額であっても相続財産に加算し直される「生前贈与加算（持ち戻し）」の対象になります。</p>
-    <p>一方、相続時精算課税制度は、2,500万円という大きな特別控除を使って早期にまとまった財産を移転できる制度で、2024年1月からは年110万円の基礎控除も新設されました。この基礎控除は暦年贈与と異なり、贈与のタイミングにかかわらず相続財産に加算されない（持ち戻しの対象にならない）ため、相続開始が近づいてからの贈与でも確実に非課税枠を使い切れます。ただし、基礎控除を超える部分は（特別控除の範囲内では非課税でも）贈与時の価額でそのまま相続財産に加算され、実質的に相続税の前払いに近い性質を持ちます。また、一度選択すると暦年課税には戻せません。</p>
-    <p>本ツールは、同じ受贈者数・同じ年間贈与額・同じ贈与期間を前提に、この2つの制度を選んだ場合の負担額（贈与税＋相続税）を比較します。相続開始までの期間が短い場合や、贈与額が110万円前後の少額にとどまる場合は相続時精算課税制度が有利になりやすく、逆に相続開始まで十分な時間があり暦年贈与の持ち戻し期間より前に贈与を終えられる場合は、暦年贈与でも同等かそれ以上に有利になることがあります。</p>
-    <h3>よくある質問</h3>
-    <dl>
-      <div class="faq-item">
-        <dt>相続時精算課税制度とは何ですか？</dt>
-        <dd>60歳以上の父母・祖父母（直系尊属）から18歳以上の子・孫への贈与について選択できる贈与税の制度です。累計2,500万円までの特別控除があり、これを超えた部分には一律20%の贈与税がかかります。贈与財産は（基礎控除部分を除き）贈与時の価額で相続財産に加算され、相続税を計算したうえで、すでに納めた贈与税額を相続税額から差し引きます（差し引ききれない分は還付されます）。2024年1月以降の贈与からは、この制度に加えて年110万円の基礎控除が新設されました。</dd>
-      </div>
-      <div class="faq-item">
-        <dt>年110万円の基礎控除は、暦年贈与の基礎控除と何が違うのですか？</dt>
-        <dd>どちらも年110万円という金額は同じですが、相続開始直前の贈与に対する扱いが異なります。暦年贈与の基礎控除は、相続開始前一定期間内（3年または7年）の贈与であれば、110万円以下の金額であっても相続財産に加算し直される「生前贈与加算（持ち戻し）」の対象になります。一方、相続時精算課税制度の年110万円の基礎控除は、贈与がいつ行われたかに関係なく、相続財産に一切加算されません。相続開始が近いタイミングでの贈与でも非課税枠を確実に使い切れる点が、相続時精算課税制度の大きな特徴です。</dd>
-      </div>
-      <div class="faq-item">
-        <dt>相続時精算課税制度を一度選ぶと、暦年課税には戻れないのですか？</dt>
-        <dd>はい。同じ贈与者・受贈者の組み合わせについて相続時精算課税制度を選択すると、その後は同じ贈与者からの贈与について暦年課税に戻すことはできません（届出は贈与者ごと・受贈者ごとに行います）。将来まとまった贈与を行う可能性がある場合や、他の贈与者からの贈与で暦年課税の基礎控除を使いたい場合との兼ね合いも踏まえて選ぶ必要があります。</dd>
-      </div>
-      <div class="faq-item">
-        <dt>特別控除2,500万円を使い切った後はどうなりますか？</dt>
-        <dd>年110万円の基礎控除を超える部分は、まず累計2,500万円の特別控除に充当されます。特別控除を使い切った後の超過分には一律20%の贈与税がかかります。この20%の贈与税は、相続時に相続税額から全額が控除され、相続税額より多く納めていた場合は還付されるため、特別控除超過分については実質的に贈与税を「先払い」しているのに近い仕組みになります。</dd>
-      </div>
-      <div class="faq-item">
-        <dt>贈与財産の値上がりは節税につながりますか？</dt>
-        <dd>相続時精算課税制度で贈与した財産（基礎控除を除く部分）は、相続発生時の時価ではなく「贈与時の価額」で相続財産に加算されます。そのため、株式や不動産など将来値上がりが期待できる財産を先に贈与しておくと、値上がり分には相続税がかからず結果的に節税になる可能性があります。逆に贈与後に値下がりした場合は、贈与時の高い価額で加算されてしまうため不利になります。本ツールはこの値上がり・値下がりの効果を試算対象に含めておらず、贈与財産の価値が変わらない前提で計算しています。</dd>
-      </div>
-      <div class="faq-item">
-        <dt>この試算は正確ですか？</dt>
-        <dd>暦年贈与・相続時精算課税制度それぞれの基礎控除・税率構造と、相続税の基礎控除・速算表・配偶者の税額軽減という基本的な計算構造に基づく概算です。実際の遺産分割は法定相続分どおりに行われ、贈与は単一の贈与者から行われるものと仮定しており、贈与財産の値上がり・値下がり、教育資金・結婚子育て資金の一括贈与の非課税特例、小規模宅地等の特例、生命保険金の非課税枠、複数の贈与者からの贈与などは考慮していません。正確な税額・対策の要否は税理士にご確認ください。</dd>
-      </div>
-    </dl>
+<main>
+  <section class="hero container">
+    <h1>このツールは統合されました</h1>
+    <p>機能が重複していたため、「相続時精算課税制度 vs 暦年贈与 比較シミュレーター」は「<a href="zouyo-souzoku-simulator.html">生前贈与 vs 相続 比較シミュレーター</a>」に統合し、「生前贈与なし」「暦年贈与」「相続時精算課税制度」の3パターンを一度に比較できるようになりました。3秒後に自動的に移動します。移動しない場合は下のリンクからお進みください。</p>
+    <p><a href="zouyo-souzoku-simulator.html">今すぐ生前贈与 vs 相続 比較シミュレーターへ移動する →</a></p>
   </section>
-  <section class="article-section">
-    <h2>あわせて使いたい関連ツール（相続・贈与）</h2>
-    <div class="tool-grid">
-      <a class="tool-card" href="souzokuzei-simulator.html">
-        <span class="badge">相続税</span>
-        <h3>相続税シミュレーター（概算）</h3>
-        <p>遺産総額・配偶者の有無・子の人数から、基礎控除額・相続税の総額・配偶者の税額軽減後の家族全体の納税額を試算します。</p>
-      </a>
-      <a class="tool-card" href="zouyo-souzoku-simulator.html">
-        <span class="badge">比較シミュレーター</span>
-        <h3>生前贈与 vs 相続 比較シミュレーター</h3>
-        <p>暦年贈与を続けた場合と何もせず相続した場合の負担額（贈与税＋相続税）を比較。相続開始前の生前贈与加算（持ち戻し）も考慮して試算します。</p>
-      </a>
-      <a class="tool-card" href="seizen-zouyo-hajimekata-guide.html">
-        <span class="badge">解説記事</span>
-        <h3>生前贈与のやり方 完全ガイド</h3>
-        <p>暦年贈与と相続時精算課税制度の選び方から、贈与契約書の作り方、持ち戻しルールの注意点まで、関連シミュレーターへのリンク付きで解説します。</p>
-      </a>
-      <a class="tool-card" href="souzokuzei-guide.html">
-        <span class="badge">解説記事</span>
-        <h3>相続税とは？基礎控除・税率・配偶者の税額軽減の仕組み 完全ガイド</h3>
-        <p>遺産総額・配偶者の有無・子の人数から相続税の基礎控除・税率・配偶者の税額軽減の仕組みを解説する記事です。</p>
-      </a>
-    </div>
-  </section>
-
-  <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の贈与税額・相続税額を保証するものではありません。贈与財産の値上がり・値下がりの効果、各種非課税特例（教育資金・結婚子育て資金の一括贈与、小規模宅地等の特例、生命保険金の非課税枠など）、複数の贈与者からの贈与は考慮していません。正確な税額・対策の要否は税理士等の専門家にご確認ください。本サイトは特定の商品・サービスの勧誘を目的とするものではありません。
-  </div>
 </main>
 
 <footer class="site-footer">
   <div class="container">
     <span>&copy; 2026 ふやすノート</span>
     <nav>
-      <a href="../index.html">トップへ戻る</a>
       <a href="../about.html">運営者情報</a>
       <a href="../privacy.html">プライバシーポリシー</a>
       <a href="../disclosure.html">アフィリエイト・広告表記について</a>
@@ -370,9 +39,5 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
-<script src="../js/seisan-kazei.js"></script>
-<script src="../js/share.js"></script>
-<script src="../js/nav-toggle.js"></script>
 </body>
 </html>
