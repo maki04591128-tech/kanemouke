@@ -1183,8 +1183,15 @@ a { color: var(--color-primary); }
   }
   .panel,
   .chart-wrap,
-  .table-wrap {
+  .table-wrap,
+  .data-table,
+  .tool-card,
+  .faq-item {
     break-inside: avoid;
+  }
+  .article-section h2,
+  .article-section h3 {
+    break-after: avoid;
   }
   main.container {
     max-width: none;
