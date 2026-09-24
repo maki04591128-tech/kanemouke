@@ -770,6 +770,7 @@ a { color: var(--color-primary); }
 .article-section h2 {
   font-size: 1.15rem;
   color: var(--color-primary-dark);
+  scroll-margin-top: 76px;
 }
 .article-section h3 {
   font-size: 1rem;
@@ -778,6 +779,55 @@ a { color: var(--color-primary); }
 .faq-item { margin-bottom: 16px; }
 .faq-item dt { font-weight: 700; margin-bottom: 4px; }
 .faq-item dd { margin: 0; color: var(--color-text-muted); }
+
+/* 解説記事の目次（js/toc.js が動的に生成。見出しが3個未満のページには表示しない） */
+.toc {
+  margin: 20px 0 0;
+}
+.toc-details {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  padding: 4px 20px;
+}
+.toc-summary {
+  cursor: pointer;
+  padding: 12px 0;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  list-style: none;
+}
+.toc-summary::-webkit-details-marker {
+  display: none;
+}
+.toc-summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 1em;
+  margin-right: 4px;
+  transition: transform 0.15s ease;
+}
+.toc-details[open] .toc-summary::before {
+  transform: rotate(90deg);
+}
+.toc-list {
+  margin: 0 0 16px;
+  padding-left: 20px;
+}
+.toc-list li {
+  margin-bottom: 8px;
+}
+.toc-list a {
+  color: var(--color-primary-dark);
+  text-decoration: none;
+}
+.toc-list a:hover,
+.toc-list a:focus-visible {
+  text-decoration: underline;
+}
+@media (prefers-reduced-motion: reduce) {
+  .toc-summary::before { transition: none; }
+}
 
 .verdict-box {
   border-left: 4px solid var(--color-primary);
@@ -1120,6 +1170,7 @@ a { color: var(--color-primary); }
   .goal-nav-section,
   .category-nav,
   .tool-search,
+  .toc,
   .site-footer nav {
     display: none !important;
   }
