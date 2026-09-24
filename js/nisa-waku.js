@@ -16,6 +16,8 @@
     years: document.getElementById("years"),
     rateOut: document.getElementById("rateOut"),
     yearsOut: document.getElementById("yearsOut"),
+    fundSelect: document.getElementById("fundSelect"),
+    fundHint: document.getElementById("fundHint"),
     verdict: document.getElementById("verdict"),
     verdictSub: document.getElementById("verdictSub"),
     fillPeriod: document.getElementById("result-fill-period"),
@@ -256,6 +258,10 @@
   [els.tsumitate, els.growth, els.rate, els.years].forEach(function (el) {
     el.addEventListener("input", render);
   });
+
+  if (window.setupFundSelect) {
+    window.setupFundSelect(els.fundSelect, els.rate, els.fundHint, render);
+  }
 
   render();
 })();

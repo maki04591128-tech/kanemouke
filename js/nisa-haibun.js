@@ -66,6 +66,8 @@
     total: document.getElementById("total"),
     rate: document.getElementById("rate"),
     rateOut: document.getElementById("rateOut"),
+    fundSelect: document.getElementById("fundSelect"),
+    fundHint: document.getElementById("fundHint"),
     verdict: document.getElementById("verdict"),
     verdictSub: document.getElementById("verdictSub"),
     splitBody: document.getElementById("split-body"),
@@ -314,6 +316,10 @@
   [els.total, els.rate].forEach(function (el) {
     el.addEventListener("input", render);
   });
+
+  if (window.setupFundSelect) {
+    window.setupFundSelect(els.fundSelect, els.rate, els.fundHint, render);
+  }
 
   render();
 })();
