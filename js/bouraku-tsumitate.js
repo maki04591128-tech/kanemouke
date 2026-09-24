@@ -274,7 +274,16 @@
         options: {
           responsive: true,
           interaction: { mode: "index", intersect: false },
-          plugins: { legend: { display: false } },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  return ctx.dataset.label + "：" + manYen(ctx.parsed.y);
+                },
+              },
+            },
+          },
           scales: {
             x: { ticks: { autoSkip: true, maxTicksLimit: 12 } },
             y: {
