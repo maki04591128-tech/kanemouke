@@ -902,3 +902,81 @@ a { color: var(--color-primary); }
 @media (prefers-reduced-motion: reduce) {
   .back-to-top { transition: none; }
 }
+
+/* 追従する結果サマリーバー（js/sticky-result.js が動的に生成） */
+/* .calc-layout がモバイル幅で1カラムになり入力欄と結果が縦に並ぶ間、 */
+/* 結果がまだ画面外にある時だけ画面下部に主要な結果を追従表示する。 */
+.sticky-result-bar {
+  position: fixed;
+  left: 14px;
+  right: 74px;
+  bottom: 14px;
+  z-index: 19;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 14px 11px;
+  background: var(--color-primary-dark);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(15, 30, 45, 0.22);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.sticky-result-bar.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.sticky-result-bar .sticky-result-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.sticky-result-bar .sticky-result-label {
+  font-size: 0.7rem;
+  opacity: 0.85;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sticky-result-bar .sticky-result-value {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.sticky-result-bar .sticky-result-arrow {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0.9;
+}
+@media (min-width: 761px) {
+  .sticky-result-bar { display: none !important; }
+}
+@media (max-width: 640px) {
+  .sticky-result-bar {
+    right: 64px;
+    bottom: 12px;
+    padding: 10px 12px;
+  }
+}
+@media print {
+  .sticky-result-bar { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sticky-result-bar { transition: none; }
+}
