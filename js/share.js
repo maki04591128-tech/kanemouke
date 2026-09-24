@@ -7,8 +7,20 @@
   // single <div class="panel"> and are unique <input>/<select> elements with
   // an id, so this script never needs page-specific field names.
 
+  // 統合ハブページ（タブ切り替えで複数シミュレーターをまとめたページ）では
+  // 非表示タブ内の`.panel`も含めて全ツール分のフィールドを対象にすると
+  // URLが肥大化し意味を持たなくなるため、現在表示中のタブ（`.tab-panel`が
+  // 存在しない通常ページでは常に全体）に属する`.panel`だけを対象にする。
   function getPanelFields() {
-    var nodes = document.querySelectorAll(".panel input[id], .panel select[id]");
+    var hiddenPanel = document.querySelector(".tab-panel[hidden]");
+    var scope;
+    if (hiddenPanel) {
+      var visiblePanel = document.querySelector(".tab-panel:not([hidden])");
+      scope = visiblePanel || document;
+    } else {
+      scope = document;
+    }
+    var nodes = scope.querySelectorAll(".panel input[id], .panel select[id]");
     return Array.prototype.slice.call(nodes);
   }
 
@@ -54,6 +66,10 @@
 
   function buildShareUrl(fields) {
     var params = new URLSearchParams();
+    if (window.getActiveHubTool) {
+      var activeTool = window.getActiveHubTool();
+      if (activeTool) params.set("tool", activeTool);
+    }
     fields.forEach(function (el) {
       params.set(el.id, el.value);
     });
@@ -85,7 +101,7 @@
     });
   }
 
-  function initShareBox(fields) {
+  function initShareBox(initialFields) {
     var box = document.getElementById("share-box");
     var urlInput = document.getElementById("share-url-input");
     var btn = document.getElementById("share-url-btn");
@@ -93,16 +109,32 @@
     if (!box || !urlInput || !btn) return;
 
     var feedbackTimer = null;
+    var boundFields = [];
 
     function refresh() {
-      urlInput.value = buildShareUrl(fields);
+      urlInput.value = buildShareUrl(boundFields);
     }
 
-    fields.forEach(function (el) {
-      el.addEventListener("input", refresh);
-      el.addEventListener("change", refresh);
+    function bind(fields) {
+      boundFields.forEach(function (el) {
+        el.removeEventListener("input", refresh);
+        el.removeEventListener("change", refresh);
+      });
+      boundFields = fields;
+      boundFields.forEach(function (el) {
+        el.addEventListener("input", refresh);
+        el.addEventListener("change", refresh);
+      });
+      refresh();
+    }
+
+    bind(initialFields);
+
+    // 統合ハブページでタブを切り替えたら、共有対象を新しいタブの
+    // フィールドに切り替える（タブがないページではこのイベントは発生しない）。
+    document.addEventListener("hubtabchange", function () {
+      bind(getPanelFields());
     });
-    refresh();
 
     btn.addEventListener("click", function () {
       refresh();
