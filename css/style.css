@@ -464,6 +464,9 @@ a { color: var(--color-primary); }
   color: var(--color-text-muted);
   margin: 0;
 }
+.article-actions {
+  margin-top: 16px;
+}
 
 .calc-layout {
   display: grid;
@@ -1167,6 +1170,7 @@ a { color: var(--color-primary); }
   .ad-slot,
   .hub-tabs,
   .share-box,
+  .article-actions,
   .goal-nav-section,
   .category-nav,
   .tool-search,
