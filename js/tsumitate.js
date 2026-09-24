@@ -11,9 +11,40 @@
     total: document.getElementById("result-total"),
     principal: document.getElementById("result-principal"),
     profit: document.getElementById("result-profit"),
+    fundSelect: document.getElementById("fundSelect"),
+    fundHint: document.getElementById("fundHint"),
   };
 
   var chart = null;
+  var DEFAULT_FUND_HINT = els.fundHint ? els.fundHint.textContent : "";
+
+  function setupFundSelect() {
+    if (!els.fundSelect || !window.FUND_DATA) return;
+
+    window.FUND_DATA.forEach(function (fund) {
+      var opt = document.createElement("option");
+      opt.value = fund.id;
+      opt.textContent = fund.name + "（" + fund.category + "）";
+      els.fundSelect.appendChild(opt);
+    });
+
+    els.fundSelect.addEventListener("change", function () {
+      var fund = window.FUND_DATA.filter(function (f) { return f.id === els.fundSelect.value; })[0];
+      if (!fund) {
+        if (els.fundHint) els.fundHint.textContent = DEFAULT_FUND_HINT;
+        return;
+      }
+      var net = Math.max(0, Math.round((fund.referenceReturnPct - fund.expenseRatio) * 10) / 10);
+      els.rate.value = net;
+      if (els.fundHint) {
+        els.fundHint.textContent =
+          fund.category + "の想定利回り目安" + fund.referenceReturnRangeText + "（中央値" + fund.referenceReturnPct.toFixed(1) +
+          "%）から信託報酬" + fund.expenseRatio.toFixed(3) + "%を差し引いた実質" + net.toFixed(1) +
+          "%を初期値にしました。" + window.FUND_DATA_NOTE;
+      }
+      render();
+    });
+  }
 
   function yen(n) {
     return Math.round(n).toLocaleString("ja-JP") + " 円";
@@ -137,5 +168,6 @@
     el.addEventListener("input", render);
   });
 
+  setupFundSelect();
   render();
 })();

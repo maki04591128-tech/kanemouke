@@ -50,6 +50,14 @@
         "@type": "Answer",
         "text": "はい、NISA口座（非課税口座）で保有していても信託報酬は通常どおりかかります。NISAが非課税にするのは運用益に対する税金（約20%）であり、信託報酬などの運用コストとは別のものです。"
       }
+    },
+    {
+      "@type": "Question",
+      "name": "「実際の投資信託から選ぶ」は何のための機能ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドをファンドA・ファンドBそれぞれで選ぶと、そのファンドの信託報酬（実質年率）の目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値であり、実際の数値や商品改定の有無は目論見書・運用会社の公式サイトで必ずご確認ください。自動入力後もスライダーで自由に調整できます。"
+      }
     }
   ]
 }
@@ -170,15 +178,29 @@
       </div>
 
       <div class="field">
+        <label for="fundSelectA">ファンドAを実際の投資信託から選ぶ（任意）</label>
+        <select id="fundSelectA">
+          <option value="">選択しない（自分で信託報酬を入力）</option>
+        </select>
+      </div>
+
+      <div class="field">
         <label for="feeA">ファンドAの信託報酬（年率） <span id="feeAOut" class="unit">0.20 %</span></label>
         <input type="range" id="feeA" value="0.20" min="0" max="3" step="0.01">
-        <p class="field-hint">低コストのインデックスファンドは年0.1〜0.3%程度のものが多く見られます。目論見書の「運用管理費用（信託報酬）」欄で確認できます。</p>
+        <p class="field-hint" id="feeAHint">低コストのインデックスファンドは年0.1〜0.3%程度のものが多く見られます。目論見書の「運用管理費用（信託報酬）」欄で確認できます。</p>
+      </div>
+
+      <div class="field">
+        <label for="fundSelectB">ファンドBを実際の投資信託から選ぶ（任意）</label>
+        <select id="fundSelectB">
+          <option value="">選択しない（自分で信託報酬を入力）</option>
+        </select>
       </div>
 
       <div class="field">
         <label for="feeB">ファンドBの信託報酬（年率） <span id="feeBOut" class="unit">1.50 %</span></label>
         <input type="range" id="feeB" value="1.50" min="0" max="3" step="0.01">
-        <p class="field-hint">アクティブファンドや旧型の商品では信託報酬が年1%台後半〜2%台になっているケースもあります。実際の商品の数値に置き換えて比較してください。</p>
+        <p class="field-hint" id="feeBHint">アクティブファンドや旧型の商品では信託報酬が年1%台後半〜2%台になっているケースもあります。実際の商品の数値に置き換えて比較してください。</p>
       </div>
     </div>
 
@@ -194,11 +216,11 @@
           <div class="value" id="result-principal">-</div>
         </div>
         <div class="result-card">
-          <div class="label">ファンドA：資産評価額</div>
+          <div class="label" id="result-a-label">ファンドA：資産評価額</div>
           <div class="value" id="result-a">-</div>
         </div>
         <div class="result-card">
-          <div class="label">ファンドB：資産評価額</div>
+          <div class="label" id="result-b-label">ファンドB：資産評価額</div>
           <div class="value" id="result-b">-</div>
         </div>
         <div class="result-card accent">
@@ -212,8 +234,8 @@
           <canvas id="growthChart" height="280"></canvas>
         </div>
         <div class="legend-note">
-          <span><span class="legend-dot" style="background:#0f5f4c"></span>ファンドA 評価額</span>
-          <span><span class="legend-dot" style="background:#d98e04"></span>ファンドB 評価額</span>
+          <span><span class="legend-dot" style="background:#0f5f4c"></span><span id="legend-a">ファンドA 評価額</span></span>
+          <span><span class="legend-dot" style="background:#d98e04"></span><span id="legend-b">ファンドB 評価額</span></span>
           <span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
         </div>
       </div>
@@ -221,7 +243,7 @@
       <div class="table-wrap">
         <table class="data-table data-table--result">
           <thead>
-            <tr><th>項目</th><th>ファンドA</th><th>ファンドB</th></tr>
+            <tr><th>項目</th><th id="thead-a">ファンドA</th><th id="thead-b">ファンドB</th></tr>
           </thead>
           <tbody id="breakdown-body"></tbody>
         </table>
@@ -274,6 +296,10 @@
       <div class="faq-item">
         <dt>NISA口座でも信託報酬はかかりますか？</dt>
         <dd>はい、NISA口座（非課税口座）で保有していても信託報酬は通常どおりかかります。NISAが非課税にするのは運用益に対する税金（約20%）であり、信託報酬などの運用コストとは別のものです。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>「実際の投資信託から選ぶ」は何のための機能ですか？</dt>
+        <dd>eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドをファンドA・ファンドBそれぞれで選ぶと、そのファンドの信託報酬（実質年率）の目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値であり、実際の数値や商品改定の有無は目論見書・運用会社の公式サイトで必ずご確認ください。自動入力後もスライダーで自由に調整できます。</dd>
       </div>
     </dl>
   </section>
@@ -351,6 +377,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/fund-data.js"></script>
 <script src="../js/shintaku-houshu.js"></script>
 <script src="../js/share.js"></script>
 <script src="../js/nav-toggle.js"></script>
