@@ -8,6 +8,8 @@
     yearsOut: document.getElementById("yearsOut"),
     annualRate: document.getElementById("annualRate"),
     annualRateOut: document.getElementById("annualRateOut"),
+    fundSelect: document.getElementById("fundSelect"),
+    fundHint: document.getElementById("fundHint"),
     pattern: document.getElementById("pattern"),
     shockFields: document.getElementById("shockFields"),
     shockPct: document.getElementById("shockPct"),
@@ -261,6 +263,10 @@
       el.addEventListener("change", render);
     }
   );
+
+  if (window.setupFundSelect) {
+    window.setupFundSelect(els.fundSelect, els.annualRate, els.fundHint, render);
+  }
 
   render();
 })();

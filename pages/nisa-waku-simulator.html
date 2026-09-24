@@ -50,6 +50,14 @@
         "@type": "Answer",
         "text": "成長投資枠は1,200万円という上限があるため、生涯投資枠1,800万円を最大限使い切りたい場合は、つみたて投資枠も並行して活用する必要があります。本シミュレーターで毎月の配分を変えながら、何年で枠を使い切るかを比較してみてください。"
       }
+    },
+    {
+      "@type": "Question",
+      "name": "「実際の投資信託から選ぶ」は何のための機能ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定利回りの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。"
+      }
     }
   ]
 }
@@ -159,6 +167,14 @@
       </div>
 
       <div class="field">
+        <label for="fundSelect">実際の投資信託から選ぶ（任意）</label>
+        <select id="fundSelect">
+          <option value="">選択しない（自分で利回りを入力）</option>
+        </select>
+        <p class="field-hint" id="fundHint">代表的なインデックスファンドを選ぶと、信託報酬を差し引いた想定利回りの目安を自動入力します（あくまで参考値です）。</p>
+      </div>
+
+      <div class="field">
         <label for="rate">想定利回り（年率） <span id="rateOut" class="unit">5.0 %</span></label>
         <input type="range" id="rate" value="5" min="0" max="8" step="0.1">
       </div>
@@ -252,6 +268,10 @@
         <dt>つみたて投資枠と成長投資枠、どちらを優先して使うべきですか？</dt>
         <dd>成長投資枠は1,200万円という上限があるため、生涯投資枠1,800万円を最大限使い切りたい場合は、つみたて投資枠も並行して活用する必要があります。本シミュレーターで毎月の配分を変えながら、何年で枠を使い切るかを比較してみてください。</dd>
       </div>
+      <div class="faq-item">
+        <dt>「実際の投資信託から選ぶ」は何のための機能ですか？</dt>
+        <dd>eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定利回りの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。</dd>
+      </div>
     </dl>
   </section>
   <section class="article-section">
@@ -328,6 +348,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/fund-data.js"></script>
 <script src="../js/nisa-waku.js"></script>
 <script src="../js/share.js"></script>
 <script src="../js/nav-toggle.js"></script>

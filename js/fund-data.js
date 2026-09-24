@@ -95,4 +95,37 @@
   global.FUND_DATA = FUNDS;
   global.FUND_DATA_NOTE =
     "信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値です。将来の運用成果を保証するものではありません。最新の数値は目論見書・運用会社の公式サイトでご確認ください。";
+
+  // 「実際の投資信託から選ぶ」プルダウンの共通セットアップ。ファンドを選ぶと
+  // rateEl（想定利回りのrange入力）へ「想定利回り目安の中央値－信託報酬」を
+  // 自動入力し、hintElに内訳を表示する。各ツールの再計算関数はonApplyで呼び出す。
+  global.setupFundSelect = function (selectEl, rateEl, hintEl, onApply) {
+    if (!selectEl || !rateEl || !global.FUND_DATA) return;
+
+    var defaultHint = hintEl ? hintEl.textContent : "";
+
+    global.FUND_DATA.forEach(function (fund) {
+      var opt = document.createElement("option");
+      opt.value = fund.id;
+      opt.textContent = fund.name + "（" + fund.category + "）";
+      selectEl.appendChild(opt);
+    });
+
+    selectEl.addEventListener("change", function () {
+      var fund = global.FUND_DATA.filter(function (f) { return f.id === selectEl.value; })[0];
+      if (!fund) {
+        if (hintEl) hintEl.textContent = defaultHint;
+        return;
+      }
+      var net = Math.max(0, Math.round((fund.referenceReturnPct - fund.expenseRatio) * 10) / 10);
+      rateEl.value = net;
+      if (hintEl) {
+        hintEl.textContent =
+          fund.category + "の想定利回り目安" + fund.referenceReturnRangeText + "（中央値" + fund.referenceReturnPct.toFixed(1) +
+          "%）から信託報酬" + fund.expenseRatio.toFixed(3) + "%を差し引いた実質" + net.toFixed(1) +
+          "%を初期値にしました。" + global.FUND_DATA_NOTE;
+      }
+      if (onApply) onApply(net, fund);
+    });
+  };
 })(window);
