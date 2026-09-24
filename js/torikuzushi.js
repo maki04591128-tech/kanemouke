@@ -4,24 +4,24 @@
   var MAX_YEARS_CAP = 70;
 
   var els = {
-    startAssets: document.getElementById("startAssets"),
-    returnPct: document.getElementById("returnPct"),
-    returnPctOut: document.getElementById("returnPctOut"),
-    maxYears: document.getElementById("maxYears"),
-    fixedAmount: document.getElementById("fixedAmount"),
-    applyInflation: document.getElementById("applyInflation"),
-    inflationPct: document.getElementById("inflationPct"),
-    inflationPctOut: document.getElementById("inflationPctOut"),
-    fixedRatePct: document.getElementById("fixedRatePct"),
-    fixedRatePctOut: document.getElementById("fixedRatePctOut"),
-    floorAmount: document.getElementById("floorAmount"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    resultFixed: document.getElementById("result-fixed"),
-    resultPercent: document.getElementById("result-percent"),
-    resultFloor: document.getElementById("result-floor"),
-    compareBody: document.getElementById("compare-body"),
-    noteBody: document.getElementById("note-body"),
+    startAssets: document.getElementById("torikuzushi-startAssets"),
+    returnPct: document.getElementById("torikuzushi-returnPct"),
+    returnPctOut: document.getElementById("torikuzushi-returnPctOut"),
+    maxYears: document.getElementById("torikuzushi-maxYears"),
+    fixedAmount: document.getElementById("torikuzushi-fixedAmount"),
+    applyInflation: document.getElementById("torikuzushi-applyInflation"),
+    inflationPct: document.getElementById("torikuzushi-inflationPct"),
+    inflationPctOut: document.getElementById("torikuzushi-inflationPctOut"),
+    fixedRatePct: document.getElementById("torikuzushi-fixedRatePct"),
+    fixedRatePctOut: document.getElementById("torikuzushi-fixedRatePctOut"),
+    floorAmount: document.getElementById("torikuzushi-floorAmount"),
+    verdict: document.getElementById("torikuzushi-verdict"),
+    verdictSub: document.getElementById("torikuzushi-verdictSub"),
+    resultFixed: document.getElementById("torikuzushi-result-fixed"),
+    resultPercent: document.getElementById("torikuzushi-result-percent"),
+    resultFloor: document.getElementById("torikuzushi-result-floor"),
+    compareBody: document.getElementById("torikuzushi-compare-body"),
+    noteBody: document.getElementById("torikuzushi-note-body"),
   };
 
   var chart = null;
@@ -217,7 +217,7 @@
       chart.options = options;
       chart.update();
     } else {
-      chart = new Chart(document.getElementById("growthChart").getContext("2d"), {
+      chart = new Chart(document.getElementById("torikuzushi-growthChart").getContext("2d"), {
         type: "line",
         data: data,
         options: options,

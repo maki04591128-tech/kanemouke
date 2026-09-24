@@ -5,25 +5,25 @@
   var MAX_SUSTAIN_YEARS = 70;
 
   var els = {
-    currentAge: document.getElementById("currentAge"),
-    currentAssets: document.getElementById("currentAssets"),
-    monthly: document.getElementById("monthly"),
-    returnPct: document.getElementById("returnPct"),
-    returnPctOut: document.getElementById("returnPctOut"),
-    annualExpense: document.getElementById("annualExpense"),
-    withdrawalPct: document.getElementById("withdrawalPct"),
-    withdrawalPctOut: document.getElementById("withdrawalPctOut"),
-    postReturnPct: document.getElementById("postReturnPct"),
-    postReturnPctOut: document.getElementById("postReturnPctOut"),
-    inflationPct: document.getElementById("inflationPct"),
-    inflationPctOut: document.getElementById("inflationPctOut"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    target: document.getElementById("result-target"),
-    reach: document.getElementById("result-reach"),
-    reachAssets: document.getElementById("result-reach-assets"),
-    sustain: document.getElementById("result-sustain"),
-    breakdownBody: document.getElementById("breakdown-body"),
+    currentAge: document.getElementById("fire-currentAge"),
+    currentAssets: document.getElementById("fire-currentAssets"),
+    monthly: document.getElementById("fire-monthly"),
+    returnPct: document.getElementById("fire-returnPct"),
+    returnPctOut: document.getElementById("fire-returnPctOut"),
+    annualExpense: document.getElementById("fire-annualExpense"),
+    withdrawalPct: document.getElementById("fire-withdrawalPct"),
+    withdrawalPctOut: document.getElementById("fire-withdrawalPctOut"),
+    postReturnPct: document.getElementById("fire-postReturnPct"),
+    postReturnPctOut: document.getElementById("fire-postReturnPctOut"),
+    inflationPct: document.getElementById("fire-inflationPct"),
+    inflationPctOut: document.getElementById("fire-inflationPctOut"),
+    verdict: document.getElementById("fire-verdict"),
+    verdictSub: document.getElementById("fire-verdictSub"),
+    target: document.getElementById("fire-result-target"),
+    reach: document.getElementById("fire-result-reach"),
+    reachAssets: document.getElementById("fire-result-reach-assets"),
+    sustain: document.getElementById("fire-result-sustain"),
+    breakdownBody: document.getElementById("fire-breakdown-body"),
   };
 
   var chart = null;
@@ -235,7 +235,7 @@
       chart.options = options;
       chart.update();
     } else {
-      chart = new Chart(document.getElementById("growthChart").getContext("2d"), {
+      chart = new Chart(document.getElementById("fire-growthChart").getContext("2d"), {
         type: "line",
         data: data,
         options: options,

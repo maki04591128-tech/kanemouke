@@ -19,25 +19,25 @@
   ];
 
   var els = {
-    monthly: document.getElementById("monthly"),
-    monthlyOut: document.getElementById("monthlyOut"),
-    years: document.getElementById("years"),
-    yearsOut: document.getElementById("yearsOut"),
-    taxableIncome: document.getElementById("taxableIncome"),
-    rate: document.getElementById("rate"),
-    rateOut: document.getElementById("rateOut"),
-    payoutMethod: document.getElementById("payoutMethod"),
-    ageGroupRow: document.getElementById("ageGroupRow"),
-    ageGroup: document.getElementById("ageGroup"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    annualSaving: document.getElementById("result-annual-saving"),
-    totalSaving: document.getElementById("result-total-saving"),
-    principal: document.getElementById("result-principal"),
-    kyosaikin: document.getElementById("result-kyosaikin"),
-    netCost: document.getElementById("result-net-cost"),
-    netPayout: document.getElementById("result-net-payout"),
-    tableBody: document.getElementById("breakdown-body"),
+    monthly: document.getElementById("kyosai-monthly"),
+    monthlyOut: document.getElementById("kyosai-monthlyOut"),
+    years: document.getElementById("kyosai-years"),
+    yearsOut: document.getElementById("kyosai-yearsOut"),
+    taxableIncome: document.getElementById("kyosai-taxableIncome"),
+    rate: document.getElementById("kyosai-rate"),
+    rateOut: document.getElementById("kyosai-rateOut"),
+    payoutMethod: document.getElementById("kyosai-payoutMethod"),
+    ageGroupRow: document.getElementById("kyosai-ageGroupRow"),
+    ageGroup: document.getElementById("kyosai-ageGroup"),
+    verdict: document.getElementById("kyosai-verdict"),
+    verdictSub: document.getElementById("kyosai-verdictSub"),
+    annualSaving: document.getElementById("kyosai-result-annual-saving"),
+    totalSaving: document.getElementById("kyosai-result-total-saving"),
+    principal: document.getElementById("kyosai-result-principal"),
+    kyosaikin: document.getElementById("kyosai-result-kyosaikin"),
+    netCost: document.getElementById("kyosai-result-net-cost"),
+    netPayout: document.getElementById("kyosai-result-net-payout"),
+    tableBody: document.getElementById("kyosai-breakdown-body"),
   };
 
   var chart = null;
@@ -239,7 +239,7 @@
     var principalData = growth.yearly.map(function (d) { return Math.round(d.principal); });
     var balanceData = growth.yearly.map(function (d) { return Math.round(d.balance); });
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("kyosai-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

@@ -1,0 +1,1159 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新NISA・積立シミュレーター まとめ | ふやすノート</title>
+<meta name="description" content="積立複利・必要積立額・一括vs積立投資・信託報酬比較・NISA生涯枠・枠の復活・枠配分・暴落シナリオまで、新NISA・積立投資に関する8つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/nisa-hub.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="新NISA・積立シミュレーター まとめ | ふやすノート">
+<meta property="og:description" content="積立複利・必要積立額・一括vs積立投資・信託報酬比較・NISA生涯枠・枠の復活・枠配分・暴落シナリオまで、新NISA・積立投資に関する8つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/nisa-hub.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="新NISA・積立シミュレーター まとめ | ふやすノート">
+<meta name="twitter:description" content="積立複利・必要積立額・一括vs積立投資・信託報酬比較・NISA生涯枠・枠の復活・枠配分・暴落シナリオまで、新NISA・積立投資に関する8つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "想定利回りは何％にすればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "過去の実績（例えば全世界株式や米国株式のインデックスの長期平均）を参考にする方が多いですが、将来の利回りを保証するものではありません。楽観的なケースだけでなく、利回りを2〜3％下げた場合も試算し、幅を持って計画を立てることをおすすめします。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "目標金額から逆算して毎月いくら積み立てればいいか知りたい場合は？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「必要積立額シミュレーター」で、目標金額・積立期間・想定利回りから毎月の必要積立額を逆算できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "一括投資と積立投資、どちらが有利ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "相場が右肩上がりの局面では一括投資が有利になりやすい一方、投資開始直後に下落した場合は積立（時間分散）の方が平均購入単価を抑えられます。値動きパターン別の違いは「一括投資 vs 積立投資（時間分散）比較シミュレーター」で確認できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「実際の投資信託から選ぶ」は何のための機能ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定利回りの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "逆算した毎月の積立額が家計に対して多すぎる場合はどうすればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "目標金額・目標時期・想定利回りのいずれかを見直すことで、必要積立額は変わります。特に目標時期を数年延ばすだけでも、複利効果により必要積立額が大きく下がるケースがあります。「積立複利シミュレーター」で、実際に無理なく続けられる積立額から将来の資産額を試算してみるのも一つの方法です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "教育資金・老後資金など、目的別に試算する方法はありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "教育資金は進路パターン別の目安額から逆算できる「教育資金シミュレーター」、老後資金はリタイア後の生活費から必要資産額を試算する「セミリタイア（FIRE）達成シミュレーター」もあわせてご活用ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "想定利回りをどのくらいに設定すればよいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "将来の利回りを保証するものではないため、単一の数値で計画を立てるのではなく、複数の利回りパターンで必要積立額を比較し、達成が難しそうな場合は目標や期間の見直しも検討することをおすすめします。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "結局、一括投資と時間分散のどちらを選べばよいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "過去の株式市場の長期データを対象にした研究では、市場が右肩上がりで推移する期間が多いことを背景に、一括投資のほうが期待値としては上回る傾向が示されることが多いとされています。ただし、これは「将来もその通りになる」ことを保証するものではありません。時間分散には、投資直後の急落による大きな含み損を避けやすくなる（精神的に続けやすくなる）という、金額の期待値だけでは測れないメリットもあります。本シミュレーターの結果はあくまで入力条件に基づく試算であり、どちらを選ぶべきかを助言するものではありません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "本シミュレーターの「価格変動パターン」はどのように計算していますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "想定年率トレンドリターンによる複利の上昇線をベースに、投資開始直後の指定した期間だけ、価格指数がV字型に下落（または上昇）して元のトレンド線に戻ってくる、という単純化したモデルで試算しています。実際の相場は不規則に変動するため、あくまで「時間分散の効果が出やすい局面・出にくい局面」を理解するための単純化されたモデルである点にご留意ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "NISA口座で一括投資する場合、年間投資枠の上限に注意する必要はありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。新NISAの年間投資枠は、つみたて投資枠が120万円、成長投資枠が240万円が上限です。一括投資したい金額がこれらの上限を超える場合は、1年で使い切れない分を翌年以降に繰り越して投資することになります。新NISAの生涯投資枠の使い切りペースについては「NISA生涯枠」シミュレーターもあわせてご参照ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「実際の投資信託から選ぶ」は何のための機能ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定年率トレンドリターンの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "信託報酬が低いファンドを選べば必ず得をしますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "同じ指数（例：同じ株価指数）に連動するインデックスファンドを比較する場合は、信託報酬が低いほど手元に残る運用成果は大きくなる傾向があります。ただし、アクティブファンドのように運用方針そのものが異なる商品を比較する場合は、信託報酬の高さが必ずしも不利とは限らず、運用成果（グロスの利回り）自体に差が出ることもあります。本シミュレーターは「グロスの利回りが同じ場合」を前提にした試算である点にご留意ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "信託報酬以外にかかるコストはありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "購入時手数料（ノーロード商品は無料）、信託財産留保額（解約時に差し引かれる商品があります）、また信託報酬に含まれない「その他費用」（監査費用や売買委託手数料など）が実質的にかかる商品もあります。より正確に比較したい場合は、目論見書や運用報告書に記載されている「実質コスト」もあわせて確認することをおすすめします。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "NISA口座でも信託報酬はかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい、NISA口座（非課税口座）で保有していても信託報酬は通常どおりかかります。NISAが非課税にするのは運用益に対する税金（約20%）であり、信託報酬などの運用コストとは別のものです。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「実際の投資信託から選ぶ」は何のための機能ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドをファンドA・ファンドBそれぞれで選ぶと、そのファンドの信託報酬（実質年率）の目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値であり、実際の数値や商品改定の有無は目論見書・運用会社の公式サイトで必ずご確認ください。自動入力後もスライダーで自由に調整できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "生涯投資枠を使い切ったら、それ以上は積立できませんか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "NISA口座での非課税の買付はできなくなりますが、通常の課税口座（特定口座・一般口座）であれば引き続き積立投資は可能です。本シミュレーターでは、枠を使い切った後の積立分を課税口座で運用し続けるものとして試算しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "NISA口座で売却した場合、枠は復活しますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "新NISAでは、保有商品を売却すると、その商品の取得価額（簿価）分の枠が翌年以降に復活する仕組みがあります。本シミュレーターは売却を行わず積立を続ける前提のため、枠の復活は考慮していません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "つみたて投資枠と成長投資枠、どちらを優先して使うべきですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "成長投資枠は1,200万円という上限があるため、生涯投資枠1,800万円を最大限使い切りたい場合は、つみたて投資枠も並行して活用する必要があります。本シミュレーターで毎月の配分を変えながら、何年で枠を使い切るかを比較してみてください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「実際の投資信託から選ぶ」は何のための機能ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定利回りの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "売却したその日のうちに、復活した枠で買い直せますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "いいえ、できません。枠が復活するのは売却した年の翌年からです。同じ年のうちに買い直す場合は、その年にまだ残っている年間投資枠（新規の未使用分）の範囲でのみ購入できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "含み損の商品を売却した場合はどうなりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "含み損があっても、復活する枠は売却時の評価額ではなく取得価額（簿価）分です。損失が出ていても、投資した金額分の枠がそのまま翌年に戻ってくる点は含み益の場合と同じです。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "成長投資枠で買った商品を売却すれば、成長投資枠の上限（1,200万円）も戻りますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。成長投資枠で購入した商品を売却した場合、生涯投資枠（総枠1,800万円）だけでなく、成長投資枠専用の上限（1,200万円）についても、取得価額分が翌年以降に復活します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "翌年、復活した枠をすべて使い切って投資できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "翌年の投資額は、復活を含めた生涯投資枠の残りだけでなく、その年の年間投資枠（つみたて投資枠120万円・成長投資枠240万円）の上限にも制限されます。復活額が大きくても、1年で使い切れるとは限りません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "結局どの配分方法がいちばんお得ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "毎月の投資予定額が合計30万円（つみたて10万円＋成長20万円）以内であれば、「つみたて優先」「成長優先」「比率按分」のいずれも最終的に生涯投資枠1,800万円を同じように使い切るため、資産評価額に大きな差は生まれません。差が出やすいのは「つみたて投資枠のみ」を選んだ場合で、成長投資枠1,200万円分の非課税枠を使わないまま積立期間が長期化します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "成長投資枠だけに全額を入れるとどうなりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "成長投資枠には生涯1,200万円という上限があるため、つみたて投資枠を使わずに積み立て続けると、成長投資枠の上限に達した時点でNISA口座への入金が止まり、それ以降の積立分は課税口座に回ります。生涯投資枠1,800万円のうち600万円分は使われないまま残ります（本ツールの「成長優先」で毎月の合計額が20万円以下の場合に、この状態を確認できます）。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "枠を使い切った後はどうすればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "生涯投資枠を使い切った後は、新たな非課税投資はできません（保有商品を売却すると翌年以降に取得価額分の枠が復活します。詳しくは「NISA枠の売却による復活シミュレーター」をご覧ください）。使い切った後の積立分は課税口座での運用となり、運用益に約20.315%の税金がかかります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「実際の投資信託から選ぶ」は何のための機能ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定利回りの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "暴落中は積立を続けたほうが必ず得なのですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "本シミュレーターの前提（下落した相場は指定した期間で必ず元の水準まで回復する）のもとでは、一般的に「継続」が最も有利になりやすい結果が出ます。ただし実際の相場では、下落した後さらに長期間低迷が続いたり、以前の水準まで回復しないまま推移する可能性もゼロではありません。本シミュレーターは特定の行動を推奨するものではなく、「回復する前提であれば行動の違いがどれだけの差を生むか」を理解するための試算ツールとしてご利用ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「狼狽売り」はなぜ底値（下落期間のちょうど中間点）で起こる設定なのですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "実際の暴落局面では、下落し始めた直後よりも、含み損が最も大きく膨らみ精神的に耐えられなくなったタイミング（＝多くの場合は底値に近いタイミング）で売却してしまう投資家が多いとされています。本シミュレーターも、この「一番苦しいときに売ってしまう」という典型的な行動パターンを想定し、下落期間の中間点＝底値付近で売却する設定にしています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「積立を中断」と「狼狽売り」の違いは何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「中断」は暴落が始まった時点で新規の積立だけを止め、それまで保有していた資産は売らずにそのまま保有し続ける想定です。一方「狼狽売り」は、保有資産そのものを底値付近で売却して現金化してしまう想定です。中断は新たに安く買えるチャンスを逃すだけですが、狼狽売りはそれに加えて保有資産の回復局面の値上がり益まで失うため、多くの場合、狼狽売りが最も評価額が低くなります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "新NISAのつみたて投資枠でも同じことが起こりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。新NISAのつみたて投資枠・成長投資枠を使った積立投資でも、暴落時に積立を止めたり売却したりすれば同様の影響が生じます。特にNISA口座で一度売却してしまうと、その年の非課税投資枠のうち簿価（取得価額）分しか翌年以降に復活しない点にも注意が必要です（詳しくは「NISA枠の復活」シミュレーターもあわせてご参照ください）。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+<div class="container">
+<a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+<button aria-controls="site-nav" aria-expanded="false" class="nav-toggle" type="button">
+<span aria-hidden="true" class="icon"></span>
+<span>メニュー</span>
+</button>
+<nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+</div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>新NISA・積立シミュレーター まとめ</h1>
+    <p>積立の複利計算から新NISAの生涯投資枠・枠の復活・つみたて投資枠と成長投資枠の配分、信託報酬比較、暴落シナリオまで、新NISA・積立投資に関する8つのシミュレーターを1ページにまとめました。上のタブを切り替えるだけで、目的に合わせて使い分けられます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ上部 --></div>
+
+  <div class="hub-tabs" id="hub-tabs" role="tablist" aria-label="ツールを選択">
+        <button type="button" class="hub-tab" role="tab" id="tab-btn-tsumitate" aria-controls="tabpanel-tsumitate" aria-selected="true" data-tool="tsumitate">積立複利</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-hitsuyou" aria-controls="tabpanel-hitsuyou" aria-selected="false" data-tool="hitsuyou">必要積立額</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-ikkatsu" aria-controls="tabpanel-ikkatsu" aria-selected="false" data-tool="ikkatsu">一括vs積立</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-shintaku" aria-controls="tabpanel-shintaku" aria-selected="false" data-tool="shintaku">信託報酬比較</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-waku" aria-controls="tabpanel-waku" aria-selected="false" data-tool="waku">生涯枠</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-fukkatsu" aria-controls="tabpanel-fukkatsu" aria-selected="false" data-tool="fukkatsu">枠の復活</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-haibun" aria-controls="tabpanel-haibun" aria-selected="false" data-tool="haibun">枠配分</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-bouraku" aria-controls="tabpanel-bouraku" aria-selected="false" data-tool="bouraku">暴落シナリオ</button>
+  </div>
+
+  <section class="tab-panel" id="tabpanel-tsumitate" role="tabpanel" aria-labelledby="tab-btn-tsumitate" data-tool="tsumitate">
+    <p class="tab-panel-intro">毎月の積立額・想定利回り・積立年数から、将来の資産額を試算します。新NISAのつみたて投資枠やiDeCoの計画づくりにご活用ください。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="tsumitate-initial">初期投資額 <span class="unit">円</span></label>
+<input id="tsumitate-initial" min="0" step="10000" type="number" value="500000"/>
+</div>
+<div class="field">
+<label for="tsumitate-monthly">毎月の積立額 <span class="unit">円</span></label>
+<input id="tsumitate-monthly" min="0" step="1000" type="number" value="30000"/>
+</div>
+<div class="field">
+<label for="tsumitate-fundSelect">実際の投資信託から選ぶ（任意）</label>
+<select id="tsumitate-fundSelect">
+<option value="">選択しない（自分で利回りを入力）</option>
+</select>
+<p class="field-hint" id="tsumitate-fundHint">代表的なインデックスファンドを選ぶと、信託報酬を差し引いた想定利回りの目安を自動入力します（あくまで参考値です）。</p>
+</div>
+<div class="field">
+<label for="tsumitate-rate">想定利回り（年率） <span class="unit" id="tsumitate-rateOut">5.0 %</span></label>
+<input id="tsumitate-rate" max="12" min="0" step="0.1" type="range" value="5"/>
+</div>
+<div class="field">
+<label for="tsumitate-years">積立期間 <span class="unit" id="tsumitate-yearsOut">20 年</span></label>
+<input id="tsumitate-years" max="40" min="1" step="1" type="range" value="20"/>
+</div>
+</div>
+<div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">将来の資産評価額</div>
+<div class="value" id="tsumitate-result-total">-</div>
+</div>
+<div class="result-card">
+<div class="label">積立元本（累計）</div>
+<div class="value" id="tsumitate-result-principal">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">運用益</div>
+<div class="value" id="tsumitate-result-profit">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="tsumitate-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
+<span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
+</div>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>複利計算の考え方</h2>
+<p>積立投資では、運用で得た利益をさらに投資に回すことで「利益が利益を生む」複利効果が働きます。同じ利回りでも、積立期間が長いほど元本に対する運用益の割合が大きくなる傾向があります。本シミュレーターは毎月の積立額を月複利で運用したと仮定して計算しています。</p>
+<h3>注意点</h3>
+<p>実際の運用では相場変動により資産額が上下し、常に一定の利回りで増え続けるわけではありません。また本試算は運用益への課税を考慮していません（NISA口座は非課税、課税口座は運用益に約20％の税金がかかります）。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>想定利回りは何％にすればいいですか？</dt>
+<dd>過去の実績（例えば全世界株式や米国株式のインデックスの長期平均）を参考にする方が多いですが、将来の利回りを保証するものではありません。楽観的なケースだけでなく、利回りを2〜3％下げた場合も試算し、幅を持って計画を立てることをおすすめします。</dd>
+</div>
+<div class="faq-item">
+<dt>目標金額から逆算して毎月いくら積み立てればいいか知りたい場合は？</dt>
+<dd>「<a href="nisa-hub.html?tool=hitsuyou">必要積立額シミュレーター</a>」で、目標金額・積立期間・想定利回りから毎月の必要積立額を逆算できます。</dd>
+</div>
+<div class="faq-item">
+<dt>一括投資と積立投資、どちらが有利ですか？</dt>
+<dd>相場が右肩上がりの局面では一括投資が有利になりやすい一方、投資開始直後に下落した場合は積立（時間分散）の方が平均購入単価を抑えられます。値動きパターン別の違いは「<a href="nisa-hub.html?tool=ikkatsu">一括投資 vs 積立投資（時間分散）比較シミュレーター</a>」で確認できます。</dd>
+</div>
+<div class="faq-item">
+<dt>「実際の投資信託から選ぶ」は何のための機能ですか？</dt>
+<dd>eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定利回りの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、将来の運用成果や元本を保証するものではありません。特定の金融商品の勧誘・投資助言を目的としたものではなく、投資に関する最終判断はご自身の責任で行ってください。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-hitsuyou" role="tabpanel" aria-labelledby="tab-btn-hitsuyou" data-tool="hitsuyou" hidden>
+    <p class="tab-panel-intro">「いつまでに、いくら貯めたいか」という目標から、毎月の必要積立額を逆算します。老後資金・教育資金・住宅資金など目標のある貯蓄計画にご活用ください。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="hitsuyou-target">目標金額 <span class="unit">円</span></label>
+<input id="hitsuyou-target" min="0" step="100000" type="number" value="20000000"/>
+</div>
+<div class="field">
+<label for="hitsuyou-initial">現在の資産額 <span class="unit">円</span></label>
+<input id="hitsuyou-initial" min="0" step="10000" type="number" value="1000000"/>
+</div>
+<div class="field">
+<label for="hitsuyou-rate">想定利回り（年率） <span class="unit" id="hitsuyou-rateOut">5.0 %</span></label>
+<input id="hitsuyou-rate" max="12" min="0" step="0.1" type="range" value="5"/>
+</div>
+<div class="field">
+<label for="hitsuyou-years">積立期間 <span class="unit" id="hitsuyou-yearsOut">25 年</span></label>
+<input id="hitsuyou-years" max="40" min="1" step="1" type="range" value="25"/>
+</div>
+</div>
+<div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">必要な毎月積立額</div>
+<div class="value" id="hitsuyou-result-monthly">-</div>
+</div>
+<div class="result-card">
+<div class="label">積立元本（累計）</div>
+<div class="value" id="hitsuyou-result-principal">-</div>
+</div>
+<div class="result-card">
+<div class="label">運用益（想定）</div>
+<div class="value" id="hitsuyou-result-profit">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="hitsuyou-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
+<span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
+</div>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>目標から逆算するメリット</h2>
+<p>「毎月いくら積み立てられるか」から考えると目標が曖昧になりがちですが、「いつまでにいくら必要か」から逆算すると、毎月の積立額という具体的な行動目標に落とし込めます。想定利回りを保守的（3%前後）と楽観的（7%前後）の両方で試算し、必要積立額に幅を持たせておくと計画が崩れにくくなります。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>逆算した毎月の積立額が家計に対して多すぎる場合はどうすればいいですか？</dt>
+<dd>目標金額・目標時期・想定利回りのいずれかを見直すことで、必要積立額は変わります。特に目標時期を数年延ばすだけでも、複利効果により必要積立額が大きく下がるケースがあります。「<a href="nisa-hub.html?tool=tsumitate">積立複利シミュレーター</a>」で、実際に無理なく続けられる積立額から将来の資産額を試算してみるのも一つの方法です。</dd>
+</div>
+<div class="faq-item">
+<dt>教育資金・老後資金など、目的別に試算する方法はありますか？</dt>
+<dd>教育資金は進路パターン別の目安額から逆算できる「<a href="kyouiku-hub.html?tool=kyouiku">教育資金シミュレーター</a>」、老後資金はリタイア後の生活費から必要資産額を試算する「<a href="fire-hub.html?tool=fire">セミリタイア（FIRE）達成シミュレーター</a>」もあわせてご活用ください。</dd>
+</div>
+<div class="faq-item">
+<dt>想定利回りをどのくらいに設定すればよいですか？</dt>
+<dd>将来の利回りを保証するものではないため、単一の数値で計画を立てるのではなく、複数の利回りパターンで必要積立額を比較し、達成が難しそうな場合は目標や期間の見直しも検討することをおすすめします。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、将来の運用成果や元本を保証するものではありません。特定の金融商品の勧誘・投資助言を目的としたものではなく、投資に関する最終判断はご自身の責任で行ってください。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-ikkatsu" role="tabpanel" aria-labelledby="tab-btn-ikkatsu" data-tool="ikkatsu" hidden>
+    <p class="tab-panel-intro">まとまった投資資金をすぐに全額投資する「一括投資」と、同じ金額を複数回に分けて時間をずらしながら投資する「時間分散（ドルコスト平均法）」を比較します。価格が一定ペースで右肩上がりのケースに加え、投資を始めた直後に一時的な下落・上昇を経験するケースも切り替えて試算できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="ikkatsu-totalAmount">投資に回せる合計金額 <span class="unit">円</span></label>
+<input id="ikkatsu-totalAmount" min="0" step="100000" type="number" value="3000000"/>
+</div>
+<div class="field">
+<label for="ikkatsu-splitMonths">分割投資の回数</label>
+<select id="ikkatsu-splitMonths">
+<option value="6">6ヶ月（毎月同額を6回に分けて投資）</option>
+<option selected="" value="12">12ヶ月（毎月同額を12回に分けて投資）</option>
+<option value="24">24ヶ月（毎月同額を24回に分けて投資）</option>
+<option value="36">36ヶ月（毎月同額を36回に分けて投資）</option>
+</select>
+<p class="field-hint">合計金額を毎月同額に分け、この期間で投資し終えるものとして計算します（時間分散＝ドルコスト平均法）。</p>
+</div>
+<div class="field">
+<label for="ikkatsu-years">保有期間 <span class="unit" id="ikkatsu-yearsOut">10 年</span></label>
+<input id="ikkatsu-years" max="30" min="3" step="1" type="range" value="10"/>
+</div>
+<div class="field">
+<label for="ikkatsu-fundSelect">実際の投資信託から選ぶ（任意）</label>
+<select id="ikkatsu-fundSelect">
+<option value="">選択しない（自分で利回りを入力）</option>
+</select>
+<p class="field-hint" id="ikkatsu-fundHint">代表的なインデックスファンドを選ぶと、信託報酬を差し引いた想定利回りの目安を自動入力します（あくまで参考値です）。</p>
+</div>
+<div class="field">
+<label for="ikkatsu-annualRate">想定年率トレンドリターン <span class="unit" id="ikkatsu-annualRateOut">5.0 %</span></label>
+<input id="ikkatsu-annualRate" max="10" min="0" step="0.1" type="range" value="5.0"/>
+<p class="field-hint">長期の株式市場を想定した年率の目安です。以下の価格変動パターンは、このトレンドに投資直後だけ一時的な上下動を重ねたものとして計算します。</p>
+</div>
+<div class="field">
+<label for="ikkatsu-pattern">投資開始直後の価格変動パターン</label>
+<select id="ikkatsu-pattern">
+<option selected="" value="flat">変動なし（トレンド通りに一定ペースで上昇）</option>
+<option value="dip">投資開始直後に一時的な下落（下落→回復）</option>
+<option value="peak">投資開始直後に一時的な上昇（高値づかみ→反落）</option>
+</select>
+<p class="field-hint">「変動なし」では一括投資が有利になりやすく、「下落→回復」では時間分散が安く買い付けられる効果を、「上昇→反落」では時間分散が高値づかみを避けられる効果を確認できます。</p>
+</div>
+<div id="ikkatsu-shockFields">
+<div class="field">
+<label for="ikkatsu-shockPct"><span id="ikkatsu-shockPctLabel">下落率</span> <span class="unit" id="ikkatsu-shockPctOut">20 %</span></label>
+<input id="ikkatsu-shockPct" max="50" min="0" step="1" type="range" value="20"/>
+</div>
+<div class="field">
+<label for="ikkatsu-shockMonths">変動が収まるまでの期間 <span class="unit" id="ikkatsu-shockMonthsOut">6 ヶ月</span></label>
+<input id="ikkatsu-shockMonths" max="24" min="1" step="1" type="range" value="6"/>
+</div>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="ikkatsu-verdict">-</span>
+<span class="sub" id="ikkatsu-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">投資元本（合計）</div>
+<div class="value" id="ikkatsu-result-principal">-</div>
+</div>
+<div class="result-card">
+<div class="label">一括投資：評価額</div>
+<div class="value" id="ikkatsu-result-lump">-</div>
+</div>
+<div class="result-card">
+<div class="label">分割投資（時間分散）：評価額</div>
+<div class="value" id="ikkatsu-result-dca">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">評価額の差額</div>
+<div class="value" id="ikkatsu-result-diff">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="ikkatsu-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>一括投資 評価額</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>分割投資（時間分散） 評価額</span>
+<span><span class="legend-dot" style="background:#7a8899"></span>投資元本（合計、参考線）</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>項目</th><th>一括投資</th><th>分割投資</th></tr>
+</thead>
+<tbody id="ikkatsu-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>一括投資と時間分散、どちらが有利か</h2>
+<p>「まとまった資金ができたとき、一度に全額投資するべきか、それとも数ヶ月〜数年かけて少しずつ投資するべきか」は、投資を始める際によく迷うテーマです。価格が長期的に右肩上がりで推移するのであれば、資金をできるだけ早く市場に投じたほうが複利で増える期間が長くなるため、一括投資のほうが期待値としては有利になりやすいというのが一般的な考え方です。一方で、投資を始めた直後にたまたま大きな下落を経験してしまうと、一括投資は下落の影響をそのまま全額分受けてしまいますが、時間分散（ドルコスト平均法）であれば下落局面でより多くの口数を安く買い付けられるため、その後の回復局面で有利に働くことがあります。本シミュレーターは、どちらが「常に正しい」と断定するものではなく、想定する値動きのパターンによって結果がどう変わるかを、入力した条件に基づく機械的な試算として確認していただくためのツールです。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>結局、一括投資と時間分散のどちらを選べばよいですか？</dt>
+<dd>過去の株式市場の長期データを対象にした研究では、市場が右肩上がりで推移する期間が多いことを背景に、一括投資のほうが期待値としては上回る傾向が示されることが多いとされています。ただし、これは「将来もその通りになる」ことを保証するものではありません。時間分散には、投資直後の急落による大きな含み損を避けやすくなる（精神的に続けやすくなる）という、金額の期待値だけでは測れないメリットもあります。本シミュレーターの結果はあくまで入力条件に基づく試算であり、どちらを選ぶべきかを助言するものではありません。</dd>
+</div>
+<div class="faq-item">
+<dt>本シミュレーターの「価格変動パターン」はどのように計算していますか？</dt>
+<dd>想定年率トレンドリターンによる複利の上昇線をベースに、投資開始直後の指定した期間だけ、価格指数がV字型に下落（または上昇）して元のトレンド線に戻ってくる、という単純化したモデルで試算しています。実際の相場は不規則に変動するため、あくまで「時間分散の効果が出やすい局面・出にくい局面」を理解するための単純化されたモデルである点にご留意ください。</dd>
+</div>
+<div class="faq-item">
+<dt>NISA口座で一括投資する場合、年間投資枠の上限に注意する必要はありますか？</dt>
+<dd>はい。新NISAの年間投資枠は、つみたて投資枠が120万円、成長投資枠が240万円が上限です。一括投資したい金額がこれらの上限を超える場合は、1年で使い切れない分を翌年以降に繰り越して投資することになります。新NISAの生涯投資枠の使い切りペースについては「NISA生涯枠」シミュレーターもあわせてご参照ください。</dd>
+</div>
+<div class="faq-item">
+<dt>「実際の投資信託から選ぶ」は何のための機能ですか？</dt>
+<dd>eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定年率トレンドリターンの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、将来の運用成果や元本を保証するものではありません。価格変動パターンは想定年率トレンドリターンに単純化したV字型の変動を重ねたモデルであり、実際の相場の不規則な値動きや売買手数料・税金は考慮していません。特定の金融商品の勧誘・投資助言を目的としたものではなく、投資に関する最終判断はご自身の責任で行ってください。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-shintaku" role="tabpanel" aria-labelledby="tab-btn-shintaku" data-tool="shintaku" hidden>
+    <p class="tab-panel-intro">信託報酬（運用管理費用）が異なる2つのファンドを、同じ積立額・同じ想定利回り（信託報酬控除前）で積み立てた場合の将来の資産額を比較します。一見小さなコスト差が、長期の複利運用でどれだけの金額差になるかを確認できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="shintaku-initial">初期投資額 <span class="unit">円</span></label>
+<input id="shintaku-initial" min="0" step="10000" type="number" value="0"/>
+</div>
+<div class="field">
+<label for="shintaku-monthly">毎月の積立額 <span class="unit">円</span></label>
+<input id="shintaku-monthly" min="0" step="1000" type="number" value="30000"/>
+</div>
+<div class="field">
+<label for="shintaku-years">積立期間 <span class="unit" id="shintaku-yearsOut">30 年</span></label>
+<input id="shintaku-years" max="40" min="1" step="1" type="range" value="30"/>
+</div>
+<div class="field">
+<label for="shintaku-grossRate">想定利回り（信託報酬控除前・グロス） <span class="unit" id="shintaku-grossRateOut">5.0 %</span></label>
+<input id="shintaku-grossRate" max="10" min="0" step="0.1" type="range" value="5.0"/>
+<p class="field-hint">同じ市場・同じ指数に連動する商品であれば、信託報酬控除前のグロスの運用成果はほぼ同じという前提で試算します。</p>
+</div>
+<div class="field">
+<label for="shintaku-fundSelectA">ファンドAを実際の投資信託から選ぶ（任意）</label>
+<select id="shintaku-fundSelectA">
+<option value="">選択しない（自分で信託報酬を入力）</option>
+</select>
+</div>
+<div class="field">
+<label for="shintaku-feeA">ファンドAの信託報酬（年率） <span class="unit" id="shintaku-feeAOut">0.20 %</span></label>
+<input id="shintaku-feeA" max="3" min="0" step="0.01" type="range" value="0.20"/>
+<p class="field-hint" id="shintaku-feeAHint">低コストのインデックスファンドは年0.1〜0.3%程度のものが多く見られます。目論見書の「運用管理費用（信託報酬）」欄で確認できます。</p>
+</div>
+<div class="field">
+<label for="shintaku-fundSelectB">ファンドBを実際の投資信託から選ぶ（任意）</label>
+<select id="shintaku-fundSelectB">
+<option value="">選択しない（自分で信託報酬を入力）</option>
+</select>
+</div>
+<div class="field">
+<label for="shintaku-feeB">ファンドBの信託報酬（年率） <span class="unit" id="shintaku-feeBOut">1.50 %</span></label>
+<input id="shintaku-feeB" max="3" min="0" step="0.01" type="range" value="1.50"/>
+<p class="field-hint" id="shintaku-feeBHint">アクティブファンドや旧型の商品では信託報酬が年1%台後半〜2%台になっているケースもあります。実際の商品の数値に置き換えて比較してください。</p>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="shintaku-verdict">-</span>
+<span class="sub" id="shintaku-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">積立元本（累計）</div>
+<div class="value" id="shintaku-result-principal">-</div>
+</div>
+<div class="result-card">
+<div class="label" id="shintaku-result-a-label">ファンドA：資産評価額</div>
+<div class="value" id="shintaku-result-a">-</div>
+</div>
+<div class="result-card">
+<div class="label" id="shintaku-result-b-label">ファンドB：資産評価額</div>
+<div class="value" id="shintaku-result-b">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">コストによる資産差額</div>
+<div class="value" id="shintaku-result-diff">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="shintaku-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span><span id="shintaku-legend-a">ファンドA 評価額</span></span>
+<span><span class="legend-dot" style="background:#d98e04"></span><span id="shintaku-legend-b">ファンドB 評価額</span></span>
+<span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>項目</th><th id="shintaku-thead-a">ファンドA</th><th id="shintaku-thead-b">ファンドB</th></tr>
+</thead>
+<tbody id="shintaku-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>信託報酬はなぜ運用成果に大きく影響するのか</h2>
+<p>信託報酬（運用管理費用）は、投資信託を保有している間、毎日の基準価額から自動的に差し引かれるコストです。購入時手数料のように一度だけ支払うものではなく、保有し続ける限り、資産残高に対して毎年一定の割合がかかり続けます。そのため信託報酬が高い商品ほど「複利で増えるはずだった部分」が毎年少しずつ削られ、積立期間が長くなるほどその差が雪だるま式に拡大していきます。本シミュレーターは、信託報酬控除前の想定利回り（グロス）が同じである2つのファンドを比較することで、コストの差だけがどれだけ最終的な資産額に影響するかを試算します。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>信託報酬が低いファンドを選べば必ず得をしますか？</dt>
+<dd>同じ指数（例：同じ株価指数）に連動するインデックスファンドを比較する場合は、信託報酬が低いほど手元に残る運用成果は大きくなる傾向があります。ただし、アクティブファンドのように運用方針そのものが異なる商品を比較する場合は、信託報酬の高さが必ずしも不利とは限らず、運用成果（グロスの利回り）自体に差が出ることもあります。本シミュレーターは「グロスの利回りが同じ場合」を前提にした試算である点にご留意ください。</dd>
+</div>
+<div class="faq-item">
+<dt>信託報酬以外にかかるコストはありますか？</dt>
+<dd>購入時手数料（ノーロード商品は無料）、信託財産留保額（解約時に差し引かれる商品があります）、また信託報酬に含まれない「その他費用」（監査費用や売買委託手数料など）が実質的にかかる商品もあります。より正確に比較したい場合は、目論見書や運用報告書に記載されている「実質コスト」もあわせて確認することをおすすめします。</dd>
+</div>
+<div class="faq-item">
+<dt>NISA口座でも信託報酬はかかりますか？</dt>
+<dd>はい、NISA口座（非課税口座）で保有していても信託報酬は通常どおりかかります。NISAが非課税にするのは運用益に対する税金（約20%）であり、信託報酬などの運用コストとは別のものです。</dd>
+</div>
+<div class="faq-item">
+<dt>「実際の投資信託から選ぶ」は何のための機能ですか？</dt>
+<dd>eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドをファンドA・ファンドBそれぞれで選ぶと、そのファンドの信託報酬（実質年率）の目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値であり、実際の数値や商品改定の有無は目論見書・運用会社の公式サイトで必ずご確認ください。自動入力後もスライダーで自由に調整できます。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、将来の運用成果や元本を保証するものではありません。信託報酬控除前の想定利回り（グロス）が2つのファンドで同一であることを前提とした試算であり、購入時手数料・信託財産留保額・実質コスト・運用益への課税は考慮していません。特定の金融商品の勧誘・投資助言を目的としたものではなく、投資に関する最終判断はご自身の責任で行ってください。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-waku" role="tabpanel" aria-labelledby="tab-btn-waku" data-tool="waku" hidden>
+    <p class="tab-panel-intro">つみたて投資枠・成長投資枠それぞれへの毎月の積立額を入力すると、生涯投資枠1,800万円（うち成長投資枠は1,200万円まで）を何年何ヶ月で使い切るか、枠を使い切った後に課税口座へ回る金額とその税額を試算します。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="waku-tsumitate">つみたて投資枠への毎月の積立額 <span class="unit">円</span></label>
+<input id="waku-tsumitate" max="100000" min="0" step="1000" type="number" value="30000"/>
+</div>
+<div class="field">
+<label for="waku-growth">成長投資枠への毎月の積立額 <span class="unit">円</span></label>
+<input id="waku-growth" max="200000" min="0" step="1000" type="number" value="50000"/>
+</div>
+<div class="field">
+<label for="waku-fundSelect">実際の投資信託から選ぶ（任意）</label>
+<select id="waku-fundSelect">
+<option value="">選択しない（自分で利回りを入力）</option>
+</select>
+<p class="field-hint" id="waku-fundHint">代表的なインデックスファンドを選ぶと、信託報酬を差し引いた想定利回りの目安を自動入力します（あくまで参考値です）。</p>
+</div>
+<div class="field">
+<label for="waku-rate">想定利回り（年率） <span class="unit" id="waku-rateOut">5.0 %</span></label>
+<input id="waku-rate" max="8" min="0" step="0.1" type="range" value="5"/>
+</div>
+<div class="field">
+<label for="waku-years">シミュレーション期間 <span class="unit" id="waku-yearsOut">30 年</span></label>
+<input id="waku-years" max="40" min="1" step="1" type="range" value="30"/>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="waku-verdict">-</span>
+<span class="sub" id="waku-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">生涯投資枠（1,800万円）を使い切るまで</div>
+<div class="value" id="waku-result-fill-period">-</div>
+</div>
+<div class="result-card">
+<div class="label">使用したNISA枠</div>
+<div class="value" id="waku-result-nisa-used">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">NISAの非課税メリット（節税額）</div>
+<div class="value" id="waku-result-tax-saved">-</div>
+</div>
+<div class="result-card">
+<div class="label">最終資産合計（NISA＋課税口座・税引後）</div>
+<div class="value" id="waku-result-final-asset">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="waku-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>NISA口座（非課税）評価額</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>課税口座（枠超過分・税引後）評価額</span>
+</div>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>新NISAの生涯投資枠とは</h2>
+<p>2024年からの新NISAでは、生涯にわたって非課税で保有できる上限額（生涯投資枠）が<strong>1,800万円</strong>と定められています。そのうち、個別株やアクティブファンドなども対象にできる<strong>成長投資枠は1,200万円</strong>が上限で、残りはつみたて投資枠（またはつみたて投資枠と成長投資枠の組み合わせ）で埋める形になります。年間の投資枠は、つみたて投資枠が120万円、成長投資枠が240万円までと決まっており、両方をフル活用すると年間360万円まで非課税で積み立てられます。このシミュレーターでは各年の上限を超えない範囲で月次積立を続け、生涯投資枠の残りが当月の積立希望額より少ない最終月だけ、つみたて投資枠・成長投資枠の入力比率に応じて按分して買い付けます。使い切った後の積立分は課税口座に回るものとして、その税金の目安も試算します。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>生涯投資枠を使い切ったら、それ以上は積立できませんか？</dt>
+<dd>NISA口座での非課税の買付はできなくなりますが、通常の課税口座（特定口座・一般口座）であれば引き続き積立投資は可能です。本シミュレーターでは、枠を使い切った後の積立分を課税口座で運用し続けるものとして試算しています。</dd>
+</div>
+<div class="faq-item">
+<dt>NISA口座で売却した場合、枠は復活しますか？</dt>
+<dd>新NISAでは、保有商品を売却すると、その商品の取得価額（簿価）分の枠が翌年以降に復活する仕組みがあります。本シミュレーターは売却を行わず積立を続ける前提のため、枠の復活は考慮していません。</dd>
+</div>
+<div class="faq-item">
+<dt>つみたて投資枠と成長投資枠、どちらを優先して使うべきですか？</dt>
+<dd>成長投資枠は1,200万円という上限があるため、生涯投資枠1,800万円を最大限使い切りたい場合は、つみたて投資枠も並行して活用する必要があります。本シミュレーターで毎月の配分を変えながら、何年で枠を使い切るかを比較してみてください。</dd>
+</div>
+<div class="faq-item">
+<dt>「実際の投資信託から選ぶ」は何のための機能ですか？</dt>
+<dd>eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定利回りの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・税制の変更・元本を保証するものではありません。課税口座の税額は運用益に一律20.315%課税されるものとして簡略化して計算しており、損益通算や年間の取引タイミングによる影響は考慮していません。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-fukkatsu" role="tabpanel" aria-labelledby="tab-btn-fukkatsu" data-tool="fukkatsu" hidden>
+    <p class="tab-panel-intro">新NISAの生涯投資枠は、保有商品を売却すると翌年以降に復活します。ただし復活するのは売却時の評価額（時価）ではなく取得価額（簿価）分だけです。現在の枠の使用状況と、売却する商品の取得価額を入力して、復活後の枠と翌年の投資可能額を確認しましょう。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="fukkatsu-lifetimeUsed">現在の生涯投資枠 使用額（総枠） <span class="unit">円</span></label>
+<input id="fukkatsu-lifetimeUsed" max="18000000" min="0" step="10000" type="number" value="10000000"/>
+</div>
+<div class="field">
+<label for="fukkatsu-growthUsed">うち成長投資枠の使用額 <span class="unit">円</span></label>
+<input id="fukkatsu-growthUsed" max="12000000" min="0" step="10000" type="number" value="6000000"/>
+</div>
+<div class="field">
+<label for="fukkatsu-saleType">売却する商品を購入した枠</label>
+<select id="fukkatsu-saleType">
+<option value="growth">成長投資枠</option>
+<option value="tsumitate">つみたて投資枠</option>
+</select>
+</div>
+<div class="field">
+<label for="fukkatsu-saleCostBasis">売却する商品の取得価額（簿価） <span class="unit">円</span></label>
+<input id="fukkatsu-saleCostBasis" min="0" step="10000" type="number" value="3000000"/>
+</div>
+<div class="field">
+<label for="fukkatsu-saleMarketValue">売却時の評価額（時価・任意） <span class="unit">円</span></label>
+<input id="fukkatsu-saleMarketValue" min="0" step="10000" type="number" value="4000000"/>
+</div>
+</div>
+<div>
+<div class="error-box" id="fukkatsu-errorBox"></div>
+<div class="verdict-banner">
+<span id="fukkatsu-verdict">-</span>
+<span class="sub" id="fukkatsu-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">翌年以降に復活する生涯投資枠</div>
+<div class="value" id="fukkatsu-result-revived-amount">-</div>
+</div>
+<div class="result-card">
+<div class="label">復活後の生涯投資枠 残り</div>
+<div class="value" id="fukkatsu-result-lifetime-remain-after">-</div>
+</div>
+<div class="result-card">
+<div class="label">復活後の成長投資枠 残り</div>
+<div class="value" id="fukkatsu-result-growth-remain-after">-</div>
+</div>
+<div class="result-card">
+<div class="label">翌年に新たに投資できる上限額</div>
+<div class="value" id="fukkatsu-result-next-year-investable">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:200px">
+<canvas height="200" id="fukkatsu-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>成長投資枠 使用額</span>
+<span><span class="legend-dot" style="background:#5fa88f"></span>つみたて投資枠 使用額</span>
+<span><span class="legend-dot" style="background:#e4ece9"></span>残り枠</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>区分</th><th>売却前</th><th>売却後（翌年以降）</th></tr>
+</thead>
+<tbody id="fukkatsu-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>NISA枠の「復活」で誤解しやすいポイント</h2>
+<p>新NISAでは、保有商品を売却するとその商品の<strong>取得価額（簿価）</strong>分だけ、生涯投資枠が翌年以降に復活します。ここで最も誤解されやすいのが、「復活するのは売却時の評価額（時価）ではなく取得価額」という点です。例えば100万円で買った商品が値上がりして150万円で売却できた場合でも、枠に戻るのはあくまで100万円分であり、値上がり益の50万円分は枠に反映されません。逆に80万円に値下がりして売却した場合も、復活するのは取得価額の100万円分です。また、枠が復活するタイミングも即座ではなく、<strong>売却した年の翌年（1月1日以降）</strong>である点に注意が必要です。年内に売却しても、その年の年間投資枠（つみたて投資枠120万円・成長投資枠240万円）を超えて追加投資することはできません。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>売却したその日のうちに、復活した枠で買い直せますか？</dt>
+<dd>いいえ、できません。枠が復活するのは売却した年の翌年からです。同じ年のうちに買い直す場合は、その年にまだ残っている年間投資枠（新規の未使用分）の範囲でのみ購入できます。</dd>
+</div>
+<div class="faq-item">
+<dt>含み損の商品を売却した場合はどうなりますか？</dt>
+<dd>含み損があっても、復活する枠は売却時の評価額ではなく取得価額（簿価）分です。損失が出ていても、投資した金額分の枠がそのまま翌年に戻ってくる点は含み益の場合と同じです。</dd>
+</div>
+<div class="faq-item">
+<dt>成長投資枠で買った商品を売却すれば、成長投資枠の上限（1,200万円）も戻りますか？</dt>
+<dd>はい。成長投資枠で購入した商品を売却した場合、生涯投資枠（総枠1,800万円）だけでなく、成長投資枠専用の上限（1,200万円）についても、取得価額分が翌年以降に復活します。</dd>
+</div>
+<div class="faq-item">
+<dt>翌年、復活した枠をすべて使い切って投資できますか？</dt>
+<dd>翌年の投資額は、復活を含めた生涯投資枠の残りだけでなく、その年の年間投資枠（つみたて投資枠120万円・成長投資枠240万円）の上限にも制限されます。復活額が大きくても、1年で使い切れるとは限りません。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値です。実際の枠管理は証券会社の口座画面や国税庁・金融庁の公表資料でご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-haibun" role="tabpanel" aria-labelledby="tab-btn-haibun" data-tool="haibun" hidden>
+    <p class="tab-panel-intro">毎月の投資予定額（合計）を入力すると、「つみたて投資枠を優先」「成長投資枠を優先」「年間上限比率で按分」「つみたて投資枠のみ」の4つの配分方法について、生涯投資枠1,800万円を使い切るまでの期間・その時点の資産評価額・節税額の目安をまとめて比較できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="haibun-total">毎月の投資予定額（合計） <span class="unit">円</span></label>
+<input id="haibun-total" max="300000" min="0" step="1000" type="number" value="150000"/>
+<p class="field-hint">つみたて投資枠は月10万円（年120万円）、成長投資枠は月20万円（年240万円）が上限です。合計で月30万円を超える分はどの配分でもNISA枠に入りません。</p>
+</div>
+<div class="field">
+<label for="haibun-fundSelect">実際の投資信託から選ぶ（任意）</label>
+<select id="haibun-fundSelect">
+<option value="">選択しない（自分で利回りを入力）</option>
+</select>
+<p class="field-hint" id="haibun-fundHint">代表的なインデックスファンドを選ぶと、信託報酬を差し引いた想定利回りの目安を自動入力します（あくまで参考値です）。</p>
+</div>
+<div class="field">
+<label for="haibun-rate">想定利回り（年率） <span class="unit" id="haibun-rateOut">5.0 %</span></label>
+<input id="haibun-rate" max="8" min="0" step="0.1" type="range" value="5"/>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="haibun-verdict">-</span>
+<span class="sub" id="haibun-verdictSub"></span>
+</div>
+<div class="table-wrap">
+<h2>配分方法ごとの毎月の内訳</h2>
+<table class="data-table data-table--result">
+<thead>
+<tr><th>配分方法</th><th>つみたて投資枠</th><th>成長投資枠</th><th>枠に入らない分（課税口座）</th></tr>
+</thead>
+<tbody id="haibun-split-body"></tbody>
+</table>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="haibun-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>配分方法ごとの資産評価額の推移（50年間、生涯枠を使い切った1年後で打ち切り）</span>
+</div>
+</div>
+</div>
+</div>
+<div class="table-wrap">
+<h2>配分方法の比較</h2>
+<table class="data-table wall-table">
+<thead>
+<tr><th>配分方法</th><th>生涯投資枠を使い切るまで</th><th>その時点の資産評価額</th><th>NISAによる節税額</th><th>使われない成長投資枠</th></tr>
+</thead>
+<tbody id="haibun-compare-body"></tbody>
+</table>
+</div>
+<section class="article-section">
+<h2>つみたて投資枠と成長投資枠、何が違う？</h2>
+<p>新NISAの生涯投資枠1,800万円は「つみたて投資枠（年120万円まで）」と「成長投資枠（年240万円まで、ただし生涯の上限は1,200万円）」の2つで構成されています。単純に「早く枠を使い切りたいから成長投資枠だけに全額入れる」という配分は一見合理的に見えますが、成長投資枠には1,200万円という生涯上限があるため、つみたて投資枠を一切使わないと、残り600万円分の非課税枠が永久に使えないまま残ってしまいます。本ツールはこの落とし穴を含め、代表的な4つの配分方法を横並びで比較できるようにしました。</p>
+<p>また、対象となる商品にも違いがあります。つみたて投資枠は金融庁が定めた基準を満たす投資信託・ETFに限られますが、成長投資枠は上場株式・REIT・投資信託など対象商品の幅が広い（ただし信託期間20年未満の投資信託や高レバレッジ型など一部除外あり）という特徴があります。配分は「非課税枠をどれだけ早く・無駄なく使い切れるか」と「どんな商品に投資したいか」の両方から考える必要があります。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>結局どの配分方法がいちばんお得ですか？</dt>
+<dd>毎月の投資予定額が合計30万円（つみたて10万円＋成長20万円）以内であれば、「つみたて優先」「成長優先」「比率按分」のいずれも最終的に生涯投資枠1,800万円を同じように使い切るため、資産評価額に大きな差は生まれません。差が出やすいのは「つみたて投資枠のみ」を選んだ場合で、成長投資枠1,200万円分の非課税枠を使わないまま積立期間が長期化します。</dd>
+</div>
+<div class="faq-item">
+<dt>成長投資枠だけに全額を入れるとどうなりますか？</dt>
+<dd>成長投資枠には生涯1,200万円という上限があるため、つみたて投資枠を使わずに積み立て続けると、成長投資枠の上限に達した時点でNISA口座への入金が止まり、それ以降の積立分は課税口座に回ります。生涯投資枠1,800万円のうち600万円分は使われないまま残ります（本ツールの「成長優先」で毎月の合計額が20万円以下の場合に、この状態を確認できます）。</dd>
+</div>
+<div class="faq-item">
+<dt>枠を使い切った後はどうすればいいですか？</dt>
+<dd>生涯投資枠を使い切った後は、新たな非課税投資はできません（保有商品を売却すると翌年以降に取得価額分の枠が復活します。詳しくは「NISA枠の売却による復活シミュレーター」をご覧ください）。使い切った後の積立分は課税口座での運用となり、運用益に約20.315%の税金がかかります。</dd>
+</div>
+<div class="faq-item">
+<dt>「実際の投資信託から選ぶ」は何のための機能ですか？</dt>
+<dd>eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定利回りの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果や制度の継続を保証するものではありません。想定利回りは一定と仮定した単純計算であり、実際の運用は市場の変動により結果が異なります。税制・NISA制度は改正される可能性があります。本サイトは特定の金融商品の勧誘・助言を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-bouraku" role="tabpanel" aria-labelledby="tab-btn-bouraku" data-tool="bouraku" hidden>
+    <p class="tab-panel-intro">積立を続けている途中で相場が暴落したとき、「そのまま積立を続ける」「積立を中断して様子を見る」「保有分を売って現金化する（いわゆる狼狽売り）」のどれを選ぶかで、最終的な資産額にどれだけ差が出るかを試算します。3つの戦略とも投資元本（積み立てた金額の合計）はまったく同じで、暴落時の行動の違いだけが結果にどう影響するかを確認できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="bouraku-monthly">毎月の積立額 <span class="unit">円</span></label>
+<input id="bouraku-monthly" min="0" step="1000" type="number" value="30000"/>
+</div>
+<div class="field">
+<label for="bouraku-preYears">暴落が起きるまでの積立期間 <span class="unit" id="bouraku-preYearsOut">5 年</span></label>
+<input id="bouraku-preYears" max="15" min="1" step="1" type="range" value="5"/>
+<p class="field-hint">このシミュレーターでは、まずこの期間だけ3戦略とも同じように積み立てて資産を作ったあと、暴落が発生する設定で試算します。</p>
+</div>
+<div class="field">
+<label for="bouraku-annualRate">想定年率トレンドリターン <span class="unit" id="bouraku-annualRateOut">5.0 %</span></label>
+<input id="bouraku-annualRate" max="10" min="0" step="0.1" type="range" value="5.0"/>
+<p class="field-hint">長期の株式市場を想定した年率の目安です。暴落による下落・回復は、このトレンド線に一時的な変動を重ねたものとして試算します。</p>
+</div>
+<div class="field">
+<label for="bouraku-shockPct">暴落による下落率 <span class="unit" id="bouraku-shockPctOut">30 %</span></label>
+<input id="bouraku-shockPct" max="70" min="10" step="5" type="range" value="30"/>
+</div>
+<div class="field">
+<label for="bouraku-shockMonths">下落してから元の水準まで回復するまでの期間 <span class="unit" id="bouraku-shockMonthsOut">12 ヶ月</span></label>
+<input id="bouraku-shockMonths" max="36" min="3" step="1" type="range" value="12"/>
+<p class="field-hint">下落率が最も大きくなる「底値」は、この期間のちょうど中間点として計算しています（狼狽売りは、まさにこの底値のタイミングで起こるという想定です）。</p>
+</div>
+<div class="field">
+<label for="bouraku-postYears">回復完了後、さらに積立を続ける期間 <span class="unit" id="bouraku-postYearsOut">10 年</span></label>
+<input id="bouraku-postYears" max="15" min="0" step="1" type="range" value="10"/>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="bouraku-verdict">-</span>
+<span class="sub" id="bouraku-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">投資元本（合計・3戦略とも同額）</div>
+<div class="value" id="bouraku-result-principal">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">① 積立を継続：評価額</div>
+<div class="value" id="bouraku-result-continue">-</div>
+</div>
+<div class="result-card">
+<div class="label">② 積立を中断（保有は継続）：評価額</div>
+<div class="value" id="bouraku-result-pause">-</div>
+</div>
+<div class="result-card">
+<div class="label">③ 狼狽売り：評価額</div>
+<div class="value" id="bouraku-result-panic">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="bouraku-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>① 積立を継続</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>② 積立を中断</span>
+<span><span class="legend-dot" style="background:#c0392b"></span>③ 狼狽売り</span>
+<span><span class="legend-dot" style="background:#7a8899"></span>投資元本（参考線）</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>項目</th><th>① 継続</th><th>② 中断</th><th>③ 狼狽売り</th></tr>
+</thead>
+<tbody id="bouraku-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>なぜ「暴落時の行動」でこれほど差が出るのか</h2>
+<p>積立投資（ドルコスト平均法）は、価格が下がった局面ほど同じ金額でより多くの口数を買えるという性質を持っています。相場が暴落している最中に積立を続けられれば、平均的な買付単価を大きく下げることができ、その後の回復局面でより大きな利益につながります。逆に、暴落を見て怖くなり積立を中断したり、保有分を売って現金化（狼狽売り）してしまうと、安く買えるはずだったチャンスを逃すだけでなく、狼狽売りの場合はさらに「それまで保有していた分の値上がり益（回復局面の利益）」まで丸ごと失うことになります。本シミュレーターは、この3つの行動パターンによる差を、同じ投資元本という条件をそろえたうえで機械的に試算するものです。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>暴落中は積立を続けたほうが必ず得なのですか？</dt>
+<dd>本シミュレーターの前提（下落した相場は指定した期間で必ず元の水準まで回復する）のもとでは、一般的に「継続」が最も有利になりやすい結果が出ます。ただし実際の相場では、下落した後さらに長期間低迷が続いたり、以前の水準まで回復しないまま推移する可能性もゼロではありません。本シミュレーターは特定の行動を推奨するものではなく、「回復する前提であれば行動の違いがどれだけの差を生むか」を理解するための試算ツールとしてご利用ください。</dd>
+</div>
+<div class="faq-item">
+<dt>「狼狽売り」はなぜ底値（下落期間のちょうど中間点）で起こる設定なのですか？</dt>
+<dd>実際の暴落局面では、下落し始めた直後よりも、含み損が最も大きく膨らみ精神的に耐えられなくなったタイミング（＝多くの場合は底値に近いタイミング）で売却してしまう投資家が多いとされています。本シミュレーターも、この「一番苦しいときに売ってしまう」という典型的な行動パターンを想定し、下落期間の中間点＝底値付近で売却する設定にしています。</dd>
+</div>
+<div class="faq-item">
+<dt>「積立を中断」と「狼狽売り」の違いは何ですか？</dt>
+<dd>「中断」は暴落が始まった時点で新規の積立だけを止め、それまで保有していた資産は売らずにそのまま保有し続ける想定です。一方「狼狽売り」は、保有資産そのものを底値付近で売却して現金化してしまう想定です。中断は新たに安く買えるチャンスを逃すだけですが、狼狽売りはそれに加えて保有資産の回復局面の値上がり益まで失うため、多くの場合、狼狽売りが最も評価額が低くなります。</dd>
+</div>
+<div class="faq-item">
+<dt>新NISAのつみたて投資枠でも同じことが起こりますか？</dt>
+<dd>はい。新NISAのつみたて投資枠・成長投資枠を使った積立投資でも、暴落時に積立を止めたり売却したりすれば同様の影響が生じます。特にNISA口座で一度売却してしまうと、その年の非課税投資枠のうち簿価（取得価額）分しか翌年以降に復活しない点にも注意が必要です（詳しくは「NISA枠の復活」シミュレーターもあわせてご参照ください）。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、将来の運用成果や元本を保証するものではありません。価格変動は想定年率トレンドリターンに単純化したV字型の下落・回復を重ねたモデルであり、実際の相場の不規則な値動きや、下落後に回復しない・回復に想定以上の時間がかかるケース、売買手数料・税金は考慮していません。特定の金融商品の勧誘・投資助言を目的としたものではなく、投資に関する最終判断はご自身の責任で行ってください。
+  </div>
+  </section>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件と選択中のツールをそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ下部 --></div>
+
+  <section class="article-section hub-related-guides">
+    <h2>あわせて読みたいガイド</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="shin-nisa-hajimekata-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>新NISAの始め方と積立額の決め方完全ガイド｜毎月いくら積み立てるべきか</h3>
+        <p>新NISAの制度（つみたて投資枠・成長投資枠・生涯投資枠1,800万円）をゼロから解説し、「毎月いくら積み立てるべきか」を自分の手取り収入から決める手順を紹…</p>
+      </a>
+      <a class="tool-card" href="nisa-deguchi-senryaku-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>新NISAの出口戦略（取り崩し方）完全ガイド｜いつ・どう売るかの考え方</h3>
+        <p>新NISAは非課税期間が無期限だからこそ「いつ・どう売るか」を自分で決める必要があります。取り崩し方式の選び方、売却した枠が復活するルール、課税口座とどちら…</p>
+      </a>
+      <a class="tool-card" href="nisa-ideco-chigai-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>NISAとiDeCoの違いとは？制度比較と併用の考え方 完全ガイド</h3>
+        <p>NISAとiDeCoはどちらも資産形成の税制優遇制度ですが、税制優遇の仕組み・掛金の上限・引き出し制限は大きく異なります。制度の違いを一覧表で整理し、どちら…</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+<div class="container">
+<span>© 2026 ふやすノート</span>
+<nav>
+<a href="../index.html">トップへ戻る</a>
+<a href="../about.html">運営者情報</a>
+<a href="../privacy.html">プライバシーポリシー</a>
+<a href="../disclosure.html">アフィリエイト・広告表記について</a>
+</nav>
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/fund-data.js"></script>
+<script src="../js/tsumitate.js"></script>
+<script src="../js/hitsuyou.js"></script>
+<script src="../js/ikkatsu-tsumitate.js"></script>
+<script src="../js/shintaku-houshu.js"></script>
+<script src="../js/nisa-waku.js"></script>
+<script src="../js/nisa-fukkatsu.js"></script>
+<script src="../js/nisa-haibun.js"></script>
+<script src="../js/bouraku-tsumitate.js"></script>
+<script src="../js/tabs.js"></script>
+<script src="../js/share.js"></script>
+<script src="../js/nav-toggle.js"></script>
+</body>
+</html>

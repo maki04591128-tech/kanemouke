@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>相続・贈与シミュレーター まとめ | ふやすノート</title>
+<meta name="description" content="相続税シミュレーター・生前贈与vs相続比較まで、相続・贈与に関する2つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/souzoku-hub.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="相続・贈与シミュレーター まとめ | ふやすノート">
+<meta property="og:description" content="相続税シミュレーター・生前贈与vs相続比較まで、相続・贈与に関する2つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/souzoku-hub.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="相続・贈与シミュレーター まとめ | ふやすノート">
+<meta name="twitter:description" content="相続税シミュレーター・生前贈与vs相続比較まで、相続・贈与に関する2つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "基礎控除内なら何もしなくていいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "相続税の申告・納税は原則不要ですが、小規模宅地等の特例や配偶者の税額軽減など「申告することで初めて適用される」特例を使って税額を0円にする場合は、基礎控除を超えていなくても申告が必要になるケースがあります。詳しくは税理士にご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "配偶者の税額軽減はどんな制度ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "配偶者が実際に取得した財産のうち、1億6,000万円と配偶者の法定相続分相当額のいずれか多い金額までは相続税がかからない制度です。多くのケースで配偶者の納税額は0円になりますが、次の相続（二次相続）では配偶者自身の財産と合算されて相続税が発生しやすくなる点に注意が必要です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "不動産はどう評価すればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "土地は路線価（または倍率方式）、建物は固定資産税評価額をもとに評価するのが原則で、時価（市場で売買される価格）とは異なります。本ツールでは相続税評価額をすでに算出済みの金額として遺産総額に含めて入力してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "この試算は正確ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "相続税の基本的な計算構造（基礎控除・速算表・配偶者の税額軽減）に基づく概算です。小規模宅地等の特例、生命保険金・死亡退職金の非課税枠、未成年者控除・障害者控除、2割加算（孫や兄弟姉妹が相続する場合など）は考慮していません。実際の税額はこれらの特例により大きく変わるため、正確な金額は税理士にご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "暦年贈与と相続時精算課税制度、どちらを選べばいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "一概にどちらが有利とは言えず、贈与額・贈与を続ける年数・相続開始までの残り年数によって変わります。相続時精算課税制度は年110万円の基礎控除部分が相続開始直前の贈与でも相続財産に加算されない（暦年贈与は加算対象になりうる）点で有利になりやすい一方、いったん選択すると同じ贈与者・受贈者の組み合わせでは暦年贈与に戻せません。本ツールで具体的な条件を入力し、3パターンの負担額を比較した上で判断することをおすすめします。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "生前贈与加算（持ち戻し）の7年ルールは正確に反映されていますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "2024年の税制改正により、暦年贈与を相続財産に加算する期間は「3年以内」から「7年以内」に延長されましたが、実際に7年分がすべて適用されるのは2031年以降に発生する相続からで、それより前の相続では経過措置により加算対象期間が短くなります。本ツールはこの複雑な年ごとの経過措置スケジュールを正確には反映せず、「3年」「7年」のどちらかを選んで試算する簡略化モデルです。実際の相続開始時期における正確な加算対象期間は税理士・国税庁の情報でご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "相続時精算課税制度の特別控除2,500万円とは何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "相続時精算課税制度を選んだ贈与者・受贈者の組み合わせでは、年110万円の基礎控除を超えた部分について、累計2,500万円までは贈与税がかかりません（特別控除）。2,500万円を使い切った後の超過分には一律20%の贈与税がかかりますが、この贈与税は相続時に相続税額から全額控除され、控除しきれない分は還付されます。基礎控除を除く贈与財産は贈与時の価額で相続財産に加算される点が、暦年贈与の生前贈与加算（一定期間内の贈与のみが対象）との大きな違いです。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "贈与税額控除とは何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "生前贈与加算（暦年贈与）や相続時精算課税制度により相続財産に持ち戻された・加算された贈与財産は、贈与時点ですでに贈与税が課されています。これに相続税をそのまま課すと二重課税になってしまうため、対応する贈与税額は最終的な相続税額から控除されます。本ツールでも両方式についてこの贈与税額控除を反映して試算しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "この試算は正確ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "暦年贈与・相続時精算課税制度それぞれの基礎控除・速算表・税率、相続税の基礎控除・速算表・配偶者の税額軽減という基本的な計算構造に基づく概算です。実際の遺産分割は法定相続分どおりに行われるものと仮定しており、教育資金・結婚子育て資金の一括贈与の非課税特例、小規模宅地等の特例、生命保険金の非課税枠、贈与財産の値上がり益（相続時精算課税では贈与時点の低い価額のまま固定できる場合がある効果）などは考慮していません。正確な税額・対策の要否は税理士にご確認ください。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+<div class="container">
+<a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+<button aria-controls="site-nav" aria-expanded="false" class="nav-toggle" type="button">
+<span aria-hidden="true" class="icon"></span>
+<span>メニュー</span>
+</button>
+<nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+</div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>相続・贈与シミュレーター まとめ</h1>
+    <p>遺産総額と家族構成から相続税の目安を試算し、生前贈与と相続のどちらが有利かを比較する、相続・贈与に関する2つのシミュレーターを1ページにまとめました。上のタブを切り替えるだけで、目的に合わせて使い分けられます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ上部 --></div>
+
+  <div class="hub-tabs" id="hub-tabs" role="tablist" aria-label="ツールを選択">
+        <button type="button" class="hub-tab" role="tab" id="tab-btn-souzokuzei" aria-controls="tabpanel-souzokuzei" aria-selected="true" data-tool="souzokuzei">相続税</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-zouyo" aria-controls="tabpanel-zouyo" aria-selected="false" data-tool="zouyo">生前贈与vs相続</button>
+  </div>
+
+  <section class="tab-panel" id="tabpanel-souzokuzei" role="tabpanel" aria-labelledby="tab-btn-souzokuzei" data-tool="souzokuzei">
+    <p class="tab-panel-intro">相続税は、遺産総額から「基礎控除額（3,000万円＋600万円×法定相続人の数）」を差し引いた「課税遺産総額」に対してかかります。基礎控除の範囲内であれば相続税はかかりません。配偶者には「配偶者の税額軽減」という大きな非課税枠もあります。遺産総額と相続人の構成を入力するだけで、相続税の総額と実際の納税額の目安を試算できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="souzokuzei-estateTotal">遺産総額（課税価格の合計額） <span class="unit">万円</span></label>
+<input id="souzokuzei-estateTotal" max="500000" min="0" step="100" type="number" value="6000"/>
+<p class="field-hint">預貯金・不動産（相続税評価額）・有価証券などの合計から、非課税財産（お墓など）や債務・葬式費用を差し引いた後のおおよその金額です。</p>
+</div>
+<div class="field">
+<label for="souzokuzei-hasSpouse">配偶者の有無</label>
+<select id="souzokuzei-hasSpouse">
+<option selected="" value="yes">いる</option>
+<option value="no">いない</option>
+</select>
+</div>
+<div class="field">
+<label for="souzokuzei-childCount">子の人数 <span class="unit">人</span></label>
+<input id="souzokuzei-childCount" max="10" min="0" step="1" type="number" value="2"/>
+<p class="field-hint">本ツールは「配偶者＋子（第1順位）」が相続人となるケースを想定しています。子がおらず父母・兄弟姉妹のみが相続人になるケース（第2・第3順位）は対象外です。</p>
+</div>
+<div class="field" id="souzokuzei-spouseShareRow">
+<label for="souzokuzei-spouseSharePct">配偶者の遺産取得割合（実際の分割割合） <span class="unit" id="souzokuzei-spouseSharePctOut">50 %</span></label>
+<input id="souzokuzei-spouseSharePct" max="100" min="0" step="5" type="range" value="50"/>
+<p class="field-hint">法定相続分どおりに分ける場合は50%です。遺産分割協議で割合を変える場合はスライダーで調整してください（子の取得分は残りを均等に按分するものとして試算します）。</p>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="souzokuzei-verdict">-</span>
+<span class="sub" id="souzokuzei-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">家族全体の納税額合計</div>
+<div class="value" id="souzokuzei-result-family-payable">-</div>
+</div>
+<div class="result-card">
+<div class="label">相続税の総額（速算表ベース）</div>
+<div class="value" id="souzokuzei-result-total-tax">-</div>
+</div>
+<div class="result-card">
+<div class="label">基礎控除額</div>
+<div class="value" id="souzokuzei-result-basic-deduction">-</div>
+</div>
+<div class="result-card">
+<div class="label">課税遺産総額</div>
+<div class="value" id="souzokuzei-result-taxable-estate">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="souzokuzei-growthChart"></canvas>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>区分</th><th>金額</th></tr>
+</thead>
+<tbody id="souzokuzei-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>相続税はどう計算される？</h2>
+<p>相続税は、まず遺産総額から「基礎控除額＝3,000万円＋600万円×法定相続人の数」を差し引いた「課税遺産総額」を求めます。次に、課税遺産総額を各法定相続人が法定相続分どおりに取得したと仮定して、それぞれの取得金額に相続税の速算表（10%〜55%の8段階の超過累進税率）を当てはめて計算した税額を合計したものが「相続税の総額」です。最後に、相続税の総額を実際の遺産の取得割合に応じて按分し、配偶者には「配偶者の税額軽減」（取得した財産のうち1億6,000万円と配偶者の法定相続分相当額のいずれか多い金額までは非課税）を適用して、各人が実際に納める税額を求めます。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>基礎控除内なら何もしなくていいですか？</dt>
+<dd>相続税の申告・納税は原則不要ですが、小規模宅地等の特例や配偶者の税額軽減など「申告することで初めて適用される」特例を使って税額を0円にする場合は、基礎控除を超えていなくても申告が必要になるケースがあります。詳しくは税理士にご確認ください。</dd>
+</div>
+<div class="faq-item">
+<dt>配偶者の税額軽減はどんな制度ですか？</dt>
+<dd>配偶者が実際に取得した財産のうち、1億6,000万円と配偶者の法定相続分相当額のいずれか多い金額までは相続税がかからない制度です。多くのケースで配偶者の納税額は0円になりますが、次の相続（二次相続）では配偶者自身の財産と合算されて相続税が発生しやすくなる点に注意が必要です。</dd>
+</div>
+<div class="faq-item">
+<dt>不動産はどう評価すればいいですか？</dt>
+<dd>土地は路線価（または倍率方式）、建物は固定資産税評価額をもとに評価するのが原則で、時価（市場で売買される価格）とは異なります。本ツールでは相続税評価額をすでに算出済みの金額として遺産総額に含めて入力してください。</dd>
+</div>
+<div class="faq-item">
+<dt>この試算は正確ですか？</dt>
+<dd>相続税の基本的な計算構造（基礎控除・速算表・配偶者の税額軽減）に基づく概算です。小規模宅地等の特例、生命保険金・死亡退職金の非課税枠、未成年者控除・障害者控除、2割加算（孫や兄弟姉妹が相続する場合など）は考慮していません。実際の税額はこれらの特例により大きく変わるため、正確な金額は税理士にご確認ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の相続税額を保証するものではありません。相続財産の評価や各種特例の適用可否を含め、正確な税額は税理士等の専門家にご確認ください。本サイトは特定の商品・サービスの勧誘を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-zouyo" role="tabpanel" aria-labelledby="tab-btn-zouyo" data-tool="zouyo" hidden>
+    <p class="tab-panel-intro">相続財産の一部を子や孫に生前贈与する場合と、何もせずそのまま相続する場合とで、家族全体の負担額（贈与税＋相続税）にどれだけ差が出るかを試算します。生前贈与は「暦年贈与」と「相続時精算課税制度」のどちらを選ぶかでも結果が変わるため、「①生前贈与なし（相続のみ）」「②暦年贈与」「③相続時精算課税制度」の3パターンを同じ条件で一度に比較できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="zouyo-estateTotal">相続財産の総額（生前贈与を行わなかった場合の想定額） <span class="unit">万円</span></label>
+<input id="zouyo-estateTotal" max="500000" min="0" step="100" type="number" value="10000"/>
+</div>
+<div class="field">
+<label for="zouyo-hasSpouse">配偶者の有無</label>
+<select id="zouyo-hasSpouse">
+<option selected="" value="yes">いる</option>
+<option value="no">いない</option>
+</select>
+</div>
+<div class="field">
+<label for="zouyo-childCount">子の人数 <span class="unit">人</span></label>
+<input id="zouyo-childCount" max="10" min="0" step="1" type="number" value="2"/>
+<p class="field-hint">本ツールは「配偶者＋子（第1順位）」が相続人となるケースを想定しています。実際の遺産分割は法定相続分どおりに行われるものと仮定して試算します（配偶者の税額軽減により配偶者の実質負担は常に0円になります）。</p>
+</div>
+<div class="field">
+<label for="zouyo-giftRecipients">生前贈与の受贈者数（子・孫など） <span class="unit">人</span></label>
+<input id="zouyo-giftRecipients" max="10" min="0" step="1" type="number" value="2"/>
+<p class="field-hint">直系尊属から18歳以上の子・孫への贈与（特例贈与財産）を想定しています。暦年贈与・相続時精算課税制度のどちらのシナリオでも同じ人数・贈与額を用います。</p>
+</div>
+<div class="field">
+<label for="zouyo-annualGift">受贈者1人あたりの年間贈与額 <span class="unit">万円</span></label>
+<input id="zouyo-annualGift" max="5000" min="0" step="10" type="number" value="110"/>
+<p class="field-hint">暦年贈与・相続時精算課税制度とも、基礎控除は受贈者1人あたり年間110万円です。</p>
+</div>
+<div class="field">
+<label for="zouyo-giftYears">生前贈与を続ける年数 <span class="unit">年</span></label>
+<input id="zouyo-giftYears" max="50" min="0" step="1" type="number" value="10"/>
+</div>
+<div class="field">
+<label for="zouyo-yearsUntilInheritance">相続開始（想定）までの残り年数 <span class="unit">年</span></label>
+<input id="zouyo-yearsUntilInheritance" max="60" min="0" step="1" type="number" value="15"/>
+<p class="field-hint">生前贈与を始めてから実際に相続が発生するまでの年数です。生前贈与を行う年数と同じか、それより長い値を入力してください。</p>
+</div>
+<div class="field">
+<label for="zouyo-lookbackPeriod">暦年贈与の生前贈与加算（持ち戻し）対象期間</label>
+<select id="zouyo-lookbackPeriod">
+<option selected="" value="7">7年（2031年以降の相続に適用される期間）</option>
+<option value="3">3年（2024年の税制改正前からのルール）</option>
+</select>
+<p class="field-hint">2024年の税制改正で加算対象期間は「3年以内」から「7年以内」に延長されましたが、実際に7年分が適用されるのは2031年以降の相続からで、それより前の相続では加算対象期間が短くなる経過措置があります。本ツールは年ごとの正確な経過措置スケジュールは反映せず、「3年」「7年」のいずれかを選ぶ簡略化モデルです。相続時精算課税制度はこの設定に関わらず、基礎控除を超える贈与額が常に相続財産に加算されます。</p>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="zouyo-verdict">-</span>
+<span class="sub" id="zouyo-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">①生前贈与なし（相続のみ）</div>
+<div class="value" id="zouyo-result-scenario-a-total">-</div>
+</div>
+<div class="result-card">
+<div class="label">②暦年贈与（贈与税＋相続税）</div>
+<div class="value" id="zouyo-result-scenario-b-total">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">③相続時精算課税制度（贈与税＋相続税）</div>
+<div class="value" id="zouyo-result-scenario-c-total">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="zouyo-growthChart"></canvas>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>区分</th><th>金額</th></tr>
+</thead>
+<tbody id="zouyo-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>生前贈与なし・暦年贈与・相続時精算課税制度、何が違う？</h2>
+<p>生前贈与をせずそのまま相続すると、相続財産の総額に応じた相続税がかかります。一方、生きている間に少しずつ財産を移転する生前贈与には「暦年贈与」と「相続時精算課税制度」の2つの方式があり、どちらを選ぶかで将来の負担額が変わります。</p>
+<p><strong>暦年贈与</strong>は、受贈者1人あたり年間110万円までは贈与税がかからない基礎控除を毎年使える方式です。ただし、相続開始前の一定期間内（2031年以降は7年以内、経過措置中はそれより短い期間）に行われた贈与は「生前贈与加算」として相続財産に加算し直され、結局は相続税の対象に戻ってしまいます。</p>
+<p><strong>相続時精算課税制度</strong>は2024年1月の税制改正で年110万円の基礎控除が新設され、この基礎控除部分はどれだけ相続開始に近い時期の贈与であっても相続財産に加算されません。基礎控除を超えた部分は累計2,500万円まで贈与税がかからず（特別控除）、超過分にも一律20%の税率がかかるだけですが、基礎控除を除く贈与財産は暦年贈与のような期間の制限なく全額が相続財産に加算される点、そしていったん選択すると同じ贈与者・受贈者の組み合わせでは暦年贈与に戻せない点に注意が必要です。</p>
+<p>どの方式が有利かは、相続財産の総額・贈与額・贈与を続ける年数・相続開始までの残り年数によって変わります。本ツールでは同じ入力条件から3パターンの負担額を一度に試算し、最も有利な方式を自動で判定します。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>暦年贈与と相続時精算課税制度、どちらを選べばいいですか？</dt>
+<dd>一概にどちらが有利とは言えず、贈与額・贈与を続ける年数・相続開始までの残り年数によって変わります。相続時精算課税制度は年110万円の基礎控除部分が相続開始直前の贈与でも相続財産に加算されない（暦年贈与は加算対象になりうる）点で有利になりやすい一方、いったん選択すると同じ贈与者・受贈者の組み合わせでは暦年贈与に戻せません。本ツールで具体的な条件を入力し、3パターンの負担額を比較した上で判断することをおすすめします。</dd>
+</div>
+<div class="faq-item">
+<dt>生前贈与加算（持ち戻し）の7年ルールは正確に反映されていますか？</dt>
+<dd>2024年の税制改正により、暦年贈与を相続財産に加算する期間は「3年以内」から「7年以内」に延長されましたが、実際に7年分がすべて適用されるのは2031年以降に発生する相続からで、それより前の相続では経過措置により加算対象期間が短くなります。本ツールはこの複雑な年ごとの経過措置スケジュールを正確には反映せず、「3年」「7年」のどちらかを選んで試算する簡略化モデルです。実際の相続開始時期における正確な加算対象期間は税理士・国税庁の情報でご確認ください。</dd>
+</div>
+<div class="faq-item">
+<dt>相続時精算課税制度の特別控除2,500万円とは何ですか？</dt>
+<dd>相続時精算課税制度を選んだ贈与者・受贈者の組み合わせでは、年110万円の基礎控除を超えた部分について、累計2,500万円までは贈与税がかかりません（特別控除）。2,500万円を使い切った後の超過分には一律20%の贈与税がかかりますが、この贈与税は相続時に相続税額から全額控除され、控除しきれない分は還付されます。基礎控除を除く贈与財産は贈与時の価額で相続財産に加算される点が、暦年贈与の生前贈与加算（一定期間内の贈与のみが対象）との大きな違いです。</dd>
+</div>
+<div class="faq-item">
+<dt>贈与税額控除とは何ですか？</dt>
+<dd>生前贈与加算（暦年贈与）や相続時精算課税制度により相続財産に持ち戻された・加算された贈与財産は、贈与時点ですでに贈与税が課されています。これに相続税をそのまま課すと二重課税になってしまうため、対応する贈与税額は最終的な相続税額から控除されます。本ツールでも両方式についてこの贈与税額控除を反映して試算しています。</dd>
+</div>
+<div class="faq-item">
+<dt>この試算は正確ですか？</dt>
+<dd>暦年贈与・相続時精算課税制度それぞれの基礎控除・速算表・税率、相続税の基礎控除・速算表・配偶者の税額軽減という基本的な計算構造に基づく概算です。実際の遺産分割は法定相続分どおりに行われるものと仮定しており、教育資金・結婚子育て資金の一括贈与の非課税特例、小規模宅地等の特例、生命保険金の非課税枠、贈与財産の値上がり益（相続時精算課税では贈与時点の低い価額のまま固定できる場合がある効果）などは考慮していません。正確な税額・対策の要否は税理士にご確認ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の贈与税額・相続税額を保証するものではありません。生前贈与加算（持ち戻し）の対象期間は、税制改正の経過措置により相続開始時期ごとに異なり、本ツールは正確な年ごとのスケジュールを反映しない簡略化モデルです。各種非課税特例も考慮していません。正確な税額・対策の要否は税理士等の専門家にご確認ください。本サイトは特定の商品・サービスの勧誘を目的とするものではありません。
+  </div>
+  </section>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件と選択中のツールをそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ下部 --></div>
+
+  <section class="article-section hub-related-guides">
+    <h2>あわせて読みたいガイド</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="seizen-zouyo-hajimekata-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>生前贈与のやり方 完全ガイド｜暦年贈与と相続時精算課税の選び方</h3>
+        <p>生前贈与を始めたい方向けに、暦年贈与と相続時精算課税制度の選び方、贈与契約書の作り方、贈与税の申告、生前贈与加算（持ち戻し）ルールの注意点までを手順ごとに解…</p>
+      </a>
+      <a class="tool-card" href="souzokuzei-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>相続税とは？基礎控除・税率・配偶者の税額軽減の仕組み 完全ガイド</h3>
+        <p>相続税がかかるかどうかの分かれ目になる基礎控除（3,000万円＋600万円×法定相続人数）の計算方法、速算表を使った税額の求め方、配偶者の税額軽減、生命保険…</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+<div class="container">
+<span>© 2026 ふやすノート</span>
+<nav>
+<a href="../index.html">トップへ戻る</a>
+<a href="../about.html">運営者情報</a>
+<a href="../privacy.html">プライバシーポリシー</a>
+<a href="../disclosure.html">アフィリエイト・広告表記について</a>
+</nav>
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+
+<script src="../js/souzokuzei.js"></script>
+<script src="../js/zouyo-souzoku.js"></script>
+<script src="../js/tabs.js"></script>
+<script src="../js/share.js"></script>
+<script src="../js/nav-toggle.js"></script>
+</body>
+</html>

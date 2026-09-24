@@ -39,16 +39,16 @@
   var WALL_HAIGUSHA_ZERO = 2016000; // 配偶者特別控除が消滅する壁（201万6千円未満）
 
   var els = {
-    income: document.getElementById("income"),
-    insuranceApplies: document.getElementById("insuranceApplies"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    salaryIncome: document.getElementById("result-salary-income"),
-    incomeTax: document.getElementById("result-income-tax"),
-    residentTax: document.getElementById("result-resident-tax"),
-    socialInsurance: document.getElementById("result-social-insurance"),
-    takeHome: document.getElementById("result-take-home"),
-    wallBody: document.getElementById("wall-body"),
+    income: document.getElementById("kabe-income"),
+    insuranceApplies: document.getElementById("kabe-insuranceApplies"),
+    verdict: document.getElementById("kabe-verdict"),
+    verdictSub: document.getElementById("kabe-verdictSub"),
+    salaryIncome: document.getElementById("kabe-result-salary-income"),
+    incomeTax: document.getElementById("kabe-result-income-tax"),
+    residentTax: document.getElementById("kabe-result-resident-tax"),
+    socialInsurance: document.getElementById("kabe-result-social-insurance"),
+    takeHome: document.getElementById("kabe-result-take-home"),
+    wallBody: document.getElementById("kabe-wall-body"),
   };
 
   var chart = null;
@@ -177,7 +177,7 @@
       faceValue.push({ x: x, y: x });
     }
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("kabe-growthChart").getContext("2d");
     var data = {
       datasets: [
         {

@@ -10,20 +10,20 @@
   var TAX_RATE = 0.20315; // 課税口座の運用益にかかる税率（所得税・復興特別所得税・住民税の合計）
 
   var els = {
-    tsumitate: document.getElementById("tsumitate"),
-    growth: document.getElementById("growth"),
-    rate: document.getElementById("rate"),
-    years: document.getElementById("years"),
-    rateOut: document.getElementById("rateOut"),
-    yearsOut: document.getElementById("yearsOut"),
-    fundSelect: document.getElementById("fundSelect"),
-    fundHint: document.getElementById("fundHint"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    fillPeriod: document.getElementById("result-fill-period"),
-    nisaUsed: document.getElementById("result-nisa-used"),
-    taxSaved: document.getElementById("result-tax-saved"),
-    finalAsset: document.getElementById("result-final-asset"),
+    tsumitate: document.getElementById("waku-tsumitate"),
+    growth: document.getElementById("waku-growth"),
+    rate: document.getElementById("waku-rate"),
+    years: document.getElementById("waku-years"),
+    rateOut: document.getElementById("waku-rateOut"),
+    yearsOut: document.getElementById("waku-yearsOut"),
+    fundSelect: document.getElementById("waku-fundSelect"),
+    fundHint: document.getElementById("waku-fundHint"),
+    verdict: document.getElementById("waku-verdict"),
+    verdictSub: document.getElementById("waku-verdictSub"),
+    fillPeriod: document.getElementById("waku-result-fill-period"),
+    nisaUsed: document.getElementById("waku-result-nisa-used"),
+    taxSaved: document.getElementById("waku-result-tax-saved"),
+    finalAsset: document.getElementById("waku-result-final-asset"),
   };
 
   var chart = null;
@@ -205,7 +205,7 @@
     var nisaData = result.series.map(function (d) { return Math.round(d.nisaValue); });
     var taxableData = result.series.map(function (d) { return Math.round(d.taxableNet); });
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("waku-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

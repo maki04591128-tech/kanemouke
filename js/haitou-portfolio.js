@@ -5,25 +5,25 @@
   var TAX_RATE = 0.20315;
 
   var els = {
-    initial: document.getElementById("initial"),
-    monthly: document.getElementById("monthly"),
-    years: document.getElementById("years"),
-    yearsOut: document.getElementById("yearsOut"),
-    yieldPct: document.getElementById("yieldPct"),
-    yieldPctOut: document.getElementById("yieldPctOut"),
-    divGrowth: document.getElementById("divGrowth"),
-    divGrowthOut: document.getElementById("divGrowthOut"),
-    priceGrowth: document.getElementById("priceGrowth"),
-    priceGrowthOut: document.getElementById("priceGrowthOut"),
-    accountType: document.getElementById("accountType"),
-    targetMonthly: document.getElementById("targetMonthly"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    finalNav: document.getElementById("result-final-nav"),
-    finalDivAnnual: document.getElementById("result-final-div-annual"),
-    finalDivMonthly: document.getElementById("result-final-div-monthly"),
-    targetYear: document.getElementById("result-target-year"),
-    breakdownBody: document.getElementById("breakdown-body"),
+    initial: document.getElementById("portfolio-initial"),
+    monthly: document.getElementById("portfolio-monthly"),
+    years: document.getElementById("portfolio-years"),
+    yearsOut: document.getElementById("portfolio-yearsOut"),
+    yieldPct: document.getElementById("portfolio-yieldPct"),
+    yieldPctOut: document.getElementById("portfolio-yieldPctOut"),
+    divGrowth: document.getElementById("portfolio-divGrowth"),
+    divGrowthOut: document.getElementById("portfolio-divGrowthOut"),
+    priceGrowth: document.getElementById("portfolio-priceGrowth"),
+    priceGrowthOut: document.getElementById("portfolio-priceGrowthOut"),
+    accountType: document.getElementById("portfolio-accountType"),
+    targetMonthly: document.getElementById("portfolio-targetMonthly"),
+    verdict: document.getElementById("portfolio-verdict"),
+    verdictSub: document.getElementById("portfolio-verdictSub"),
+    finalNav: document.getElementById("portfolio-result-final-nav"),
+    finalDivAnnual: document.getElementById("portfolio-result-final-div-annual"),
+    finalDivMonthly: document.getElementById("portfolio-result-final-div-monthly"),
+    targetYear: document.getElementById("portfolio-result-target-year"),
+    breakdownBody: document.getElementById("portfolio-breakdown-body"),
   };
 
   var chart = null;
@@ -195,7 +195,7 @@
       chart.options = options;
       chart.update();
     } else {
-      chart = new Chart(document.getElementById("growthChart").getContext("2d"), {
+      chart = new Chart(document.getElementById("portfolio-growthChart").getContext("2d"), {
         type: "line",
         data: data,
         options: options,

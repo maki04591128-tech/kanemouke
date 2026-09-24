@@ -291,20 +291,20 @@
   }
 
   var els = {
-    estateTotal: document.getElementById("estateTotal"),
-    hasSpouse: document.getElementById("hasSpouse"),
-    childCount: document.getElementById("childCount"),
-    giftRecipients: document.getElementById("giftRecipients"),
-    annualGift: document.getElementById("annualGift"),
-    giftYears: document.getElementById("giftYears"),
-    yearsUntilInheritance: document.getElementById("yearsUntilInheritance"),
-    lookbackPeriod: document.getElementById("lookbackPeriod"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    scenarioATotal: document.getElementById("result-scenario-a-total"),
-    scenarioBTotal: document.getElementById("result-scenario-b-total"),
-    scenarioCTotal: document.getElementById("result-scenario-c-total"),
-    tableBody: document.getElementById("breakdown-body"),
+    estateTotal: document.getElementById("zouyo-estateTotal"),
+    hasSpouse: document.getElementById("zouyo-hasSpouse"),
+    childCount: document.getElementById("zouyo-childCount"),
+    giftRecipients: document.getElementById("zouyo-giftRecipients"),
+    annualGift: document.getElementById("zouyo-annualGift"),
+    giftYears: document.getElementById("zouyo-giftYears"),
+    yearsUntilInheritance: document.getElementById("zouyo-yearsUntilInheritance"),
+    lookbackPeriod: document.getElementById("zouyo-lookbackPeriod"),
+    verdict: document.getElementById("zouyo-verdict"),
+    verdictSub: document.getElementById("zouyo-verdictSub"),
+    scenarioATotal: document.getElementById("zouyo-result-scenario-a-total"),
+    scenarioBTotal: document.getElementById("zouyo-result-scenario-b-total"),
+    scenarioCTotal: document.getElementById("zouyo-result-scenario-c-total"),
+    tableBody: document.getElementById("zouyo-breakdown-body"),
   };
 
   var chart = null;
@@ -410,7 +410,7 @@
       })
       .join("");
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("zouyo-growthChart").getContext("2d");
     var data = {
       labels: [SCENARIO_LABEL.A, SCENARIO_LABEL.B, SCENARIO_LABEL.C],
       datasets: [

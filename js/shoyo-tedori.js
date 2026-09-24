@@ -48,21 +48,21 @@
   ];
 
   var els = {
-    bonus: document.getElementById("bonus"),
-    prevSalary: document.getElementById("prevSalary"),
-    ageGroup: document.getElementById("ageGroup"),
-    taxColumn: document.getElementById("taxColumn"),
-    dependentsField: document.getElementById("dependents-field"),
-    dependents: document.getElementById("dependents"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    takeHome: document.getElementById("result-take-home"),
-    takeHomeRate: document.getElementById("result-take-home-rate"),
-    socialInsurance: document.getElementById("result-social-insurance"),
-    incomeTax: document.getElementById("result-income-tax"),
-    breakdownBody: document.getElementById("breakdown-body"),
-    tableBody: document.getElementById("table-body"),
-    overLimitNote: document.getElementById("over-limit-note"),
+    bonus: document.getElementById("shoyo-bonus"),
+    prevSalary: document.getElementById("shoyo-prevSalary"),
+    ageGroup: document.getElementById("shoyo-ageGroup"),
+    taxColumn: document.getElementById("shoyo-taxColumn"),
+    dependentsField: document.getElementById("shoyo-dependents-field"),
+    dependents: document.getElementById("shoyo-dependents"),
+    verdict: document.getElementById("shoyo-verdict"),
+    verdictSub: document.getElementById("shoyo-verdictSub"),
+    takeHome: document.getElementById("shoyo-result-take-home"),
+    takeHomeRate: document.getElementById("shoyo-result-take-home-rate"),
+    socialInsurance: document.getElementById("shoyo-result-social-insurance"),
+    incomeTax: document.getElementById("shoyo-result-income-tax"),
+    breakdownBody: document.getElementById("shoyo-breakdown-body"),
+    tableBody: document.getElementById("shoyo-table-body"),
+    overLimitNote: document.getElementById("shoyo-over-limit-note"),
   };
 
   var chart = null;
@@ -200,7 +200,7 @@
     });
     els.tableBody.innerHTML = rows.join("");
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("shoyo-growthChart").getContext("2d");
     var data = {
       labels: ["手取り", "社会保険料", "所得税"],
       datasets: [

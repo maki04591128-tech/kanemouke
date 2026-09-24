@@ -2,28 +2,28 @@
   "use strict";
 
   var els = {
-    totalAmount: document.getElementById("totalAmount"),
-    splitMonths: document.getElementById("splitMonths"),
-    years: document.getElementById("years"),
-    yearsOut: document.getElementById("yearsOut"),
-    annualRate: document.getElementById("annualRate"),
-    annualRateOut: document.getElementById("annualRateOut"),
-    fundSelect: document.getElementById("fundSelect"),
-    fundHint: document.getElementById("fundHint"),
-    pattern: document.getElementById("pattern"),
-    shockFields: document.getElementById("shockFields"),
-    shockPct: document.getElementById("shockPct"),
-    shockPctOut: document.getElementById("shockPctOut"),
-    shockPctLabel: document.getElementById("shockPctLabel"),
-    shockMonths: document.getElementById("shockMonths"),
-    shockMonthsOut: document.getElementById("shockMonthsOut"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    resultPrincipal: document.getElementById("result-principal"),
-    resultLump: document.getElementById("result-lump"),
-    resultDca: document.getElementById("result-dca"),
-    resultDiff: document.getElementById("result-diff"),
-    breakdownBody: document.getElementById("breakdown-body"),
+    totalAmount: document.getElementById("ikkatsu-totalAmount"),
+    splitMonths: document.getElementById("ikkatsu-splitMonths"),
+    years: document.getElementById("ikkatsu-years"),
+    yearsOut: document.getElementById("ikkatsu-yearsOut"),
+    annualRate: document.getElementById("ikkatsu-annualRate"),
+    annualRateOut: document.getElementById("ikkatsu-annualRateOut"),
+    fundSelect: document.getElementById("ikkatsu-fundSelect"),
+    fundHint: document.getElementById("ikkatsu-fundHint"),
+    pattern: document.getElementById("ikkatsu-pattern"),
+    shockFields: document.getElementById("ikkatsu-shockFields"),
+    shockPct: document.getElementById("ikkatsu-shockPct"),
+    shockPctOut: document.getElementById("ikkatsu-shockPctOut"),
+    shockPctLabel: document.getElementById("ikkatsu-shockPctLabel"),
+    shockMonths: document.getElementById("ikkatsu-shockMonths"),
+    shockMonthsOut: document.getElementById("ikkatsu-shockMonthsOut"),
+    verdict: document.getElementById("ikkatsu-verdict"),
+    verdictSub: document.getElementById("ikkatsu-verdictSub"),
+    resultPrincipal: document.getElementById("ikkatsu-result-principal"),
+    resultLump: document.getElementById("ikkatsu-result-lump"),
+    resultDca: document.getElementById("ikkatsu-result-dca"),
+    resultDiff: document.getElementById("ikkatsu-result-diff"),
+    breakdownBody: document.getElementById("ikkatsu-breakdown-body"),
   };
 
   var chart = null;
@@ -249,7 +249,7 @@
       chart.options = options;
       chart.update();
     } else {
-      chart = new Chart(document.getElementById("growthChart").getContext("2d"), {
+      chart = new Chart(document.getElementById("ikkatsu-growthChart").getContext("2d"), {
         type: "line",
         data: data,
         options: options,

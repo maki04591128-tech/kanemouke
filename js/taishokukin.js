@@ -19,32 +19,32 @@
   ];
 
   var els = {
-    amount: document.getElementById("amount"),
-    serviceYears: document.getElementById("serviceYears"),
-    serviceYearsOut: document.getElementById("serviceYearsOut"),
-    payoutYears: document.getElementById("payoutYears"),
-    payoutYearsOut: document.getElementById("payoutYearsOut"),
-    ageGroup: document.getElementById("ageGroup"),
-    annuityRate: document.getElementById("annuityRate"),
-    annuityRateOut: document.getElementById("annuityRateOut"),
-    investRate: document.getElementById("investRate"),
-    investRateOut: document.getElementById("investRateOut"),
-    overlapEnable: document.getElementById("overlapEnable"),
-    overlapFields: document.getElementById("overlapFields"),
-    overlapType: document.getElementById("overlapType"),
-    overlapYear: document.getElementById("overlapYear"),
-    overlapServiceYears: document.getElementById("overlapServiceYears"),
-    overlapAmount: document.getElementById("overlapAmount"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    lumpNet: document.getElementById("result-lump-net"),
-    lumpTax: document.getElementById("result-lump-tax"),
-    pensionYearly: document.getElementById("result-pension-yearly"),
-    finalLump: document.getElementById("result-final-lump"),
-    finalPension: document.getElementById("result-final-pension"),
-    pensionTaxTotal: document.getElementById("pension-tax-total"),
-    deductionAmount: document.getElementById("deduction-amount"),
-    overlapNote: document.getElementById("overlap-note"),
+    amount: document.getElementById("taishokukin-amount"),
+    serviceYears: document.getElementById("taishokukin-serviceYears"),
+    serviceYearsOut: document.getElementById("taishokukin-serviceYearsOut"),
+    payoutYears: document.getElementById("taishokukin-payoutYears"),
+    payoutYearsOut: document.getElementById("taishokukin-payoutYearsOut"),
+    ageGroup: document.getElementById("taishokukin-ageGroup"),
+    annuityRate: document.getElementById("taishokukin-annuityRate"),
+    annuityRateOut: document.getElementById("taishokukin-annuityRateOut"),
+    investRate: document.getElementById("taishokukin-investRate"),
+    investRateOut: document.getElementById("taishokukin-investRateOut"),
+    overlapEnable: document.getElementById("taishokukin-overlapEnable"),
+    overlapFields: document.getElementById("taishokukin-overlapFields"),
+    overlapType: document.getElementById("taishokukin-overlapType"),
+    overlapYear: document.getElementById("taishokukin-overlapYear"),
+    overlapServiceYears: document.getElementById("taishokukin-overlapServiceYears"),
+    overlapAmount: document.getElementById("taishokukin-overlapAmount"),
+    verdict: document.getElementById("taishokukin-verdict"),
+    verdictSub: document.getElementById("taishokukin-verdictSub"),
+    lumpNet: document.getElementById("taishokukin-result-lump-net"),
+    lumpTax: document.getElementById("taishokukin-result-lump-tax"),
+    pensionYearly: document.getElementById("taishokukin-result-pension-yearly"),
+    finalLump: document.getElementById("taishokukin-result-final-lump"),
+    finalPension: document.getElementById("taishokukin-result-final-pension"),
+    pensionTaxTotal: document.getElementById("taishokukin-pension-tax-total"),
+    deductionAmount: document.getElementById("taishokukin-deduction-amount"),
+    overlapNote: document.getElementById("taishokukin-overlap-note"),
   };
 
   var THIS_YEAR = new Date().getFullYear();
@@ -275,7 +275,7 @@
     var dataA = seriesA.map(function (d) { return Math.round(d.asset); });
     var dataB = seriesB.map(function (d) { return Math.round(d.asset); });
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("taishokukin-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

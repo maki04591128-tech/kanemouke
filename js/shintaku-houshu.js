@@ -2,31 +2,31 @@
   "use strict";
 
   var els = {
-    initial: document.getElementById("initial"),
-    monthly: document.getElementById("monthly"),
-    years: document.getElementById("years"),
-    yearsOut: document.getElementById("yearsOut"),
-    grossRate: document.getElementById("grossRate"),
-    grossRateOut: document.getElementById("grossRateOut"),
-    feeA: document.getElementById("feeA"),
-    feeAOut: document.getElementById("feeAOut"),
-    feeB: document.getElementById("feeB"),
-    feeBOut: document.getElementById("feeBOut"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    resultPrincipal: document.getElementById("result-principal"),
-    resultA: document.getElementById("result-a"),
-    resultB: document.getElementById("result-b"),
-    resultDiff: document.getElementById("result-diff"),
-    breakdownBody: document.getElementById("breakdown-body"),
-    fundSelectA: document.getElementById("fundSelectA"),
-    fundSelectB: document.getElementById("fundSelectB"),
-    resultALabel: document.getElementById("result-a-label"),
-    resultBLabel: document.getElementById("result-b-label"),
-    legendA: document.getElementById("legend-a"),
-    legendB: document.getElementById("legend-b"),
-    theadA: document.getElementById("thead-a"),
-    theadB: document.getElementById("thead-b"),
+    initial: document.getElementById("shintaku-initial"),
+    monthly: document.getElementById("shintaku-monthly"),
+    years: document.getElementById("shintaku-years"),
+    yearsOut: document.getElementById("shintaku-yearsOut"),
+    grossRate: document.getElementById("shintaku-grossRate"),
+    grossRateOut: document.getElementById("shintaku-grossRateOut"),
+    feeA: document.getElementById("shintaku-feeA"),
+    feeAOut: document.getElementById("shintaku-feeAOut"),
+    feeB: document.getElementById("shintaku-feeB"),
+    feeBOut: document.getElementById("shintaku-feeBOut"),
+    verdict: document.getElementById("shintaku-verdict"),
+    verdictSub: document.getElementById("shintaku-verdictSub"),
+    resultPrincipal: document.getElementById("shintaku-result-principal"),
+    resultA: document.getElementById("shintaku-result-a"),
+    resultB: document.getElementById("shintaku-result-b"),
+    resultDiff: document.getElementById("shintaku-result-diff"),
+    breakdownBody: document.getElementById("shintaku-breakdown-body"),
+    fundSelectA: document.getElementById("shintaku-fundSelectA"),
+    fundSelectB: document.getElementById("shintaku-fundSelectB"),
+    resultALabel: document.getElementById("shintaku-result-a-label"),
+    resultBLabel: document.getElementById("shintaku-result-b-label"),
+    legendA: document.getElementById("shintaku-legend-a"),
+    legendB: document.getElementById("shintaku-legend-b"),
+    theadA: document.getElementById("shintaku-thead-a"),
+    theadB: document.getElementById("shintaku-thead-b"),
   };
 
   var chart = null;
@@ -210,7 +210,7 @@
       chart.options = options;
       chart.update();
     } else {
-      chart = new Chart(document.getElementById("growthChart").getContext("2d"), {
+      chart = new Chart(document.getElementById("shintaku-growthChart").getContext("2d"), {
         type: "line",
         data: data,
         options: options,

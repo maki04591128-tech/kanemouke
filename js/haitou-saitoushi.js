@@ -5,22 +5,22 @@
   var TAX_RATE = 0.20315;
 
   var els = {
-    initial: document.getElementById("initial"),
-    monthly: document.getElementById("monthly"),
-    years: document.getElementById("years"),
-    yearsOut: document.getElementById("yearsOut"),
-    totalReturn: document.getElementById("totalReturn"),
-    totalReturnOut: document.getElementById("totalReturnOut"),
-    distYield: document.getElementById("distYield"),
-    distYieldOut: document.getElementById("distYieldOut"),
-    accountType: document.getElementById("accountType"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    finalA: document.getElementById("result-final-a"),
-    finalB: document.getElementById("result-final-b"),
-    diff: document.getElementById("result-diff"),
-    taxPaid: document.getElementById("result-tax-paid"),
-    breakdownBody: document.getElementById("breakdown-body"),
+    initial: document.getElementById("saitoushi-initial"),
+    monthly: document.getElementById("saitoushi-monthly"),
+    years: document.getElementById("saitoushi-years"),
+    yearsOut: document.getElementById("saitoushi-yearsOut"),
+    totalReturn: document.getElementById("saitoushi-totalReturn"),
+    totalReturnOut: document.getElementById("saitoushi-totalReturnOut"),
+    distYield: document.getElementById("saitoushi-distYield"),
+    distYieldOut: document.getElementById("saitoushi-distYieldOut"),
+    accountType: document.getElementById("saitoushi-accountType"),
+    verdict: document.getElementById("saitoushi-verdict"),
+    verdictSub: document.getElementById("saitoushi-verdictSub"),
+    finalA: document.getElementById("saitoushi-result-final-a"),
+    finalB: document.getElementById("saitoushi-result-final-b"),
+    diff: document.getElementById("saitoushi-result-diff"),
+    taxPaid: document.getElementById("saitoushi-result-tax-paid"),
+    breakdownBody: document.getElementById("saitoushi-breakdown-body"),
   };
 
   var chart = null;
@@ -185,7 +185,7 @@
       chart.options = options;
       chart.update();
     } else {
-      chart = new Chart(document.getElementById("growthChart").getContext("2d"), {
+      chart = new Chart(document.getElementById("saitoushi-growthChart").getContext("2d"), {
         type: "line",
         data: data,
         options: options,

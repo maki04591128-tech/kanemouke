@@ -43,23 +43,23 @@
   var RESIDENT_TAX_RATE = 0.10;
 
   var els = {
-    principal: document.getElementById("principal"),
-    loanRate: document.getElementById("loanRate"),
-    loanYears: document.getElementById("loanYears"),
-    category: document.getElementById("category"),
-    kosodateRow: document.getElementById("kosodateRow"),
-    kosodate: document.getElementById("kosodate"),
-    salaryIncome: document.getElementById("salaryIncome"),
-    hasSpouse: document.getElementById("hasSpouse"),
-    dependents: document.getElementById("dependents"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    resultLimit: document.getElementById("result-limit"),
-    resultPeriod: document.getElementById("result-period"),
-    resultFirstYear: document.getElementById("result-first-year"),
-    resultTotal: document.getElementById("result-total"),
-    resultIncomeTax: document.getElementById("result-income-tax"),
-    tableBody: document.getElementById("breakdown-body"),
+    principal: document.getElementById("koujo-principal"),
+    loanRate: document.getElementById("koujo-loanRate"),
+    loanYears: document.getElementById("koujo-loanYears"),
+    category: document.getElementById("koujo-category"),
+    kosodateRow: document.getElementById("koujo-kosodateRow"),
+    kosodate: document.getElementById("koujo-kosodate"),
+    salaryIncome: document.getElementById("koujo-salaryIncome"),
+    hasSpouse: document.getElementById("koujo-hasSpouse"),
+    dependents: document.getElementById("koujo-dependents"),
+    verdict: document.getElementById("koujo-verdict"),
+    verdictSub: document.getElementById("koujo-verdictSub"),
+    resultLimit: document.getElementById("koujo-result-limit"),
+    resultPeriod: document.getElementById("koujo-result-period"),
+    resultFirstYear: document.getElementById("koujo-result-first-year"),
+    resultTotal: document.getElementById("koujo-result-total"),
+    resultIncomeTax: document.getElementById("koujo-result-income-tax"),
+    tableBody: document.getElementById("koujo-breakdown-body"),
   };
 
   var chart = null;
@@ -255,7 +255,7 @@
       },
     };
 
-    var ctx = document.getElementById("creditChart").getContext("2d");
+    var ctx = document.getElementById("koujo-creditChart").getContext("2d");
     if (chart) {
       chart.data = data;
       chart.options = options;

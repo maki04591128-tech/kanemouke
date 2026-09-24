@@ -63,15 +63,15 @@
   ];
 
   var els = {
-    total: document.getElementById("total"),
-    rate: document.getElementById("rate"),
-    rateOut: document.getElementById("rateOut"),
-    fundSelect: document.getElementById("fundSelect"),
-    fundHint: document.getElementById("fundHint"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    splitBody: document.getElementById("split-body"),
-    compareBody: document.getElementById("compare-body"),
+    total: document.getElementById("haibun-total"),
+    rate: document.getElementById("haibun-rate"),
+    rateOut: document.getElementById("haibun-rateOut"),
+    fundSelect: document.getElementById("haibun-fundSelect"),
+    fundHint: document.getElementById("haibun-fundHint"),
+    verdict: document.getElementById("haibun-verdict"),
+    verdictSub: document.getElementById("haibun-verdictSub"),
+    splitBody: document.getElementById("haibun-split-body"),
+    compareBody: document.getElementById("haibun-compare-body"),
   };
 
   var chart = null;
@@ -285,7 +285,7 @@
       return cur.result.series.length > best.length ? cur.result.series.map(function (d) { return d.year + "年"; }) : best;
     }, labels);
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("haibun-growthChart").getContext("2d");
     var data = { labels: chartLabels, datasets: datasets };
     var options = {
       responsive: true,

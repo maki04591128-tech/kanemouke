@@ -19,31 +19,31 @@
   ];
 
   var els = {
-    amount: document.getElementById("amount"),
-    contribYears: document.getElementById("contribYears"),
-    contribYearsOut: document.getElementById("contribYearsOut"),
-    payoutYears: document.getElementById("payoutYears"),
-    payoutYearsOut: document.getElementById("payoutYearsOut"),
-    ageGroup: document.getElementById("ageGroup"),
-    annuityRate: document.getElementById("annuityRate"),
-    annuityRateOut: document.getElementById("annuityRateOut"),
-    investRate: document.getElementById("investRate"),
-    investRateOut: document.getElementById("investRateOut"),
-    lumpRatio: document.getElementById("lumpRatio"),
-    lumpRatioOut: document.getElementById("lumpRatioOut"),
-    overlapEnable: document.getElementById("overlapEnable"),
-    overlapFields: document.getElementById("overlapFields"),
-    overlapYear: document.getElementById("overlapYear"),
-    overlapServiceYears: document.getElementById("overlapServiceYears"),
-    overlapAmount: document.getElementById("overlapAmount"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    finalLump: document.getElementById("result-final-lump"),
-    finalPension: document.getElementById("result-final-pension"),
-    finalMix: document.getElementById("result-final-mix"),
-    deductionAmount: document.getElementById("deduction-amount"),
-    deductionUsed: document.getElementById("deduction-used"),
-    overlapNote: document.getElementById("overlap-note"),
+    amount: document.getElementById("uketori-amount"),
+    contribYears: document.getElementById("uketori-contribYears"),
+    contribYearsOut: document.getElementById("uketori-contribYearsOut"),
+    payoutYears: document.getElementById("uketori-payoutYears"),
+    payoutYearsOut: document.getElementById("uketori-payoutYearsOut"),
+    ageGroup: document.getElementById("uketori-ageGroup"),
+    annuityRate: document.getElementById("uketori-annuityRate"),
+    annuityRateOut: document.getElementById("uketori-annuityRateOut"),
+    investRate: document.getElementById("uketori-investRate"),
+    investRateOut: document.getElementById("uketori-investRateOut"),
+    lumpRatio: document.getElementById("uketori-lumpRatio"),
+    lumpRatioOut: document.getElementById("uketori-lumpRatioOut"),
+    overlapEnable: document.getElementById("uketori-overlapEnable"),
+    overlapFields: document.getElementById("uketori-overlapFields"),
+    overlapYear: document.getElementById("uketori-overlapYear"),
+    overlapServiceYears: document.getElementById("uketori-overlapServiceYears"),
+    overlapAmount: document.getElementById("uketori-overlapAmount"),
+    verdict: document.getElementById("uketori-verdict"),
+    verdictSub: document.getElementById("uketori-verdictSub"),
+    finalLump: document.getElementById("uketori-result-final-lump"),
+    finalPension: document.getElementById("uketori-result-final-pension"),
+    finalMix: document.getElementById("uketori-result-final-mix"),
+    deductionAmount: document.getElementById("uketori-deduction-amount"),
+    deductionUsed: document.getElementById("uketori-deduction-used"),
+    overlapNote: document.getElementById("uketori-overlap-note"),
   };
 
   var THIS_YEAR = new Date().getFullYear();
@@ -330,7 +330,7 @@
       chart.options = options;
       chart.update();
     } else {
-      chart = new Chart(document.getElementById("growthChart").getContext("2d"), {
+      chart = new Chart(document.getElementById("uketori-growthChart").getContext("2d"), {
         type: "line",
         data: data,
         options: options,
