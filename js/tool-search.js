@@ -5,8 +5,9 @@
   var clearBtn = document.getElementById("tool-search-clear");
   var status = document.getElementById("tool-search-status");
   var featured = document.getElementById("featured-section");
-  var categoryNav = document.getElementById("category-nav");
+  var goalNav = document.getElementById("goal-nav-section");
   var suggestions = document.getElementById("tool-search-suggestions");
+  var searchBox = document.querySelector(".tool-search");
   var categories = Array.prototype.slice.call(document.querySelectorAll(".tool-category"));
   if (!input || !status || categories.length === 0) return;
 
@@ -20,7 +21,7 @@
     '</svg>' +
     '<p>該当するツール・ガイドが見つかりませんでした。<br>別のキーワードでお試しいただくか、下のボタンから一覧をご覧ください。</p>' +
     '<button type="button" class="tool-search-no-results-reset">すべてのツール・ガイドを表示</button>';
-  categoryNav.insertAdjacentElement("afterend", noResults);
+  (searchBox || input).insertAdjacentElement("afterend", noResults);
   var noResultsReset = noResults.querySelector(".tool-search-no-results-reset");
 
   // 表記ゆれ（読み方・略称違い）を吸収するための同義語辞書。
@@ -87,7 +88,7 @@
       });
     });
     if (featured) featured.classList.remove("is-search-hidden");
-    categoryNav.classList.remove("is-search-hidden");
+    if (goalNav) goalNav.classList.remove("is-search-hidden");
     if (suggestions) suggestions.classList.remove("is-search-hidden");
     noResults.classList.add("is-search-hidden");
     status.textContent = "";
@@ -107,7 +108,7 @@
       total += visibleInSection;
     });
     if (featured) featured.classList.add("is-search-hidden");
-    categoryNav.classList.add("is-search-hidden");
+    if (goalNav) goalNav.classList.add("is-search-hidden");
     if (suggestions) suggestions.classList.add("is-search-hidden");
     noResults.classList.toggle("is-search-hidden", total > 0);
     status.textContent = total > 0
