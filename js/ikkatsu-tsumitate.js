@@ -8,6 +8,8 @@
     yearsOut: document.getElementById("ikkatsu-yearsOut"),
     annualRate: document.getElementById("ikkatsu-annualRate"),
     annualRateOut: document.getElementById("ikkatsu-annualRateOut"),
+    fundSelect: document.getElementById("ikkatsu-fundSelect"),
+    fundHint: document.getElementById("ikkatsu-fundHint"),
     pattern: document.getElementById("ikkatsu-pattern"),
     shockFields: document.getElementById("ikkatsu-shockFields"),
     shockPct: document.getElementById("ikkatsu-shockPct"),
@@ -261,6 +263,10 @@
       el.addEventListener("change", render);
     }
   );
+
+  if (window.setupFundSelect) {
+    window.setupFundSelect(els.fundSelect, els.annualRate, els.fundHint, render);
+  }
 
   render();
 })();

@@ -16,6 +16,8 @@
     years: document.getElementById("waku-years"),
     rateOut: document.getElementById("waku-rateOut"),
     yearsOut: document.getElementById("waku-yearsOut"),
+    fundSelect: document.getElementById("waku-fundSelect"),
+    fundHint: document.getElementById("waku-fundHint"),
     verdict: document.getElementById("waku-verdict"),
     verdictSub: document.getElementById("waku-verdictSub"),
     fillPeriod: document.getElementById("waku-result-fill-period"),
@@ -256,6 +258,10 @@
   [els.tsumitate, els.growth, els.rate, els.years].forEach(function (el) {
     el.addEventListener("input", render);
   });
+
+  if (window.setupFundSelect) {
+    window.setupFundSelect(els.fundSelect, els.rate, els.fundHint, render);
+  }
 
   render();
 })();

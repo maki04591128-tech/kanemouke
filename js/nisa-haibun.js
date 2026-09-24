@@ -66,6 +66,8 @@
     total: document.getElementById("haibun-total"),
     rate: document.getElementById("haibun-rate"),
     rateOut: document.getElementById("haibun-rateOut"),
+    fundSelect: document.getElementById("haibun-fundSelect"),
+    fundHint: document.getElementById("haibun-fundHint"),
     verdict: document.getElementById("haibun-verdict"),
     verdictSub: document.getElementById("haibun-verdictSub"),
     splitBody: document.getElementById("haibun-split-body"),
@@ -314,6 +316,10 @@
   [els.total, els.rate].forEach(function (el) {
     el.addEventListener("input", render);
   });
+
+  if (window.setupFundSelect) {
+    window.setupFundSelect(els.fundSelect, els.rate, els.fundHint, render);
+  }
 
   render();
 })();
