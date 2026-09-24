@@ -185,6 +185,49 @@ a { color: var(--color-primary); }
   transform: translateY(-2px);
 }
 
+/* まずは目的から選ぶ（初めての人向けの入口セクション） */
+.goal-nav-section {
+  margin: 8px 0 36px;
+}
+.goal-nav-lead {
+  margin: 0 0 16px;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+.goal-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+.goal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  text-decoration: none;
+  color: var(--color-text);
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.goal-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 20px rgba(15, 30, 45, 0.08);
+}
+.goal-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.goal-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
 /* よく使われているツール（人気ツールの近道セクション） */
 .section-lead {
   margin: 8px 0 16px;
