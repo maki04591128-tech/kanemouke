@@ -7,6 +7,8 @@
     preYearsOut: document.getElementById("bouraku-preYearsOut"),
     annualRate: document.getElementById("bouraku-annualRate"),
     annualRateOut: document.getElementById("bouraku-annualRateOut"),
+    fundSelect: document.getElementById("bouraku-fundSelect"),
+    fundHint: document.getElementById("bouraku-fundHint"),
     shockPct: document.getElementById("bouraku-shockPct"),
     shockPctOut: document.getElementById("bouraku-shockPctOut"),
     shockMonths: document.getElementById("bouraku-shockMonths"),
@@ -299,6 +301,10 @@
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
+
+  if (window.setupFundSelect) {
+    window.setupFundSelect(els.fundSelect, els.annualRate, els.fundHint, render);
+  }
 
   render();
 })();
