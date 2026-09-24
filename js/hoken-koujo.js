@@ -36,23 +36,23 @@
   var INCOME_DEPENDENT_DEDUCTION = 380000;
 
   var els = {
-    salaryIncome: document.getElementById("salaryIncome"),
-    socialInsurance: document.getElementById("socialInsurance"),
-    hasSpouse: document.getElementById("hasSpouse"),
-    dependents: document.getElementById("dependents"),
-    generalLife: document.getElementById("generalLife"),
-    medicalCare: document.getElementById("medicalCare"),
-    personalPension: document.getElementById("personalPension"),
-    earthquake: document.getElementById("earthquake"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    lifeIncome: document.getElementById("result-life-income"),
-    lifeResident: document.getElementById("result-life-resident"),
-    eqIncome: document.getElementById("result-eq-income"),
-    eqResident: document.getElementById("result-eq-resident"),
-    taxRate: document.getElementById("result-tax-rate"),
-    totalReduction: document.getElementById("result-total-reduction"),
-    tableBody: document.getElementById("breakdown-body"),
+    salaryIncome: document.getElementById("hoken-salaryIncome"),
+    socialInsurance: document.getElementById("hoken-socialInsurance"),
+    hasSpouse: document.getElementById("hoken-hasSpouse"),
+    dependents: document.getElementById("hoken-dependents"),
+    generalLife: document.getElementById("hoken-generalLife"),
+    medicalCare: document.getElementById("hoken-medicalCare"),
+    personalPension: document.getElementById("hoken-personalPension"),
+    earthquake: document.getElementById("hoken-earthquake"),
+    verdict: document.getElementById("hoken-verdict"),
+    verdictSub: document.getElementById("hoken-verdictSub"),
+    lifeIncome: document.getElementById("hoken-result-life-income"),
+    lifeResident: document.getElementById("hoken-result-life-resident"),
+    eqIncome: document.getElementById("hoken-result-eq-income"),
+    eqResident: document.getElementById("hoken-result-eq-resident"),
+    taxRate: document.getElementById("hoken-result-tax-rate"),
+    totalReduction: document.getElementById("hoken-result-total-reduction"),
+    tableBody: document.getElementById("hoken-breakdown-body"),
   };
 
   var chart = null;
@@ -199,7 +199,7 @@
       eqResident,
     ];
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("hoken-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

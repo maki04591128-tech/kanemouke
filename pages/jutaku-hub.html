@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>住宅ローンシミュレーター まとめ | ふやすノート</title>
+<meta name="description" content="ローンvs投資・繰上返済vs投資・住宅ローン控除・変動vs固定金利まで、住宅ローンに関する4つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/jutaku-hub.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="住宅ローンシミュレーター まとめ | ふやすノート">
+<meta property="og:description" content="ローンvs投資・繰上返済vs投資・住宅ローン控除・変動vs固定金利まで、住宅ローンに関する4つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/jutaku-hub.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="住宅ローンシミュレーター まとめ | ふやすノート">
+<meta name="twitter:description" content="ローンvs投資・繰上返済vs投資・住宅ローン控除・変動vs固定金利まで、住宅ローンに関する4つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "「完済までの期間（繰り上げ返済あり）」はどう計算していますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "通常の毎月返済額に加えて、入力した「毎月の余裕資金」を毎月継続して元金の返済に充てた場合に、残高がゼロになるまでの期間を1ヶ月単位でシミュレーションしています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "積立投資の運用益は、どの期間で計算していますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「繰り上げ返済で完済するまでの期間」と同じ月数だけ、同じ月額を積立投資に回したと仮定して計算しています。繰り上げ返済シナリオで毎月の余裕資金が実際に使われる期間に合わせることで、両者を同じ条件で比較できるようにしています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "繰上返済にはどんな種類がありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "大きく分けて、毎月の返済額を変えずに完済を早める「期間短縮型」と、返済期間は変えずに毎月の返済額を減らす「返済額軽減型」があります。総支払利息の軽減効果は一般に期間短縮型の方が大きいため、本シミュレーターは期間短縮型で試算しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "投資の運用益には税金がかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "新NISA口座での運用益は非課税ですが、非課税投資枠には上限があります。課税口座（特定口座など）の場合、運用益に対して約20.315%の税金がかかる点にご留意ください。本シミュレーターの「税引前」の値はこの税金を考慮していません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "どちらを選べばいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "数字の比較だけでなく、「団体信用生命保険による保障を維持したいか」「手元の現金流動性をどれだけ確保したいか」「金利変動のリスクをどう考えるか」なども踏まえた総合判断が大切です。本シミュレーターはあくまで機械的な試算の一つの目安としてご活用ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「控除しきれない額」が出るのはなぜですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "住宅ローン控除は所得税額・住民税所得割額（上限あり）からしか引けないため、年末残高から計算される控除枠が所得税・住民税の負担額より大きい場合、その差額は控除に使いきれず、原則として翌年以降に繰り越すこともできません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "住宅の区分はどうやって確認すればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "認定長期優良住宅・低炭素住宅は所管行政庁が交付する認定通知書、ZEH水準省エネ住宅・省エネ基準適合住宅は住宅性能証明書や建設住宅性能評価書などで確認できます。不明な場合は施工会社や不動産会社に確認しましょう。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "子育て世帯・若者夫婦世帯の上乗せ措置はいつまで対象ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "2024年・2025年に入居する場合の措置です。本ツールもこの期間の入居を前提としています。制度は税制改正で変更される可能性があるため、入居予定年の最新情報を国税庁のサイト等でご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "この試算は正確ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "元利均等返済・給与所得者であることを前提にした概算です。繰り上げ返済を行った場合の残高変動、ふるさと納税など他の控除との兼ね合い、年収の変動、連帯債務・ペアローンの持分按分などは考慮していません。正確な控除額は確定申告時の計算や税務署・税理士にご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "変動金利と固定金利、結局どちらを選べばいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "本シミュレーターは特定の選択を推奨するものではありません。金利が上がらなければ当初金利の低い変動金利が有利になりやすく、金利が大きく上がる局面では固定金利が有利になりやすい、という一般的な傾向を、ご自身が想定するシナリオで確認するための試算ツールとしてご利用ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "すべての銀行が5年ルール・125%ルールを採用していますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "いいえ。多くの大手銀行は採用していますが、一部のネット銀行などでは採用しておらず、金利変動が毎月の返済額にそのまま反映される商品もあります。契約前に金融機関の商品説明書で必ず確認してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "未払利息はいつ返済することになりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "金融機関や契約内容によって扱いが異なりますが、返済期間の途中で未払利息が解消されなかった場合、最終回にまとめて一括返済を求められるケースが一般的です。本シミュレーターでは簡略化のため、返済期間終了時点で残っている残高（未払利息を含む）を一括請求額として表示しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "金利は5年ごとにしか変わらないのですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "いいえ。多くの変動金利型住宅ローンでは、適用金利自体は半年ごとに見直されます。5年ルールが対象にしているのはあくまで「毎月の返済額」であり、見直された金利は返済額に反映されないだけで、内部的な利息計算には反映され続けます。本シミュレーターは、この「金利は半年ごと・返済額は5年ごと」という実際の仕組みを簡略化し、5年単位でまとめて試算しています。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+<div class="container">
+<a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+<button aria-controls="site-nav" aria-expanded="false" class="nav-toggle" type="button">
+<span aria-hidden="true" class="icon"></span>
+<span>メニュー</span>
+</button>
+<nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+</div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>住宅ローンシミュレーター まとめ</h1>
+    <p>住宅ローンと投資どちらを優先すべきか、まとまった資金の繰上返済と投資の比較、住宅ローン控除の還付額、変動金利と固定金利の比較まで、住宅ローンに関する4つのシミュレーターを1ページにまとめました。上のタブを切り替えるだけで、目的に合わせて使い分けられます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ上部 --></div>
+
+  <div class="hub-tabs" id="hub-tabs" role="tablist" aria-label="ツールを選択">
+        <button type="button" class="hub-tab" role="tab" id="tab-btn-roan" aria-controls="tabpanel-roan" aria-selected="true" data-tool="roan">ローンvs投資</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-kurioage" aria-controls="tabpanel-kurioage" aria-selected="false" data-tool="kurioage">繰上返済vs投資</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-koujo" aria-controls="tabpanel-koujo" aria-selected="false" data-tool="koujo">住宅ローン控除</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-kinri" aria-controls="tabpanel-kinri" aria-selected="false" data-tool="kinri">変動vs固定金利</button>
+  </div>
+
+  <section class="tab-panel" id="tabpanel-roan" role="tabpanel" aria-labelledby="tab-btn-roan" data-tool="roan">
+    <p class="tab-panel-intro">毎月の余裕資金を「住宅ローンの繰り上げ返済」に回すのと「積立投資」に回すのとでは、どちらが得になるかを機械的に試算します。繰り上げ返済による利息軽減額と、積立投資の運用益を並べて比較できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="roan-balance">住宅ローンの残高 <span class="unit">円</span></label>
+<input id="roan-balance" max="200000000" min="1000000" step="100000" type="number" value="30000000"/>
+</div>
+<div class="field">
+<label for="roan-loanRate">住宅ローン金利（年率） <span class="unit" id="roan-loanRateOut">1.00 %</span></label>
+<input id="roan-loanRate" max="4" min="0" step="0.05" type="range" value="1.0"/>
+</div>
+<div class="field">
+<label for="roan-years">残りの返済期間 <span class="unit" id="roan-yearsOut">25 年</span></label>
+<input id="roan-years" max="35" min="1" step="1" type="range" value="25"/>
+</div>
+<div class="field">
+<label for="roan-extra">毎月の余裕資金（繰り上げ返済 or 積立投資に回す額） <span class="unit">円</span></label>
+<input id="roan-extra" max="500000" min="0" step="1000" type="number" value="20000"/>
+</div>
+<div class="field">
+<label for="roan-investRate">積立投資の想定利回り（年率） <span class="unit" id="roan-investRateOut">5.0 %</span></label>
+<input id="roan-investRate" max="10" min="0" step="0.1" type="range" value="5"/>
+</div>
+</div>
+<div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">完済までの期間（通常）</div>
+<div class="value" id="roan-result-payoff-normal">-</div>
+</div>
+<div class="result-card">
+<div class="label">完済までの期間（繰り上げ返済あり）</div>
+<div class="value" id="roan-result-payoff-prepay">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">繰り上げ返済：利息軽減額</div>
+<div class="value" id="roan-result-interest-saved">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">積立投資：運用益</div>
+<div class="value" id="roan-result-invest-profit">-</div>
+</div>
+</div>
+<div class="verdict-box" id="roan-verdict-box">
+<h3 id="roan-verdict-title">-</h3>
+<p id="roan-verdict-body">条件を入力すると、この条件下でどちらが有利かの目安を表示します。</p>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="roan-loanChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#7a8899"></span>通常返済のローン残高</span>
+<span><span class="legend-dot" style="background:#0f5f4c"></span>繰り上げ返済ありのローン残高</span>
+</div>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>試算の内訳</h2>
+<dl>
+<div class="faq-item">
+<dt>総支払利息（通常返済の場合）</dt>
+<dd id="roan-detail-normal-interest">-</dd>
+</div>
+<div class="faq-item">
+<dt>総支払利息（繰り上げ返済ありの場合）</dt>
+<dd id="roan-detail-prepay-interest">-</dd>
+</div>
+<div class="faq-item">
+<dt>完済時期の短縮効果</dt>
+<dd id="roan-detail-shorten">-</dd>
+</div>
+<div class="faq-item">
+<dt>積立投資の元本合計（繰り上げ完済までの期間で拠出した場合）</dt>
+<dd id="roan-detail-invest-principal">-</dd>
+</div>
+<div class="faq-item">
+<dt>積立投資の将来評価額（元本＋運用益）</dt>
+<dd id="roan-detail-invest-total">-</dd>
+</div>
+</dl>
+</section>
+<section class="article-section">
+<h2>この比較で押さえておきたいポイント</h2>
+<h3>繰り上げ返済のメリット・注意点</h3>
+<p>繰り上げ返済でその後支払うはずだった利息が減る効果は、住宅ローン金利分の運用をノーリスクで確定させることに相当します。一方で、繰り上げ返済に回したお金は簡単には引き出せなくなるため、手元資金（生活防衛資金）が不足しないよう注意が必要です。また、住宅ローン控除（住宅借入金等特別控除）を利用中の場合、ローン残高が減ることで控除額が減る可能性があるため、控除期間中は繰り上げ返済のタイミングを慎重に検討することをおすすめします。</p>
+<h3>積立投資のメリット・注意点</h3>
+<p>積立投資は住宅ローン金利を上回るリターンが得られれば繰り上げ返済より有利になりますが、想定利回りはあくまで仮定であり、相場の下落により元本割れする可能性があります。また、課税口座では運用益に約20%の税金がかかる点（新NISA口座なら非課税）も考慮する必要があります。本シミュレーターの積立投資の試算は税引前の数値です。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>「完済までの期間（繰り上げ返済あり）」はどう計算していますか？</dt>
+<dd>通常の毎月返済額に加えて、入力した「毎月の余裕資金」を毎月継続して元金の返済に充てた場合に、残高がゼロになるまでの期間を1ヶ月単位でシミュレーションしています。</dd>
+</div>
+<div class="faq-item">
+<dt>積立投資の運用益は、どの期間で計算していますか？</dt>
+<dd>「繰り上げ返済で完済するまでの期間」と同じ月数だけ、同じ月額を積立投資に回したと仮定して計算しています。繰り上げ返済シナリオで毎月の余裕資金が実際に使われる期間に合わせることで、両者を同じ条件で比較できるようにしています。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、実際の返済額・運用成果・元本を保証するものではありません。住宅ローン控除など税制上の優遇措置、金利変動（変動金利の場合）、繰り上げ返済手数料は考慮していません。実際の判断にあたっては金融機関・ファイナンシャルプランナー等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-kurioage" role="tabpanel" aria-labelledby="tab-btn-kurioage" data-tool="kurioage" hidden>
+    <p class="tab-panel-intro">まとまった資金ができたとき、住宅ローンの繰上返済（期間短縮型）に使う場合と、新NISAなどで運用に回す場合とで、どちらが有利かを試算します。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="kurioage-balance">住宅ローンの残高 <span class="unit">円</span></label>
+<input id="kurioage-balance" min="0" step="100000" type="number" value="25000000"/>
+</div>
+<div class="field">
+<label for="kurioage-loanRate">ローン金利（年率） <span class="unit" id="kurioage-loanRateOut">1.0 %</span></label>
+<input id="kurioage-loanRate" max="4" min="0.1" step="0.05" type="range" value="1.0"/>
+</div>
+<div class="field">
+<label for="kurioage-termYears">残りの返済期間 <span class="unit" id="kurioage-termYearsOut">25 年</span></label>
+<input id="kurioage-termYears" max="35" min="1" step="1" type="range" value="25"/>
+</div>
+<div class="field">
+<label for="kurioage-lump">繰上返済 or 投資に回す資金 <span class="unit">円</span></label>
+<input id="kurioage-lump" min="0" step="100000" type="number" value="2000000"/>
+</div>
+<div class="field">
+<label for="kurioage-investRate">想定運用利回り（年率） <span class="unit" id="kurioage-investRateOut">5.0 %</span></label>
+<input id="kurioage-investRate" max="10" min="0" step="0.1" type="range" value="5"/>
+</div>
+</div>
+<div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">短縮される返済期間</div>
+<div class="value" id="kurioage-result-months-saved">-</div>
+</div>
+<div class="result-card">
+<div class="label">繰上返済で軽減できる利息総額</div>
+<div class="value" id="kurioage-result-interest-saved">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">同じ資金を運用した場合の運用益（税引前）</div>
+<div class="value" id="kurioage-result-invest-profit">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="kurioage-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>繰上返済による利息軽減額（累計）</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>投資に回した場合の運用益（累計）</span>
+</div>
+</div>
+<div class="disclaimer" id="kurioage-conclusion" style="margin-top:20px;"></div>
+</div>
+</div>
+<section class="article-section">
+<h2>この試算の考え方</h2>
+<p>「繰上返済」は返済期間を短くする<strong>期間短縮型</strong>を前提にしています。毎月の返済額は変えず、入力した資金を残高からその場で差し引くことで、完済までの期間と支払う利息の総額がどれだけ減るかを計算します。「投資」は同じ資金を、繰上返済していなければ支払い続けていたはずの期間（残りの返済期間）だけ複利で運用したと仮定した場合の評価額です。</p>
+<dl>
+<div class="faq-item">
+<dt>繰り上げ返済で軽減できる利息総額</dt>
+<dd id="kurioage-detail-interest-saved">-</dd>
+</div>
+<div class="faq-item">
+<dt>同じ資金を運用した場合の運用益（税引前）</dt>
+<dd id="kurioage-detail-invest-profit">-</dd>
+</div>
+<div class="faq-item">
+<dt>運用益（税引後の目安・課税口座 20.315%の場合）</dt>
+<dd id="kurioage-detail-invest-profit-after-tax">-</dd>
+</div>
+</dl>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>繰上返済にはどんな種類がありますか？</dt>
+<dd>大きく分けて、毎月の返済額を変えずに完済を早める「期間短縮型」と、返済期間は変えずに毎月の返済額を減らす「返済額軽減型」があります。総支払利息の軽減効果は一般に期間短縮型の方が大きいため、本シミュレーターは期間短縮型で試算しています。</dd>
+</div>
+<div class="faq-item">
+<dt>投資の運用益には税金がかかりますか？</dt>
+<dd>新NISA口座での運用益は非課税ですが、非課税投資枠には上限があります。課税口座（特定口座など）の場合、運用益に対して約20.315%の税金がかかる点にご留意ください。本シミュレーターの「税引前」の値はこの税金を考慮していません。</dd>
+</div>
+<div class="faq-item">
+<dt>どちらを選べばいいですか？</dt>
+<dd>数字の比較だけでなく、「団体信用生命保険による保障を維持したいか」「手元の現金流動性をどれだけ確保したいか」「金利変動のリスクをどう考えるか」なども踏まえた総合判断が大切です。本シミュレーターはあくまで機械的な試算の一つの目安としてご活用ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの結果は入力条件に基づく参考値であり、実際のローン契約内容・将来の運用成果・元本を保証するものではありません。金利は将来変動する可能性があり、繰上返済には金融機関ごとの手数料や手続き条件が別途かかる場合があります。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-koujo" role="tabpanel" aria-labelledby="tab-btn-koujo" data-tool="koujo" hidden>
+    <p class="tab-panel-intro">住宅ローン控除は、年末のローン残高に応じて所得税・住民税が軽減される制度です。控除額は「年末残高（借入限度額が上限）×0.7%」で計算されますが、住宅の種類によって借入限度額や控除期間が異なり、所得税額が少ないと控除しきれない場合もあります。条件を入力して、控除期間全体の見込み額を確認しましょう。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="koujo-principal">借入額（当初） <span class="unit">円</span></label>
+<input id="koujo-principal" min="0" step="100000" type="number" value="35000000"/>
+</div>
+<div class="field">
+<label for="koujo-loanRate">借入金利（年率） <span class="unit">%</span></label>
+<input id="koujo-loanRate" max="10" min="0" step="0.01" type="number" value="1.0"/>
+</div>
+<div class="field">
+<label for="koujo-loanYears">返済期間 <span class="unit">年</span></label>
+<input id="koujo-loanYears" max="50" min="1" step="1" type="number" value="35"/>
+</div>
+<div class="field">
+<label for="koujo-category">住宅の区分</label>
+<select id="koujo-category">
+<option value="new-nintei">新築：認定住宅（長期優良住宅・低炭素住宅）</option>
+<option value="new-zeh">新築：ZEH水準省エネ住宅</option>
+<option selected="" value="new-shoene">新築：省エネ基準適合住宅</option>
+<option value="new-sonota">新築：その他の住宅（2023年末までに建築確認・経過措置）</option>
+<option value="used-nintei">既存（中古）：認定住宅等・ZEH水準省エネ住宅・省エネ基準適合住宅</option>
+<option value="used-sonota">既存（中古）：その他の住宅</option>
+</select>
+<p class="field-hint">2024年・2025年に入居する場合の現行制度に基づく区分です。証明書の種類は住宅の売買契約書や建築確認の書類でご確認ください。</p>
+</div>
+<div class="field" id="koujo-kosodateRow">
+<label for="koujo-kosodate">子育て世帯・若者夫婦世帯に該当</label>
+<select id="koujo-kosodate">
+<option value="no">該当しない</option>
+<option value="yes">該当する（19歳未満の子がいる、または夫婦のいずれかが40歳未満）</option>
+</select>
+</div>
+<div class="field">
+<label for="koujo-salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
+<input id="koujo-salaryIncome" max="30000000" min="0" step="10000" type="number" value="6000000"/>
+</div>
+<div class="field">
+<label for="koujo-hasSpouse">配偶者控除の対象になる配偶者</label>
+<select id="koujo-hasSpouse">
+<option value="no">いない</option>
+<option value="yes">いる（配偶者の年収が123万円以下など）</option>
+</select>
+</div>
+<div class="field">
+<label for="koujo-dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
+<input id="koujo-dependents" max="6" min="0" step="1" type="number" value="0"/>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="koujo-verdict">-</span>
+<span class="sub" id="koujo-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">控除期間合計の見込み額</div>
+<div class="value" id="koujo-result-total">-</div>
+</div>
+<div class="result-card">
+<div class="label">初年度の控除見込み額</div>
+<div class="value" id="koujo-result-first-year">-</div>
+</div>
+<div class="result-card">
+<div class="label">借入限度額（区分適用後）</div>
+<div class="value" id="koujo-result-limit">-</div>
+</div>
+<div class="result-card">
+<div class="label">控除期間</div>
+<div class="value" id="koujo-result-period">-</div>
+</div>
+<div class="result-card">
+<div class="label">所得税額（概算・年間）</div>
+<div class="value" id="koujo-result-income-tax">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:220px">
+<canvas height="220" id="koujo-creditChart"></canvas>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>経過年</th><th>年末残高</th><th>控除額（枠）</th><th>所得税から控除</th><th>住民税から控除</th><th>控除しきれない額</th></tr>
+</thead>
+<tbody id="koujo-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>住宅ローン控除はどう計算される？</h2>
+<p>住宅ローン控除（住宅借入金等特別控除）は、毎年12月末時点のローン残高（住宅の区分ごとの借入限度額が上限）に0.7%を掛けた金額が、その年の所得税額から控除される制度です。所得税額から引ききれない分は、一定の上限（原則は課税総所得金額等の5%、上限97,500円）まで翌年度の住民税からも控除できます。控除できる期間は、新築で認定住宅・ZEH水準省エネ住宅・省エネ基準適合住宅に該当する場合は13年間、それ以外の新築（経過措置）や中古（既存）住宅の場合は10年間です。</p>
+<p>借入限度額は住宅の性能が高いほど大きく設定されており、2024年・2025年に入居する場合はさらに「子育て世帯・若者夫婦世帯」向けの上乗せ措置があります。本ツールはこの現行制度（2024・2025年入居）を前提に、入力された借入条件から元利均等返済の年末残高を試算し、各年の控除額・所得税と住民税への充当額・控除しきれない金額を計算します。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>「控除しきれない額」が出るのはなぜですか？</dt>
+<dd>住宅ローン控除は所得税額・住民税所得割額（上限あり）からしか引けないため、年末残高から計算される控除枠が所得税・住民税の負担額より大きい場合、その差額は控除に使いきれず、原則として翌年以降に繰り越すこともできません。</dd>
+</div>
+<div class="faq-item">
+<dt>住宅の区分はどうやって確認すればいいですか？</dt>
+<dd>認定長期優良住宅・低炭素住宅は所管行政庁が交付する認定通知書、ZEH水準省エネ住宅・省エネ基準適合住宅は住宅性能証明書や建設住宅性能評価書などで確認できます。不明な場合は施工会社や不動産会社に確認しましょう。</dd>
+</div>
+<div class="faq-item">
+<dt>子育て世帯・若者夫婦世帯の上乗せ措置はいつまで対象ですか？</dt>
+<dd>2024年・2025年に入居する場合の措置です。本ツールもこの期間の入居を前提としています。制度は税制改正で変更される可能性があるため、入居予定年の最新情報を国税庁のサイト等でご確認ください。</dd>
+</div>
+<div class="faq-item">
+<dt>この試算は正確ですか？</dt>
+<dd>元利均等返済・給与所得者であることを前提にした概算です。繰り上げ返済を行った場合の残高変動、ふるさと納税など他の控除との兼ね合い、年収の変動、連帯債務・ペアローンの持分按分などは考慮していません。正確な控除額は確定申告時の計算や税務署・税理士にご確認ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の控除額を保証するものではありません。制度内容は税制改正により変更される場合があります。正確な金額は税務署・税理士等にご確認ください。本サイトは特定の金融機関・住宅の勧誘を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-kinri" role="tabpanel" aria-labelledby="tab-btn-kinri" data-tool="kinri" hidden>
+    <p class="tab-panel-intro">借入額・返済期間・金利を入力し、今後の金利上昇シナリオを選ぶと、全期間固定金利と変動金利で総返済額がどれだけ変わるかを試算します。変動金利は「5年ルール」「125%ルール」を考慮した場合としない場合を切り替えて比較できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="kinri-principal">借入額 <span class="unit">万円</span></label>
+<input id="kinri-principal" min="0" step="50" type="number" value="3000"/>
+</div>
+<div class="field">
+<label for="kinri-loanYears">返済期間 <span class="unit">年</span></label>
+<input id="kinri-loanYears" max="50" min="1" step="1" type="number" value="35"/>
+</div>
+<div class="field">
+<label for="kinri-fixedRate">固定金利プランの金利（全期間一定） <span class="unit">%</span></label>
+<input id="kinri-fixedRate" max="10" min="0" step="0.05" type="number" value="1.7"/>
+</div>
+<div class="field">
+<label for="kinri-variableRate">変動金利プランの当初金利 <span class="unit">%</span></label>
+<input id="kinri-variableRate" max="10" min="0" step="0.05" type="number" value="0.5"/>
+</div>
+<div class="field">
+<label for="kinri-scenario">変動金利の今後の金利上昇シナリオ</label>
+<select id="kinri-scenario">
+<option value="flat">上昇なし（横ばい）</option>
+<option value="gentle">緩やかに上昇（5年ごとに+0.25%）</option>
+<option value="steep">急上昇（5年ごとに+0.5%）</option>
+</select>
+<p class="field-hint">実際の金融機関の基準金利は5年ごと以外にも見直されますが、本シミュレーターでは代表的な「5年ごとの見直し」を前提に試算します。</p>
+</div>
+<div class="field">
+<label for="kinri-applyRule">5年ルール・125%ルールの適用</label>
+<select id="kinri-applyRule">
+<option value="yes">適用する（多くの銀行の一般的な変動金利型に採用）</option>
+<option value="no">適用しない（金利変動をそのまま毎月返済額に反映）</option>
+</select>
+<p class="field-hint">「適用する」を選ぶと、金利が上がっても5年間は毎月返済額が変わらず、6年目以降の見直しでも上昇幅は直前の返済額の125%までに抑えられます。ただし抑えられた分の利息（未払利息）は元金に上乗せされます。</p>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="kinri-verdict">-</span>
+<span class="sub" id="kinri-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">固定金利の総返済額</div>
+<div class="value" id="kinri-result-fixed-total">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">変動金利の総返済額（シナリオ通り）</div>
+<div class="value" id="kinri-result-variable-total">-</div>
+</div>
+<div class="result-card">
+<div class="label">総返済額の差</div>
+<div class="value" id="kinri-result-diff">-</div>
+</div>
+<div class="result-card">
+<div class="label">変動金利で発生する未払利息</div>
+<div class="value" id="kinri-result-unpaid">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="kinri-balanceChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>固定金利の残高推移</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>変動金利の残高推移</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>期間</th><th>適用金利</th><th>毎月返済額</th><th>期間開始時の残高</th></tr>
+</thead>
+<tbody id="kinri-review-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>「5年ルール」「125%ルール」とは</h2>
+<p>多くの銀行の変動金利型住宅ローンには、金利が変動しても毎月の返済額を一定期間据え置く仕組みがあります。「5年ルール」は、金利が半年ごとに見直されても毎月の返済額自体は5年間変わらないというルールです。5年後の見直し時には返済額も見直されますが、「125%ルール」により、その上昇幅は直前の返済額の125%まで（つまり最大でも25%増まで）に抑えられます。</p>
+<p>ただし、これらのルールは返済者の家計を急激な負担増から守るためのものであり、金利上昇そのものを打ち消すわけではありません。返済額に反映しきれなかった利息（未払利息）は消えるのではなく元金に上乗せされるため、金利上昇が続くと「毎月の返済額は変わらないのに、なかなか元金が減らない」「最終回に未払分がまとめて請求される」といった事態が起こり得ます。本シミュレーターの「未払利息」「一括請求」の試算は、この仕組みのリスクをイメージしやすくするためのものです。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>変動金利と固定金利、結局どちらを選べばいいですか？</dt>
+<dd>本シミュレーターは特定の選択を推奨するものではありません。金利が上がらなければ当初金利の低い変動金利が有利になりやすく、金利が大きく上がる局面では固定金利が有利になりやすい、という一般的な傾向を、ご自身が想定するシナリオで確認するための試算ツールとしてご利用ください。</dd>
+</div>
+<div class="faq-item">
+<dt>すべての銀行が5年ルール・125%ルールを採用していますか？</dt>
+<dd>いいえ。多くの大手銀行は採用していますが、一部のネット銀行などでは採用しておらず、金利変動が毎月の返済額にそのまま反映される商品もあります。契約前に金融機関の商品説明書で必ず確認してください。</dd>
+</div>
+<div class="faq-item">
+<dt>未払利息はいつ返済することになりますか？</dt>
+<dd>金融機関や契約内容によって扱いが異なりますが、返済期間の途中で未払利息が解消されなかった場合、最終回にまとめて一括返済を求められるケースが一般的です。本シミュレーターでは簡略化のため、返済期間終了時点で残っている残高（未払利息を含む）を一括請求額として表示しています。</dd>
+</div>
+<div class="faq-item">
+<dt>金利は5年ごとにしか変わらないのですか？</dt>
+<dd>いいえ。多くの変動金利型住宅ローンでは、適用金利自体は半年ごとに見直されます。5年ルールが対象にしているのはあくまで「毎月の返済額」であり、見直された金利は返済額に反映されないだけで、内部的な利息計算には反映され続けます。本シミュレーターは、この「金利は半年ごと・返済額は5年ごと」という実際の仕組みを簡略化し、5年単位でまとめて試算しています。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件・金利シナリオに基づく参考値であり、将来の金利動向や実際の返済額を保証するものではありません。金利の見直し時期・見直し方法（半年ごと・5年ごとなど）、未払利息の扱いは金融機関や商品ごとに異なります。実際の借入条件・返済額は各金融機関に必ずご確認ください。本サイトは特定の金融機関・住宅ローン商品の勧誘・助言を目的とするものではありません。
+  </div>
+  </section>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件と選択中のツールをそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ下部 --></div>
+
+  <section class="article-section hub-related-guides">
+    <h2>あわせて読みたいガイド</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="kinri-erabikata-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>住宅ローンの金利タイプの選び方｜変動金利・固定金利・固定期間選択型の違い 完全ガイド</h3>
+        <p>住宅ローンの「全期間固定金利」「変動金利」「固定期間選択型」の3つの金利タイプについて、それぞれのメリット・デメリット、変動金利の「5年ルール・125%ルー…</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+<div class="container">
+<span>© 2026 ふやすノート</span>
+<nav>
+<a href="../about.html">運営者情報</a>
+<a href="../privacy.html">プライバシーポリシー</a>
+<a href="../disclosure.html">アフィリエイト・広告表記について</a>
+</nav>
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+
+<script src="../js/roan.js"></script>
+<script src="../js/loan-vs-invest.js"></script>
+<script src="../js/jutaku-loan-koujo.js"></script>
+<script src="../js/kinri-hikaku.js"></script>
+<script src="../js/tabs.js"></script>
+<script src="../js/share.js"></script>
+<script src="../js/nav-toggle.js"></script>
+</body>
+</html>

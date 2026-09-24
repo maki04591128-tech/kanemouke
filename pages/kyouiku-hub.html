@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>教育資金・保険シミュレーター まとめ | ふやすノート</title>
+<meta name="description" content="教育資金シミュレーター・学資保険vs積立NISA・生命保険料控除まで、教育資金・保険に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/kyouiku-hub.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="教育資金・保険シミュレーター まとめ | ふやすノート">
+<meta property="og:description" content="教育資金シミュレーター・学資保険vs積立NISA・生命保険料控除まで、教育資金・保険に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/kyouiku-hub.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="教育資金・保険シミュレーター まとめ | ふやすノート">
+<meta name="twitter:description" content="教育資金シミュレーター・学資保険vs積立NISA・生命保険料控除まで、教育資金・保険に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "オール公立（幼稚園〜大学まで国公立）",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "目安 約820万円"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "高校まで公立＋大学は私立文系",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "目安 約980万円"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "高校まで公立＋大学は私立理系",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "目安 約1,120万円"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "幼稚園〜大学まですべて私立",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "目安 約2,300万円（文系・理系や下宿の有無でさらに増減）"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "いつまでに準備すればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "大学入学時（18歳）に一時的な出費が集中しやすいため、多くのご家庭では子どもが18歳になるまでを目安に準備しています。本シミュレーターも18歳到達時点を目標時期として計算しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "想定利回りは何%にすればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "教育資金は使う時期が決まっているため、老後資金などに比べて低め・安全志向の利回り（0〜3%程度）で試算する方が多い傾向にあります。学資保険や預金中心なら0%、新NISA等での運用も組み合わせるなら1〜3%程度を目安にしてみてください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "学資保険の保険料は生命保険料控除の対象になりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "多くの学資保険は「一般生命保険料控除」の対象です。年間の払込保険料に応じて所得税・住民税が軽減されますが、本シミュレーターでは金額を簡略化するため控除額を試算に含めていません。控除額の目安は「生命保険料控除・地震保険料控除シミュレーター」で別途ご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "満期保険金を受け取ると税金がかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "契約者本人が保険料を払い込み、契約者本人が満期保険金を受け取る場合は「一時所得」として扱われます。一時所得は「（受取額－払込保険料総額－特別控除50万円）÷2」が課税対象で、多くの学資保険は受取額と払込保険料の差が50万円以下に収まるため、実際には課税されないケースが大半です。一方、積立NISA（つみたて投資枠）は運用益が非課税のため、この論点自体が生じません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "払込期間の途中で解約したらどうなりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "学資保険を途中解約すると、解約返戻金が払込保険料の総額を下回ることが多く、大きく元本割れするのが一般的です。本シミュレーターは満期まで契約を継続した場合の試算のみを対象としています。積立NISAはいつでも時価で売却できる点が対照的です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "2011年以前に契約した「旧制度」の保険はどうなりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "旧制度（一般生命保険料・個人年金保険料の2区分、それぞれ上限50,000円）は控除額の計算式が異なります。本ツールは新制度の保険料を前提に試算しているため、旧制度の契約が多い場合は実際の控除額と差が生じます。正確な金額は保険会社から届く「保険料控除証明書」に記載の区分・金額をご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "会社員でも申告は必要ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "会社員の場合は、年末調整の際に「給与所得者の保険料控除申告書」に保険料控除証明書の内容を記入して提出すれば、確定申告をしなくても控除が適用されます。年末調整に間に合わなかった場合は、翌年以降5年以内であれば確定申告（還付申告）で控除を受けられます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "火災保険料も控除の対象になりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "火災保険料そのものは地震保険料控除の対象外です。地震保険とセットの契約でも、地震保険料部分のみが控除の対象になります。保険料控除証明書に地震保険料の金額が別途記載されているので、その金額を入力してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "この試算は正確ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "給与所得者を前提とした一般的な近似計算です。生命保険料控除・地震保険料控除以外の各種控除（住宅ローン控除・医療費控除・iDeCoの掛金控除など）や、旧制度の契約がある場合は実際の還付額・軽減額が変わります。正確な金額は年末調整の結果や確定申告書等作成コーナー、税務署でご確認ください。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+<div class="container">
+<a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+<button aria-controls="site-nav" aria-expanded="false" class="nav-toggle" type="button">
+<span aria-hidden="true" class="icon"></span>
+<span>メニュー</span>
+</button>
+<nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+</div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>教育資金・保険シミュレーター まとめ</h1>
+    <p>教育資金の準備計画、学資保険と積立NISAの比較、生命保険料・地震保険料控除の節税額まで、教育資金・保険に関する3つのシミュレーターを1ページにまとめました。上のタブを切り替えるだけで、目的に合わせて使い分けられます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ上部 --></div>
+
+  <div class="hub-tabs" id="hub-tabs" role="tablist" aria-label="ツールを選択">
+        <button type="button" class="hub-tab" role="tab" id="tab-btn-kyouiku" aria-controls="tabpanel-kyouiku" aria-selected="true" data-tool="kyouiku">教育資金</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-gakushi" aria-controls="tabpanel-gakushi" aria-selected="false" data-tool="gakushi">学資保険vsNISA</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-hoken" aria-controls="tabpanel-hoken" aria-selected="false" data-tool="hoken">保険料控除</button>
+  </div>
+
+  <section class="tab-panel" id="tabpanel-kyouiku" role="tabpanel" aria-labelledby="tab-btn-kyouiku" data-tool="kyouiku">
+    <p class="tab-panel-intro">進路（公立・私立）に応じた教育費の目安と、お子さまの現在の年齢から、大学卒業までに毎月いくら積み立てればよいかを試算します。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="kyouiku-course">進路パターン（教育費の目安）</label>
+<select id="kyouiku-course">
+<option value="820">オール公立（幼稚園〜大学）目安 820万円</option>
+<option selected="" value="980">高校まで公立＋大学は私立文系　目安 980万円</option>
+<option value="1120">高校まで公立＋大学は私立理系　目安 1,120万円</option>
+<option value="2300">幼稚園〜大学まですべて私立　目安 2,300万円</option>
+<option value="custom">カスタム（下の欄で金額を直接入力）</option>
+</select>
+</div>
+<div class="field">
+<label for="kyouiku-target">教育費の目標総額 <span class="unit">万円</span></label>
+<input id="kyouiku-target" min="0" step="10" type="number" value="980"/>
+</div>
+<div class="field">
+<label for="kyouiku-childAge">お子さまの現在の年齢 <span class="unit" id="kyouiku-childAgeOut">3 歳</span></label>
+<input id="kyouiku-childAge" max="17" min="0" step="1" type="range" value="3"/>
+</div>
+<div class="field">
+<label for="kyouiku-initial">すでに準備できている金額 <span class="unit">円</span></label>
+<input id="kyouiku-initial" min="0" step="10000" type="number" value="500000"/>
+</div>
+<div class="field">
+<label for="kyouiku-rate">想定利回り（年率） <span class="unit" id="kyouiku-rateOut">1.0 %</span></label>
+<input id="kyouiku-rate" max="8" min="0" step="0.1" type="range" value="1"/>
+</div>
+</div>
+<div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">大学卒業までに必要な毎月積立額</div>
+<div class="value" id="kyouiku-result-monthly">-</div>
+</div>
+<div class="result-card">
+<div class="label">積立元本（累計・現在の貯蓄含む）</div>
+<div class="value" id="kyouiku-result-principal">-</div>
+</div>
+<div class="result-card">
+<div class="label">運用益（想定）</div>
+<div class="value" id="kyouiku-result-profit">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="kyouiku-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
+<span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
+</div>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>進路別の教育費の目安（幼稚園〜大学の合計）</h2>
+<p>公的な学習費調査などで参照されることの多い数値をもとにした、幼稚園から大学卒業までの目安総額です。実際の費用は自治体・学校・下宿の有無などによって大きく変動するため、あくまで計画の出発点としてご活用ください。</p>
+<dl>
+<div class="faq-item">
+<dt>オール公立（幼稚園〜大学まで国公立）</dt>
+<dd>目安 約820万円</dd>
+</div>
+<div class="faq-item">
+<dt>高校まで公立＋大学は私立文系</dt>
+<dd>目安 約980万円</dd>
+</div>
+<div class="faq-item">
+<dt>高校まで公立＋大学は私立理系</dt>
+<dd>目安 約1,120万円</dd>
+</div>
+<div class="faq-item">
+<dt>幼稚園〜大学まですべて私立</dt>
+<dd>目安 約2,300万円（文系・理系や下宿の有無でさらに増減）</dd>
+</div>
+</dl>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>いつまでに準備すればいいですか？</dt>
+<dd>大学入学時（18歳）に一時的な出費が集中しやすいため、多くのご家庭では子どもが18歳になるまでを目安に準備しています。本シミュレーターも18歳到達時点を目標時期として計算しています。</dd>
+</div>
+<div class="faq-item">
+<dt>想定利回りは何%にすればいいですか？</dt>
+<dd>教育資金は使う時期が決まっているため、老後資金などに比べて低め・安全志向の利回り（0〜3%程度）で試算する方が多い傾向にあります。学資保険や預金中心なら0%、新NISA等での運用も組み合わせるなら1〜3%程度を目安にしてみてください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの教育費目安・試算結果はいずれも参考値であり、実際に必要な金額や将来の運用成果・元本を保証するものではありません。教育費は進学先・地域・下宿の有無等により大きく異なります。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-gakushi" role="tabpanel" aria-labelledby="tab-btn-gakushi" data-tool="gakushi" hidden>
+    <p class="tab-panel-intro">教育資金の準備方法として根強い人気がある「学資保険」と、既存の教育資金シミュレーターが前提とする「積立NISA（つみたて投資枠）」を、同じ毎月の積立額で比較します。学資保険は返戻率どおりの受取額が契約時に確定するのに対し、積立NISAは想定利回りで運用した場合の試算値である点が大きな違いです。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="gakushi-monthly">毎月の払込・積立額 <span class="unit">万円</span></label>
+<input id="gakushi-monthly" min="0" step="0.1" type="number" value="1.5"/>
+</div>
+<div class="field">
+<label for="gakushi-years">払込・積立期間 <span class="unit" id="gakushi-yearsOut">18 年</span></label>
+<input id="gakushi-years" max="22" min="5" step="1" type="range" value="18"/>
+<p class="field-hint">学資保険は0歳から加入し18歳満期（払込18年）が一般的です。払込期間を短くして据置く商品もありますが、本シミュレーターでは払込期間＝満期までの期間として簡略化しています。</p>
+</div>
+<div class="field">
+<label for="gakushi-returnRate">学資保険の返戻率 <span class="unit" id="gakushi-returnRateOut">105.0 %</span></label>
+<input id="gakushi-returnRate" max="115" min="90" step="0.5" type="range" value="105.0"/>
+<p class="field-hint">返戻率＝受取総額÷払込保険料総額。保障を厚くするほど返戻率は下がり、100%未満（元本割れ）になる商品もあります。加入予定の商品のパンフレット記載値を入力してください。</p>
+</div>
+<div class="field">
+<label for="gakushi-nisaRate">積立NISAの想定利回り（年率・複利） <span class="unit" id="gakushi-nisaRateOut">5.0 %</span></label>
+<input id="gakushi-nisaRate" max="10" min="0" step="0.1" type="range" value="5.0"/>
+<p class="field-hint">つみたて投資枠の運用益は非課税のため、税金は考慮していません。将来の運用成果を保証するものではない点にご留意ください。</p>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="gakushi-verdict">-</span>
+<span class="sub" id="gakushi-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">払込・積立累計額（元本）</div>
+<div class="value" id="gakushi-result-principal">-</div>
+</div>
+<div class="result-card">
+<div class="label">学資保険：満期受取額</div>
+<div class="value" id="gakushi-result-hoken">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">積立NISA：運用終了時点の評価額</div>
+<div class="value" id="gakushi-result-nisa">-</div>
+</div>
+<div class="result-card">
+<div class="label">受取額の差</div>
+<div class="value" id="gakushi-result-diff">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="gakushi-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>積立NISA 評価額</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>学資保険 満期受取額（参考）</span>
+<span><span class="legend-dot" style="background:#7a8899"></span>払込・積立累計額（元本）</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>項目</th><th>学資保険</th><th>積立NISA</th></tr>
+</thead>
+<tbody id="gakushi-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>学資保険と積立NISA、金額以外に何が違うのか</h2>
+<p>学資保険は、契約時に定めた返戻率どおりの受取額が（保険会社の破綻等がない限り）確定している「元本保証型」の商品です。一方、積立NISAは投資信託などで運用するため、将来の受取額は市場の値動きによって変動し、想定利回りを下回る（元本割れする）可能性もあります。本シミュレーターの試算結果はどちらが「得」かを断定するものではなく、条件を変えて金額の傾向を確認するための参考値です。</p>
+<p>また、学資保険には積立NISAにはない「保障」の機能があります。代表的なのが<strong>保険料払込免除特約</strong>で、契約者（多くは親）が死亡・高度障害になった場合、それ以降の保険料の払い込みが免除されたうえで、満期時には契約どおりの満額の学資金を受け取れます。積立NISAでこれと同等の保障を得るには、別途生命保険への加入が必要です。逆に積立NISAには、いつでも売却して資金を引き出せる流動性の高さや、学資保険の返戻率が110%を超えることは少ないのに対し長期の株式運用ではより高いリターンが期待できる可能性があるという特徴があります。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>学資保険の保険料は生命保険料控除の対象になりますか？</dt>
+<dd>多くの学資保険は「一般生命保険料控除」の対象です。年間の払込保険料に応じて所得税・住民税が軽減されますが、本シミュレーターでは金額を簡略化するため控除額を試算に含めていません。控除額の目安は「生命保険料控除・地震保険料控除シミュレーター」で別途ご確認ください。</dd>
+</div>
+<div class="faq-item">
+<dt>満期保険金を受け取ると税金がかかりますか？</dt>
+<dd>契約者本人が保険料を払い込み、契約者本人が満期保険金を受け取る場合は「一時所得」として扱われます。一時所得は「（受取額－払込保険料総額－特別控除50万円）÷2」が課税対象で、多くの学資保険は受取額と払込保険料の差が50万円以下に収まるため、実際には課税されないケースが大半です。一方、積立NISA（つみたて投資枠）は運用益が非課税のため、この論点自体が生じません。</dd>
+</div>
+<div class="faq-item">
+<dt>払込期間の途中で解約したらどうなりますか？</dt>
+<dd>学資保険を途中解約すると、解約返戻金が払込保険料の総額を下回ることが多く、大きく元本割れするのが一般的です。本シミュレーターは満期まで契約を継続した場合の試算のみを対象としています。積立NISAはいつでも時価で売却できる点が対照的です。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・保険会社の商品内容・元本を保証するものではありません。学資保険の返戻率は入力値をそのまま満期時に確定するものとして計算し、途中解約・保障内容・生命保険料控除・満期保険金の課税は考慮していません。積立NISAは運用益非課税として月次複利で計算した税引前の試算値です。実際の商品選び・税額については保険会社・税理士等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-hoken" role="tabpanel" aria-labelledby="tab-btn-hoken" data-tool="hoken" hidden>
+    <p class="tab-panel-intro">1年間（1月〜12月）に支払った生命保険料・地震保険料は、年末調整や確定申告で所得控除の対象になります。契約ごとの年間払込保険料を入力するだけで、所得税・住民税それぞれの控除額と、還付・軽減される税額の目安をまとめて試算できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="hoken-salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
+<input id="hoken-salaryIncome" max="30000000" min="0" step="10000" type="number" value="5000000"/>
+</div>
+<div class="field">
+<label for="hoken-socialInsurance">社会保険料の年間支払額（概算） <span class="unit">円</span></label>
+<input id="hoken-socialInsurance" min="0" step="1000" type="number" value="750000"/>
+<p class="field-hint">目安がわからない場合は年収の約15%で概算しています（給与明細の社会保険料合計×12で置き換えるとより正確です）。</p>
+</div>
+<div class="field">
+<label for="hoken-hasSpouse">配偶者控除の対象になる配偶者</label>
+<select id="hoken-hasSpouse">
+<option value="no">いない</option>
+<option value="yes">いる（配偶者の年収が123万円以下など）</option>
+</select>
+</div>
+<div class="field">
+<label for="hoken-dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
+<input id="hoken-dependents" max="6" min="0" step="1" type="number" value="0"/>
+</div>
+<div class="field">
+<label for="hoken-generalLife">一般生命保険料の年間払込額 <span class="unit">円</span></label>
+<input id="hoken-generalLife" min="0" step="1000" type="number" value="80000"/>
+<p class="field-hint">死亡保障などの生命保険。2012年（平成24年）以降に契約した「新制度」の保険料を前提に計算します。</p>
+</div>
+<div class="field">
+<label for="hoken-medicalCare">介護医療保険料の年間払込額 <span class="unit">円</span></label>
+<input id="hoken-medicalCare" min="0" step="1000" type="number" value="40000"/>
+<p class="field-hint">医療保険・がん保険・介護保険など。新制度で新設された区分です。</p>
+</div>
+<div class="field">
+<label for="hoken-personalPension">個人年金保険料の年間払込額 <span class="unit">円</span></label>
+<input id="hoken-personalPension" min="0" step="1000" type="number" value="0"/>
+<p class="field-hint">「個人年金保険料税制適格特約」が付いた契約のみが対象です。特約のない個人年金保険は一般生命保険料の扱いになります。</p>
+</div>
+<div class="field">
+<label for="hoken-earthquake">地震保険料の年間払込額 <span class="unit">円</span></label>
+<input id="hoken-earthquake" min="0" step="1000" type="number" value="20000"/>
+<p class="field-hint">火災保険とセットで加入する地震保険の保険料部分のみが対象です（火災保険料単体は対象外）。</p>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="hoken-verdict">-</span>
+<span class="sub" id="hoken-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">生命保険料控除額（所得税）</div>
+<div class="value" id="hoken-result-life-income">-</div>
+</div>
+<div class="result-card">
+<div class="label">生命保険料控除額（住民税）</div>
+<div class="value" id="hoken-result-life-resident">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">地震保険料控除額（所得税）</div>
+<div class="value" id="hoken-result-eq-income">-</div>
+</div>
+<div class="result-card">
+<div class="label">地震保険料控除額（住民税）</div>
+<div class="value" id="hoken-result-eq-resident">-</div>
+</div>
+<div class="result-card">
+<div class="label">所得税率（速算表）</div>
+<div class="value" id="hoken-result-tax-rate">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">合計の軽減額（概算）</div>
+<div class="value" id="hoken-result-total-reduction">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:220px">
+<canvas height="220" id="hoken-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>所得税の控除額</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>住民税の控除額</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>区分</th><th>金額</th></tr>
+</thead>
+<tbody id="hoken-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>生命保険料控除・地震保険料控除はどう決まる？</h2>
+<p>2012年（平成24年）以降に契約した生命保険（新制度）は、「一般生命保険料」「介護医療保険料」「個人年金保険料」の3区分に分かれ、それぞれ所得税は年間払込額80,000円で控除額40,000円が上限、3区分合計の上限は120,000円です。住民税は区分ごとに56,000円で控除額28,000円が上限、3区分合計の上限は70,000円です。地震保険料控除は所得税が支払額全額（上限50,000円）、住民税が支払額の1/2（上限25,000円）です。本ツールはこれらの控除額から、給与収入・家族構成に基づく所得税の限界税率（速算表）を用いて還付額・軽減額の目安を試算します。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>2011年以前に契約した「旧制度」の保険はどうなりますか？</dt>
+<dd>旧制度（一般生命保険料・個人年金保険料の2区分、それぞれ上限50,000円）は控除額の計算式が異なります。本ツールは新制度の保険料を前提に試算しているため、旧制度の契約が多い場合は実際の控除額と差が生じます。正確な金額は保険会社から届く「保険料控除証明書」に記載の区分・金額をご確認ください。</dd>
+</div>
+<div class="faq-item">
+<dt>会社員でも申告は必要ですか？</dt>
+<dd>会社員の場合は、年末調整の際に「給与所得者の保険料控除申告書」に保険料控除証明書の内容を記入して提出すれば、確定申告をしなくても控除が適用されます。年末調整に間に合わなかった場合は、翌年以降5年以内であれば確定申告（還付申告）で控除を受けられます。</dd>
+</div>
+<div class="faq-item">
+<dt>火災保険料も控除の対象になりますか？</dt>
+<dd>火災保険料そのものは地震保険料控除の対象外です。地震保険とセットの契約でも、地震保険料部分のみが控除の対象になります。保険料控除証明書に地震保険料の金額が別途記載されているので、その金額を入力してください。</dd>
+</div>
+<div class="faq-item">
+<dt>この試算は正確ですか？</dt>
+<dd>給与所得者を前提とした一般的な近似計算です。生命保険料控除・地震保険料控除以外の各種控除（住宅ローン控除・医療費控除・iDeCoの掛金控除など）や、旧制度の契約がある場合は実際の還付額・軽減額が変わります。正確な金額は年末調整の結果や確定申告書等作成コーナー、税務署でご確認ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の控除額・還付額・軽減額を保証するものではありません。正確な金額は保険料控除証明書・年末調整結果・税務署等でご確認ください。本サイトは特定の保険商品の勧誘を目的とするものではありません。
+  </div>
+  </section>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件と選択中のツールをそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ下部 --></div>
+
+  <section class="article-section hub-related-guides">
+    <h2>あわせて読みたいガイド</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="hoken-koujo-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>生命保険料控除・地震保険料控除とは？対象となる保険と控除額の計算方法 完全ガイド</h3>
+        <p>生命保険料控除・地震保険料控除の仕組みを解説。2012年を境にした新制度・旧制度の違い、一般生命・介護医療・個人年金の区分ごとの控除額速算表、地震保険料控除…</p>
+      </a>
+      <a class="tool-card" href="kyouiku-shikin-junbi-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>教育資金はどう準備する？学資保険・積立NISA・財形貯蓄・教育ローンの選び方 完全ガイド</h3>
+        <p>子どもの教育資金をいつから・どうやって準備すればいいかを解説。預金・財形貯蓄・学資保険・積立NISA・奨学金・教育ローンそれぞれのメリット・デメリットを比較…</p>
+      </a>
+      <a class="tool-card" href="gakushihoken-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>学資保険とは？仕組み・返戻率・メリットデメリット・選び方 完全ガイド</h3>
+        <p>学資保険の仕組みをわかりやすく解説。保険料・満期金・祝い金の関係、返戻率の意味と目安、メリット・デメリット、生命保険料控除の対象になる仕組み、積立NISAと…</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+<div class="container">
+<span>© 2026 ふやすノート</span>
+<nav>
+<a href="../index.html">トップへ戻る</a>
+<a href="../about.html">運営者情報</a>
+<a href="../privacy.html">プライバシーポリシー</a>
+<a href="../disclosure.html">アフィリエイト・広告表記について</a>
+</nav>
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+
+<script src="../js/kyouiku.js"></script>
+<script src="../js/gakushihoken-nisa.js"></script>
+<script src="../js/hoken-koujo.js"></script>
+<script src="../js/tabs.js"></script>
+<script src="../js/share.js"></script>
+<script src="../js/nav-toggle.js"></script>
+</body>
+</html>

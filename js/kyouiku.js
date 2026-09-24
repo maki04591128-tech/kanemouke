@@ -2,16 +2,16 @@
   "use strict";
 
   var els = {
-    course: document.getElementById("course"),
-    target: document.getElementById("target"),
-    childAge: document.getElementById("childAge"),
-    initial: document.getElementById("initial"),
-    rate: document.getElementById("rate"),
-    childAgeOut: document.getElementById("childAgeOut"),
-    rateOut: document.getElementById("rateOut"),
-    monthly: document.getElementById("result-monthly"),
-    principal: document.getElementById("result-principal"),
-    profit: document.getElementById("result-profit"),
+    course: document.getElementById("kyouiku-course"),
+    target: document.getElementById("kyouiku-target"),
+    childAge: document.getElementById("kyouiku-childAge"),
+    initial: document.getElementById("kyouiku-initial"),
+    rate: document.getElementById("kyouiku-rate"),
+    childAgeOut: document.getElementById("kyouiku-childAgeOut"),
+    rateOut: document.getElementById("kyouiku-rateOut"),
+    monthly: document.getElementById("kyouiku-result-monthly"),
+    principal: document.getElementById("kyouiku-result-principal"),
+    profit: document.getElementById("kyouiku-result-profit"),
   };
 
   var GOAL_AGE = 18;
@@ -92,7 +92,7 @@
     var principalData = yearly.map(function (d) { return Math.round(d.principal); });
     var balanceData = yearly.map(function (d) { return Math.round(d.balance); });
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("kyouiku-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

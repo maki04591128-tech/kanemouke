@@ -7,19 +7,19 @@
   var GROWTH_YEARLY_CAP = 2400000; // 成長投資枠の年間上限
 
   var els = {
-    lifetimeUsed: document.getElementById("lifetimeUsed"),
-    growthUsed: document.getElementById("growthUsed"),
-    saleType: document.getElementById("saleType"),
-    saleCostBasis: document.getElementById("saleCostBasis"),
-    saleMarketValue: document.getElementById("saleMarketValue"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    revivedAmount: document.getElementById("result-revived-amount"),
-    lifetimeRemainAfter: document.getElementById("result-lifetime-remain-after"),
-    growthRemainAfter: document.getElementById("result-growth-remain-after"),
-    nextYearInvestable: document.getElementById("result-next-year-investable"),
-    errorBox: document.getElementById("errorBox"),
-    tableBody: document.getElementById("breakdown-body"),
+    lifetimeUsed: document.getElementById("fukkatsu-lifetimeUsed"),
+    growthUsed: document.getElementById("fukkatsu-growthUsed"),
+    saleType: document.getElementById("fukkatsu-saleType"),
+    saleCostBasis: document.getElementById("fukkatsu-saleCostBasis"),
+    saleMarketValue: document.getElementById("fukkatsu-saleMarketValue"),
+    verdict: document.getElementById("fukkatsu-verdict"),
+    verdictSub: document.getElementById("fukkatsu-verdictSub"),
+    revivedAmount: document.getElementById("fukkatsu-result-revived-amount"),
+    lifetimeRemainAfter: document.getElementById("fukkatsu-result-lifetime-remain-after"),
+    growthRemainAfter: document.getElementById("fukkatsu-result-growth-remain-after"),
+    nextYearInvestable: document.getElementById("fukkatsu-result-next-year-investable"),
+    errorBox: document.getElementById("fukkatsu-errorBox"),
+    tableBody: document.getElementById("fukkatsu-breakdown-body"),
   };
 
   var chart = null;
@@ -136,7 +136,7 @@
       })
       .join("");
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("fukkatsu-growthChart").getContext("2d");
     var data = {
       labels: ["売却前", "売却後（翌年以降）"],
       datasets: [

@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>配当・高配当株シミュレーター まとめ | ふやすノート</title>
+<meta name="description" content="配当再投資・高配当株ポートフォリオ・配当課税方式比較まで、配当・高配当株に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/haitou-hub.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="配当・高配当株シミュレーター まとめ | ふやすノート">
+<meta property="og:description" content="配当再投資・高配当株ポートフォリオ・配当課税方式比較まで、配当・高配当株に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/haitou-hub.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="配当・高配当株シミュレーター まとめ | ふやすノート">
+<meta name="twitter:description" content="配当再投資・高配当株ポートフォリオ・配当課税方式比較まで、配当・高配当株に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "分配金利回りを高くすると必ず損をしますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "いいえ。分配金として先に受け取るか、そのまま含み益として保有し続けるかの違いであり、生活費として使う予定があるなら分配型にも意味があります。ただし「将来のためにすべて再投資する」前提であれば、課税口座では無分配型の方が税負担を抑えやすくなります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "分配金利回りが想定利回りより高いのはおかしいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "実際の運用益を上回る分配は、元本の一部を取り崩して支払う「特別分配金（元本払戻金）」に該当する場合があります。特別分配金は本来非課税・かつ元本の払い戻しであるため課税対象になりませんが、本シミュレーターでは簡略化のため分配金をすべて課税対象の「普通分配金」として計算しています。分配金利回りが想定利回りを大きく上回る条件では、実際の税負担は試算より軽くなる可能性がある点にご留意ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "NISA口座なら分配型を選んでも問題ないですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "NISA口座内では分配金にも売却益にも税金がかからないため、本シミュレーターの計算上、分配型と無分配型の最終資産額に理論上の差はありません。ただし、信託報酬など商品ごとのコストは本シミュレーターでは考慮していないため、実際の商品選びでは費用面も比較することをおすすめします。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "実際の高配当株でも同じように増えますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "本シミュレーターは配当利回り・増配率・株価の値上がり率が毎年一定というあくまで単純化した仮定に基づく試算です。実際の個別株では業績悪化による減配・無配転落のリスクがあり、増配が保証されているわけではありません。複数銘柄への分散投資や、高配当株ファンドの活用も検討材料になります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "目標の月間配当金に届かない場合はどうすればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "毎月の追加投資額を増やす、運用期間を長くとる、配当利回りや増配率の前提を見直す、などの入力値を変えて試算し直してみてください。目標額に届く条件の組み合わせを探ることができます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "NISA口座だとどう変わりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "NISA口座では配当金・譲渡益に税金がかからないため、税引後の配当金が課税口座より多くなり、再投資による複利効果もより大きくなります。ただし新NISAの成長投資枠には年間240万円・生涯1,200万円の投資上限がある点にご留意ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "総合課税を選ぶと必ず得になりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "いいえ。総合課税は配当所得が他の所得と合算されるため、給与所得などがもともと多い方（課税所得が高い方）ほど適用される所得税率が上がり、配当控除を差し引いても源泉徴収より不利になるケースが多くなります。本シミュレーターの試算結果がプラスの場合のみ、総合課税を検討する価値があります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "総合課税を選ぶと配当以外にどんな影響がありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "総合課税を選ぶと配当所得が「合計所得金額」に加算されるため、扶養控除・配偶者控除の所得要件、国民健康保険料・後期高齢者医療保険料、保育料の算定などに影響が及ぶ場合があります。手取り額だけでなく、こうした副次的な影響も踏まえて判断することをおすすめします。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "NISA口座で受け取った配当金も対象ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "いいえ。NISA口座内の配当金・分配金は非課税のため、そもそも確定申告の対象外です。本シミュレーターは課税口座（特定口座・一般口座）で受け取った上場株式等の配当金を前提としています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "大口株主が受け取る配当金も同じ計算ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "発行済株式総数の3%以上を保有する大口株主が受け取る配当金は、源泉徴収の対象外で総合課税が強制されるなど扱いが異なります。本シミュレーターは、それ以外の一般的な上場株式等の配当金を前提としています。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+<div class="container">
+<a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+<button aria-controls="site-nav" aria-expanded="false" class="nav-toggle" type="button">
+<span aria-hidden="true" class="icon"></span>
+<span>メニュー</span>
+</button>
+<nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+</div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>配当・高配当株シミュレーター まとめ</h1>
+    <p>配当再投資の複利効果、高配当株ポートフォリオの配当収入、配当課税方式（総合課税・申告分離課税・確定申告不要）の比較まで、配当・高配当株に関する3つのシミュレーターを1ページにまとめました。上のタブを切り替えるだけで、目的に合わせて使い分けられます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ上部 --></div>
+
+  <div class="hub-tabs" id="hub-tabs" role="tablist" aria-label="ツールを選択">
+        <button type="button" class="hub-tab" role="tab" id="tab-btn-saitoushi" aria-controls="tabpanel-saitoushi" aria-selected="true" data-tool="saitoushi">配当再投資</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-portfolio" aria-controls="tabpanel-portfolio" aria-selected="false" data-tool="portfolio">配当ポートフォリオ</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-kazei" aria-controls="tabpanel-kazei" aria-selected="false" data-tool="kazei">課税方式比較</button>
+  </div>
+
+  <section class="tab-panel" id="tabpanel-saitoushi" role="tabpanel" aria-labelledby="tab-btn-saitoushi" data-tool="saitoushi">
+    <p class="tab-panel-intro">配当金・分配金を受け取って再投資する「受取型」と、分配せず自動で複利運用する「無分配型（再投資型）」。同じ運用利回りでも、分配のたびに税金が引かれる「受取型」は複利で増える前に資産が目減りします。将来の資産額にどれだけ差が出るかを試算しましょう。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="saitoushi-initial">初期投資額 <span class="unit">万円</span></label>
+<input id="saitoushi-initial" min="0" step="10" type="number" value="100"/>
+</div>
+<div class="field">
+<label for="saitoushi-monthly">毎月の積立額 <span class="unit">万円</span></label>
+<input id="saitoushi-monthly" min="0" step="0.5" type="number" value="3"/>
+</div>
+<div class="field">
+<label for="saitoushi-years">運用期間 <span class="unit" id="saitoushi-yearsOut">20 年</span></label>
+<input id="saitoushi-years" max="40" min="5" step="1" type="range" value="20"/>
+</div>
+<div class="field">
+<label for="saitoushi-totalReturn">想定利回り（値上がり益＋分配、税引前・年率） <span class="unit" id="saitoushi-totalReturnOut">5.0 %</span></label>
+<input id="saitoushi-totalReturn" max="10" min="0" step="0.1" type="range" value="5.0"/>
+</div>
+<div class="field">
+<label for="saitoushi-distYield">分配金利回り（基準価額に対する年率） <span class="unit" id="saitoushi-distYieldOut">4.0 %</span></label>
+<input id="saitoushi-distYield" max="10" min="0" step="0.1" type="range" value="4.0"/>
+<p class="field-hint">分配金利回りが想定利回りを上回ると、運用益を超えて元本の一部を取り崩して分配する「タコ足配当」の状態になります。</p>
+</div>
+<div class="field">
+<label for="saitoushi-accountType">口座区分</label>
+<select id="saitoushi-accountType">
+<option selected="" value="taxable">課税口座（特定口座・一般口座）</option>
+<option value="nisa">NISA口座（非課税）</option>
+</select>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="saitoushi-verdict">-</span>
+<span class="sub" id="saitoushi-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">A：分配型（受取・再投資）の最終手取り資産</div>
+<div class="value" id="saitoushi-result-final-a">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">B：無分配型（自動再投資）の最終手取り資産</div>
+<div class="value" id="saitoushi-result-final-b">-</div>
+</div>
+<div class="result-card">
+<div class="label">最終資産の差額</div>
+<div class="value" id="saitoushi-result-diff">-</div>
+</div>
+<div class="result-card">
+<div class="label">分配型で先に課税された税額の累計（参考）</div>
+<div class="value" id="saitoushi-result-tax-paid">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="saitoushi-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#d98e04"></span>A：分配型（受取・再投資）</span>
+<span><span class="legend-dot" style="background:#0f5f4c"></span>B：無分配型（自動再投資）</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>項目</th><th>A：分配型</th><th>B：無分配型</th></tr>
+</thead>
+<tbody id="saitoushi-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>分配型と無分配型で資産額に差がつく理由</h2>
+<p>投資信託や株式には、運用益の一部を定期的に「分配金」「配当金」として払い出すタイプと、払い出さずにそのまま自動で再投資するタイプがあります。同じ運用利回りであっても、課税口座（特定口座・一般口座）では分配金・配当金を受け取るたびに20.315%（所得税15%＋復興特別所得税0.315%＋住民税5%）の税金が差し引かれます。受け取った後に自分で再投資したとしても、<strong>先に税金を払った分だけ複利で増える元手が減ってしまう</strong>ため、無分配型（売却するまで課税が繰り延べられるタイプ）に比べて最終的な資産額が小さくなりやすい傾向があります。これは「税の繰り延べ効果（タックス・ディファード効果）」と呼ばれる複利運用の基本原則の一つです。一方、<strong>NISA口座など運用益が非課税になる口座では、分配のタイミングによる差は理論上生まれません。</strong></p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>分配金利回りを高くすると必ず損をしますか？</dt>
+<dd>いいえ。分配金として先に受け取るか、そのまま含み益として保有し続けるかの違いであり、生活費として使う予定があるなら分配型にも意味があります。ただし「将来のためにすべて再投資する」前提であれば、課税口座では無分配型の方が税負担を抑えやすくなります。</dd>
+</div>
+<div class="faq-item">
+<dt>分配金利回りが想定利回りより高いのはおかしいですか？</dt>
+<dd>実際の運用益を上回る分配は、元本の一部を取り崩して支払う「特別分配金（元本払戻金）」に該当する場合があります。特別分配金は本来非課税・かつ元本の払い戻しであるため課税対象になりませんが、本シミュレーターでは簡略化のため分配金をすべて課税対象の「普通分配金」として計算しています。分配金利回りが想定利回りを大きく上回る条件では、実際の税負担は試算より軽くなる可能性がある点にご留意ください。</dd>
+</div>
+<div class="faq-item">
+<dt>NISA口座なら分配型を選んでも問題ないですか？</dt>
+<dd>NISA口座内では分配金にも売却益にも税金がかからないため、本シミュレーターの計算上、分配型と無分配型の最終資産額に理論上の差はありません。ただし、信託報酬など商品ごとのコストは本シミュレーターでは考慮していないため、実際の商品選びでは費用面も比較することをおすすめします。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・分配金の継続・元本を保証するものではありません。分配金はすべて課税対象の普通分配金として計算し、信託報酬等の運用コストは考慮していません。月次の利回りは年率を単純に12で割った概算値を使用しています。実際の税額・商品選びについては税理士・金融機関等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-portfolio" role="tabpanel" aria-labelledby="tab-btn-portfolio" data-tool="portfolio" hidden>
+    <p class="tab-panel-intro">高配当株・高配当株ファンドに積立投資しながら、受け取った配当金をそのまま再投資し続けると、年間配当金がどれくらいのペースで複利成長していくかを試算します。目標の月間配当金（いわゆる「配当金生活」の目安額）に何年で届くかも確認できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="portfolio-initial">現在の保有額（初期投資額） <span class="unit">万円</span></label>
+<input id="portfolio-initial" min="0" step="10" type="number" value="300"/>
+</div>
+<div class="field">
+<label for="portfolio-monthly">毎月の追加投資額 <span class="unit">万円</span></label>
+<input id="portfolio-monthly" min="0" step="0.5" type="number" value="5"/>
+</div>
+<div class="field">
+<label for="portfolio-years">運用期間 <span class="unit" id="portfolio-yearsOut">20 年</span></label>
+<input id="portfolio-years" max="40" min="5" step="1" type="range" value="20"/>
+</div>
+<div class="field">
+<label for="portfolio-yieldPct">配当利回り（税引前・年率） <span class="unit" id="portfolio-yieldPctOut">4.0 %</span></label>
+<input id="portfolio-yieldPct" max="8" min="1" step="0.1" type="range" value="4.0"/>
+</div>
+<div class="field">
+<label for="portfolio-divGrowth">増配率（配当利回りの年間上昇率） <span class="unit" id="portfolio-divGrowthOut">3.0 %</span></label>
+<input id="portfolio-divGrowth" max="10" min="0" step="0.5" type="range" value="3.0"/>
+<p class="field-hint">連続増配銘柄を想定し、配当利回りが毎年一定率で上昇していくと仮定します。減配リスクは考慮していません。</p>
+</div>
+<div class="field">
+<label for="portfolio-priceGrowth">株価の値上がり率（配当を除く年率） <span class="unit" id="portfolio-priceGrowthOut">2.0 %</span></label>
+<input id="portfolio-priceGrowth" max="8" min="0" step="0.5" type="range" value="2.0"/>
+</div>
+<div class="field">
+<label for="portfolio-accountType">口座区分</label>
+<select id="portfolio-accountType">
+<option selected="" value="taxable">課税口座（特定口座・一般口座）</option>
+<option value="nisa">NISA口座（非課税）</option>
+</select>
+</div>
+<div class="field">
+<label for="portfolio-targetMonthly">目標の月間配当金（税引後の目安） <span class="unit">万円</span></label>
+<input id="portfolio-targetMonthly" min="0" step="0.5" type="number" value="5"/>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="portfolio-verdict">-</span>
+<span class="sub" id="portfolio-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">最終ポートフォリオ評価額（配当は再投資）</div>
+<div class="value" id="portfolio-result-final-nav">-</div>
+</div>
+<div class="result-card">
+<div class="label">最終年の年間配当金（税引後・再投資あり）</div>
+<div class="value" id="portfolio-result-final-div-annual">-</div>
+</div>
+<div class="result-card">
+<div class="label">最終年の月間配当金換算（税引後・再投資あり）</div>
+<div class="value" id="portfolio-result-final-div-monthly">-</div>
+</div>
+<div class="result-card">
+<div class="label">目標の月間配当金に到達する時期</div>
+<div class="value" id="portfolio-result-target-year">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="portfolio-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>A：配当を再投資し続けた場合</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>B：配当を再投資せず受け取るだけの場合</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>項目</th><th>A：配当を再投資</th><th>B：配当を再投資せず受取</th></tr>
+</thead>
+<tbody id="portfolio-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>配当再投資で年間配当金が複利で増えていく仕組み</h2>
+<p>高配当株投資では、受け取った配当金をそのまま同じ銘柄・ファンドに再投資すると、翌年以降はその買い増し分にも配当がつくようになります。さらに増配（企業が配当金を毎年引き上げること）が続けば、保有株数の増加と1株あたり配当の増加が両方重なり、年間配当金は雪だるま式（スノーボール式）に増えていきます。本シミュレーターは、配当利回り・増配率・株価の値上がり率をそれぞれ一定と仮定した単純化モデルで、この複利成長のイメージを数字とグラフで確認できるようにしたものです。<strong>配当を再投資せず毎年受け取るだけの場合（B）と比べると、再投資を続けた場合（A）の方が年間配当金の伸び方が大きくなる</strong>点をグラフで比較できます。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>実際の高配当株でも同じように増えますか？</dt>
+<dd>本シミュレーターは配当利回り・増配率・株価の値上がり率が毎年一定というあくまで単純化した仮定に基づく試算です。実際の個別株では業績悪化による減配・無配転落のリスクがあり、増配が保証されているわけではありません。複数銘柄への分散投資や、高配当株ファンドの活用も検討材料になります。</dd>
+</div>
+<div class="faq-item">
+<dt>目標の月間配当金に届かない場合はどうすればいいですか？</dt>
+<dd>毎月の追加投資額を増やす、運用期間を長くとる、配当利回りや増配率の前提を見直す、などの入力値を変えて試算し直してみてください。目標額に届く条件の組み合わせを探ることができます。</dd>
+</div>
+<div class="faq-item">
+<dt>NISA口座だとどう変わりますか？</dt>
+<dd>NISA口座では配当金・譲渡益に税金がかからないため、税引後の配当金が課税口座より多くなり、再投資による複利効果もより大きくなります。ただし新NISAの成長投資枠には年間240万円・生涯1,200万円の投資上限がある点にご留意ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の配当金・株価・運用成果を保証するものではありません。配当利回り・増配率・株価の値上がり率はいずれも毎年一定という単純化した仮定に基づいており、実際の個別株では減配・無配転落や株価下落のリスクがあります。配当金はすべて課税対象として計算し、売買手数料・信託報酬等のコストは考慮していません。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-kazei" role="tabpanel" aria-labelledby="tab-btn-kazei" data-tool="kazei" hidden>
+    <p class="tab-panel-intro">上場株式の配当金は「確定申告不要制度」「申告分離課税」「総合課税」の3つの方式から選んで受け取ることができます。給与収入・配当金額を入力すると、総合課税で配当控除を使った場合の手取り額を、申告不要（源泉徴収のみ）の場合と比較し、どちらが有利かを試算します。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="kazei-income">給与年収（配当以外の収入） <span class="unit">万円</span></label>
+<input id="kazei-income" min="0" step="10" type="number" value="500"/>
+</div>
+<div class="field">
+<label for="kazei-dividend">年間の配当金額（税引前） <span class="unit">万円</span></label>
+<input id="kazei-dividend" min="0" step="1" type="number" value="30"/>
+<p class="field-hint">証券会社の年間取引報告書に記載される、上場株式・株式投資信託等の分配金の合計額（税引前）を入力してください。</p>
+</div>
+<div class="field">
+<label for="kazei-ageGroup">年齢区分（社会保険料の計算に使用）</label>
+<select id="kazei-ageGroup">
+<option value="under40">40歳未満</option>
+<option value="40to64">40歳以上65歳未満（介護保険あり）</option>
+</select>
+</div>
+<div class="field">
+<label for="kazei-hasSpouse">配偶者控除の対象となる配偶者</label>
+<select id="kazei-hasSpouse">
+<option value="no">いない</option>
+<option value="yes">いる（配偶者の年収が目安103万円以下）</option>
+</select>
+</div>
+<div class="field">
+<label for="kazei-dependents">扶養親族の人数（16歳以上・一般の扶養親族） <span class="unit">人</span></label>
+<input id="kazei-dependents" max="5" min="0" step="1" type="number" value="0"/>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="kazei-verdict">-</span>
+<span class="sub" id="kazei-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">確定申告不要（源泉徴収のみ）の手取り</div>
+<div class="value" id="kazei-result-net-withholding">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">総合課税（配当控除あり）の手取り</div>
+<div class="value" id="kazei-result-net-comprehensive">-</div>
+</div>
+<div class="result-card">
+<div class="label">総合課税との差額</div>
+<div class="value" id="kazei-result-diff">-</div>
+</div>
+<div class="result-card">
+<div class="label">総合課税での配当への実効税率</div>
+<div class="value" id="kazei-result-effective-rate">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="kazei-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>方式ごとの手取り配当額</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>課税方式</th><th>配当への税額</th><th>手取り配当額</th><th>特徴</th></tr>
+</thead>
+<tbody id="kazei-compare-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>配当金の3つの課税方式とは</h2>
+<p>上場株式等の配当金は、証券会社の特定口座（源泉徴収あり）で受け取ると、通常は自動的に20.315%（所得税15.315%＋住民税5%）が源泉徴収され、それだけで課税関係が終了します（確定申告不要制度）。これとは別に、確定申告をすることで「申告分離課税」または「総合課税」を選ぶこともできます。申告分離課税は税率が源泉徴収と同じ20.315%で、上場株式等の譲渡損失がある場合に損益通算・繰越控除ができるのが主なメリットです。総合課税は配当所得を給与所得などと合算して累進税率で課税する代わりに「配当控除」（課税所得1,000万円以下の部分は所得税10%・住民税2.8%を税額控除）が使えるため、課税所得が低い人ほど有利になりやすい方式です。なお2024年（令和6年度）以降、所得税と住民税の課税方式は一致させる必要があり、どちらか一方だけ総合課税・もう一方だけ申告不要、といった選択はできません。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>総合課税を選ぶと必ず得になりますか？</dt>
+<dd>いいえ。総合課税は配当所得が他の所得と合算されるため、給与所得などがもともと多い方（課税所得が高い方）ほど適用される所得税率が上がり、配当控除を差し引いても源泉徴収より不利になるケースが多くなります。本シミュレーターの試算結果がプラスの場合のみ、総合課税を検討する価値があります。</dd>
+</div>
+<div class="faq-item">
+<dt>総合課税を選ぶと配当以外にどんな影響がありますか？</dt>
+<dd>総合課税を選ぶと配当所得が「合計所得金額」に加算されるため、扶養控除・配偶者控除の所得要件、国民健康保険料・後期高齢者医療保険料、保育料の算定などに影響が及ぶ場合があります。手取り額だけでなく、こうした副次的な影響も踏まえて判断することをおすすめします。</dd>
+</div>
+<div class="faq-item">
+<dt>NISA口座で受け取った配当金も対象ですか？</dt>
+<dd>いいえ。NISA口座内の配当金・分配金は非課税のため、そもそも確定申告の対象外です。本シミュレーターは課税口座（特定口座・一般口座）で受け取った上場株式等の配当金を前提としています。</dd>
+</div>
+<div class="faq-item">
+<dt>大口株主が受け取る配当金も同じ計算ですか？</dt>
+<dd>発行済株式総数の3%以上を保有する大口株主が受け取る配当金は、源泉徴収の対象外で総合課税が強制されるなど扱いが異なります。本シミュレーターは、それ以外の一般的な上場株式等の配当金を前提としています。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値です。所得税率・配当控除率は2025年分の制度に基づく概算であり、社会保険料率は協会けんぽの全国平均目安による概算です。配偶者控除・扶養控除は簡略化した条件で試算しており、実際の確定申告書上の税額とは差が生じる場合があります。総合課税を選んだ場合に生じうる扶養控除・国民健康保険料等への副次的な影響は試算に含めていません。正確な金額は税務署・税理士にご確認ください。本サイトは税務・投資に関する助言を目的とするものではありません。
+  </div>
+  </section>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件と選択中のツールをそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ下部 --></div>
+
+  <section class="article-section hub-related-guides">
+    <h2>あわせて読みたいガイド</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="haitou-kazei-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>配当所得の課税方式とは？総合課税・申告分離課税・確定申告不要の違いと選び方 完全ガイド</h3>
+        <p>上場株式等の配当金にかかる「確定申告不要制度」「申告分離課税」「総合課税」の3つの課税方式について、税率・配当控除・損益通算の違いから、総合課税を選ぶと配偶…</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+<div class="container">
+<span>© 2026 ふやすノート</span>
+<nav>
+<a href="../index.html">トップへ戻る</a>
+<a href="../about.html">運営者情報</a>
+<a href="../privacy.html">プライバシーポリシー</a>
+<a href="../disclosure.html">アフィリエイト・広告表記について</a>
+</nav>
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+
+<script src="../js/haitou-saitoushi.js"></script>
+<script src="../js/haitou-portfolio.js"></script>
+<script src="../js/haitou-kazei.js"></script>
+<script src="../js/tabs.js"></script>
+<script src="../js/share.js"></script>
+<script src="../js/nav-toggle.js"></script>
+</body>
+</html>

@@ -2,17 +2,17 @@
   "use strict";
 
   var els = {
-    initial: document.getElementById("initial"),
-    monthly: document.getElementById("monthly"),
-    rate: document.getElementById("rate"),
-    years: document.getElementById("years"),
-    rateOut: document.getElementById("rateOut"),
-    yearsOut: document.getElementById("yearsOut"),
-    total: document.getElementById("result-total"),
-    principal: document.getElementById("result-principal"),
-    profit: document.getElementById("result-profit"),
-    fundSelect: document.getElementById("fundSelect"),
-    fundHint: document.getElementById("fundHint"),
+    initial: document.getElementById("tsumitate-initial"),
+    monthly: document.getElementById("tsumitate-monthly"),
+    rate: document.getElementById("tsumitate-rate"),
+    years: document.getElementById("tsumitate-years"),
+    rateOut: document.getElementById("tsumitate-rateOut"),
+    yearsOut: document.getElementById("tsumitate-yearsOut"),
+    total: document.getElementById("tsumitate-result-total"),
+    principal: document.getElementById("tsumitate-result-principal"),
+    profit: document.getElementById("tsumitate-result-profit"),
+    fundSelect: document.getElementById("tsumitate-fundSelect"),
+    fundHint: document.getElementById("tsumitate-fundHint"),
   };
 
   var chart = null;
@@ -107,7 +107,7 @@
     var principalData = result.yearly.map(function (d) { return Math.round(d.principal); });
     var balanceData = result.yearly.map(function (d) { return Math.round(d.balance); });
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("tsumitate-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

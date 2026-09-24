@@ -4,287 +4,32 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>iDeCo節税シミュレーター | ふやすノート</title>
-<meta name="description" content="毎月の掛金と課税所得（税率区分）から、iDeCo（個人型確定拠出年金）の節税額と将来の資産額をまとめて試算できる無料シミュレーターです。">
-<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/ideco-simulator.html">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="ふやすノート">
-<meta property="og:locale" content="ja_JP">
-<meta property="og:title" content="iDeCo節税シミュレーター | ふやすノート">
-<meta property="og:description" content="毎月の掛金と課税所得（税率区分）から、iDeCo（個人型確定拠出年金）の節税額と将来の資産額をまとめて試算できる無料シミュレーターです。">
-<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/ideco-simulator.html">
-<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="iDeCo節税シミュレーター | ふやすノート">
-<meta name="twitter:description" content="毎月の掛金と課税所得（税率区分）から、iDeCo（個人型確定拠出年金）の節税額と将来の資産額をまとめて試算できる無料シミュレーターです。">
-<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/ideco-hub.html?tool=setsuzei">
+<meta http-equiv="refresh" content="1; url=ideco-hub.html?tool=setsuzei">
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-
 <header class="site-header">
   <div class="container">
     <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
-        <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false">
-      <span class="icon" aria-hidden="true"></span>
-      <span>メニュー</span>
-    </button>
-    <nav class="site-nav" id="site-nav">
-      <span class="nav-group-label">積立・新NISA</span>
-      <a href="tsumitate-simulator.html">積立シミュレーター</a>
-      <a href="hitsuyou-gaku.html">必要積立額</a>
-      <a href="ikkatsu-tsumitate-simulator.html">一括vs積立投資</a>
-      <a href="shintaku-houshu-simulator.html">信託報酬コスト比較</a>
-      <a href="nisa-waku-simulator.html">NISA生涯枠</a>
-      <a href="nisa-fukkatsu-simulator.html">NISA枠の復活</a>
-      <a href="nisa-haibun-simulator.html">つみたてvs成長投資枠</a>
-      <a href="bouraku-tsumitate-simulator.html">暴落シナリオ比較</a>
-      <a href="shin-nisa-hajimekata-guide.html">新NISAの始め方ガイド</a>
-      <a href="nisa-deguchi-senryaku-guide.html">NISA出口戦略ガイド</a>
-      <a href="nisa-ideco-chigai-guide.html">NISAとiDeCoの違い</a>
-      <span class="nav-group-label">iDeCo・小規模企業共済</span>
-      <a href="ideco-simulator.html">iDeCo節税</a>
-      <a href="ideco-gendogaku-simulator.html">iDeCo拠出限度額</a>
-      <a href="ideco-uketori-simulator.html">iDeCoの受け取り方</a>
-      <a href="ideco-nisa-yuusen-simulator.html">iDeCovsNISA優先度</a>
-      <a href="shoukibo-kyosai-simulator.html">小規模企業共済</a>
-      <a href="ideco-hajimekata-guide.html">iDeCoの始め方ガイド</a>
-      <a href="ideco-tesuryou-guide.html">iDeCoの手数料まとめ</a>
-      <a href="shoukibo-kyosai-guide.html">小規模企業共済とは</a>
-      <span class="nav-group-label">住宅ローン</span>
-      <a href="roan-simulator.html">ローンvs投資</a>
-      <a href="loan-vs-invest-simulator.html">一括資金 繰上返済vs投資</a>
-      <a href="jutaku-loan-koujo-simulator.html">住宅ローン控除</a>
-      <a href="kinri-hikaku-simulator.html">変動vs固定金利</a>
-      <a href="kinri-erabikata-guide.html">住宅ローン金利タイプの選び方</a>
-      <span class="nav-group-label">教育資金・保険</span>
-      <a href="kyouiku-simulator.html">教育資金</a>
-      <a href="gakushihoken-nisa-simulator.html">学資保険vs積立NISA</a>
-      <a href="hoken-koujo-simulator.html">生命保険料・地震保険料控除</a>
-      <a href="hoken-koujo-guide.html">生命保険料控除とは</a>
-      <a href="kyouiku-shikin-junbi-guide.html">教育資金の準備方法</a>
-      <a href="gakushihoken-guide.html">学資保険とは</a>
-      <span class="nav-group-label">節税・控除・確定申告</span>
-      <a href="furusato-nozei-simulator.html">ふるさと納税上限額</a>
-      <a href="iryouhi-koujo-simulator.html">医療費控除</a>
-      <a href="furusato-nozei-hajimekata-guide.html">ふるさと納税のやり方ガイド</a>
-      <a href="kakutei-shinkoku-hajimekata-guide.html">確定申告のやり方ガイド</a>
-      <a href="juminzei-guide.html">住民税とは</a>
-      <a href="nenmatsu-chosei-guide.html">年末調整とは</a>
-      <a href="iryouhi-koujo-selfmedication-guide.html">医療費控除とセルフメディケーションの違い</a>
-      <a href="kyuyo-shotoku-koujo-guide.html">給与所得控除とは</a>
-      <a href="fukugyo-20man-simulator.html">副業20万円ルール</a>
-      <span class="nav-group-label">配当・高配当株</span>
-      <a href="haitou-saitoushi-simulator.html">配当再投資</a>
-      <a href="haitou-portfolio-simulator.html">高配当株ポートフォリオ</a>
-      <a href="haitou-kazei-simulator.html">配当課税方式比較</a>
-      <a href="haitou-kazei-guide.html">配当所得の課税方式とは</a>
-      <span class="nav-group-label">FIRE・資産取り崩し</span>
-      <a href="fire-simulator.html">FIRE達成シミュレーター</a>
-      <a href="torikuzushi-simulator.html">資産取り崩し方式比較</a>
-      <a href="fire-hajimekata-guide.html">FIREの始め方ガイド</a>
-      <span class="nav-group-label">相続・贈与</span>
-      <a href="souzokuzei-simulator.html">相続税シミュレーター</a>
-      <a href="zouyo-souzoku-simulator.html">生前贈与vs相続比較</a>
-      <a href="seizen-zouyo-hajimekata-guide.html">生前贈与のやり方ガイド</a>
-      <a href="souzokuzei-guide.html">相続税とは</a>
-      <span class="nav-group-label">年収・手取り・退職金</span>
-      <a href="taishokukin-simulator.html">退職金の受け取り方</a>
-      <a href="nenshu-no-kabe-simulator.html">年収の壁</a>
-      <a href="nenshu-tedori-simulator.html">年収から手取り額</a>
-      <a href="shoyo-tedori-simulator.html">賞与の手取り額</a>
-      <a href="nenshu-no-kabe-guide.html">年収の壁とは（一覧）</a>
-      <a href="taishoku-shotoku-koujo-guide.html">退職所得控除とは</a>
-      <a href="haiguusha-fuyou-koujo-guide.html">配偶者控除・扶養控除とは</a>
-      <a href="shakaihoken-guide.html">社会保険料とは</a>
-    </nav>
   </div>
 </header>
-
 <main class="container">
-  <div class="page-title">
-    <h1>iDeCo節税シミュレーター</h1>
-    <p>毎月の掛金と課税所得（所得税率）から、掛金が全額所得控除になることによる節税額と、将来の資産評価額をまとめて試算します。</p>
-  </div>
-
-  <div class="ad-slot"><!-- AdSense placeholder: ツールページ上部 --></div>
-
-  <div class="calc-layout">
-    <div class="panel">
-      <h2>条件を入力</h2>
-
-      <div class="field">
-        <label for="monthly">毎月の掛金 <span class="unit">円</span></label>
-        <input type="number" id="monthly" value="23000" min="1000" max="68000" step="1000">
-      </div>
-
-      <div class="field">
-        <label for="taxRate">所得税率（課税所得に応じた区分）</label>
-        <select id="taxRate">
-          <option value="5">195万円以下（税率5%）</option>
-          <option value="10" selected>195万円超 330万円以下（税率10%）</option>
-          <option value="20">330万円超 695万円以下（税率20%）</option>
-          <option value="23">695万円超 900万円以下（税率23%）</option>
-          <option value="33">900万円超 1,800万円以下（税率33%）</option>
-          <option value="40">1,800万円超 4,000万円以下（税率40%）</option>
-          <option value="45">4,000万円超（税率45%）</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="rate">想定利回り（年率） <span id="rateOut" class="unit">4.0 %</span></label>
-        <input type="range" id="rate" value="4" min="0" max="12" step="0.1">
-      </div>
-
-      <div class="field">
-        <label for="years">積立期間 <span id="yearsOut" class="unit">20 年</span></label>
-        <input type="range" id="years" value="20" min="1" max="40" step="1">
-      </div>
-    </div>
-
-    <div>
-      <div class="result-summary">
-        <div class="result-card">
-          <div class="label">将来の資産評価額</div>
-          <div class="value" id="result-total">-</div>
-        </div>
-        <div class="result-card">
-          <div class="label">運用益（想定）</div>
-          <div class="value" id="result-profit">-</div>
-        </div>
-        <div class="result-card accent">
-          <div class="label">節税額（累計）</div>
-          <div class="value" id="result-tax-saving">-</div>
-        </div>
-      </div>
-
-      <div class="chart-wrap">
-        <div class="chart-canvas-wrap" style="height:280px">
-          <canvas id="growthChart" height="280"></canvas>
-        </div>
-        <div class="legend-note">
-          <span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
-          <span><span class="legend-dot" style="background:#7a8899"></span>掛金累計</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <section class="article-section">
-    <h2>節税額の内訳</h2>
-    <p>iDeCoの掛金は全額が所得控除の対象になるため、所得税・住民税（住民税率は一律10%として計算）の負担が軽くなります。この試算では、掛金額・所得・税率区分が積立期間中ずっと変わらないと仮定した概算値を示しています。</p>
-    <dl>
-      <div class="faq-item">
-        <dt>年間の節税額</dt>
-        <dd id="tax-saving-yearly">-</dd>
-      </div>
-      <div class="faq-item">
-        <dt>積立期間累計の節税額</dt>
-        <dd id="tax-saving-total">-</dd>
-      </div>
-      <div class="faq-item">
-        <dt>節税額＋運用益の合計メリット</dt>
-        <dd id="benefit-total">-</dd>
-      </div>
-    </dl>
-  </section>
-
-  <div class="share-box" id="share-box">
-    <div class="share-box-text">
-      <strong>この条件の結果をURLで共有</strong>
-      <p>入力した条件をそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
-    </div>
-    <div class="share-box-controls">
-      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
-      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
-    </div>
-    <span id="share-url-feedback" class="share-feedback" role="status"></span>
-  </div>
-
-  <div class="ad-slot"><!-- AdSense placeholder: 結果グラフ下 --></div>
-
-  <div class="affiliate-box">
-    <h3>iDeCoの口座を検討する</h3>
-    <div class="affiliate-list">
-      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
-        <span>iDeCoの資料請求・口座開設（手数料比較）</span>
-        <span class="cta">詳細を見る →</span>
-      </a>
-      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
-        <span>ネット証券で新NISA口座もあわせて開設する</span>
-        <span class="cta">詳細を見る →</span>
-      </a>
-    </div>
-    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
-  </div>
-
-  <section class="article-section">
-    <h2>iDeCoを使う上での注意点</h2>
-    <p>iDeCoは原則60歳まで資産を引き出せない制度です。掛金の上限額は加入区分（会社員・公務員・自営業者など）によって異なり、本シミュレーターでは上限チェックは行っていません。ご自身の職業区分に応じた上限額の範囲内で入力してください。また、受け取り時（老齢給付金）には退職所得控除や公的年金等控除の対象となりますが、本シミュレーターでは受取時の税金は考慮していません。</p>
-  </section>
-  <section class="article-section">
-    <h2>あわせて使いたい関連ツール（iDeCo・小規模企業共済）</h2>
-    <div class="tool-grid">
-      <a class="tool-card" href="ideco-gendogaku-simulator.html">
-        <span class="badge">節税シミュレーター</span>
-        <h3>iDeCo拠出限度額シミュレーター</h3>
-        <p>会社員・公務員・自営業者・専業主婦（主夫）など職業区分ごとに異なるiDeCoの拠出限度額（月額・年額）と、上限まで拠出した場合の節税額の目安を試算します。</p>
-      </a>
-      <a class="tool-card" href="ideco-uketori-simulator.html">
-        <span class="badge">比較シミュレーター</span>
-        <h3>iDeCoの受け取り方 一時金 vs 年金 vs 併用</h3>
-        <p>iDeCoの資産を一時金・年金・併用のどれで受け取ると有利か、退職所得控除・公的年金等控除を踏まえて3パターンの将来資産額を比較します。</p>
-      </a>
-      <a class="tool-card" href="ideco-nisa-yuusen-simulator.html">
-        <span class="badge">配分シミュレーター</span>
-        <h3>iDeCo vs NISA どっちを優先すべき？配分シミュレーター</h3>
-        <p>毎月の投資可能額を「iDeCo優先」「NISA優先」「半分ずつ」に配分し、資産評価額・節税額・60歳まで引き出せない金額の違いを比較します。</p>
-      </a>
-      <a class="tool-card" href="shoukibo-kyosai-simulator.html">
-        <span class="badge">節税シミュレーター</span>
-        <h3>小規模企業共済 節税シミュレーター</h3>
-        <p>自営業者・フリーランス・中小企業役員向けの小規模企業共済について、掛金全額所得控除による節税額と、共済金受取時（一括・分割）の税金の目安を試算します。</p>
-      </a>
-      <a class="tool-card" href="ideco-hajimekata-guide.html">
-        <span class="badge">解説記事</span>
-        <h3>iDeCoの始め方完全ガイド</h3>
-        <p>加入資格・掛金上限の確認から、金融機関選びのポイント、受け取り方の考え方まで、関連シミュレーターへのリンク付きで解説します。</p>
-      </a>
-      <a class="tool-card" href="ideco-tesuryou-guide.html">
-        <span class="badge">解説記事</span>
-        <h3>iDeCoの手数料まとめ｜加入時・毎月・給付時にかかる費用と金融機関の選び方 完全ガイド</h3>
-        <p>加入時2,829円・毎月の口座管理手数料（国民年金基金連合会105円＋事務委託先金融機関66円は共通、運営管理機関手数料は金融機関により異なる）・給付時440円など、iDeCoにかかる手数料の内訳と金融機関の選び方を解説します。</p>
-      </a>
-      <a class="tool-card" href="shoukibo-kyosai-guide.html">
-        <span class="badge">解説記事</span>
-        <h3>小規模企業共済とは？掛金・節税額・共済金の受け取り方 完全ガイド</h3>
-        <p>自営業者・フリーランス向けの退職金制度「小規模企業共済」の掛金の決め方、節税の仕組み、一括受取vs分割受取の税金の違い、iDeCoとの違いを解説します。</p>
-      </a>
-    </div>
-  </section>
-
-  <div class="disclaimer">
-    本シミュレーターの結果は入力条件に基づく参考値であり、実際の税額・将来の運用成果・元本を保証するものではありません。税制は改正される場合があり、実際の節税額は個人の所得状況・控除の適用状況によって異なります。正確な税額については税務署・税理士等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  <div class="page-title" style="text-align:center; padding: 60px 0;">
+    <h1>このツールは統合ページに移動しました</h1>
+    <p>まもなく自動的に移動します。移動しない場合は下記のリンクをクリックしてください。</p>
+    <p style="margin-top:24px;"><a class="hero-cta" href="ideco-hub.html?tool=setsuzei">統合ページを開く →</a></p>
   </div>
 </main>
-
 <footer class="site-footer">
   <div class="container">
-    <span>&copy; 2026 ふやすノート</span>
-    <nav>
+    <nav class="footer-nav">
+      <a href="../index.html">トップへ戻る</a>
       <a href="../about.html">運営者情報</a>
       <a href="../privacy.html">プライバシーポリシー</a>
       <a href="../disclosure.html">アフィリエイト・広告表記について</a>
     </nav>
   </div>
 </footer>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
-<script src="../js/ideco.js"></script>
-<script src="../js/share.js"></script>
-<script src="../js/nav-toggle.js"></script>
 </body>
 </html>

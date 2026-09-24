@@ -8,19 +8,19 @@
   };
 
   var els = {
-    principal: document.getElementById("principal"),
-    loanYears: document.getElementById("loanYears"),
-    fixedRate: document.getElementById("fixedRate"),
-    variableRate: document.getElementById("variableRate"),
-    scenario: document.getElementById("scenario"),
-    applyRule: document.getElementById("applyRule"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    resultFixedTotal: document.getElementById("result-fixed-total"),
-    resultVariableTotal: document.getElementById("result-variable-total"),
-    resultDiff: document.getElementById("result-diff"),
-    resultUnpaid: document.getElementById("result-unpaid"),
-    tableBody: document.getElementById("review-body"),
+    principal: document.getElementById("kinri-principal"),
+    loanYears: document.getElementById("kinri-loanYears"),
+    fixedRate: document.getElementById("kinri-fixedRate"),
+    variableRate: document.getElementById("kinri-variableRate"),
+    scenario: document.getElementById("kinri-scenario"),
+    applyRule: document.getElementById("kinri-applyRule"),
+    verdict: document.getElementById("kinri-verdict"),
+    verdictSub: document.getElementById("kinri-verdictSub"),
+    resultFixedTotal: document.getElementById("kinri-result-fixed-total"),
+    resultVariableTotal: document.getElementById("kinri-result-variable-total"),
+    resultDiff: document.getElementById("kinri-result-diff"),
+    resultUnpaid: document.getElementById("kinri-result-unpaid"),
+    tableBody: document.getElementById("kinri-review-body"),
   };
 
   var chart = null;
@@ -209,7 +209,7 @@
       },
     };
 
-    var ctx = document.getElementById("balanceChart").getContext("2d");
+    var ctx = document.getElementById("kinri-balanceChart").getContext("2d");
     if (chart) {
       chart.data = data;
       chart.options = options;

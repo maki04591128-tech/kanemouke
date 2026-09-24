@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FIRE・資産取り崩しシミュレーター まとめ | ふやすノート</title>
+<meta name="description" content="FIRE達成シミュレーター・資産取り崩し方式比較まで、FIRE・資産取り崩しに関する2つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/fire-hub.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="FIRE・資産取り崩しシミュレーター まとめ | ふやすノート">
+<meta property="og:description" content="FIRE達成シミュレーター・資産取り崩し方式比較まで、FIRE・資産取り崩しに関する2つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/fire-hub.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FIRE・資産取り崩しシミュレーター まとめ | ふやすノート">
+<meta name="twitter:description" content="FIRE達成シミュレーター・資産取り崩し方式比較まで、FIRE・資産取り崩しに関する2つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "4%ルールはそのまま信じてよいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "4%ルールは、米国株式市場の約30年分の過去データを対象にした「トリニティ・スタディ」という研究に基づく目安であり、将来の運用成果や日本市場での再現性を保証するものではありません。より保守的に見積もりたい場合は、引き出し率を3〜3.5%程度に下げて試算することも検討してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「リタイア後の運用利回り」を0%にするとどうなりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "運用をせず、資産を生活費分だけ取り崩していく場合の試算になります。この場合、資産が持つ期間はおおよそ「資産額 ÷ 年間生活費」に近づきます（生活費が毎年上昇する設定にしている場合は、その分やや短くなります）。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "資産が尽きない結果になるのはなぜですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "リタイア後の運用利回りが、生活費の上昇（インフレ率）や取り崩しのペースを上回っている場合、資産が理論上減り続けない、または増え続ける結果になります。本シミュレーターは試算の目安として70年分まで計算しており、それでも資産が残っている場合はその旨を表示します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "結局どの方式を選べばよいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "本ツールは特定の方式を推奨するものではなく、入力条件に基づく機械的な試算結果を比較できるようにしたものです。一般的には「定額方式は生活費が読みやすい代わりに資産が尽きるリスクが相対的に高い」「定率方式は資産が尽きにくい代わりに取り崩し額が変動する」というトレードオフがあるため、ご自身の生活設計に合わせて検討してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "定率方式で「資産が尽きない」と表示されるのはなぜですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "定率方式は毎年「残高×取り崩し率」だけを取り崩すため、残高が減れば取り崩し額も比例して減り、数式の上では資産が限りなくゼロに近づいても完全にはゼロになりません。本ツールではこの性質を反映し、上限年数まで残高が残る場合はその旨を表示します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "FIRE達成シミュレーターとの違いは何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「FIRE達成シミュレーター」は積立期間から目標資産額への到達時期を試算し、達成後の取り崩しは「引き出し率どおりに定額を取り崩す」という単一の前提で計算しています。本ツールはその取り崩し局面だけを取り出し、定額・定率・定率＋下限額という複数の方式を比較できるようにした、補完的な位置づけのツールです。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+<div class="container">
+<a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+<button aria-controls="site-nav" aria-expanded="false" class="nav-toggle" type="button">
+<span aria-hidden="true" class="icon"></span>
+<span>メニュー</span>
+</button>
+<nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+</div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>FIRE・資産取り崩しシミュレーター まとめ</h1>
+    <p>FIRE（早期リタイア）達成に必要な資産額、リタイア後の資産取り崩し方式の比較まで、FIRE・資産取り崩しに関する2つのシミュレーターを1ページにまとめました。上のタブを切り替えるだけで、目的に合わせて使い分けられます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ上部 --></div>
+
+  <div class="hub-tabs" id="hub-tabs" role="tablist" aria-label="ツールを選択">
+        <button type="button" class="hub-tab" role="tab" id="tab-btn-fire" aria-controls="tabpanel-fire" aria-selected="true" data-tool="fire">FIRE達成</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-torikuzushi" aria-controls="tabpanel-torikuzushi" aria-selected="false" data-tool="torikuzushi">資産取り崩し</button>
+  </div>
+
+  <section class="tab-panel" id="tabpanel-fire" role="tabpanel" aria-labelledby="tab-btn-fire" data-tool="fire">
+    <p class="tab-panel-intro">現在の資産・毎月の積立額・想定利回りから、いわゆる「4%ルール」など任意の取り崩し率で計算したFIRE（Financial Independence, Retire Early＝経済的自立と早期リタイア）に必要な資産額と、そこに到達するまでの年数・年齢を試算します。達成後に生活費を取り崩しながら運用を続けた場合、資産が何年もつかもあわせて確認できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="fire-currentAge">現在の年齢 <span class="unit">歳</span></label>
+<input id="fire-currentAge" max="79" min="18" step="1" type="number" value="30"/>
+</div>
+<div class="field">
+<label for="fire-currentAssets">現在の資産額 <span class="unit">万円</span></label>
+<input id="fire-currentAssets" min="0" step="10" type="number" value="300"/>
+</div>
+<div class="field">
+<label for="fire-monthly">毎月の積立額 <span class="unit">万円</span></label>
+<input id="fire-monthly" min="0" step="1" type="number" value="10"/>
+</div>
+<div class="field">
+<label for="fire-returnPct">想定利回り（積立期間中・年率） <span class="unit" id="fire-returnPctOut">5.0 %</span></label>
+<input id="fire-returnPct" max="10" min="1" step="0.5" type="range" value="5.0"/>
+</div>
+<div class="field">
+<label for="fire-annualExpense">リタイア後の年間生活費 <span class="unit">万円</span></label>
+<input id="fire-annualExpense" min="0" step="10" type="number" value="300"/>
+<p class="field-hint">月あたりの生活費の目安は、この金額の12分の1です。</p>
+</div>
+<div class="field">
+<label for="fire-withdrawalPct">想定引き出し率（安全な取り崩し率） <span class="unit" id="fire-withdrawalPctOut">4.0 %</span></label>
+<input id="fire-withdrawalPct" max="6" min="2.5" step="0.5" type="range" value="4.0"/>
+<p class="field-hint">米国株式市場の過去データに基づく「4%ルール」（トリニティ・スタディ）が有名ですが、より安全側に見積もる場合は3〜3.5%程度で試算する考え方もあります。</p>
+</div>
+<div class="field">
+<label for="fire-postReturnPct">リタイア後の運用利回り（取り崩し期間中・年率） <span class="unit" id="fire-postReturnPctOut">3.0 %</span></label>
+<input id="fire-postReturnPct" max="8" min="0" step="0.5" type="range" value="3.0"/>
+<p class="field-hint">リタイア後もある程度リスクを取って運用を続ける前提です。0%にすると、運用せず資産を取り崩すだけの場合を試算できます。</p>
+</div>
+<div class="field">
+<label for="fire-inflationPct">生活費の上昇率（インフレ率・年率） <span class="unit" id="fire-inflationPctOut">1.0 %</span></label>
+<input id="fire-inflationPct" max="3" min="0" step="0.5" type="range" value="1.0"/>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="fire-verdict">-</span>
+<span class="sub" id="fire-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">FIRE達成に必要な資産額</div>
+<div class="value" id="fire-result-target">-</div>
+</div>
+<div class="result-card">
+<div class="label">達成までの期間・到達年齢</div>
+<div class="value" id="fire-result-reach">-</div>
+</div>
+<div class="result-card">
+<div class="label">到達時点の資産額</div>
+<div class="value" id="fire-result-reach-assets">-</div>
+</div>
+<div class="result-card">
+<div class="label">リタイア後、資産が持つ期間の目安</div>
+<div class="value" id="fire-result-sustain">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="fire-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>資産額の推移（積立期間 → リタイア後の取り崩し期間）</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>FIRE達成ライン（目標資産額）</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>項目</th><th>金額・期間</th></tr>
+</thead>
+<tbody id="fire-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>FIRE達成に必要な資産額の考え方</h2>
+<p>FIRE（Financial Independence, Retire Early）は、資産運用による収益で生活費をまかない、労働収入に頼らず暮らせる状態を目指す考え方です。必要な資産額は「年間生活費 ÷ 引き出し率」で概算できます。たとえば年間生活費300万円・引き出し率4%なら、必要資産額は300万円 ÷ 4% ＝ 7,500万円（生活費の25年分）となり、これが「4%ルール」「生活費25年分ルール」と呼ばれる考え方の基本です。本シミュレーターでは、この目標資産額に現在の資産・毎月の積立額・想定利回りで何年後に到達するか、また達成後に生活費を取り崩しながら運用を続けた場合に資産が何年もつかを試算します。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>4%ルールはそのまま信じてよいですか？</dt>
+<dd>4%ルールは、米国株式市場の約30年分の過去データを対象にした「トリニティ・スタディ」という研究に基づく目安であり、将来の運用成果や日本市場での再現性を保証するものではありません。より保守的に見積もりたい場合は、引き出し率を3〜3.5%程度に下げて試算することも検討してください。</dd>
+</div>
+<div class="faq-item">
+<dt>「リタイア後の運用利回り」を0%にするとどうなりますか？</dt>
+<dd>運用をせず、資産を生活費分だけ取り崩していく場合の試算になります。この場合、資産が持つ期間はおおよそ「資産額 ÷ 年間生活費」に近づきます（生活費が毎年上昇する設定にしている場合は、その分やや短くなります）。</dd>
+</div>
+<div class="faq-item">
+<dt>資産が尽きない結果になるのはなぜですか？</dt>
+<dd>リタイア後の運用利回りが、生活費の上昇（インフレ率）や取り崩しのペースを上回っている場合、資産が理論上減り続けない、または増え続ける結果になります。本シミュレーターは試算の目安として70年分まで計算しており、それでも資産が残っている場合はその旨を表示します。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果や資産の持続期間を保証するものではありません。想定利回り・引き出し率・インフレ率はいずれも毎年一定という単純化した仮定に基づいており、実際の相場は変動します。運用益への課税や売買手数料・信託報酬等のコストは考慮していません。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-torikuzushi" role="tabpanel" aria-labelledby="tab-btn-torikuzushi" data-tool="torikuzushi" hidden>
+    <p class="tab-panel-intro">リタイア後（またはFIRE達成後）に資産を取り崩しながら暮らす際、「定額」「定率」「定率＋下限額」のどの方式を選ぶかで資産の持続年数は大きく変わります。取り崩し開始時点の資産額・想定運用利回り・各方式のパラメータを入力すると、3方式それぞれで資産が何年もつかをまとめて比較できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="torikuzushi-startAssets">取り崩し開始時点の資産額 <span class="unit">万円</span></label>
+<input id="torikuzushi-startAssets" min="0" step="100" type="number" value="3000"/>
+</div>
+<div class="field">
+<label for="torikuzushi-returnPct">想定運用利回り（取り崩しながら運用を続ける・年率） <span class="unit" id="torikuzushi-returnPctOut">3.0 %</span></label>
+<input id="torikuzushi-returnPct" max="8" min="0" step="0.5" type="range" value="3.0"/>
+</div>
+<div class="field">
+<label for="torikuzushi-maxYears">シミュレーション上限年数 <span class="unit">年</span></label>
+<input id="torikuzushi-maxYears" max="70" min="1" step="1" type="number" value="30"/>
+<p class="field-hint">資産が尽きない場合は、この年数までの推移を表示します（最大70年）。</p>
+</div>
+<div class="field">
+<label for="torikuzushi-fixedAmount">【定額方式】年間取り崩し額 <span class="unit">万円</span></label>
+<input id="torikuzushi-fixedAmount" min="0" step="10" type="number" value="120"/>
+<p class="field-hint">毎年ほぼ一定の金額を取り崩す方式です。月あたりの目安は、この金額の12分の1です。</p>
+</div>
+<div class="field">
+<label for="torikuzushi-applyInflation">定額方式の取り崩し額をインフレ率で毎年増額する</label>
+<select id="torikuzushi-applyInflation">
+<option selected="" value="yes">増額する（生活費が毎年上昇する前提）</option>
+<option value="no">増額しない（金額を一定に保つ）</option>
+</select>
+</div>
+<div class="field">
+<label for="torikuzushi-inflationPct">生活費の上昇率（インフレ率・年率） <span class="unit" id="torikuzushi-inflationPctOut">1.0 %</span></label>
+<input id="torikuzushi-inflationPct" max="3" min="0" step="0.5" type="range" value="1.0"/>
+<p class="field-hint">上の「増額する」を選んだ場合に、定額方式の取り崩し額へ適用されます。</p>
+</div>
+<div class="field">
+<label for="torikuzushi-fixedRatePct">【定率方式】取り崩し率（残高に対して毎年） <span class="unit" id="torikuzushi-fixedRatePctOut">4.0 %</span></label>
+<input id="torikuzushi-fixedRatePct" max="10" min="1" step="0.5" type="range" value="4.0"/>
+<p class="field-hint">「定率取り崩し」「定率＋下限額」の両方式で共通して使う取り崩し率です。</p>
+</div>
+<div class="field">
+<label for="torikuzushi-floorAmount">【定率＋下限額方式】年間の下限額 <span class="unit">万円</span></label>
+<input id="torikuzushi-floorAmount" min="0" step="10" type="number" value="80"/>
+<p class="field-hint">「残高×取り崩し率」と「この下限額」のうち大きい方を、その年の取り崩し額とします。</p>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="torikuzushi-verdict">-</span>
+<span class="sub" id="torikuzushi-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">定額取り崩し</div>
+<div class="value" id="torikuzushi-result-fixed">-</div>
+</div>
+<div class="result-card">
+<div class="label">定率取り崩し</div>
+<div class="value" id="torikuzushi-result-percent">-</div>
+</div>
+<div class="result-card">
+<div class="label">定率＋下限額</div>
+<div class="value" id="torikuzushi-result-floor">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="torikuzushi-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>定額取り崩し</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>定率取り崩し</span>
+<span><span class="legend-dot" style="background:#c96b3f"></span>定率＋下限額</span>
+</div>
+</div>
+</div>
+</div>
+<div class="table-wrap">
+<h2>3方式の比較</h2>
+<table class="data-table data-table--result">
+<thead>
+<tr><th>取り崩し方式</th><th>初年度の取り崩し額</th><th>資産の持続年数</th></tr>
+</thead>
+<tbody id="torikuzushi-compare-body"></tbody>
+</table>
+</div>
+<div class="verdict-box" id="torikuzushi-verdict-box">
+<h3>取り崩し方式ごとの一般的な特徴</h3>
+<div id="torikuzushi-note-body"></div>
+</div>
+<section class="article-section">
+<h2>資産の「取り崩し方式」はなぜ重要か</h2>
+<p>「セミリタイア（FIRE）達成シミュレーター」では、目標資産額を「年間生活費 ÷ 引き出し率」という一定のルール（4%ルールなど）で計算し、達成後もその引き出し率どおりに取り崩す前提で試算しています。しかし実際には、資産の取り崩し方には複数の考え方があり、どれを選ぶかによって資産が持続する年数は大きく変わります。本ツールでは代表的な3つの方式を取り上げます。</p>
+<p><strong>①定額取り崩し</strong>は、毎年（またはインフレ率で増額しながら）一定の金額を取り崩す方式です。生活費の見通しが立てやすい一方、相場が下落した年も取り崩し額を減らさないため、資産の減り方が急になりやすい方式です。<strong>②定率取り崩し</strong>は、残高に対して毎年一定の割合だけを取り崩す方式です。残高が減れば取り崩し額も自動的に減るため、理論上は資産が完全にゼロにはなりにくい一方、晩年に向けて使えるお金が目減りしていきます。<strong>③定率＋下限額</strong>は、定率方式をベースにしつつ「最低限これだけは取り崩す」という下限額を設けることで、取り崩し額が下がりすぎないようにする折衷案です。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>結局どの方式を選べばよいですか？</dt>
+<dd>本ツールは特定の方式を推奨するものではなく、入力条件に基づく機械的な試算結果を比較できるようにしたものです。一般的には「定額方式は生活費が読みやすい代わりに資産が尽きるリスクが相対的に高い」「定率方式は資産が尽きにくい代わりに取り崩し額が変動する」というトレードオフがあるため、ご自身の生活設計に合わせて検討してください。</dd>
+</div>
+<div class="faq-item">
+<dt>定率方式で「資産が尽きない」と表示されるのはなぜですか？</dt>
+<dd>定率方式は毎年「残高×取り崩し率」だけを取り崩すため、残高が減れば取り崩し額も比例して減り、数式の上では資産が限りなくゼロに近づいても完全にはゼロになりません。本ツールではこの性質を反映し、上限年数まで残高が残る場合はその旨を表示します。</dd>
+</div>
+<div class="faq-item">
+<dt>FIRE達成シミュレーターとの違いは何ですか？</dt>
+<dd>「FIRE達成シミュレーター」は積立期間から目標資産額への到達時期を試算し、達成後の取り崩しは「引き出し率どおりに定額を取り崩す」という単一の前提で計算しています。本ツールはその取り崩し局面だけを取り出し、定額・定率・定率＋下限額という複数の方式を比較できるようにした、補完的な位置づけのツールです。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果や資産の持続期間を保証するものではありません。想定運用利回り・取り崩し率・インフレ率はいずれも毎年一定という単純化した仮定に基づいており、実際の相場は変動します。運用益への課税や売買手数料・信託報酬等のコストは考慮していません。本サイトは特定の取り崩し方式や金融商品の勧誘・投資助言を目的とするものではありません。
+  </div>
+  </section>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件と選択中のツールをそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ下部 --></div>
+
+  <section class="article-section hub-related-guides">
+    <h2>あわせて読みたいガイド</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="fire-hajimekata-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>FIRE（セミリタイア）の始め方 完全ガイド｜4%ルールで必要資産額を計算する方法</h3>
+        <p>FIRE（経済的自立と早期リタイア）を目指す始め方を解説。4%ルール（生活費25年分）で必要資産額を計算する方法、リーン・ファット・サイド・バリスタなどタイ…</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+<div class="container">
+<span>© 2026 ふやすノート</span>
+<nav>
+<a href="../index.html">トップへ戻る</a>
+<a href="../about.html">運営者情報</a>
+<a href="../privacy.html">プライバシーポリシー</a>
+<a href="../disclosure.html">アフィリエイト・広告表記について</a>
+</nav>
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+
+<script src="../js/fire.js"></script>
+<script src="../js/torikuzushi.js"></script>
+<script src="../js/tabs.js"></script>
+<script src="../js/share.js"></script>
+<script src="../js/nav-toggle.js"></script>
+</body>
+</html>

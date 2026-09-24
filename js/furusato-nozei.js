@@ -36,19 +36,19 @@
   var RESIDENT_DEPENDENT_DEDUCTION = 330000;
 
   var els = {
-    salaryIncome: document.getElementById("salaryIncome"),
-    socialInsurance: document.getElementById("socialInsurance"),
-    hasSpouse: document.getElementById("hasSpouse"),
-    dependents: document.getElementById("dependents"),
-    donationPlan: document.getElementById("donationPlan"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    limit: document.getElementById("result-limit"),
-    salaryIncomeOut: document.getElementById("result-salary-income"),
-    taxableIncome: document.getElementById("result-taxable-income"),
-    taxRate: document.getElementById("result-tax-rate"),
-    residentTax: document.getElementById("result-resident-tax"),
-    tableBody: document.getElementById("breakdown-body"),
+    salaryIncome: document.getElementById("furusato-salaryIncome"),
+    socialInsurance: document.getElementById("furusato-socialInsurance"),
+    hasSpouse: document.getElementById("furusato-hasSpouse"),
+    dependents: document.getElementById("furusato-dependents"),
+    donationPlan: document.getElementById("furusato-donationPlan"),
+    verdict: document.getElementById("furusato-verdict"),
+    verdictSub: document.getElementById("furusato-verdictSub"),
+    limit: document.getElementById("furusato-result-limit"),
+    salaryIncomeOut: document.getElementById("furusato-result-salary-income"),
+    taxableIncome: document.getElementById("furusato-result-taxable-income"),
+    taxRate: document.getElementById("furusato-result-tax-rate"),
+    residentTax: document.getElementById("furusato-result-resident-tax"),
+    tableBody: document.getElementById("furusato-breakdown-body"),
   };
 
   var chart = null;
@@ -181,7 +181,7 @@
       curve.push({ x: x, y: selfPay(x, limit) });
     }
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("furusato-growthChart").getContext("2d");
     var data = {
       datasets: [
         {

@@ -28,24 +28,24 @@
   };
 
   var els = {
-    category: document.getElementById("category"),
-    offsetRow: document.getElementById("offsetRow"),
-    offsetAmount: document.getElementById("offsetAmount"),
-    budget: document.getElementById("budget"),
-    taxableIncome: document.getElementById("taxableIncome"),
-    rate: document.getElementById("rate"),
-    rateOut: document.getElementById("rateOut"),
-    years: document.getElementById("years"),
-    yearsOut: document.getElementById("yearsOut"),
-    liquidityNeed: document.getElementById("liquidityNeed"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    idecoCap: document.getElementById("result-ideco-cap"),
-    marginalRate: document.getElementById("result-marginal-rate"),
-    baseAsset: document.getElementById("result-base-asset"),
-    bonusAsset: document.getElementById("result-bonus-asset"),
-    splitBody: document.getElementById("split-body"),
-    compareBody: document.getElementById("compare-body"),
+    category: document.getElementById("yuusen-category"),
+    offsetRow: document.getElementById("yuusen-offsetRow"),
+    offsetAmount: document.getElementById("yuusen-offsetAmount"),
+    budget: document.getElementById("yuusen-budget"),
+    taxableIncome: document.getElementById("yuusen-taxableIncome"),
+    rate: document.getElementById("yuusen-rate"),
+    rateOut: document.getElementById("yuusen-rateOut"),
+    years: document.getElementById("yuusen-years"),
+    yearsOut: document.getElementById("yuusen-yearsOut"),
+    liquidityNeed: document.getElementById("yuusen-liquidityNeed"),
+    verdict: document.getElementById("yuusen-verdict"),
+    verdictSub: document.getElementById("yuusen-verdictSub"),
+    idecoCap: document.getElementById("yuusen-result-ideco-cap"),
+    marginalRate: document.getElementById("yuusen-result-marginal-rate"),
+    baseAsset: document.getElementById("yuusen-result-base-asset"),
+    bonusAsset: document.getElementById("yuusen-result-bonus-asset"),
+    splitBody: document.getElementById("yuusen-split-body"),
+    compareBody: document.getElementById("yuusen-compare-body"),
   };
 
   var chart = null;
@@ -221,7 +221,7 @@
     }
 
     var labels = results.map(function (r) { return r.strategy.label; });
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("yuusen-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

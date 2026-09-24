@@ -4,18 +4,18 @@
   var RESIDENT_TAX_RATE = 0.10;
 
   var els = {
-    monthly: document.getElementById("monthly"),
-    taxRate: document.getElementById("taxRate"),
-    rate: document.getElementById("rate"),
-    years: document.getElementById("years"),
-    rateOut: document.getElementById("rateOut"),
-    yearsOut: document.getElementById("yearsOut"),
-    total: document.getElementById("result-total"),
-    profit: document.getElementById("result-profit"),
-    taxSaving: document.getElementById("result-tax-saving"),
-    taxSavingYearly: document.getElementById("tax-saving-yearly"),
-    taxSavingTotal: document.getElementById("tax-saving-total"),
-    benefitTotal: document.getElementById("benefit-total"),
+    monthly: document.getElementById("setsuzei-monthly"),
+    taxRate: document.getElementById("setsuzei-taxRate"),
+    rate: document.getElementById("setsuzei-rate"),
+    years: document.getElementById("setsuzei-years"),
+    rateOut: document.getElementById("setsuzei-rateOut"),
+    yearsOut: document.getElementById("setsuzei-yearsOut"),
+    total: document.getElementById("setsuzei-result-total"),
+    profit: document.getElementById("setsuzei-result-profit"),
+    taxSaving: document.getElementById("setsuzei-result-tax-saving"),
+    taxSavingYearly: document.getElementById("setsuzei-tax-saving-yearly"),
+    taxSavingTotal: document.getElementById("setsuzei-tax-saving-total"),
+    benefitTotal: document.getElementById("setsuzei-benefit-total"),
   };
 
   var chart = null;
@@ -89,7 +89,7 @@
     var principalData = growth.yearly.map(function (d) { return Math.round(d.principal); });
     var balanceData = growth.yearly.map(function (d) { return Math.round(d.balance); });
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("setsuzei-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

@@ -2,24 +2,24 @@
   "use strict";
 
   var els = {
-    monthly: document.getElementById("monthly"),
-    preYears: document.getElementById("preYears"),
-    preYearsOut: document.getElementById("preYearsOut"),
-    annualRate: document.getElementById("annualRate"),
-    annualRateOut: document.getElementById("annualRateOut"),
-    shockPct: document.getElementById("shockPct"),
-    shockPctOut: document.getElementById("shockPctOut"),
-    shockMonths: document.getElementById("shockMonths"),
-    shockMonthsOut: document.getElementById("shockMonthsOut"),
-    postYears: document.getElementById("postYears"),
-    postYearsOut: document.getElementById("postYearsOut"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    resultPrincipal: document.getElementById("result-principal"),
-    resultContinue: document.getElementById("result-continue"),
-    resultPause: document.getElementById("result-pause"),
-    resultPanic: document.getElementById("result-panic"),
-    breakdownBody: document.getElementById("breakdown-body"),
+    monthly: document.getElementById("bouraku-monthly"),
+    preYears: document.getElementById("bouraku-preYears"),
+    preYearsOut: document.getElementById("bouraku-preYearsOut"),
+    annualRate: document.getElementById("bouraku-annualRate"),
+    annualRateOut: document.getElementById("bouraku-annualRateOut"),
+    shockPct: document.getElementById("bouraku-shockPct"),
+    shockPctOut: document.getElementById("bouraku-shockPctOut"),
+    shockMonths: document.getElementById("bouraku-shockMonths"),
+    shockMonthsOut: document.getElementById("bouraku-shockMonthsOut"),
+    postYears: document.getElementById("bouraku-postYears"),
+    postYearsOut: document.getElementById("bouraku-postYearsOut"),
+    verdict: document.getElementById("bouraku-verdict"),
+    verdictSub: document.getElementById("bouraku-verdictSub"),
+    resultPrincipal: document.getElementById("bouraku-result-principal"),
+    resultContinue: document.getElementById("bouraku-result-continue"),
+    resultPause: document.getElementById("bouraku-result-pause"),
+    resultPanic: document.getElementById("bouraku-result-panic"),
+    breakdownBody: document.getElementById("bouraku-breakdown-body"),
   };
 
   var chart = null;
@@ -261,7 +261,7 @@
       ],
     };
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("bouraku-growthChart").getContext("2d");
     if (chart) {
       chart.data = data;
       chart.update();

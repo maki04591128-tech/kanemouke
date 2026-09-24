@@ -33,22 +33,22 @@
   var INCOME_DEPENDENT_DEDUCTION = 380000;
 
   var els = {
-    salaryIncome: document.getElementById("salaryIncome"),
-    socialInsurance: document.getElementById("socialInsurance"),
-    hasSpouse: document.getElementById("hasSpouse"),
-    dependents: document.getElementById("dependents"),
-    medicalTotal: document.getElementById("medicalTotal"),
-    insuranceReimbursement: document.getElementById("insuranceReimbursement"),
-    otcAmount: document.getElementById("otcAmount"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    deduction: document.getElementById("result-deduction"),
-    selfmed: document.getElementById("result-selfmed"),
-    taxRate: document.getElementById("result-tax-rate"),
-    incomeTaxRefund: document.getElementById("result-income-tax-refund"),
-    residentTaxReduction: document.getElementById("result-resident-tax-reduction"),
-    totalReduction: document.getElementById("result-total-reduction"),
-    tableBody: document.getElementById("breakdown-body"),
+    salaryIncome: document.getElementById("iryouhi-salaryIncome"),
+    socialInsurance: document.getElementById("iryouhi-socialInsurance"),
+    hasSpouse: document.getElementById("iryouhi-hasSpouse"),
+    dependents: document.getElementById("iryouhi-dependents"),
+    medicalTotal: document.getElementById("iryouhi-medicalTotal"),
+    insuranceReimbursement: document.getElementById("iryouhi-insuranceReimbursement"),
+    otcAmount: document.getElementById("iryouhi-otcAmount"),
+    verdict: document.getElementById("iryouhi-verdict"),
+    verdictSub: document.getElementById("iryouhi-verdictSub"),
+    deduction: document.getElementById("iryouhi-result-deduction"),
+    selfmed: document.getElementById("iryouhi-result-selfmed"),
+    taxRate: document.getElementById("iryouhi-result-tax-rate"),
+    incomeTaxRefund: document.getElementById("iryouhi-result-income-tax-refund"),
+    residentTaxReduction: document.getElementById("iryouhi-result-resident-tax-reduction"),
+    totalReduction: document.getElementById("iryouhi-result-total-reduction"),
+    tableBody: document.getElementById("iryouhi-breakdown-body"),
   };
 
   var chart = null;
@@ -182,7 +182,7 @@
       curve.push({ x: x, y: medicalDeduction(x, reimbursement, salaryIncome) });
     }
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("iryouhi-growthChart").getContext("2d");
     var data = {
       datasets: [
         {

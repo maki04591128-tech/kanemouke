@@ -4,21 +4,21 @@
   var CAPITAL_GAINS_TAX_RATE = 0.20315;
 
   var els = {
-    balance: document.getElementById("balance"),
-    loanRate: document.getElementById("loanRate"),
-    termYears: document.getElementById("termYears"),
-    lump: document.getElementById("lump"),
-    investRate: document.getElementById("investRate"),
-    loanRateOut: document.getElementById("loanRateOut"),
-    termYearsOut: document.getElementById("termYearsOut"),
-    investRateOut: document.getElementById("investRateOut"),
-    monthsSaved: document.getElementById("result-months-saved"),
-    interestSaved: document.getElementById("result-interest-saved"),
-    investProfit: document.getElementById("result-invest-profit"),
-    detailInterestSaved: document.getElementById("detail-interest-saved"),
-    detailInvestProfit: document.getElementById("detail-invest-profit"),
-    detailInvestProfitAfterTax: document.getElementById("detail-invest-profit-after-tax"),
-    conclusion: document.getElementById("conclusion"),
+    balance: document.getElementById("kurioage-balance"),
+    loanRate: document.getElementById("kurioage-loanRate"),
+    termYears: document.getElementById("kurioage-termYears"),
+    lump: document.getElementById("kurioage-lump"),
+    investRate: document.getElementById("kurioage-investRate"),
+    loanRateOut: document.getElementById("kurioage-loanRateOut"),
+    termYearsOut: document.getElementById("kurioage-termYearsOut"),
+    investRateOut: document.getElementById("kurioage-investRateOut"),
+    monthsSaved: document.getElementById("kurioage-result-months-saved"),
+    interestSaved: document.getElementById("kurioage-result-interest-saved"),
+    investProfit: document.getElementById("kurioage-result-invest-profit"),
+    detailInterestSaved: document.getElementById("kurioage-detail-interest-saved"),
+    detailInvestProfit: document.getElementById("kurioage-detail-invest-profit"),
+    detailInvestProfitAfterTax: document.getElementById("kurioage-detail-invest-profit-after-tax"),
+    conclusion: document.getElementById("kurioage-conclusion"),
   };
 
   var chart = null;
@@ -137,7 +137,7 @@
       return Math.round(lump * Math.pow(1 + investMonthlyRate, d.month) - lump);
     });
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("kurioage-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

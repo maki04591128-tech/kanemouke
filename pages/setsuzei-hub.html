@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>節税・控除シミュレーター まとめ | ふやすノート</title>
+<meta name="description" content="ふるさと納税控除上限額・医療費控除・副業20万円ルールまで、節税・控除に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/setsuzei-hub.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="節税・控除シミュレーター まとめ | ふやすノート">
+<meta property="og:description" content="ふるさと納税控除上限額・医療費控除・副業20万円ルールまで、節税・控除に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/setsuzei-hub.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="節税・控除シミュレーター まとめ | ふやすノート">
+<meta name="twitter:description" content="ふるさと納税控除上限額・医療費控除・副業20万円ルールまで、節税・控除に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "上限額を超えて寄付するとどうなりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "上限を超えた部分は控除の対象にならず、全額自己負担になります。返礼品は受け取れますが、税金の控除という観点では超過分がそのまま持ち出しになる点に注意してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "社会保険料の金額がわからない場合はどうすればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "給与明細やねんきん定期便で確認するのが最も正確ですが、目安として年収のおよそ15%を社会保険料として概算しても大きくは外れません。本ツールも初期値としてこの概算値を表示しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ワンストップ特例と確定申告で控除額は変わりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "控除の合計額自体はどちらの手続きでもほぼ同じです。ワンストップ特例では住民税からまとめて控除され、確定申告では所得税の還付と住民税の控除に分かれる点が異なります（ワンストップ特例は寄付先が5自治体以内などの条件があります）。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "この試算は正確ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "給与所得者を前提とした一般的な近似計算です。医療費控除・住宅ローン控除・iDeCoの掛金控除など他の控除がある場合や、給与以外の所得がある場合は上限額が変わります。正確な金額は自治体の窓口や税理士、ふるさと納税サイトの詳細シミュレーターでご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "医療費控除は誰でも申告が必要ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "会社員で年末調整を受けている方でも、医療費控除は年末調整の対象外のため、控除を受けるには別途確定申告（還付申告）が必要です。申告の時期を問わず、対象となる年の翌年から5年間はさかのぼって申告できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "通院のための交通費も対象になりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "電車・バスなど公共交通機関による通院の交通費は対象になります。ただし、自家用車のガソリン代や駐車場代は原則として対象外です。領収書が出ない交通費は、日付・区間・金額をメモに残しておくと申告時に役立ちます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "セルフメディケーション税制との違いは何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "セルフメディケーション税制は、健康診断や予防接種など一定の取り組みを行っている人が対象のスイッチOTC医薬品を購入した場合に使える特例で、控除額の上限は88,000円と通常の医療費控除より小さいですが、下限が12,000円と低いため、医療費総額が少ない年でも使いやすいのが特徴です。両方の要件を満たしていても、どちらか一方しか選択できません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "この試算は正確ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "給与所得者を前提とした一般的な近似計算です。医療費控除以外の各種控除（住宅ローン控除・iDeCoの掛金控除など）や、給与以外の所得がある場合は実際の還付額・軽減額が変わります。正確な金額は確定申告書等作成コーナーや税務署、税理士にご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "20万円ルールとは何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "給与を1か所から受けていて年末調整が済んでいる会社員などが、給与所得・退職所得以外の所得（副業の雑所得・事業所得など）の合計額が年間20万円以下であれば、所得税の確定申告をしなくてもよいという制度です。国税庁が案内している「確定申告不要制度」の一つで、副業をしている会社員に広く関係します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "20万円は「収入」と「所得」のどちらで判定しますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「所得」で判定します。副業の年間収入から、その副業のためにかかった必要経費を差し引いた金額（雑所得や事業所得の金額）が20万円を超えるかどうかで判定するため、収入自体が20万円を超えていても、経費を引いた所得が20万円以下であれば対象になりえます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "所得税の確定申告が不要でも、住民税の申告は必要ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい、必要です。20万円ルールはあくまで所得税についての特例であり、住民税には適用されません。副業で所得が発生している場合は、所得税の確定申告をしないのであれば、お住まいの市区町村へ別途住民税の申告書を提出する必要があります。この点は見落とされがちなので注意してください（確定申告をした場合は、その内容が住民税にも自動的に反映されるため、住民税の申告を別途行う必要はありません）。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "20万円ルールが使えないケースはありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。20万円ルールは、給与を1か所からのみ受けていて年末調整が済んでいる人が前提です。給与を2か所以上から受けている場合、年末調整をしていない場合、給与収入が2,000万円を超える場合などはそもそも対象外です。また、医療費控除・住宅ローン控除（1年目）・ふるさと納税のワンストップ特例が使えないケースなど、副業所得の多寡にかかわらず別の理由で確定申告をする場合は、その申告の中で副業所得も含めたすべての所得を申告する必要があります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ふるさと納税のワンストップ特例を使っている場合はどうなりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ワンストップ特例は「確定申告をしないこと」が条件の制度です。副業所得が20万円を超えて所得税の確定申告が必要になった場合、提出済みのワンストップ特例の申請は無効になり、寄付金控除はその確定申告の中で改めて申告する必要があります。ふるさと納税を利用している方は、この点もあわせて確認してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "確定申告した場合の所得税額はどう計算していますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "給与所得（給与所得控除・社会保険料控除・基礎控除後の課税所得）に、副業所得（雑所得・事業所得として総合課税で合算する一般的なケース）を上乗せした場合に増える所得税額を、既存の所得税速算表に基づく限界税率方式で簡易的に試算したものです。青色申告特別控除や配偶者控除・扶養控除、社会保険料の細かい違いなどは考慮していない目安の金額であり、実際の税額とは差が生じます。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+<div class="container">
+<a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+<button aria-controls="site-nav" aria-expanded="false" class="nav-toggle" type="button">
+<span aria-hidden="true" class="icon"></span>
+<span>メニュー</span>
+</button>
+<nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+</div>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>節税・控除シミュレーター まとめ</h1>
+    <p>ふるさと納税の控除上限額、医療費控除、副業20万円ルールの判定まで、節税・控除に関する3つのシミュレーターを1ページにまとめました。上のタブを切り替えるだけで、目的に合わせて使い分けられます。</p>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ上部 --></div>
+
+  <div class="hub-tabs" id="hub-tabs" role="tablist" aria-label="ツールを選択">
+        <button type="button" class="hub-tab" role="tab" id="tab-btn-furusato" aria-controls="tabpanel-furusato" aria-selected="true" data-tool="furusato">ふるさと納税</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-iryouhi" aria-controls="tabpanel-iryouhi" aria-selected="false" data-tool="iryouhi">医療費控除</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-fukugyo" aria-controls="tabpanel-fukugyo" aria-selected="false" data-tool="fukugyo">副業20万円ルール</button>
+  </div>
+
+  <section class="tab-panel" id="tabpanel-furusato" role="tabpanel" aria-labelledby="tab-btn-furusato" data-tool="furusato">
+    <p class="tab-panel-intro">ふるさと納税は、自己負担2,000円を超える部分が所得税・住民税から控除される制度ですが、控除される金額には年収や家族構成に応じた上限があります。上限を超えて寄付した分は全額自己負担になるため、寄付前に目安額を確認しておきましょう。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="furusato-salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
+<input id="furusato-salaryIncome" max="30000000" min="0" step="10000" type="number" value="5000000"/>
+</div>
+<div class="field">
+<label for="furusato-socialInsurance">社会保険料の年間支払額（概算） <span class="unit">円</span></label>
+<input id="furusato-socialInsurance" min="0" step="1000" type="number" value="750000"/>
+<p class="field-hint">目安がわからない場合は年収の約15%で概算しています（給与明細の社会保険料合計×12で置き換えるとより正確です）。</p>
+</div>
+<div class="field">
+<label for="furusato-hasSpouse">配偶者控除の対象になる配偶者</label>
+<select id="furusato-hasSpouse">
+<option value="no">いない</option>
+<option value="yes">いる（配偶者の年収が123万円以下など）</option>
+</select>
+</div>
+<div class="field">
+<label for="furusato-dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
+<input id="furusato-dependents" max="6" min="0" step="1" type="number" value="0"/>
+</div>
+<div class="field">
+<label for="furusato-donationPlan">寄付予定額 <span class="unit">円</span></label>
+<input id="furusato-donationPlan" min="0" step="1000" type="number" value="50000"/>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="furusato-verdict">-</span>
+<span class="sub" id="furusato-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">控除上限額の目安</div>
+<div class="value" id="furusato-result-limit">-</div>
+</div>
+<div class="result-card">
+<div class="label">給与所得</div>
+<div class="value" id="furusato-result-salary-income">-</div>
+</div>
+<div class="result-card">
+<div class="label">課税所得（住民税ベース）</div>
+<div class="value" id="furusato-result-taxable-income">-</div>
+</div>
+<div class="result-card">
+<div class="label">所得税率（速算表）</div>
+<div class="value" id="furusato-result-tax-rate">-</div>
+</div>
+<div class="result-card">
+<div class="label">住民税所得割額（概算）</div>
+<div class="value" id="furusato-result-resident-tax">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:220px">
+<canvas height="220" id="furusato-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>寄付額に対する自己負担額</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>あなたの寄付予定額</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>区分</th><th>金額</th></tr>
+</thead>
+<tbody id="furusato-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>控除上限額はどう決まる？</h2>
+<p>ふるさと納税の控除上限額（自己負担2,000円で寄付できる金額の目安）は、住民税所得割額と所得税率から総務省が示す計算式で求められます。本ツールでは <strong>控除上限額 ＝ 住民税所得割額 × 20% ÷（90% − 所得税率 × 102.1%）＋ 2,000円</strong> という一般的な近似式を用いて試算しています。年収が高いほど、また扶養家族が少ないほど上限額は大きくなる傾向があります。ただし、これはあくまで給与所得者を前提にした概算であり、医療費控除や住宅ローン控除など他の控除を利用している場合、実際の上限額はここで示す金額より少なくなります。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>上限額を超えて寄付するとどうなりますか？</dt>
+<dd>上限を超えた部分は控除の対象にならず、全額自己負担になります。返礼品は受け取れますが、税金の控除という観点では超過分がそのまま持ち出しになる点に注意してください。</dd>
+</div>
+<div class="faq-item">
+<dt>社会保険料の金額がわからない場合はどうすればいいですか？</dt>
+<dd>給与明細やねんきん定期便で確認するのが最も正確ですが、目安として年収のおよそ15%を社会保険料として概算しても大きくは外れません。本ツールも初期値としてこの概算値を表示しています。</dd>
+</div>
+<div class="faq-item">
+<dt>ワンストップ特例と確定申告で控除額は変わりますか？</dt>
+<dd>控除の合計額自体はどちらの手続きでもほぼ同じです。ワンストップ特例では住民税からまとめて控除され、確定申告では所得税の還付と住民税の控除に分かれる点が異なります（ワンストップ特例は寄付先が5自治体以内などの条件があります）。</dd>
+</div>
+<div class="faq-item">
+<dt>この試算は正確ですか？</dt>
+<dd>給与所得者を前提とした一般的な近似計算です。医療費控除・住宅ローン控除・iDeCoの掛金控除など他の控除がある場合や、給与以外の所得がある場合は上限額が変わります。正確な金額は自治体の窓口や税理士、ふるさと納税サイトの詳細シミュレーターでご確認ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の控除上限額を保証するものではありません。正確な金額は自治体・税務署・税理士等にご確認ください。本サイトは特定の自治体・返礼品の勧誘を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-iryouhi" role="tabpanel" aria-labelledby="tab-btn-iryouhi" data-tool="iryouhi" hidden>
+    <p class="tab-panel-intro">1年間（1月〜12月）に本人や生計を一にする家族のために支払った医療費が一定額を超えると、確定申告により所得税の還付・住民税の軽減が受けられます。年収と医療費の合計額を入力するだけで、控除額と税金の軽減額の目安をまとめて試算できます。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="iryouhi-salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
+<input id="iryouhi-salaryIncome" max="30000000" min="0" step="10000" type="number" value="5000000"/>
+</div>
+<div class="field">
+<label for="iryouhi-socialInsurance">社会保険料の年間支払額（概算） <span class="unit">円</span></label>
+<input id="iryouhi-socialInsurance" min="0" step="1000" type="number" value="750000"/>
+<p class="field-hint">目安がわからない場合は年収の約15%で概算しています（給与明細の社会保険料合計×12で置き換えるとより正確です）。</p>
+</div>
+<div class="field">
+<label for="iryouhi-hasSpouse">配偶者控除の対象になる配偶者</label>
+<select id="iryouhi-hasSpouse">
+<option value="no">いない</option>
+<option value="yes">いる（配偶者の年収が123万円以下など）</option>
+</select>
+</div>
+<div class="field">
+<label for="iryouhi-dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
+<input id="iryouhi-dependents" max="6" min="0" step="1" type="number" value="0"/>
+</div>
+<div class="field">
+<label for="iryouhi-medicalTotal">1年間に支払った医療費の合計額 <span class="unit">円</span></label>
+<input id="iryouhi-medicalTotal" min="0" step="1000" type="number" value="300000"/>
+<p class="field-hint">本人・生計を一にする配偶者や親族の分も合算できます。通院の交通費や市販薬の一部も対象になる場合があります。</p>
+</div>
+<div class="field">
+<label for="iryouhi-insuranceReimbursement">保険金などで補填される金額 <span class="unit">円</span></label>
+<input id="iryouhi-insuranceReimbursement" min="0" step="1000" type="number" value="0"/>
+<p class="field-hint">生命保険の入院給付金、健康保険の高額療養費・出産育児一時金など、医療費の支払いに対して別途受け取った金額を入力します。</p>
+</div>
+<div class="field">
+<label for="iryouhi-otcAmount">スイッチOTC医薬品の購入額（セルフメディケーション税制用・任意） <span class="unit">円</span></label>
+<input id="iryouhi-otcAmount" min="0" step="1000" type="number" value="0"/>
+<p class="field-hint">対象の市販薬（スイッチOTC医薬品）の購入額です。通常の医療費控除とは選択制（併用不可）のため、参考として両方の控除額を比較表示します。</p>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="iryouhi-verdict">-</span>
+<span class="sub" id="iryouhi-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">医療費控除額（通常制度）</div>
+<div class="value" id="iryouhi-result-deduction">-</div>
+</div>
+<div class="result-card">
+<div class="label">セルフメディケーション税制の控除額</div>
+<div class="value" id="iryouhi-result-selfmed">-</div>
+</div>
+<div class="result-card">
+<div class="label">所得税率（速算表）</div>
+<div class="value" id="iryouhi-result-tax-rate">-</div>
+</div>
+<div class="result-card">
+<div class="label">所得税の還付額（概算）</div>
+<div class="value" id="iryouhi-result-income-tax-refund">-</div>
+</div>
+<div class="result-card">
+<div class="label">住民税の軽減額（概算）</div>
+<div class="value" id="iryouhi-result-resident-tax-reduction">-</div>
+</div>
+<div class="result-card accent">
+<div class="label">合計の軽減額（概算）</div>
+<div class="value" id="iryouhi-result-total-reduction">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:220px">
+<canvas height="220" id="iryouhi-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>医療費合計に対する控除額（通常制度）</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>あなたの医療費合計額</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th>区分</th><th>金額</th></tr>
+</thead>
+<tbody id="iryouhi-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>医療費控除額はどう決まる？</h2>
+<p>医療費控除額は <strong>実際に支払った医療費の合計額 − 保険金などで補填される金額 − 10万円（総所得金額等が200万円未満の場合はその5%）</strong> で計算され、上限は200万円です。生命保険の入院給付金や健康保険の高額療養費・出産育児一時金を受け取った場合は、その金額を差し引く必要がある点に注意してください。また、対象となる医薬品を購入した場合に使える「セルフメディケーション税制」は、通常の医療費控除と選択制（どちらか一方のみ）のため、本ツールでは両方の控除額を試算して有利な方を自動で案内します。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>医療費控除は誰でも申告が必要ですか？</dt>
+<dd>会社員で年末調整を受けている方でも、医療費控除は年末調整の対象外のため、控除を受けるには別途確定申告（還付申告）が必要です。申告の時期を問わず、対象となる年の翌年から5年間はさかのぼって申告できます。</dd>
+</div>
+<div class="faq-item">
+<dt>通院のための交通費も対象になりますか？</dt>
+<dd>電車・バスなど公共交通機関による通院の交通費は対象になります。ただし、自家用車のガソリン代や駐車場代は原則として対象外です。領収書が出ない交通費は、日付・区間・金額をメモに残しておくと申告時に役立ちます。</dd>
+</div>
+<div class="faq-item">
+<dt>セルフメディケーション税制との違いは何ですか？</dt>
+<dd>セルフメディケーション税制は、健康診断や予防接種など一定の取り組みを行っている人が対象のスイッチOTC医薬品を購入した場合に使える特例で、控除額の上限は88,000円と通常の医療費控除より小さいですが、下限が12,000円と低いため、医療費総額が少ない年でも使いやすいのが特徴です。両方の要件を満たしていても、どちらか一方しか選択できません。</dd>
+</div>
+<div class="faq-item">
+<dt>この試算は正確ですか？</dt>
+<dd>給与所得者を前提とした一般的な近似計算です。医療費控除以外の各種控除（住宅ローン控除・iDeCoの掛金控除など）や、給与以外の所得がある場合は実際の還付額・軽減額が変わります。正確な金額は確定申告書等作成コーナーや税務署、税理士にご確認ください。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の控除額・還付額・軽減額を保証するものではありません。正確な金額は税務署・税理士等にご確認ください。本サイトは特定の医療機関・商品の勧誘を目的とするものではありません。
+  </div>
+  </section>
+  <section class="tab-panel" id="tabpanel-fukugyo" role="tabpanel" aria-labelledby="tab-btn-fukugyo" data-tool="fukugyo" hidden>
+    <p class="tab-panel-intro">給与所得者が副業をしている場合、副業の所得（収入－必要経費）が年間20万円以下であれば所得税の確定申告は不要です。給与年収・副業の収入・必要経費を入力すると、この「20万円ルール」に該当するかどうかと、確定申告した場合の所得税額の目安を試算します。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="fukugyo-salaryIncome">給与年収 <span class="unit">万円</span></label>
+<input id="fukugyo-salaryIncome" min="0" step="10" type="number" value="500"/>
+<p class="field-hint">源泉徴収票の「支払金額」の目安です。給与を1か所から受けていて年末調整済みであることを前提とします。</p>
+</div>
+<div class="field">
+<label for="fukugyo-sideIncome">副業の年間収入 <span class="unit">万円</span></label>
+<input id="fukugyo-sideIncome" min="0" step="1" type="number" value="50"/>
+<p class="field-hint">副業（雑所得・事業所得）で得た年間の収入合計額（経費を引く前）を入力してください。</p>
+</div>
+<div class="field">
+<label for="fukugyo-sideExpense">副業の必要経費 <span class="unit">万円</span></label>
+<input id="fukugyo-sideExpense" min="0" step="1" type="number" value="10"/>
+<p class="field-hint">副業の収入を得るために直接かかった費用（仕入れ・機材・通信費の按分分など）の年間合計額です。</p>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="fukugyo-verdict">-</span>
+<span class="sub" id="fukugyo-verdictSub"></span>
+</div>
+<div class="error-box" id="fukugyo-noticeBox"></div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">副業所得（収入－必要経費）</div>
+<div class="value" id="fukugyo-result-side-profit">-</div>
+</div>
+<div class="result-card">
+<div class="label">所得税の確定申告</div>
+<div class="value" id="fukugyo-result-income-tax-filing">-</div>
+</div>
+<div class="result-card">
+<div class="label">住民税の申告</div>
+<div class="value" id="fukugyo-result-resident-tax-filing">-</div>
+</div>
+<div class="result-card">
+<div class="label">確定申告した場合の所得税額の目安</div>
+<div class="value" id="fukugyo-result-tax-if-filed">-</div>
+</div>
+<div class="result-card">
+<div class="label">適用される所得税の限界税率の目安</div>
+<div class="value" id="fukugyo-result-marginal-rate">-</div>
+</div>
+</div>
+<div class="chart-wrap">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas height="280" id="fukugyo-growthChart"></canvas>
+</div>
+<div class="legend-note">
+<span><span class="legend-dot" style="background:#0f5f4c"></span>副業所得（雑所得等）</span>
+<span><span class="legend-dot" style="background:#d98e04"></span>必要経費</span>
+</div>
+</div>
+<div class="table-wrap">
+<table class="data-table wall-table">
+<thead>
+<tr><th>副業所得の水準</th><th>所得税の確定申告</th><th>住民税の申告</th></tr>
+</thead>
+<tbody id="fukugyo-compare-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>副業「20万円ルール」とは</h2>
+<p>会社員などの給与所得者が副業をしている場合、副業から得た所得（雑所得や事業所得など、給与所得・退職所得以外の所得の合計額）が年間20万円以下であれば、所得税の確定申告をしなくてもよいという制度があります。これは、給与を1か所から受けていて年末調整が済んでいることを前提に、国税庁が案内している「確定申告不要制度」のひとつです。判定に使うのは「収入」ではなく「所得」（収入から必要経費を差し引いた金額）である点、そして所得税だけの特例であり住民税には適用されない点の2つが特に見落とされやすいポイントです。本シミュレーターでは、給与年収・副業の年間収入・副業の必要経費を入力するだけで、この20万円ルールに該当するかどうかと、仮に確定申告をした場合に増える所得税額の目安を確認できます。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>20万円ルールとは何ですか？</dt>
+<dd>給与を1か所から受けていて年末調整が済んでいる会社員などが、給与所得・退職所得以外の所得（副業の雑所得・事業所得など）の合計額が年間20万円以下であれば、所得税の確定申告をしなくてもよいという制度です。国税庁が案内している「確定申告不要制度」の一つで、副業をしている会社員に広く関係します。</dd>
+</div>
+<div class="faq-item">
+<dt>20万円は「収入」と「所得」のどちらで判定しますか？</dt>
+<dd>「所得」で判定します。副業の年間収入から、その副業のためにかかった必要経費を差し引いた金額（雑所得や事業所得の金額）が20万円を超えるかどうかで判定するため、収入自体が20万円を超えていても、経費を引いた所得が20万円以下であれば対象になりえます。</dd>
+</div>
+<div class="faq-item">
+<dt>所得税の確定申告が不要でも、住民税の申告は必要ですか？</dt>
+<dd>はい、必要です。20万円ルールはあくまで所得税についての特例であり、住民税には適用されません。副業で所得が発生している場合は、所得税の確定申告をしないのであれば、お住まいの市区町村へ別途住民税の申告書を提出する必要があります。この点は見落とされがちなので注意してください（確定申告をした場合は、その内容が住民税にも自動的に反映されるため、住民税の申告を別途行う必要はありません）。</dd>
+</div>
+<div class="faq-item">
+<dt>20万円ルールが使えないケースはありますか？</dt>
+<dd>はい。20万円ルールは、給与を1か所からのみ受けていて年末調整が済んでいる人が前提です。給与を2か所以上から受けている場合、年末調整をしていない場合、給与収入が2,000万円を超える場合などはそもそも対象外です。また、医療費控除・住宅ローン控除（1年目）・ふるさと納税のワンストップ特例が使えないケースなど、副業所得の多寡にかかわらず別の理由で確定申告をする場合は、その申告の中で副業所得も含めたすべての所得を申告する必要があります。</dd>
+</div>
+<div class="faq-item">
+<dt>ふるさと納税のワンストップ特例を使っている場合はどうなりますか？</dt>
+<dd>ワンストップ特例は「確定申告をしないこと」が条件の制度です。副業所得が20万円を超えて所得税の確定申告が必要になった場合、提出済みのワンストップ特例の申請は無効になり、寄付金控除はその確定申告の中で改めて申告する必要があります。ふるさと納税を利用している方は、この点もあわせて確認してください。詳しくは<a href="furusato-nozei-hajimekata-guide.html">ふるさと納税のやり方 完全ガイド</a>もご覧ください。</dd>
+</div>
+<div class="faq-item">
+<dt>確定申告した場合の所得税額はどう計算していますか？</dt>
+<dd>給与所得（給与所得控除・社会保険料控除・基礎控除後の課税所得）に、副業所得（雑所得・事業所得として総合課税で合算する一般的なケース）を上乗せした場合に増える所得税額を、既存の所得税速算表に基づく限界税率方式で簡易的に試算したものです。青色申告特別控除や配偶者控除・扶養控除、社会保険料の細かい違いなどは考慮していない目安の金額であり、実際の税額とは差が生じます。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値です。「20万円ルール」は、給与を1か所からのみ受けていて年末調整が済んでいること、給与所得・退職所得以外の所得の合計が20万円以下であることを前提とした所得税の確定申告不要制度であり、給与を2か所以上から受けている場合や年末調整をしていない場合、医療費控除など他の理由で確定申告をする場合には適用されません。住民税は20万円ルールの対象外のため、所得税の確定申告が不要な場合でも別途申告が必要になることがあります。社会保険料率・給与所得控除・所得税速算表は既存ツールと共通の概算値を用いており、配偶者控除・扶養控除・青色申告特別控除等は考慮していません。正確な要否判定・税額は税務署・税理士にご確認ください。本サイトは税務に関する助言を目的とするものではありません。
+  </div>
+  </section>
+
+  <div class="share-box" id="share-box">
+    <div class="share-box-text">
+      <strong>この条件の結果をURLで共有</strong>
+      <p>入力した条件と選択中のツールをそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+    </div>
+    <div class="share-box-controls">
+      <input type="text" id="share-url-input" readonly aria-label="共有用URL">
+      <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
+    </div>
+    <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: ハブページ下部 --></div>
+
+  <section class="article-section hub-related-guides">
+    <h2>あわせて読みたいガイド</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="furusato-nozei-hajimekata-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>ふるさと納税のやり方 完全ガイド｜控除上限額の確認から手続きまで</h3>
+        <p>ふるさと納税を初めて行う方向けに、控除上限額の確認から寄付、ワンストップ特例・確定申告の選び方、控除が反映されるタイミングまでを手順ごとに解説。関連する無料…</p>
+      </a>
+      <a class="tool-card" href="kakutei-shinkoku-hajimekata-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>確定申告のやり方 完全ガイド｜会社員・副業ありの人が対象になるケースと必要書類</h3>
+        <p>会社員でも確定申告が必要になる主なケース（副業20万円超、医療費控除、住宅ローン控除1年目、ふるさと納税6自治体以上など）の見分け方から、必要書類の準備、申…</p>
+      </a>
+      <a class="tool-card" href="juminzei-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>住民税とは？仕組み・計算方法・納め方 完全ガイド</h3>
+        <p>住民税は所得割と均等割からなり、前年の所得に対して翌年課税される「後払い」の税金です。計算の仕組み、特別徴収と普通徴収の違い、ふるさと納税・iDeCo・確定…</p>
+      </a>
+      <a class="tool-card" href="nenmatsu-chosei-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>年末調整とは？仕組み・対象者・できる控除・確定申告との違い 完全ガイド</h3>
+        <p>年末調整は、毎月の給与から源泉徴収されている所得税の概算額を、1年間の正しい税額に精算する会社員向けの手続きです。対象者・対象外になるケース、年末調整ででき…</p>
+      </a>
+      <a class="tool-card" href="iryouhi-koujo-selfmedication-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>医療費控除とセルフメディケーション税制の違いとは？どちらが得か 完全ガイド</h3>
+        <p>医療費控除とセルフメディケーション税制はどちらか一方しか選べない選択制の制度です。対象となる費用・医薬品の違い、控除額の計算方法の違い（10万円超過分 vs…</p>
+      </a>
+      <a class="tool-card" href="kyuyo-shotoku-koujo-guide.html">
+        <span class="badge">ガイド</span>
+        <h3>給与所得控除とは？計算方法と控除額早見表 完全ガイド</h3>
+        <p>会社員・公務員の年収から自動的に差し引かれる給与所得控除の仕組みと、2025年度税制改正後の最新の速算表・計算方法、基礎控除との違い、副業がある場合の注意点…</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+<div class="container">
+<span>© 2026 ふやすノート</span>
+<nav>
+<a href="../index.html">トップへ戻る</a>
+<a href="../about.html">運営者情報</a>
+<a href="../privacy.html">プライバシーポリシー</a>
+<a href="../disclosure.html">アフィリエイト・広告表記について</a>
+</nav>
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+
+<script src="../js/furusato-nozei.js"></script>
+<script src="../js/iryouhi-koujo.js"></script>
+<script src="../js/fukugyo-20man.js"></script>
+<script src="../js/tabs.js"></script>
+<script src="../js/share.js"></script>
+<script src="../js/nav-toggle.js"></script>
+</body>
+</html>

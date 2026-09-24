@@ -34,18 +34,18 @@
   var RESIDENT_BASIC_DEDUCTION = 430000; // 住民税の基礎控除
 
   var els = {
-    salaryIncome: document.getElementById("salaryIncome"),
-    sideIncome: document.getElementById("sideIncome"),
-    sideExpense: document.getElementById("sideExpense"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    noticeBox: document.getElementById("noticeBox"),
-    sideProfit: document.getElementById("result-side-profit"),
-    incomeTaxFiling: document.getElementById("result-income-tax-filing"),
-    residentTaxFiling: document.getElementById("result-resident-tax-filing"),
-    taxIfFiled: document.getElementById("result-tax-if-filed"),
-    marginalRate: document.getElementById("result-marginal-rate"),
-    compareBody: document.getElementById("compare-body"),
+    salaryIncome: document.getElementById("fukugyo-salaryIncome"),
+    sideIncome: document.getElementById("fukugyo-sideIncome"),
+    sideExpense: document.getElementById("fukugyo-sideExpense"),
+    verdict: document.getElementById("fukugyo-verdict"),
+    verdictSub: document.getElementById("fukugyo-verdictSub"),
+    noticeBox: document.getElementById("fukugyo-noticeBox"),
+    sideProfit: document.getElementById("fukugyo-result-side-profit"),
+    incomeTaxFiling: document.getElementById("fukugyo-result-income-tax-filing"),
+    residentTaxFiling: document.getElementById("fukugyo-result-resident-tax-filing"),
+    taxIfFiled: document.getElementById("fukugyo-result-tax-if-filed"),
+    marginalRate: document.getElementById("fukugyo-result-marginal-rate"),
+    compareBody: document.getElementById("fukugyo-compare-body"),
   };
 
   var chart = null;
@@ -184,7 +184,7 @@
       })
       .join("");
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("fukugyo-growthChart").getContext("2d");
     var data = {
       labels: ["副業所得（雑所得等）", "必要経費"],
       datasets: [

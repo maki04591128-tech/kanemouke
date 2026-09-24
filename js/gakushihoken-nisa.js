@@ -2,20 +2,20 @@
   "use strict";
 
   var els = {
-    monthly: document.getElementById("monthly"),
-    years: document.getElementById("years"),
-    yearsOut: document.getElementById("yearsOut"),
-    returnRate: document.getElementById("returnRate"),
-    returnRateOut: document.getElementById("returnRateOut"),
-    nisaRate: document.getElementById("nisaRate"),
-    nisaRateOut: document.getElementById("nisaRateOut"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    resultPrincipal: document.getElementById("result-principal"),
-    resultHoken: document.getElementById("result-hoken"),
-    resultNisa: document.getElementById("result-nisa"),
-    resultDiff: document.getElementById("result-diff"),
-    breakdownBody: document.getElementById("breakdown-body"),
+    monthly: document.getElementById("gakushi-monthly"),
+    years: document.getElementById("gakushi-years"),
+    yearsOut: document.getElementById("gakushi-yearsOut"),
+    returnRate: document.getElementById("gakushi-returnRate"),
+    returnRateOut: document.getElementById("gakushi-returnRateOut"),
+    nisaRate: document.getElementById("gakushi-nisaRate"),
+    nisaRateOut: document.getElementById("gakushi-nisaRateOut"),
+    verdict: document.getElementById("gakushi-verdict"),
+    verdictSub: document.getElementById("gakushi-verdictSub"),
+    resultPrincipal: document.getElementById("gakushi-result-principal"),
+    resultHoken: document.getElementById("gakushi-result-hoken"),
+    resultNisa: document.getElementById("gakushi-result-nisa"),
+    resultDiff: document.getElementById("gakushi-result-diff"),
+    breakdownBody: document.getElementById("gakushi-breakdown-body"),
   };
 
   var chart = null;
@@ -158,7 +158,7 @@
       chart.options = options;
       chart.update();
     } else {
-      chart = new Chart(document.getElementById("growthChart").getContext("2d"), {
+      chart = new Chart(document.getElementById("gakushi-growthChart").getContext("2d"), {
         type: "line",
         data: data,
         options: options,

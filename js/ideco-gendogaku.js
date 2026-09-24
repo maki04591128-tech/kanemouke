@@ -80,20 +80,20 @@
   ];
 
   var els = {
-    category: document.getElementById("category"),
-    offsetRow: document.getElementById("offsetRow"),
-    offsetLabel: document.getElementById("offsetLabel"),
-    offsetHint: document.getElementById("offsetHint"),
-    offsetAmount: document.getElementById("offsetAmount"),
-    taxableIncome: document.getElementById("taxableIncome"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    monthlyCap: document.getElementById("result-monthly-cap"),
-    annualCap: document.getElementById("result-annual-cap"),
-    remaining: document.getElementById("result-remaining"),
-    taxRate: document.getElementById("result-tax-rate"),
-    taxSaving: document.getElementById("result-tax-saving"),
-    tableBody: document.getElementById("breakdown-body"),
+    category: document.getElementById("gendogaku-category"),
+    offsetRow: document.getElementById("gendogaku-offsetRow"),
+    offsetLabel: document.getElementById("gendogaku-offsetLabel"),
+    offsetHint: document.getElementById("gendogaku-offsetHint"),
+    offsetAmount: document.getElementById("gendogaku-offsetAmount"),
+    taxableIncome: document.getElementById("gendogaku-taxableIncome"),
+    verdict: document.getElementById("gendogaku-verdict"),
+    verdictSub: document.getElementById("gendogaku-verdictSub"),
+    monthlyCap: document.getElementById("gendogaku-result-monthly-cap"),
+    annualCap: document.getElementById("gendogaku-result-annual-cap"),
+    remaining: document.getElementById("gendogaku-result-remaining"),
+    taxRate: document.getElementById("gendogaku-result-tax-rate"),
+    taxSaving: document.getElementById("gendogaku-result-tax-saving"),
+    tableBody: document.getElementById("gendogaku-breakdown-body"),
   };
 
   var chart = null;
@@ -192,7 +192,7 @@
       return key === categoryKey ? "#d98e04" : "#0f5f4c";
     });
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("gendogaku-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

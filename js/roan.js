@@ -2,26 +2,26 @@
   "use strict";
 
   var els = {
-    balance: document.getElementById("balance"),
-    loanRate: document.getElementById("loanRate"),
-    loanRateOut: document.getElementById("loanRateOut"),
-    years: document.getElementById("years"),
-    yearsOut: document.getElementById("yearsOut"),
-    extra: document.getElementById("extra"),
-    investRate: document.getElementById("investRate"),
-    investRateOut: document.getElementById("investRateOut"),
-    payoffNormal: document.getElementById("result-payoff-normal"),
-    payoffPrepay: document.getElementById("result-payoff-prepay"),
-    interestSaved: document.getElementById("result-interest-saved"),
-    investProfit: document.getElementById("result-invest-profit"),
-    verdictTitle: document.getElementById("verdict-title"),
-    verdictBody: document.getElementById("verdict-body"),
-    verdictBox: document.getElementById("verdict-box"),
-    detailNormalInterest: document.getElementById("detail-normal-interest"),
-    detailPrepayInterest: document.getElementById("detail-prepay-interest"),
-    detailShorten: document.getElementById("detail-shorten"),
-    detailInvestPrincipal: document.getElementById("detail-invest-principal"),
-    detailInvestTotal: document.getElementById("detail-invest-total"),
+    balance: document.getElementById("roan-balance"),
+    loanRate: document.getElementById("roan-loanRate"),
+    loanRateOut: document.getElementById("roan-loanRateOut"),
+    years: document.getElementById("roan-years"),
+    yearsOut: document.getElementById("roan-yearsOut"),
+    extra: document.getElementById("roan-extra"),
+    investRate: document.getElementById("roan-investRate"),
+    investRateOut: document.getElementById("roan-investRateOut"),
+    payoffNormal: document.getElementById("roan-result-payoff-normal"),
+    payoffPrepay: document.getElementById("roan-result-payoff-prepay"),
+    interestSaved: document.getElementById("roan-result-interest-saved"),
+    investProfit: document.getElementById("roan-result-invest-profit"),
+    verdictTitle: document.getElementById("roan-verdict-title"),
+    verdictBody: document.getElementById("roan-verdict-body"),
+    verdictBox: document.getElementById("roan-verdict-box"),
+    detailNormalInterest: document.getElementById("roan-detail-normal-interest"),
+    detailPrepayInterest: document.getElementById("roan-detail-prepay-interest"),
+    detailShorten: document.getElementById("roan-detail-shorten"),
+    detailInvestPrincipal: document.getElementById("roan-detail-invest-principal"),
+    detailInvestTotal: document.getElementById("roan-detail-invest-total"),
   };
 
   var chart = null;
@@ -205,7 +205,7 @@
       },
     };
 
-    var ctx = document.getElementById("loanChart").getContext("2d");
+    var ctx = document.getElementById("roan-loanChart").getContext("2d");
     if (chart) {
       chart.data = data;
       chart.options = options;

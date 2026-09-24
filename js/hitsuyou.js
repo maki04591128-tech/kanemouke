@@ -2,15 +2,15 @@
   "use strict";
 
   var els = {
-    target: document.getElementById("target"),
-    initial: document.getElementById("initial"),
-    rate: document.getElementById("rate"),
-    years: document.getElementById("years"),
-    rateOut: document.getElementById("rateOut"),
-    yearsOut: document.getElementById("yearsOut"),
-    monthly: document.getElementById("result-monthly"),
-    principal: document.getElementById("result-principal"),
-    profit: document.getElementById("result-profit"),
+    target: document.getElementById("hitsuyou-target"),
+    initial: document.getElementById("hitsuyou-initial"),
+    rate: document.getElementById("hitsuyou-rate"),
+    years: document.getElementById("hitsuyou-years"),
+    rateOut: document.getElementById("hitsuyou-rateOut"),
+    yearsOut: document.getElementById("hitsuyou-yearsOut"),
+    monthly: document.getElementById("hitsuyou-result-monthly"),
+    principal: document.getElementById("hitsuyou-result-principal"),
+    profit: document.getElementById("hitsuyou-result-profit"),
   };
 
   var chart = null;
@@ -81,7 +81,7 @@
     var principalData = yearly.map(function (d) { return Math.round(d.principal); });
     var balanceData = yearly.map(function (d) { return Math.round(d.balance); });
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("hitsuyou-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [

@@ -40,18 +40,18 @@
   var RESIDENT_DEPENDENT_DEDUCTION = 330000; // 住民税の扶養控除（1人あたり）
 
   var els = {
-    income: document.getElementById("income"),
-    ageGroup: document.getElementById("ageGroup"),
-    hasSpouse: document.getElementById("hasSpouse"),
-    dependents: document.getElementById("dependents"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    takeHome: document.getElementById("result-take-home"),
-    takeHomeRate: document.getElementById("result-take-home-rate"),
-    takeHomeMonthly: document.getElementById("result-take-home-monthly"),
-    totalDeduction: document.getElementById("result-total-deduction"),
-    breakdownBody: document.getElementById("breakdown-body"),
-    tableBody: document.getElementById("table-body"),
+    income: document.getElementById("tedori-income"),
+    ageGroup: document.getElementById("tedori-ageGroup"),
+    hasSpouse: document.getElementById("tedori-hasSpouse"),
+    dependents: document.getElementById("tedori-dependents"),
+    verdict: document.getElementById("tedori-verdict"),
+    verdictSub: document.getElementById("tedori-verdictSub"),
+    takeHome: document.getElementById("tedori-result-take-home"),
+    takeHomeRate: document.getElementById("tedori-result-take-home-rate"),
+    takeHomeMonthly: document.getElementById("tedori-result-take-home-monthly"),
+    totalDeduction: document.getElementById("tedori-result-total-deduction"),
+    breakdownBody: document.getElementById("tedori-breakdown-body"),
+    tableBody: document.getElementById("tedori-table-body"),
   };
 
   var chart = null;
@@ -166,7 +166,7 @@
     });
     els.tableBody.innerHTML = rows.join("");
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("tedori-growthChart").getContext("2d");
     var data = {
       labels: ["手取り", "社会保険料", "所得税", "住民税"],
       datasets: [

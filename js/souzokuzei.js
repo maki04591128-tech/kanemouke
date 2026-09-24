@@ -18,19 +18,19 @@
   ];
 
   var els = {
-    estateTotal: document.getElementById("estateTotal"),
-    hasSpouse: document.getElementById("hasSpouse"),
-    childCount: document.getElementById("childCount"),
-    spouseShareRow: document.getElementById("spouseShareRow"),
-    spouseSharePct: document.getElementById("spouseSharePct"),
-    spouseSharePctOut: document.getElementById("spouseSharePctOut"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    totalTax: document.getElementById("result-total-tax"),
-    basicDeduction: document.getElementById("result-basic-deduction"),
-    taxableEstate: document.getElementById("result-taxable-estate"),
-    familyPayable: document.getElementById("result-family-payable"),
-    tableBody: document.getElementById("breakdown-body"),
+    estateTotal: document.getElementById("souzokuzei-estateTotal"),
+    hasSpouse: document.getElementById("souzokuzei-hasSpouse"),
+    childCount: document.getElementById("souzokuzei-childCount"),
+    spouseShareRow: document.getElementById("souzokuzei-spouseShareRow"),
+    spouseSharePct: document.getElementById("souzokuzei-spouseSharePct"),
+    spouseSharePctOut: document.getElementById("souzokuzei-spouseSharePctOut"),
+    verdict: document.getElementById("souzokuzei-verdict"),
+    verdictSub: document.getElementById("souzokuzei-verdictSub"),
+    totalTax: document.getElementById("souzokuzei-result-total-tax"),
+    basicDeduction: document.getElementById("souzokuzei-result-basic-deduction"),
+    taxableEstate: document.getElementById("souzokuzei-result-taxable-estate"),
+    familyPayable: document.getElementById("souzokuzei-result-family-payable"),
+    tableBody: document.getElementById("souzokuzei-breakdown-body"),
   };
 
   var chart = null;
@@ -183,7 +183,7 @@
       })
       .join("");
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("souzokuzei-growthChart").getContext("2d");
     var exemptPortion = Math.min(estateTotal, basicDeduction);
     var data = {
       labels: ["基礎控除相当額（非課税）", "課税遺産総額（税率が適用される部分）"],

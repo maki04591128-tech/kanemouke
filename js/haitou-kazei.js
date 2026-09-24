@@ -45,18 +45,18 @@
   var RESIDENT_DEPENDENT_DEDUCTION = 330000;
 
   var els = {
-    income: document.getElementById("income"),
-    ageGroup: document.getElementById("ageGroup"),
-    hasSpouse: document.getElementById("hasSpouse"),
-    dependents: document.getElementById("dependents"),
-    dividend: document.getElementById("dividend"),
-    verdict: document.getElementById("verdict"),
-    verdictSub: document.getElementById("verdictSub"),
-    netWithholding: document.getElementById("result-net-withholding"),
-    netComprehensive: document.getElementById("result-net-comprehensive"),
-    diff: document.getElementById("result-diff"),
-    effectiveRate: document.getElementById("result-effective-rate"),
-    compareBody: document.getElementById("compare-body"),
+    income: document.getElementById("kazei-income"),
+    ageGroup: document.getElementById("kazei-ageGroup"),
+    hasSpouse: document.getElementById("kazei-hasSpouse"),
+    dependents: document.getElementById("kazei-dependents"),
+    dividend: document.getElementById("kazei-dividend"),
+    verdict: document.getElementById("kazei-verdict"),
+    verdictSub: document.getElementById("kazei-verdictSub"),
+    netWithholding: document.getElementById("kazei-result-net-withholding"),
+    netComprehensive: document.getElementById("kazei-result-net-comprehensive"),
+    diff: document.getElementById("kazei-result-diff"),
+    effectiveRate: document.getElementById("kazei-result-effective-rate"),
+    compareBody: document.getElementById("kazei-compare-body"),
   };
 
   var chart = null;
@@ -193,7 +193,7 @@
       })
       .join("");
 
-    var ctx = document.getElementById("growthChart").getContext("2d");
+    var ctx = document.getElementById("kazei-growthChart").getContext("2d");
     var data = {
       labels: ["確定申告不要", "申告分離課税", "総合課税"],
       datasets: [
