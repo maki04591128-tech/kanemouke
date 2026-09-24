@@ -9,6 +9,8 @@
   --color-border: #e2e8ef;
   --color-profit: #0f5f4c;
   --color-principal: #7a8899;
+  --color-error: #c0392b;
+  --color-error-bg: #fdecea;
   --radius: 14px;
   --shadow: 0 4px 20px rgba(15, 30, 45, 0.06);
   color-scheme: light;
@@ -557,6 +559,24 @@ a { color: var(--color-primary); }
   line-height: 1.4;
 }
 .number-value-hint[hidden] { display: none; }
+/* 数値入力欄のインラインバリデーション（js/field-validation.js が動的に生成） */
+.field-error {
+  display: none;
+  font-size: 0.78rem;
+  color: var(--color-error);
+  font-weight: 600;
+  margin: 6px 0 0;
+  line-height: 1.5;
+}
+.field.has-error .field-error { display: block; }
+.field.has-error input[type="number"] {
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
+}
+.field.has-error input[type="number"]:focus {
+  outline: 2px solid var(--color-error);
+  outline-offset: 1px;
+}
 .field input[type="number"],
 .field input[type="range"],
 .field select {
