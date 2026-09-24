@@ -241,13 +241,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="setsuzei-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="setsuzei-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
 <span><span class="legend-dot" style="background:#7a8899"></span>掛金累計</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="setsuzei-growthDataTable"></table></div></details>
 </div>
 </div>
 <section class="article-section">
@@ -333,12 +334,13 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:220px">
-<canvas height="220" id="gendogaku-growthChart"></canvas>
+<canvas aria-hidden="true" height="220" id="gendogaku-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>職業区分ごとの拠出限度額（月額・目安）</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="gendogaku-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -457,7 +459,7 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="uketori-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="uketori-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>A：全額一時金</span>
@@ -465,6 +467,7 @@
 <span><span class="legend-dot" style="background:#2563eb"></span>C：併用</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="uketori-growthDataTable"></table></div></details>
 </div>
 </div>
 <section class="article-section">
@@ -579,12 +582,13 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:260px">
-<canvas height="260" id="yuusen-growthChart"></canvas>
+<canvas aria-hidden="true" height="260" id="yuusen-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>節税額の再投資なし／<span class="legend-dot" style="background:#d98e04"></span>節税額を毎年NISAに再投資</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="yuusen-growthDataTable"></table></div></details>
 </div>
 </div>
 <div class="table-wrap">
@@ -697,13 +701,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:220px">
-<canvas height="220" id="kyosai-growthChart"></canvas>
+<canvas aria-hidden="true" height="220" id="kyosai-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>共済金の目安（掛金＋運用益）</span>
 <span><span class="legend-dot" style="background:#7a8899"></span>掛金（累計拠出額）</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="kyosai-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -791,6 +796,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/chart-data-table.js"></script>
 
 <script src="../js/ideco.js"></script>
 <script src="../js/ideco-gendogaku.js"></script>

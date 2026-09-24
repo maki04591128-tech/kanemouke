@@ -243,13 +243,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:220px">
-<canvas height="220" id="furusato-growthChart"></canvas>
+<canvas aria-hidden="true" height="220" id="furusato-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>寄付額に対する自己負担額</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>あなたの寄付予定額</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="furusato-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -361,13 +362,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:220px">
-<canvas height="220" id="iryouhi-growthChart"></canvas>
+<canvas aria-hidden="true" height="220" id="iryouhi-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>医療費合計に対する控除額（通常制度）</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>あなたの医療費合計額</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="iryouhi-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -456,13 +458,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="fukugyo-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="fukugyo-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>副業所得（雑所得等）</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>必要経費</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="fukugyo-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table wall-table">
 <thead>
@@ -574,6 +577,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/chart-data-table.js"></script>
 
 <script src="../js/furusato-nozei.js"></script>
 <script src="../js/iryouhi-koujo.js"></script>

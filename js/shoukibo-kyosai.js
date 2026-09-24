@@ -287,6 +287,7 @@
     } else {
       chart = new Chart(ctx, { type: "line", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("kyosai-growthDataTable", chart);
   }
 
   els.payoutMethod.addEventListener("change", function () {

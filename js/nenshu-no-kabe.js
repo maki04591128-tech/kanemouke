@@ -247,6 +247,7 @@
     } else {
       chart = new Chart(ctx, { type: "line", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("kabe-growthDataTable", chart);
   }
 
   [els.income, els.insuranceApplies].forEach(function (el) {

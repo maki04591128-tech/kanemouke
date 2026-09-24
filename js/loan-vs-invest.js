@@ -188,6 +188,7 @@
     } else {
       chart = new Chart(ctx, { type: "line", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("kurioage-growthDataTable", chart);
   }
 
   [els.balance, els.loanRate, els.termYears, els.lump, els.investRate].forEach(function (el) {

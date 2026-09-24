@@ -201,6 +201,7 @@
         options: options,
       });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("portfolio-growthDataTable", chart);
   }
 
   [els.initial, els.monthly, els.years, els.yieldPct, els.divGrowth, els.priceGrowth, els.accountType, els.targetMonthly].forEach(function (el) {

@@ -293,13 +293,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="taishokukin-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="taishokukin-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>A：一時金を運用</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>B：年金＋再投資</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="taishokukin-growthDataTable"></table></div></details>
 </div>
 </div>
 <section class="article-section">
@@ -384,13 +385,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:220px">
-<canvas height="220" id="kabe-growthChart"></canvas>
+<canvas aria-hidden="true" height="220" id="kabe-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>手取り額の目安</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>あなたの年収</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="kabe-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table wall-table">
 <thead>
@@ -486,12 +488,13 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="tedori-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="tedori-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>手取り／社会保険料／所得税／住民税の内訳</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="tedori-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -606,12 +609,13 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="shoyo-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="shoyo-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>手取り／社会保険料／所得税の内訳</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="shoyo-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -716,6 +720,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/chart-data-table.js"></script>
 
 <script src="../js/taishokukin.js"></script>
 <script src="../js/nenshu-no-kabe.js"></script>

@@ -216,6 +216,7 @@
         options: options,
       });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("shintaku-growthDataTable", chart);
   }
 
   [els.initial, els.monthly, els.years, els.grossRate, els.feeA, els.feeB].forEach(function (el) {

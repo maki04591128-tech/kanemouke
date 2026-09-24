@@ -140,6 +140,7 @@
     } else {
       chart = new Chart(ctx, { type: "line", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("setsuzei-growthDataTable", chart);
   }
 
   [els.monthly, els.taxRate, els.rate, els.years].forEach(function (el) {

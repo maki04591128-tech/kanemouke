@@ -227,6 +227,7 @@
     } else {
       chart = new Chart(ctx, { type: "bar", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("kazei-growthDataTable", chart);
   }
 
   [els.income, els.ageGroup, els.hasSpouse, els.dependents, els.dividend].forEach(function (el) {

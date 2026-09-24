@@ -211,13 +211,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="saitoushi-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="saitoushi-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#d98e04"></span>A：分配型（受取・再投資）</span>
 <span><span class="legend-dot" style="background:#0f5f4c"></span>B：無分配型（自動再投資）</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="saitoushi-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -318,13 +319,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="portfolio-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="portfolio-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>A：配当を再投資し続けた場合</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>B：配当を再投資せず受け取るだけの場合</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="portfolio-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -416,12 +418,13 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="kazei-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="kazei-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>方式ごとの手取り配当額</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="kazei-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -500,6 +503,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/chart-data-table.js"></script>
 
 <script src="../js/haitou-saitoushi.js"></script>
 <script src="../js/haitou-portfolio.js"></script>

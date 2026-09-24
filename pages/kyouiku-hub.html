@@ -225,13 +225,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="kyouiku-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="kyouiku-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
 <span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="kyouiku-growthDataTable"></table></div></details>
 </div>
 </div>
 <section class="article-section">
@@ -321,7 +322,7 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="gakushi-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="gakushi-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>積立NISA 評価額</span>
@@ -329,6 +330,7 @@
 <span><span class="legend-dot" style="background:#7a8899"></span>払込・積立累計額（元本）</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="gakushi-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -442,13 +444,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:220px">
-<canvas height="220" id="hoken-growthChart"></canvas>
+<canvas aria-hidden="true" height="220" id="hoken-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>所得税の控除額</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>住民税の控除額</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="hoken-growthDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -537,6 +540,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/chart-data-table.js"></script>
 
 <script src="../js/kyouiku.js"></script>
 <script src="../js/gakushihoken-nisa.js"></script>

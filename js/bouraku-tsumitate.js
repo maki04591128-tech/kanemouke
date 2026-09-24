@@ -288,6 +288,7 @@
         },
       });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("bouraku-growthDataTable", chart);
   }
 
   [
