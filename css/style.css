@@ -1161,6 +1161,21 @@ a { color: var(--color-primary); }
   .sticky-result-toggle-icon { transition: none; }
 }
 
+/* js/print-result.jsが印刷・PDF保存時に本文末尾へ追加する注記。
+   保存後のPDFが元ページから切り離されても、サイト名・元URL・簡易免責が
+   分かるようにする。画面表示では常に非表示（下の@media printブロックの
+   ルールに上書きされるよう、通常表示用のこのルールを先に定義しておく）。 */
+.print-footer-note {
+  display: none;
+  margin-top: 32px;
+  padding-top: 12px;
+  border-top: 1px solid #d0d0d0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #666;
+  word-break: break-all;
+}
+
 /* 結果の印刷・PDF保存（js/print-result.js が window.print() を呼び出す） */
 /* 統合ハブページで「結果を印刷・PDF保存」ボタンを押した際、入力条件と */
 /* 試算結果だけが読みやすく残るよう、ナビ・広告枠・タブ・共有ボックス等の */
@@ -1195,5 +1210,8 @@ a { color: var(--color-primary); }
   }
   main.container {
     max-width: none;
+  }
+  .print-footer-note {
+    display: block;
   }
 }
