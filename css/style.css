@@ -276,6 +276,35 @@ a { color: var(--color-primary); }
   color: var(--color-text-muted);
   min-height: 1.2em;
 }
+.tool-search-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+.tool-search-suggestions-label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-right: 2px;
+}
+.tool-search-suggestion {
+  display: inline-block;
+  padding: 5px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.tool-search-suggestion:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-bg);
+}
 .tool-search-no-results {
   margin: 8px 0 40px;
   padding: 32px 20px;
