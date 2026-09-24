@@ -19,9 +19,44 @@
     resultB: document.getElementById("result-b"),
     resultDiff: document.getElementById("result-diff"),
     breakdownBody: document.getElementById("breakdown-body"),
+    fundSelectA: document.getElementById("fundSelectA"),
+    fundSelectB: document.getElementById("fundSelectB"),
+    resultALabel: document.getElementById("result-a-label"),
+    resultBLabel: document.getElementById("result-b-label"),
+    legendA: document.getElementById("legend-a"),
+    legendB: document.getElementById("legend-b"),
+    theadA: document.getElementById("thead-a"),
+    theadB: document.getElementById("thead-b"),
   };
 
   var chart = null;
+  var fundNameA = "";
+  var fundNameB = "";
+
+  function fundLabel(side) {
+    return side === "A"
+      ? (fundNameA ? "ファンドA（" + fundNameA + "）" : "ファンドA")
+      : (fundNameB ? "ファンドB（" + fundNameB + "）" : "ファンドB");
+  }
+
+  function setupFundSelect(selectEl, feeEl, side) {
+    if (!selectEl || !window.FUND_DATA) return;
+
+    window.FUND_DATA.forEach(function (fund) {
+      var opt = document.createElement("option");
+      opt.value = fund.id;
+      opt.textContent = fund.name + "（" + fund.category + "）";
+      selectEl.appendChild(opt);
+    });
+
+    selectEl.addEventListener("change", function () {
+      var fund = window.FUND_DATA.filter(function (f) { return f.id === selectEl.value; })[0];
+      if (side === "A") fundNameA = fund ? fund.name : "";
+      else fundNameB = fund ? fund.name : "";
+      if (fund) feeEl.value = fund.expenseRatio.toFixed(2);
+      render();
+    });
+  }
 
   function yen(n) {
     return Math.round(n).toLocaleString("ja-JP") + " 円";
@@ -77,10 +112,17 @@
     var principal = simA.principal;
     var diff = simA.balance - simB.balance;
 
+    if (els.resultALabel) els.resultALabel.textContent = fundLabel("A") + "：資産評価額";
+    if (els.resultBLabel) els.resultBLabel.textContent = fundLabel("B") + "：資産評価額";
+    if (els.legendA) els.legendA.textContent = fundLabel("A") + " 評価額";
+    if (els.legendB) els.legendB.textContent = fundLabel("B") + " 評価額";
+    if (els.theadA) els.theadA.textContent = fundLabel("A");
+    if (els.theadB) els.theadB.textContent = fundLabel("B");
+
     els.resultPrincipal.textContent = yen(principal);
     els.resultA.textContent = yen(simA.balance);
     els.resultB.textContent = yen(simB.balance);
-    els.resultDiff.textContent = (diff >= 0 ? "+" : "") + manYen(diff) + "（ファンドA－ファンドB）";
+    els.resultDiff.textContent = (diff >= 0 ? "+" : "") + manYen(diff) + "（" + fundLabel("A") + "－" + fundLabel("B") + "）";
 
     if (feeAPct === feeBPct) {
       els.verdict.textContent = "信託報酬が同じため、最終的な資産額に差はありません";
@@ -89,10 +131,10 @@
       els.verdict.textContent = "この条件では資産額の差はごくわずかです";
       els.verdictSub.textContent = "積立期間が短い、または信託報酬の差が小さい条件です。期間を長くするほど差が拡大していく傾向を確認してみてください。";
     } else if (diff > 0) {
-      els.verdict.textContent = "信託報酬が低いファンドAのほうが " + manYen(diff) + " 多く資産が残ります";
+      els.verdict.textContent = "信託報酬が低い" + fundLabel("A") + "のほうが " + manYen(diff) + " 多く資産が残ります";
       els.verdictSub.textContent = "信託報酬は基準価額から毎日差し引かれ、運用期間中ずっと複利で効いてくるため、わずかな料率差でも長期では大きな金額差になります。";
     } else {
-      els.verdict.textContent = "この条件ではファンドBのほうが " + manYen(-diff) + " 多く資産が残ります";
+      els.verdict.textContent = "この条件では" + fundLabel("B") + "のほうが " + manYen(-diff) + " 多く資産が残ります";
       els.verdictSub.textContent = "想定利回り（グロス）が同じ場合、信託報酬が低いほど有利になります。ファンドBの信託報酬をファンドAより低く設定すると結果が入れ替わります。";
     }
 
@@ -118,7 +160,7 @@
       labels: labels,
       datasets: [
         {
-          label: "ファンドA 評価額（信託報酬 " + feeAPct.toFixed(2) + "%）",
+          label: fundLabel("A") + " 評価額（信託報酬 " + feeAPct.toFixed(2) + "%）",
           data: aSeries,
           borderColor: "#0f5f4c",
           backgroundColor: "rgba(15, 95, 76, 0.1)",
@@ -127,7 +169,7 @@
           pointRadius: 0,
         },
         {
-          label: "ファンドB 評価額（信託報酬 " + feeBPct.toFixed(2) + "%）",
+          label: fundLabel("B") + " 評価額（信託報酬 " + feeBPct.toFixed(2) + "%）",
           data: bSeries,
           borderColor: "#d98e04",
           backgroundColor: "rgba(217, 142, 4, 0.1)",
@@ -181,5 +223,7 @@
     el.addEventListener("change", render);
   });
 
+  setupFundSelect(els.fundSelectA, els.feeA, "A");
+  setupFundSelect(els.fundSelectB, els.feeB, "B");
   render();
 })();
