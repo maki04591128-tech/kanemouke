@@ -221,6 +221,47 @@ a { color: var(--color-primary); }
 }
 
 /* まずは目的から選ぶ（初めての人向けの入口セクション） */
+/* 前回の続きから（訪問履歴。localStorageに保存し、履歴がある人にだけ表示） */
+.recent-tools-section {
+  margin: 8px 0 36px;
+}
+.recent-tools-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.recent-tools-head .section-lead {
+  margin-bottom: 4px;
+}
+.recent-tools-clear {
+  border: none;
+  background: none;
+  padding: 4px 0;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.recent-tools-clear:hover {
+  color: var(--color-primary-dark);
+}
+.recent-tools-lead {
+  margin: 0 0 16px;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+.recent-tools-grid {
+  margin: 0 0 8px;
+}
+.recent-tool-card {
+  padding: 18px 20px;
+}
+.recent-tool-card h3 {
+  font-size: 1rem;
+}
+
 .goal-nav-section {
   margin: 8px 0 36px;
 }
@@ -1268,6 +1309,7 @@ a { color: var(--color-primary); }
   .share-box,
   .article-actions,
   .goal-nav-section,
+  .recent-tools-section,
   .category-nav,
   .tool-search,
   .toc,

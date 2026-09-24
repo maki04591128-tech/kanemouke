@@ -58,6 +58,15 @@
   </section>
 
   <section class="container">
+    <div class="recent-tools-section" id="recent-tools-section" aria-labelledby="recent-tools-heading" hidden>
+      <div class="recent-tools-head">
+        <h2 class="section-lead" id="recent-tools-heading">前回の続きから</h2>
+        <button type="button" id="recent-tools-clear" class="recent-tools-clear">履歴を消去</button>
+      </div>
+      <p class="recent-tools-lead">最近チェックしたツール・記事です。タップで続きから確認できます（このブラウザだけに保存され、他の人には見えません）。</p>
+      <div class="tool-grid recent-tools-grid" id="recent-tools-grid"></div>
+    </div>
+
     <div class="goal-nav-section" id="goal-nav-section" aria-labelledby="goal-nav-heading">
       <h2 class="section-lead" id="goal-nav-heading">まずは目的から選ぶ</h2>
       <p class="goal-nav-lead">気になる項目をタップすると、関連するツール・記事にジャンプします。どれか迷ったら下の人気ツールもどうぞ。</p>
@@ -360,5 +369,6 @@
 <script src="js/skip-link.js"></script>
 <script src="js/nav-toggle.js"></script>
 <script src="js/tool-search.js"></script>
+<script src="js/recent-tools.js"></script>
 </body>
 </html>
