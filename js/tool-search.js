@@ -110,8 +110,22 @@
     categoryNav.classList.add("is-search-hidden");
     if (suggestions) suggestions.classList.add("is-search-hidden");
     noResults.classList.toggle("is-search-hidden", total > 0);
-    status.textContent = total > 0 ? "検索結果：" + total + "件" : "";
+    status.textContent = total > 0
+      ? "検索結果：" + total + "件" + (total === 1 ? "（Enterキーで開けます）" : "")
+      : "";
     clearBtn.hidden = false;
+  }
+
+  function getVisibleItems() {
+    var visible = [];
+    cards.forEach(function (group) {
+      group.items.forEach(function (item) {
+        if (!item.el.classList.contains("is-search-hidden")) {
+          visible.push(item.el);
+        }
+      });
+    });
+    return visible;
   }
 
   input.addEventListener("input", function () {
@@ -120,6 +134,18 @@
       reset();
     } else {
       search(query);
+    }
+  });
+
+  // 検索結果が1件に絞られた状態でEnterキーを押すと、そのツール・ガイドへ直接遷移する。
+  // 日本語入力（IME）の変換確定でのEnterと誤反応しないよう、変換中は無視する。
+  input.addEventListener("keydown", function (event) {
+    if (event.key !== "Enter" || event.isComposing || event.keyCode === 229) return;
+    if (input.value.trim() === "") return;
+    var visible = getVisibleItems();
+    if (visible.length === 1) {
+      event.preventDefault();
+      window.location.href = visible[0].getAttribute("href");
     }
   });
 
