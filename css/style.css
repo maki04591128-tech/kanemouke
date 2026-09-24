@@ -39,6 +39,39 @@ a { color: var(--color-primary); }
   padding: 0 20px;
 }
 
+/* スキップリンク：ヘッダーナビ（全ページ共通で数十件のリンクを含む）を
+   毎回たどらずに本文へ直接移動できるよう、キーボード・スクリーンリーダー
+   利用者向けに設置する。通常は画面外に隠し、キーボードフォーカス時のみ
+   画面左上に表示する（マウス利用者の見た目には影響しない）。 */
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 8px;
+  z-index: 100;
+  background: var(--color-primary-dark);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 8px;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+@media print {
+  .skip-link { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skip-link { transition: none; }
+}
+#main-content {
+  scroll-margin-top: 76px;
+}
+
 /* Header */
 .site-header {
   background: var(--color-surface);
