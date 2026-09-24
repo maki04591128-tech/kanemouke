@@ -525,6 +525,39 @@ a { color: var(--color-primary); }
   color: var(--color-text-muted);
 }
 
+/* Breadcrumb navigation */
+.breadcrumb {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+.breadcrumb li {
+  display: flex;
+  align-items: center;
+}
+.breadcrumb li:not(:last-child)::after {
+  content: "›";
+  margin: 0 6px;
+  color: var(--color-border);
+}
+.breadcrumb a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+.breadcrumb a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+.breadcrumb li[aria-current="page"] {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
 /* Panels / calculator layout */
 .page-title {
   padding: 40px 0 8px;
@@ -1304,6 +1337,7 @@ a { color: var(--color-primary); }
 /* 印刷しても意味のない要素を非表示にする。 */
 @media print {
   .site-header,
+  .breadcrumb-nav,
   .ad-slot,
   .hub-tabs,
   .share-box,
