@@ -923,10 +923,23 @@ a { color: var(--color-primary); }
   .back-to-top { transition: none; }
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* 追従する結果サマリーバー（js/sticky-result.js が動的に生成） */
 /* .calc-layout がモバイル幅で1カラムになり入力欄と結果が縦に並ぶ間、 */
 /* 結果がまだ画面外にある時だけ画面下部に主要な結果を追従表示する。 */
-.sticky-result-bar {
+/* 「内訳」トグルで、スクロールせずその場で全ての結果カードを確認できる。 */
+.sticky-result-wrap {
   position: fixed;
   left: 14px;
   right: 74px;
@@ -934,41 +947,76 @@ a { color: var(--color-primary); }
   z-index: 19;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 4px;
-  border: none;
-  border-radius: 14px;
-  padding: 10px 14px 11px;
-  background: var(--color-primary-dark);
-  color: #fff;
-  box-shadow: 0 6px 18px rgba(15, 30, 45, 0.22);
-  cursor: pointer;
-  font-family: inherit;
-  text-align: left;
+  gap: 8px;
   opacity: 0;
   visibility: hidden;
   transform: translateY(8px);
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
-.sticky-result-bar.is-visible {
+.sticky-result-wrap.is-visible {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
-.sticky-result-bar .sticky-result-top {
+.sticky-result-bar {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+.sticky-result-toggle,
+.sticky-result-main {
+  border: none;
+  border-radius: 14px;
+  background: var(--color-primary-dark);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(15, 30, 45, 0.22);
+  cursor: pointer;
+  font-family: inherit;
+}
+.sticky-result-toggle {
+  flex: 0 0 auto;
+  width: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.2;
+  background: var(--color-primary);
+}
+.sticky-result-toggle[hidden] { display: none; }
+.sticky-result-toggle-icon {
+  display: block;
+  font-size: 0.8rem;
+  transition: transform 0.15s ease;
+}
+.sticky-result-toggle[aria-expanded="true"] .sticky-result-toggle-icon {
+  transform: rotate(180deg);
+}
+.sticky-result-main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  padding: 10px 14px 11px;
+  text-align: left;
+  min-width: 0;
+}
+.sticky-result-main .sticky-result-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
-.sticky-result-bar .sticky-result-label {
+.sticky-result-main .sticky-result-label {
   font-size: 0.7rem;
   opacity: 0.85;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.sticky-result-bar .sticky-result-value {
+.sticky-result-main .sticky-result-value {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -977,26 +1025,59 @@ a { color: var(--color-primary); }
   font-weight: 700;
   line-height: 1.35;
 }
-.sticky-result-bar .sticky-result-arrow {
+.sticky-result-main .sticky-result-arrow {
   flex-shrink: 0;
   font-size: 0.72rem;
   font-weight: 700;
   white-space: nowrap;
   opacity: 0.9;
 }
+.sticky-result-detail {
+  order: -1;
+  max-height: 46vh;
+  overflow-y: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(15, 30, 45, 0.22);
+  padding: 6px 4px;
+}
+.sticky-result-detail[hidden] { display: none; }
+.sticky-result-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  font-size: 0.84rem;
+}
+.sticky-result-detail-row + .sticky-result-detail-row {
+  border-top: 1px solid var(--color-border);
+}
+.sticky-result-detail-label {
+  color: var(--color-text-muted);
+}
+.sticky-result-detail-value {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  text-align: right;
+}
 @media (min-width: 761px) {
-  .sticky-result-bar { display: none !important; }
+  .sticky-result-wrap { display: none !important; }
 }
 @media (max-width: 640px) {
-  .sticky-result-bar {
+  .sticky-result-wrap {
     right: 64px;
     bottom: 12px;
+  }
+  .sticky-result-main {
     padding: 10px 12px;
   }
 }
 @media print {
-  .sticky-result-bar { display: none; }
+  .sticky-result-wrap { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sticky-result-bar { transition: none; }
+  .sticky-result-wrap { transition: none; }
+  .sticky-result-toggle-icon { transition: none; }
 }
