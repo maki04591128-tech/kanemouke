@@ -191,6 +191,7 @@
         options: options,
       });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("saitoushi-growthDataTable", chart);
   }
 
   [els.initial, els.monthly, els.years, els.totalReturn, els.distYield, els.accountType].forEach(function (el) {

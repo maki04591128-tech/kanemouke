@@ -220,6 +220,7 @@
     } else {
       chart = new Chart(ctx, { type: "doughnut", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("souzokuzei-growthDataTable", chart);
   }
 
   [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct].forEach(function (el) {

@@ -701,6 +701,54 @@ a { color: var(--color-primary); }
 .legend-note span { display: inline-flex; align-items: center; gap: 6px; }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 
+/* グラフの数値データ（js/chart-data-table.jsが生成する表）を折りたたんで
+   表示する開閉ウィジェット。視覚的にグラフを見られない・使えない利用者にも
+   同じ情報を伝えるための代替表現で、既存の.toc-details/.toc-summaryと
+   同じ見た目に揃えている。 */
+.chart-data-details {
+  margin-top: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  padding: 4px 20px;
+}
+.chart-data-summary {
+  cursor: pointer;
+  padding: 12px 0;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  list-style: none;
+}
+.chart-data-summary::-webkit-details-marker {
+  display: none;
+}
+.chart-data-summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 1em;
+  margin-right: 4px;
+  transition: transform 0.15s ease;
+}
+.chart-data-details[open] .chart-data-summary::before {
+  transform: rotate(90deg);
+}
+.chart-data-details .table-wrap {
+  margin: 0 0 16px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chart-data-summary::before { transition: none; }
+}
+@media print {
+  /* 印刷・PDF保存時は折りたたみを開いた状態と同じ見え方にし、
+     グラフの数値データも紙面に残るようにする。 */
+  .chart-data-details:not([open]) .table-wrap {
+    display: block;
+  }
+  .chart-data-summary::before {
+    display: none;
+  }
+}
+
 /* Ad slots */
 .ad-slot {
   margin: 28px 0;

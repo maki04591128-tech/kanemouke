@@ -336,6 +336,7 @@
         options: options,
       });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("uketori-growthDataTable", chart);
   }
 
   [

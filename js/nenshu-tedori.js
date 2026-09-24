@@ -207,6 +207,7 @@
     } else {
       chart = new Chart(ctx, { type: "doughnut", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("tedori-growthDataTable", chart);
   }
 
   [els.income, els.ageGroup, els.hasSpouse, els.dependents].forEach(function (el) {

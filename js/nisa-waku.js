@@ -253,6 +253,7 @@
     } else {
       chart = new Chart(ctx, { type: "line", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("waku-growthDataTable", chart);
   }
 
   [els.tsumitate, els.growth, els.rate, els.years].forEach(function (el) {

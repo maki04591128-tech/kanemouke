@@ -217,6 +217,7 @@
     } else {
       chart = new Chart(ctx, { type: "line", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("kinri-balanceDataTable", chart);
   }
 
   [els.principal, els.loanYears, els.fixedRate, els.variableRate, els.scenario, els.applyRule].forEach(function (el) {

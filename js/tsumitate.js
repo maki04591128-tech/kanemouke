@@ -133,6 +133,7 @@
     } else {
       chart = new Chart(ctx, { type: "line", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("tsumitate-growthDataTable", chart);
   }
 
   [els.initial, els.monthly, els.rate, els.years].forEach(function (el) {

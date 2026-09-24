@@ -228,13 +228,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="roan-loanChart"></canvas>
+<canvas aria-hidden="true" height="280" id="roan-loanChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#7a8899"></span>通常返済のローン残高</span>
 <span><span class="legend-dot" style="background:#0f5f4c"></span>繰り上げ返済ありのローン残高</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="roan-loanDataTable"></table></div></details>
 </div>
 </div>
 <section class="article-section">
@@ -327,13 +328,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="kurioage-growthChart"></canvas>
+<canvas aria-hidden="true" height="280" id="kurioage-growthChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>繰上返済による利息軽減額（累計）</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>投資に回した場合の運用益（累計）</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="kurioage-growthDataTable"></table></div></details>
 <div class="disclaimer" id="kurioage-conclusion" style="margin-top:20px;"></div>
 </div>
 </div>
@@ -455,9 +457,10 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:220px">
-<canvas height="220" id="koujo-creditChart"></canvas>
+<canvas aria-hidden="true" height="220" id="koujo-creditChart"></canvas>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="koujo-creditDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -560,13 +563,14 @@
 </div>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
-<canvas height="280" id="kinri-balanceChart"></canvas>
+<canvas aria-hidden="true" height="280" id="kinri-balanceChart"></canvas>
 </div>
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>固定金利の残高推移</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>変動金利の残高推移</span>
 </div>
 </div>
+<details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="kinri-balanceDataTable"></table></div></details>
 <div class="table-wrap">
 <table class="data-table data-table--result">
 <thead>
@@ -645,6 +649,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" integrity="sha384-G436+Z2nlA8+PNoeRvWdxKbvOf8E/y+lYxqht2iBwNHTQDV5CJr3+AGVj8fGZi5t" crossorigin="anonymous"></script>
+<script src="../js/chart-data-table.js"></script>
 
 <script src="../js/roan.js"></script>
 <script src="../js/loan-vs-invest.js"></script>

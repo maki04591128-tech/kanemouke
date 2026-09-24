@@ -164,6 +164,7 @@
         options: options,
       });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("gakushi-growthDataTable", chart);
   }
 
   [els.monthly, els.years, els.returnRate, els.nisaRate].forEach(function (el) {

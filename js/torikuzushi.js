@@ -223,6 +223,7 @@
         options: options,
       });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("torikuzushi-growthDataTable", chart);
   }
 
   [

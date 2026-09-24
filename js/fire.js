@@ -241,6 +241,7 @@
         options: options,
       });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("fire-growthDataTable", chart);
   }
 
   [els.currentAge, els.currentAssets, els.monthly, els.returnPct, els.annualExpense, els.withdrawalPct, els.postReturnPct, els.inflationPct].forEach(function (el) {

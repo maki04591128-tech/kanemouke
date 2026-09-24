@@ -221,6 +221,7 @@
     } else {
       chart = new Chart(ctx, { type: "doughnut", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("fukugyo-growthDataTable", chart);
   }
 
   [els.salaryIncome, els.sideIncome, els.sideExpense].forEach(function (el) {

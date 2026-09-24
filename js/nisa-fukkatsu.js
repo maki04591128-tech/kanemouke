@@ -189,6 +189,7 @@
     } else {
       chart = new Chart(ctx, { type: "bar", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("fukkatsu-growthDataTable", chart);
   }
 
   [

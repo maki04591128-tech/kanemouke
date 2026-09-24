@@ -311,6 +311,7 @@
     } else {
       chart = new Chart(ctx, { type: "line", data: data, options: options });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("haibun-growthDataTable", chart);
   }
 
   [els.total, els.rate].forEach(function (el) {

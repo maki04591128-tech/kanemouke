@@ -255,6 +255,7 @@
         options: options,
       });
     }
+    if (window.renderChartDataTable) window.renderChartDataTable("ikkatsu-growthDataTable", chart);
   }
 
   [els.totalAmount, els.splitMonths, els.years, els.annualRate, els.pattern, els.shockPct, els.shockMonths].forEach(
