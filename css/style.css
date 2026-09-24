@@ -530,6 +530,13 @@ a { color: var(--color-primary); }
   margin: 6px 0 0;
   line-height: 1.5;
 }
+.number-value-hint {
+  font-size: 0.78rem;
+  color: var(--color-primary);
+  margin: 6px 0 0;
+  line-height: 1.4;
+}
+.number-value-hint[hidden] { display: none; }
 .field input[type="number"],
 .field input[type="range"],
 .field select {
