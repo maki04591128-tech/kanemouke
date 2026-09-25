@@ -17,6 +17,15 @@
   // は、控除対象かどうかという別の質問のため対象に含めない。
   // 「年収の壁」シミュレーターのkabe-incomeは、扶養に入る側（パート等）の
   // 収入という別人の値を尋ねているため、同じ理由で対象外にしている。
+  //
+  // 統合ハブページ（例：setsuzei-hub.htmlのふるさと納税タブと医療費控除タブ）
+  // では、同じkindのフィールドが最初からDOMに同居している。ページ読み込み時の
+  // 復元だけでは、読み込み後にタブを切り替えながら片方に入力しても、もう一方の
+  // タブには反映されない（次回訪問時まで反映を待つことになる）。これを防ぐため、
+  // 実際のユーザー操作（Event.isTrusted）による変更時のみ、同じページ内に存在する
+  // 同kindの未確定フィールド（そのフィールド自身がまだ明示的に入力・復元されて
+  // いないもの）へ即時に反映する。一度でも明示的な値を持ったフィールドは
+  // 「確定」として扱い、以後は他フィールドからの反映で上書きしない。
 
   var STORAGE_PREFIX = "kanemouke:profile:";
   var FIELD_STORAGE_PREFIX = "kanemouke:input:"; // js/input-memory.js と同じキー体系
@@ -132,17 +141,29 @@
 
   var urlParams = new URLSearchParams(window.location.search);
   var appliedEls = [];
+  var fieldEls = {}; // field.id -> el（このページに存在するフィールドのみ）
+
+  function markSynced(el) {
+    if (el.classList.contains("profile-synced-field")) return;
+    el.classList.add("profile-synced-field");
+    var hint = document.createElement("p");
+    hint.className = "field-hint sync-hint";
+    hint.textContent = "🔄 他のツールの入力内容を自動反映（変更できます）";
+    el.insertAdjacentElement("afterend", hint);
+  }
 
   FIELDS.forEach(function (field) {
     var el = document.getElementById(field.id);
     if (!el) return; // このページには存在しないツールのフィールド
+    fieldEls[field.id] = el;
 
     // このページで既に自分の値として保存済み、または共有URLで指定済みの
     // フィールドは、他ツールの値で上書きしない（js/input-memory.js・
-    // js/share.jsの復元結果を尊重する）。
-    var hasOwnHistory = urlParams.has(field.id) || window.localStorage.getItem(FIELD_STORAGE_PREFIX + field.id) !== null;
+    // js/share.jsの復元結果を尊重する）。以後、同ページ内の同kindフィールド
+    // からの自動反映（propagateToSiblings）でも上書きしない「確定」状態にする。
+    field.locked = urlParams.has(field.id) || window.localStorage.getItem(FIELD_STORAGE_PREFIX + field.id) !== null;
 
-    if (!hasOwnHistory) {
+    if (!field.locked) {
       var profileValue = readProfile(field.kind);
       if (profileValue !== null) {
         if (field.kind === "hasSpouse" || el.tagName === "SELECT") {
@@ -163,27 +184,65 @@
         }
       }
     }
+  });
+
+  // 統合ハブページ内で、あるフィールドへの実入力を同ページ内の同kindの
+  // 未確定フィールドへ即時反映する（例：setsuzei-hub.htmlのふるさと納税タブに
+  // 入力した年収を、同じページの医療費控除タブへもタブ切り替え前に反映）。
+  var isSyncing = false;
+  function propagateToSiblings(sourceField, sourceEl) {
+    if (isSyncing) return;
+    isSyncing = true;
+    try {
+      var normalized = valueToProfile(sourceField, sourceEl);
+      if (normalized === null) return;
+      FIELDS.forEach(function (field) {
+        if (field.kind !== sourceField.kind || field.id === sourceField.id || field.locked) return;
+        var el = fieldEls[field.id];
+        if (!el) return; // このページには存在しない
+        var targetValue = field.kind === "hasSpouse" ? (normalized === "yes" ? "yes" : "no") : profileToFieldValue(field, el, normalized);
+        if (targetValue === null) return;
+        if (field.kind === "hasSpouse" || el.tagName === "SELECT") {
+          var hasOption = Array.prototype.some.call(el.options || [], function (opt) {
+            return opt.value === targetValue;
+          });
+          if (!hasOption) return;
+        }
+        if (el.value === targetValue) return;
+        el.value = targetValue;
+        dispatch(el, "input");
+        dispatch(el, "change");
+        markSynced(el);
+      });
+    } finally {
+      isSyncing = false;
+    }
+  }
+
+  FIELDS.forEach(function (field) {
+    var el = fieldEls[field.id];
+    if (!el) return;
 
     // 値の変更を常に共有プロフィールへ反映する（自分自身の入力操作・
     // 他スクリプトによる復元のいずれも対象）。
-    el.addEventListener("input", function () {
+    function handleChange(e) {
       var normalized = valueToProfile(field, el);
       if (normalized !== null) writeProfile(field.kind, normalized);
-    });
-    el.addEventListener("change", function () {
-      var normalized = valueToProfile(field, el);
-      if (normalized !== null) writeProfile(field.kind, normalized);
-    });
+      // Event.isTrusted な実操作のときだけ「確定」扱いにして、同ページ内の
+      // 他タブの未確定フィールドへ反映する（プログラム的な復元イベントでは
+      // 確定扱いにしない＝あとから他フィールドの入力で上書きされ得る状態を保つ）。
+      if (e && e.isTrusted) {
+        field.locked = true;
+        if (!isSyncing) propagateToSiblings(field, el);
+      }
+    }
+    el.addEventListener("input", handleChange);
+    el.addEventListener("change", handleChange);
   });
 
   appliedEls.forEach(function (el) {
     dispatch(el, "input");
     dispatch(el, "change");
-    el.classList.add("profile-synced-field");
-
-    var hint = document.createElement("p");
-    hint.className = "field-hint sync-hint";
-    hint.textContent = "🔄 他のツールの入力内容を自動反映（変更できます）";
-    el.insertAdjacentElement("afterend", hint);
+    markSynced(el);
   });
 })();
