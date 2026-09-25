@@ -8,6 +8,11 @@
   // 必要があった。ここでは、URL共有機能が組み立てるのと同じ形式のURLに
   // 見出し（診断結果・主要な結果カードの値）を添えてlocalStorageへ保存し、
   // この端末で後から一覧・再訪・削除できるようにする。
+  //
+  // 保存件数が2件以上たまってきた利用者向けに、チェックボックスで選んだ
+  // 2件以上を「入力条件」「試算結果」の項目ごとに並べて比較できる表も
+  // あわせて提供する（同じ項目名を持つ行同士を突き合わせ、値が食い違う
+  // セルだけを強調する）。
 
   var STORAGE_KEY = "kanemouke:result_history";
   // 端末全体（全ハブページ共通）での保存上限。古いものから自動的に
@@ -19,6 +24,10 @@
   var section = document.getElementById("result-history");
   var list = document.getElementById("result-history-list");
   if (!saveBtn || !section || !list) return;
+
+  var compareControls = document.getElementById("result-compare-controls");
+  var compareBtn = document.getElementById("result-compare-btn");
+  var comparePanel = document.getElementById("result-compare");
 
   var feedback = document.getElementById("share-url-feedback");
   var feedbackTimer = null;
@@ -49,7 +58,20 @@
     try {
       var raw = window.localStorage.getItem(STORAGE_KEY);
       var parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
+      if (!Array.isArray(parsed)) return [];
+      // 比較機能の追加より前に保存された古いデータはinputs/resultsを
+      // 持たないため、比較表が空欄だらけにならないよう見出し文言だけを
+      // 1行の結果として補う（保存後にこの機能が追加された利用者向けの
+      // 後方互換）。
+      parsed.forEach(function (item) {
+        if (!Array.isArray(item.inputs)) item.inputs = [];
+        if (!Array.isArray(item.results) || item.results.length === 0) {
+          item.results = item.headline
+            ? [{ label: "保存時の結果", value: item.headline }]
+            : [];
+        }
+      });
+      return parsed;
     } catch (e) {
       return [];
     }
@@ -90,6 +112,71 @@
       params.set(el.id, el.value);
     });
     return window.location.pathname + "?" + params.toString();
+  }
+
+  // 比較表の行見出しに使う、人が読める入力項目名（<label>から単位表記の
+  // <span class="unit">を取り除いたもの）。
+  function fieldLabelText(el) {
+    var label = document.querySelector('label[for="' + el.id + '"]');
+    if (!label) return el.id;
+    var clone = label.cloneNode(true);
+    var unit = clone.querySelector(".unit");
+    if (unit && unit.parentNode) unit.parentNode.removeChild(unit);
+    return clone.textContent.replace(/\s+/g, " ").trim();
+  }
+
+  // 比較表に出す入力値の表示文字列。スライダー（type="range"）は生の
+  // 数値だと分かりにくいため、単位付きでリアルタイム表示している
+  // <span id="xxxOut">の文言（例：「5.0 %」）をそのまま使う。
+  // それ以外の数値入力は<label>内の単位表記を末尾に補う。
+  function fieldValueText(el) {
+    var outSpan = document.getElementById(el.id + "Out");
+    if (outSpan) return outSpan.textContent.replace(/\s+/g, " ").trim();
+    if (el.tagName === "SELECT") {
+      var opt = el.options[el.selectedIndex];
+      return opt ? opt.textContent.trim() : el.value;
+    }
+    var label = document.querySelector('label[for="' + el.id + '"]');
+    var unitText = "";
+    if (label) {
+      var unit = label.querySelector(".unit");
+      if (unit && !unit.id) unitText = unit.textContent.trim();
+    }
+    return unitText ? el.value + " " + unitText : el.value;
+  }
+
+  function collectInputRows() {
+    return getPanelFields().map(function (el) {
+      return { label: fieldLabelText(el), value: fieldValueText(el) };
+    });
+  }
+
+  // js/result-text.js の collectLines() と同じ「診断バナー＋結果カード」
+  // の集め方を、ラベルと値のペア配列として再実装している。
+  function collectResultRows(resultCol) {
+    var rows = [];
+    var banner = resultCol.querySelector(".verdict-banner");
+    if (banner) {
+      var verdictEl = banner.querySelector("span[id]");
+      var subEl = banner.querySelector(".sub");
+      var verdictText = verdictEl ? verdictEl.textContent.trim() : "";
+      if (verdictText && verdictText !== "-") {
+        var sub = subEl ? subEl.textContent.trim() : "";
+        rows.push({
+          label: "診断結果",
+          value: sub ? verdictText + "（" + sub + "）" : verdictText
+        });
+      }
+    }
+    Array.prototype.slice.call(resultCol.querySelectorAll(".result-card")).forEach(function (card) {
+      var labelEl = card.querySelector(".label");
+      var valueEl = card.querySelector(".value");
+      if (!labelEl || !valueEl) return;
+      var value = valueEl.textContent.replace(/\s+/g, " ").trim();
+      if (!value || value === "-") return;
+      rows.push({ label: labelEl.textContent.trim(), value: value });
+    });
+    return rows;
   }
 
   // js/result-text.js と同じ「現在表示中タブの結果カラム」の探し方。
@@ -139,6 +226,12 @@
     }
   }
 
+  // チェックボックスの選択状態はrender()を呼ぶたび（保存・削除・初回表示）
+  // にリセットする。削除された項目のidが選択状態に残ってゴミになったり、
+  // 一覧の並びが変わった後に古い選択のまま比較表を開いたりする状態を
+  // 避けるための単純化。
+  var selectedIds = {};
+
   function removeItem(id) {
     var all = readAll().filter(function (item) {
       return item.id !== id;
@@ -148,7 +241,133 @@
     showFeedback("保存した結果を削除しました。");
   }
 
+  function updateCompareButton() {
+    if (!compareBtn) return;
+    var count = Object.keys(selectedIds).length;
+    compareBtn.disabled = count < 2;
+  }
+
+  function hideComparePanel() {
+    if (!comparePanel) return;
+    comparePanel.hidden = true;
+    comparePanel.innerHTML = "";
+  }
+
+  function unionLabels(items, key) {
+    var seen = [];
+    var index = {};
+    items.forEach(function (item) {
+      (item[key] || []).forEach(function (row) {
+        if (!Object.prototype.hasOwnProperty.call(index, row.label)) {
+          index[row.label] = true;
+          seen.push(row.label);
+        }
+      });
+    });
+    return seen;
+  }
+
+  function valueForLabel(item, key, label) {
+    var rows = item[key] || [];
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i].label === label) return rows[i].value;
+    }
+    return null;
+  }
+
+  function addCompareSection(tbody, columnCount, title, items, key) {
+    var labels = unionLabels(items, key);
+    if (labels.length === 0) return;
+
+    var sectionRow = document.createElement("tr");
+    sectionRow.className = "result-compare-section";
+    var sectionTh = document.createElement("th");
+    sectionTh.setAttribute("colspan", String(columnCount + 1));
+    sectionTh.textContent = title;
+    sectionRow.appendChild(sectionTh);
+    tbody.appendChild(sectionRow);
+
+    labels.forEach(function (label) {
+      var values = items.map(function (item) {
+        return valueForLabel(item, key, label);
+      });
+      var allSame = values.every(function (v) {
+        return v === values[0];
+      });
+      var tr = document.createElement("tr");
+      var rowTh = document.createElement("th");
+      rowTh.scope = "row";
+      rowTh.textContent = label;
+      tr.appendChild(rowTh);
+      values.forEach(function (v) {
+        var td = document.createElement("td");
+        td.textContent = v === null ? "（該当なし）" : v;
+        if (!allSame) td.className = "result-compare-diff";
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderCompareTable(items) {
+    if (!comparePanel) return;
+    comparePanel.innerHTML = "";
+
+    var wrap = document.createElement("div");
+    wrap.className = "table-wrap";
+    var table = document.createElement("table");
+    table.className = "data-table result-compare-table";
+
+    var thead = document.createElement("thead");
+    var headRow = document.createElement("tr");
+    headRow.appendChild(document.createElement("th"));
+    items.forEach(function (item) {
+      var th = document.createElement("th");
+      var time = document.createElement("span");
+      time.className = "result-compare-col-time";
+      time.textContent = formatSavedAt(item.savedAt);
+      th.appendChild(time);
+      if (item.toolLabel) {
+        th.appendChild(document.createElement("br"));
+        var toolSpan = document.createElement("span");
+        toolSpan.className = "result-compare-col-label";
+        toolSpan.textContent = item.toolLabel;
+        th.appendChild(toolSpan);
+      }
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+
+    var tbody = document.createElement("tbody");
+    addCompareSection(tbody, items.length, "入力条件", items, "inputs");
+    addCompareSection(tbody, items.length, "試算結果", items, "results");
+    table.appendChild(tbody);
+
+    wrap.appendChild(table);
+    comparePanel.appendChild(wrap);
+
+    var note = document.createElement("p");
+    note.className = "result-compare-note";
+    note.textContent = "色が付いたセルは、選択した保存結果の間で値が異なる項目です。";
+    comparePanel.appendChild(note);
+
+    var closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.className = "share-btn secondary result-compare-close";
+    closeBtn.textContent = "比較表を閉じる";
+    closeBtn.addEventListener("click", hideComparePanel);
+    comparePanel.appendChild(closeBtn);
+
+    comparePanel.hidden = false;
+    comparePanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
   function render() {
+    selectedIds = {};
+    updateCompareButton();
+    hideComparePanel();
+
     var here = readAll().filter(function (item) {
       return item.path === window.location.pathname;
     });
@@ -160,6 +379,22 @@
     here.forEach(function (item) {
       var li = document.createElement("li");
       li.className = "result-history-item";
+
+      var checkLabel = document.createElement("label");
+      checkLabel.className = "result-history-check";
+      var checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.setAttribute("aria-label", "比較用に選択（" + (item.toolLabel ? "[" + item.toolLabel + "] " : "") + item.headline + "）");
+      checkbox.addEventListener("change", function () {
+        if (checkbox.checked) {
+          selectedIds[item.id] = true;
+        } else {
+          delete selectedIds[item.id];
+        }
+        updateCompareButton();
+      });
+      checkLabel.appendChild(checkbox);
+      li.appendChild(checkLabel);
 
       var link = document.createElement("a");
       link.className = "result-history-link";
@@ -190,6 +425,25 @@
       list.appendChild(li);
     });
     section.hidden = false;
+
+    if (compareControls) compareControls.hidden = here.length < 2;
+  }
+
+  if (compareBtn) {
+    compareBtn.addEventListener("click", function () {
+      var chosen = readAll()
+        .filter(function (item) {
+          return selectedIds[item.id];
+        })
+        .sort(function (a, b) {
+          return a.savedAt - b.savedAt;
+        });
+      if (chosen.length < 2) {
+        showFeedback("比較するには2件以上チェックしてください。");
+        return;
+      }
+      renderCompareTable(chosen);
+    });
   }
 
   saveBtn.addEventListener("click", function () {
@@ -209,7 +463,9 @@
       url: buildUrl(),
       savedAt: Date.now(),
       toolLabel: activeToolLabel(),
-      headline: headline
+      headline: headline,
+      inputs: collectInputRows(),
+      results: collectResultRows(resultCol)
     };
     var all = readAll();
     all.unshift(item);

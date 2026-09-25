@@ -1386,6 +1386,79 @@ a { color: var(--color-primary); }
   font-size: 0.76rem;
   color: var(--color-text-muted);
 }
+.result-history-check {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.result-history-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* 保存した2件以上を並べて見比べる比較表（js/result-history.js） */
+.result-compare-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--color-border);
+}
+.result-compare-controls .share-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.result-compare-hint {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+.result-compare {
+  margin-top: 14px;
+}
+.result-compare-table th,
+.result-compare-table td {
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+.result-compare-table th:first-child,
+.result-compare-table td:first-child {
+  white-space: normal;
+  font-weight: 700;
+  color: var(--color-text);
+  background: #f7faf9;
+}
+.result-compare-col-time {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+.result-compare-col-label {
+  display: block;
+}
+.result-compare-section th {
+  background: #eaf5f1;
+  color: var(--color-primary-dark);
+  text-align: left;
+  font-size: 0.8rem;
+}
+.result-compare-diff {
+  background: #fdf3e2;
+  color: #8a4b06;
+  font-weight: 700;
+}
+.result-compare-note {
+  margin: 10px 0 0;
+  font-size: 0.76rem;
+  color: var(--color-text-muted);
+}
+.result-compare-close {
+  margin-top: 10px;
+}
 
 .error-box {
   display: none;
