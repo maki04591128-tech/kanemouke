@@ -886,6 +886,9 @@ a { color: var(--color-primary); }
   line-height: 1.4;
 }
 .number-value-hint[hidden] { display: none; }
+/* 共有プロフィール機能（js/profile-sync.js）で自動入力されたフィールド */
+.profile-synced-field { background: #f3f8f6; }
+.sync-hint { color: var(--color-primary); }
 /* 数値入力欄のインラインバリデーション（js/field-validation.js が動的に生成） */
 .field-error {
   display: none;
