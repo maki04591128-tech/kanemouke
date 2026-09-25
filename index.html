@@ -79,9 +79,51 @@
       <div class="tool-grid recent-tools-grid" id="recent-tools-grid"></div>
     </div>
 
+    <div class="diagnosis-section" id="diagnosis-section" aria-labelledby="diagnosis-heading">
+      <h2 class="section-lead" id="diagnosis-heading">30秒でおすすめのツールを診断</h2>
+      <p class="diagnosis-lead">2つの質問に答えると、あなたに合いそうなツールをひとつおすすめします。どれから使えばいいか迷ったらこちらへ。回答はこの端末に保存され、対応するツールの入力欄に自動で反映されます（他の人には見えません）。</p>
+
+      <div class="diagnosis-step" id="diagnosis-step-1">
+        <p class="diagnosis-question">Q1. ご家族の状況は？</p>
+        <div class="diagnosis-options" role="group" aria-label="ご家族の状況">
+          <button type="button" class="diagnosis-option" data-status="single">独身</button>
+          <button type="button" class="diagnosis-option" data-status="spouse">配偶者あり</button>
+          <button type="button" class="diagnosis-option" data-status="spouse-child">配偶者・子どもあり</button>
+          <button type="button" class="diagnosis-option diagnosis-skip" data-status="skip">答えない</button>
+        </div>
+      </div>
+
+      <div class="diagnosis-step" id="diagnosis-step-2" hidden>
+        <p class="diagnosis-question">Q2. いちばん気になることは？</p>
+        <div class="diagnosis-options diagnosis-options-grid" role="group" aria-label="いちばん気になること">
+          <button type="button" class="diagnosis-option" data-concern="tsumitate">🏦 資産を増やしたい</button>
+          <button type="button" class="diagnosis-option" data-concern="ideco">👵 老後資金を準備したい</button>
+          <button type="button" class="diagnosis-option" data-concern="setsuzei">🧾 税金を安くしたい</button>
+          <button type="button" class="diagnosis-option" data-concern="jutaku">🏠 住宅ローンで迷っている</button>
+          <button type="button" class="diagnosis-option" data-concern="kyouiku">🎓 教育費が心配</button>
+          <button type="button" class="diagnosis-option" data-concern="haitou">📈 配当・高配当株に興味がある</button>
+          <button type="button" class="diagnosis-option" data-concern="fire">🔥 早期リタイア（FIRE）したい</button>
+          <button type="button" class="diagnosis-option" data-concern="souzoku">👪 相続・贈与が心配</button>
+          <button type="button" class="diagnosis-option" data-concern="nenshu">💼 手取り・退職金を知りたい</button>
+        </div>
+        <button type="button" class="diagnosis-back" id="diagnosis-back">← 質問1に戻る</button>
+      </div>
+
+      <div class="diagnosis-result" id="diagnosis-result" hidden aria-live="polite">
+        <p class="diagnosis-result-label">あなたへのおすすめ</p>
+        <a class="tool-card featured diagnosis-result-card" id="diagnosis-result-card" href="#">
+          <span class="badge featured-badge">診断結果</span>
+          <h3 id="diagnosis-result-title"></h3>
+          <p id="diagnosis-result-desc"></p>
+        </a>
+        <p class="diagnosis-result-note" id="diagnosis-result-note" hidden></p>
+        <button type="button" class="diagnosis-restart" id="diagnosis-restart">もう一度診断する</button>
+      </div>
+    </div>
+
     <div class="goal-nav-section" id="goal-nav-section" aria-labelledby="goal-nav-heading">
-      <h2 class="section-lead" id="goal-nav-heading">まずは目的から選ぶ</h2>
-      <p class="goal-nav-lead">気になる項目をタップすると、関連するツール・記事にジャンプします。どれか迷ったら下の人気ツールもどうぞ。</p>
+      <h2 class="section-lead" id="goal-nav-heading">自分で目的から選ぶ</h2>
+      <p class="goal-nav-lead">気になる項目をタップすると、関連するツール・記事にジャンプします。どれか迷ったら上の診断もどうぞ。</p>
       <div class="goal-nav-grid">
         <a class="goal-card" href="#cat-tsumitate"><span class="goal-icon" aria-hidden="true">🏦</span><span class="goal-label">資産を増やしたい<br>（新NISA・積立）</span></a>
         <a class="goal-card" href="#cat-ideco"><span class="goal-icon" aria-hidden="true">👵</span><span class="goal-label">老後資金を準備したい<br>（iDeCo）</span></a>
@@ -385,5 +427,6 @@
 <script src="js/tool-search.js"></script>
 <script src="js/recent-tools.js"></script>
 <script src="js/favorites.js"></script>
+<script src="js/tool-diagnosis.js"></script>
 </body>
 </html>
