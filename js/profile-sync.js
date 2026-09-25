@@ -18,6 +18,17 @@
   // 「年収の壁」シミュレーターのkabe-incomeは、扶養に入る側（パート等）の
   // 収入という別人の値を尋ねているため、同じ理由で対象外にしている。
   //
+  // 「想定利回り（年率）」も、積立・一括投資・住宅ローン繰上返済vs投資・
+  // iDeCo・退職金運用など複数のツールで同じ「投資信託等への長期投資で
+  // 見込む年率リターン」という前提を尋ねている。これらはkind: "investYield"
+  // として共有対象に含める。ただし同じ「利率」でも性質が異なるものは対象外：
+  // 住宅ローン金利（roan-loanRate等、借入コストであり運用利回りではない）、
+  // iDeCo・退職金の据置年金原資の運用利率（uketori-annuityRate等、上限3%
+  // 程度の保守的な運用を前提にした別の値）、小規模企業共済の想定利率
+  // （kyosai-rate、共済独自の予定利率）、学資保険の返戻率（gakushi-returnRate、
+  // 年率ではなく満期時の払込総額に対する受取率）は、id命名パターンが似て
+  // いても意味が異なるため含めない。
+  //
   // 統合ハブページ（例：setsuzei-hub.htmlのふるさと納税タブと医療費控除タブ）
   // では、同じkindのフィールドが最初からDOMに同居している。ページ読み込み時の
   // 復元だけでは、読み込み後にタブを切り替えながら片方に入力しても、もう一方の
@@ -52,7 +63,23 @@
     { id: "hoken-dependents", kind: "dependents" },
     { id: "kazei-dependents", kind: "dependents" },
     { id: "tedori-dependents", kind: "dependents" },
-    { id: "shoyo-dependents", kind: "dependents" }
+    { id: "shoyo-dependents", kind: "dependents" },
+
+    { id: "tsumitate-rate", kind: "investYield" },
+    { id: "hitsuyou-rate", kind: "investYield" },
+    { id: "waku-rate", kind: "investYield" },
+    { id: "haibun-rate", kind: "investYield" },
+    { id: "ikkatsu-annualRate", kind: "investYield" },
+    { id: "bouraku-annualRate", kind: "investYield" },
+    { id: "shintaku-grossRate", kind: "investYield" },
+    { id: "kyouiku-rate", kind: "investYield" },
+    { id: "gakushi-nisaRate", kind: "investYield" },
+    { id: "roan-investRate", kind: "investYield" },
+    { id: "kurioage-investRate", kind: "investYield" },
+    { id: "setsuzei-rate", kind: "investYield" },
+    { id: "yuusen-rate", kind: "investYield" },
+    { id: "uketori-investRate", kind: "investYield" },
+    { id: "taishokukin-investRate", kind: "investYield" }
   ];
 
   function storageAvailable() {
@@ -111,6 +138,11 @@
       if (isNaN(n) || n < 0) return null;
       return String(n);
     }
+    if (field.kind === "investYield") {
+      var pct = parseFloat(el.value);
+      if (isNaN(pct)) return null;
+      return String(Math.round(pct * 10) / 10);
+    }
     return null;
   }
 
@@ -136,12 +168,40 @@
       if (n < 0) n = 0;
       return String(n);
     }
+    if (field.kind === "investYield") {
+      var rate = parseFloat(profileValue);
+      if (isNaN(rate)) return null;
+      var rateMax = el.getAttribute("max");
+      var rateMin = el.getAttribute("min");
+      if (rateMax !== null && rate > Number(rateMax)) rate = Number(rateMax);
+      if (rateMin !== null && rate < Number(rateMin)) rate = Number(rateMin);
+      else if (rateMin === null && rate < 0) rate = 0;
+      return String(rate);
+    }
     return null;
   }
 
   var urlParams = new URLSearchParams(window.location.search);
   var appliedEls = [];
   var fieldEls = {}; // field.id -> el（このページに存在するフィールドのみ）
+
+  // 複数のフィールドがmax属性の異なる同kindを共有する場合（例：想定利回りは
+  // ページによって上限8〜12%まで様々）、このスクリプト自身が復元・伝播のために
+  // 発火させたイベントで各フィールド固有のクランプ後の値を毎回プロフィールへ
+  // 書き戻すと、最後に処理したフィールドの（より狭い上限で切り詰められた）
+  // 値でプロフィールが上書きされ続け、本来の値が徐々に失われてしまう。これを
+  // 防ぐため、このスクリプトが自分で発火させたイベント処理中はプロフィールへの
+  // 書き戻しを行わない（真のユーザー操作や他スクリプト由来のイベントでの
+  // 書き戻しは従来どおり行う）。
+  var isInternalDispatch = false;
+  function dispatchInternal(el, type) {
+    isInternalDispatch = true;
+    try {
+      dispatch(el, type);
+    } finally {
+      isInternalDispatch = false;
+    }
+  }
 
   function markSynced(el) {
     if (el.classList.contains("profile-synced-field")) return;
@@ -210,8 +270,8 @@
         }
         if (el.value === targetValue) return;
         el.value = targetValue;
-        dispatch(el, "input");
-        dispatch(el, "change");
+        dispatchInternal(el, "input");
+        dispatchInternal(el, "change");
         markSynced(el);
       });
     } finally {
@@ -223,11 +283,14 @@
     var el = fieldEls[field.id];
     if (!el) return;
 
-    // 値の変更を常に共有プロフィールへ反映する（自分自身の入力操作・
-    // 他スクリプトによる復元のいずれも対象）。
+    // 値の変更を共有プロフィールへ反映する（自分自身の入力操作・他スクリプト
+    // による復元のいずれも対象。ただしこのスクリプト自身がdispatchInternalで
+    // 発火させたイベントは対象外＝上記の理由でプロフィールを書き戻さない）。
     function handleChange(e) {
-      var normalized = valueToProfile(field, el);
-      if (normalized !== null) writeProfile(field.kind, normalized);
+      if (!isInternalDispatch) {
+        var normalized = valueToProfile(field, el);
+        if (normalized !== null) writeProfile(field.kind, normalized);
+      }
       // Event.isTrusted な実操作のときだけ「確定」扱いにして、同ページ内の
       // 他タブの未確定フィールドへ反映する（プログラム的な復元イベントでは
       // 確定扱いにしない＝あとから他フィールドの入力で上書きされ得る状態を保つ）。
@@ -241,8 +304,8 @@
   });
 
   appliedEls.forEach(function (el) {
-    dispatch(el, "input");
-    dispatch(el, "change");
+    dispatchInternal(el, "input");
+    dispatchInternal(el, "change");
     markSynced(el);
   });
 })();
