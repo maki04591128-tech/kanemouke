@@ -33,6 +33,7 @@
     lumpRatioOut: document.getElementById("uketori-lumpRatioOut"),
     overlapEnable: document.getElementById("uketori-overlapEnable"),
     overlapFields: document.getElementById("uketori-overlapFields"),
+    overlapType: document.getElementById("uketori-overlapType"),
     overlapYear: document.getElementById("uketori-overlapYear"),
     overlapServiceYears: document.getElementById("uketori-overlapServiceYears"),
     overlapAmount: document.getElementById("uketori-overlapAmount"),
@@ -93,25 +94,28 @@
     return Math.max(0, Math.min(deemed, otherServiceYears));
   }
 
-  // 勤務先の退職金を先に受け取り、その後iDeCo等の老齢一時金を一時金として受け取る場合の
-  // 退職所得控除額の調整（所得税法施行令第70条第1項第2号ハ）。この組み合わせは受け取り間隔が
-  // 前年以前19年内であれば調整の対象となる。重複期間は、双方の勤続（拠出）年数のうち短い方（前の
+  // 他の退職一時金を先に受け取り、その後iDeCo等の老齢一時金を一時金として受け取る場合の
+  // 退職所得控除額の調整（所得税法施行令第70条第1項第2号ロ・ハ）。他の一時金の種類によって
+  // 対象となる受け取り間隔が異なる：(1)勤務先の退職金（一般の退職手当等）が前の一時金の場合は
+  // 前年以前19年内（ハ）、(2)他の確定拠出年金（企業型DCなど）の老齢一時金が前の一時金の場合は
+  // 前年以前9年内（令和8年1月1日以後に受け取ったものに限る。それより前に受け取ったものは
+  // 従来どおり前年以前4年内）（ロ）。重複期間は、双方の勤続（拠出）年数のうち短い方（前の
   // 一時金側は上記の逆算調整後の年数）とみなして簡易的に算出する。
-  function overlapAdjustedDeduction(baseYears, enabled, otherYear, otherServiceYears, otherAmount) {
+  function overlapAdjustedDeduction(baseYears, enabled, otherType, otherYear, otherServiceYears, otherAmount) {
     var baseDeduction = retirementDeduction(baseYears);
-    var THRESHOLD = 19;
+    var threshold = otherType === "dc" ? (otherYear >= 2026 ? 9 : 4) : 19;
     var result = {
       deduction: baseDeduction,
       reduction: 0,
       overlapYears: 0,
       otherEffectiveYears: otherServiceYears,
       applied: false,
-      threshold: THRESHOLD,
+      threshold: threshold,
     };
     if (!enabled) return result;
 
     var gap = THIS_YEAR - otherYear;
-    if (gap < 1 || gap > THRESHOLD) return result;
+    if (gap < 1 || gap > threshold) return result;
     if (!(otherServiceYears > 0)) return result;
 
     var otherEffectiveYears = deemedOverlapServiceYears(otherServiceYears, otherAmount);
@@ -220,6 +224,7 @@
     var overlapResult = overlapAdjustedDeduction(
       contribYears,
       overlapEnabled,
+      els.overlapType.value,
       Number(els.overlapYear.value),
       Number(els.overlapServiceYears.value),
       Math.max(0, Number(els.overlapAmount.value) || 0) * 10000
@@ -240,7 +245,7 @@
       var overlapAmountNote = "";
       if (overlapResult.otherEffectiveYears < Number(els.overlapServiceYears.value)) {
         overlapAmountNote =
-          "先に受け取った退職金の額が少ないため、重複期間の算定では勤続年数を実際の" +
+          "先に受け取った一時金の額が少ないため、重複期間の算定では勤続（拠出）年数を実際の" +
           els.overlapServiceYears.value + "年ではなく" + overlapResult.otherEffectiveYears +
           "年とみなしています（所得税法施行令第70条第2項）。";
       }
@@ -348,6 +353,7 @@
     els.investRate,
     els.lumpRatio,
     els.overlapEnable,
+    els.overlapType,
     els.overlapYear,
     els.overlapServiceYears,
     els.overlapAmount,
