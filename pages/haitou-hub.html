@@ -492,12 +492,13 @@
   <div class="share-box" id="share-box">
     <div class="share-box-text">
       <strong>この条件の結果をURLで共有</strong>
-      <p>入力した条件と選択中のツールをそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。</p>
+      <p>入力した条件と選択中のツールをそのまま再現できるURLです。SNSやメモ・友人との共有にご利用ください。また、入力した値はこの端末にのみ自動保存され、次回このツールを開いたときに復元されます（「入力を初期値に戻す」でいつでもリセットできます）。</p>
     </div>
     <div class="share-box-controls">
       <input type="text" id="share-url-input" readonly aria-label="共有用URL">
       <button type="button" id="share-url-btn" class="share-btn">URLをコピー</button>
       <button type="button" id="print-result-btn" class="share-btn secondary" aria-label="現在の入力条件と試算結果を印刷またはPDFで保存">結果を印刷・PDF保存</button>
+      <button type="button" id="reset-inputs-btn" class="share-btn secondary" aria-label="入力した値を初期状態に戻す">入力を初期値に戻す</button>
     </div>
     <span id="share-url-feedback" class="share-feedback" role="status"></span>
   </div>
@@ -537,6 +538,7 @@
 <script src="../js/recent-tools.js"></script>
 <script src="../js/tabs.js"></script>
 <script src="../js/share.js"></script>
+<script src="../js/input-memory.js"></script>
 <script src="../js/print-result.js"></script>
 <script src="../js/number-format.js"></script>
 <script src="../js/field-validation.js"></script>
