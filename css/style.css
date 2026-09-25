@@ -511,6 +511,21 @@ a { color: var(--color-primary); }
   font-size: 0.82rem;
   color: var(--color-text-muted);
 }
+.diagnosis-related {
+  margin: 16px 0 0;
+  padding-top: 16px;
+  border-top: 1px dashed #cfe6dd;
+}
+.diagnosis-related-label {
+  margin: 0 0 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+.diagnosis-related-card {
+  display: block;
+  max-width: 420px;
+}
 .diagnosis-restart {
   display: inline-block;
   margin-top: 16px;

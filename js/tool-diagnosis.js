@@ -70,6 +70,48 @@
     skip: "答えない"
   };
 
+  // Q1（家族の状況）× Q2（気になること）の組み合わせによっては、
+  // メインのおすすめ1件だけでは拾いきれない関連ツールがある。
+  // 該当する組み合わせだけ「あわせてチェック」として2件目を出す
+  // （すべての組み合わせを網羅するのではなく、明確に関連性が高いものだけに絞る）。
+  var RELATED = {
+    "setsuzei|spouse-child": {
+      href: "pages/setsuzei-hub.html?tool=iryouhi",
+      title: "医療費控除シミュレーター",
+      desc: "家族の医療費が年間10万円を超えていれば、あわせて確認しておきたい控除です。"
+    },
+    "setsuzei|spouse": {
+      href: "pages/haiguusha-fuyou-koujo-guide.html",
+      title: "配偶者控除・配偶者特別控除ガイド",
+      desc: "配偶者の年収に応じて控除額がどう変わるかをまとめています。"
+    },
+    "kyouiku|spouse-child": {
+      href: "pages/gakushihoken-nisa-simulator.html",
+      title: "学資保険 vs NISA比較シミュレーター",
+      desc: "教育資金を学資保険とNISAのどちらで準備すべきか比較できます。"
+    },
+    "ideco|spouse-child": {
+      href: "pages/kyouiku-hub.html?tool=kyouiku",
+      title: "教育資金シミュレーター",
+      desc: "老後資金の準備とあわせて、お子さまの教育資金の目安も確認できます。"
+    },
+    "jutaku|spouse-child": {
+      href: "pages/kyouiku-hub.html?tool=kyouiku",
+      title: "教育資金シミュレーター",
+      desc: "住宅ローンと教育資金、両方の負担感をあわせて確認しておくと安心です。"
+    },
+    "nenshu|spouse": {
+      href: "pages/nenshu-hub.html?tool=kabe",
+      title: "年収の壁シミュレーター",
+      desc: "配偶者の働き方によって変わる「年収の壁」の目安を確認できます。"
+    },
+    "nenshu|spouse-child": {
+      href: "pages/nenshu-hub.html?tool=kabe",
+      title: "年収の壁シミュレーター",
+      desc: "配偶者の働き方によって変わる「年収の壁」の目安を確認できます。"
+    }
+  };
+
   var step1 = document.getElementById("diagnosis-step-1");
   var step2 = document.getElementById("diagnosis-step-2");
   var result = document.getElementById("diagnosis-result");
@@ -81,6 +123,10 @@
   var resultNote = document.getElementById("diagnosis-result-note");
   var backBtn = document.getElementById("diagnosis-back");
   var restartBtn = document.getElementById("diagnosis-restart");
+  var related = document.getElementById("diagnosis-related");
+  var relatedCard = document.getElementById("diagnosis-related-card");
+  var relatedTitle = document.getElementById("diagnosis-related-title");
+  var relatedDesc = document.getElementById("diagnosis-related-desc");
 
   var selectedStatus = null;
 
@@ -129,6 +175,18 @@
       resultNote.textContent = "";
     }
 
+    if (related && relatedCard && relatedTitle && relatedDesc) {
+      var relatedInfo = selectedStatus ? RELATED[concernKey + "|" + selectedStatus] : null;
+      if (relatedInfo) {
+        relatedCard.href = relatedInfo.href;
+        relatedTitle.textContent = relatedInfo.title;
+        relatedDesc.textContent = relatedInfo.desc;
+        related.hidden = false;
+      } else {
+        related.hidden = true;
+      }
+    }
+
     step1.hidden = true;
     step2.hidden = true;
     result.hidden = false;
@@ -139,6 +197,7 @@
     result.hidden = true;
     step2.hidden = true;
     step1.hidden = false;
+    if (related) related.hidden = true;
   }
 
   step1.addEventListener("click", function (e) {
