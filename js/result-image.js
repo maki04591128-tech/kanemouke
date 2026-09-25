@@ -11,6 +11,36 @@
   var btn = document.getElementById("image-result-btn");
   if (!btn) return;
 
+  var feedback = document.getElementById("share-url-feedback");
+  var feedbackTimer = null;
+  function showFeedback(message) {
+    if (!feedback) return;
+    feedback.textContent = message;
+    clearTimeout(feedbackTimer);
+    feedbackTimer = setTimeout(function () {
+      feedback.textContent = "";
+    }, 4000);
+  }
+
+  // Web Share API（ファイル共有）に対応した環境かどうかを判定する。
+  // 対応していれば「保存」ではなくOSの共有シートから直接LINE・X等へ
+  // 画像を渡せるため、ダウンロードより一手間少ない体験になる。
+  function supportsFileShare() {
+    if (!(window.File && navigator.share && navigator.canShare)) return false;
+    try {
+      var testFile = new File([""], "test.png", { type: "image/png" });
+      return navigator.canShare({ files: [testFile] });
+    } catch (e) {
+      return false;
+    }
+  }
+
+  var fileShareReady = supportsFileShare();
+  if (fileShareReady) {
+    btn.textContent = "結果を画像でシェア";
+    btn.setAttribute("aria-label", "現在の試算結果を画像として共有シートから直接シェア");
+  }
+
   var FONT = '"Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif';
   var COLOR_BG = "#f7f9fb";
   var COLOR_HEADER_BG = "#0f5f4c";
@@ -225,23 +255,59 @@
     return canvas;
   }
 
-  function downloadImage() {
-    var canvas = buildImage();
-    if (!canvas) return;
-    var slug = (window.getActiveHubTool && window.getActiveHubTool()) || "result";
+  function downloadCanvas(canvas, filename) {
     var link = document.createElement("a");
-    link.download = "fuyasu-note-" + slug + ".png";
+    link.download = filename;
     link.href = canvas.toDataURL("image/png");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    showFeedback("画像を保存しました。");
+  }
+
+  function shareOrDownloadImage() {
+    var canvas = buildImage();
+    if (!canvas) return;
+    var slug = (window.getActiveHubTool && window.getActiveHubTool()) || "result";
+    var filename = "fuyasu-note-" + slug + ".png";
+
+    if (!fileShareReady) {
+      downloadCanvas(canvas, filename);
+      return;
+    }
+
+    canvas.toBlob(function (blob) {
+      if (!blob) {
+        downloadCanvas(canvas, filename);
+        return;
+      }
+      var file = new File([blob], filename, { type: "image/png" });
+      if (!navigator.canShare({ files: [file] })) {
+        downloadCanvas(canvas, filename);
+        return;
+      }
+      navigator
+        .share({
+          files: [file],
+          title: "ふやすノート",
+          text: document.title.split("|")[0].trim()
+        })
+        .then(function () {
+          showFeedback("画像を共有しました。");
+        })
+        .catch(function (err) {
+          // AbortError はユーザーが共有シートを閉じただけなので何もしない。
+          if (err && err.name === "AbortError") return;
+          downloadCanvas(canvas, filename);
+        });
+    }, "image/png");
   }
 
   btn.addEventListener("click", function () {
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(downloadImage);
+      document.fonts.ready.then(shareOrDownloadImage);
     } else {
-      downloadImage();
+      shareOrDownloadImage();
     }
   });
 })();
