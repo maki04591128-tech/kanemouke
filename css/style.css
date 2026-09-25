@@ -1568,12 +1568,22 @@ a { color: var(--color-primary); }
   color: #666;
   word-break: break-all;
 }
+/* 印刷時のみ、後述の@page下余白を利用してページ下端に固定表示する
+   （position: fixedはブラウザの印刷機能ではページ毎に繰り返し描画される
+   ため、本文の一部としてではなく全ページ共通のフッターとして機能する。
+   Blink系ブラウザ（Chrome/Edge）で確認済みの挙動。Firefoxは繰り返されず
+   最終ページのみの表示に留まるが、画面表示への影響はなく退行でもない）。 */
 
 /* 結果の印刷・PDF保存（js/print-result.js が window.print() を呼び出す） */
 /* 統合ハブページで「結果を印刷・PDF保存」ボタンを押した際、入力条件と */
 /* 試算結果だけが読みやすく残るよう、ナビ・広告枠・タブ・共有ボックス等の */
 /* 印刷しても意味のない要素を非表示にする。 */
 @media print {
+  /* 下余白を広めに確保し、固定表示するフッター注記（.print-footer-note）
+     が本文の最終行と重ならないようにする。 */
+  @page {
+    margin: 15mm 12mm 20mm 12mm;
+  }
   .site-header,
   .breadcrumb-nav,
   .ad-slot,
@@ -1610,5 +1620,14 @@ a { color: var(--color-primary); }
   }
   .print-footer-note {
     display: block;
+    position: fixed;
+    left: 12mm;
+    right: 12mm;
+    bottom: 6mm;
+    max-height: 13mm;
+    margin-top: 0;
+    padding-top: 4px;
+    overflow: hidden;
+    background: #fff;
   }
 }
