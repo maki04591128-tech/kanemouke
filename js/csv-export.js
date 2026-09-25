@@ -1,15 +1,16 @@
 (function () {
   "use strict";
 
-  // 統合ハブページのグラフ数値データ表（js/chart-data-table.jsが生成する
-  // 「グラフの数値データを表で見る」内の<table>）を、CSVファイルとして
-  // ダウンロードする機能。既存の「結果をテキストでコピー」「結果を画像で
-  // 保存」はSNS共有向けの要約だが、CSVは年ごとの推移データをそのまま
+  // 統合ハブページの「グラフの数値データを表で見る」内の<table>
+  // （js/chart-data-table.jsが生成する年次推移データ）と、画面に直接
+  // 表示されている「結果の内訳」テーブル（*-breakdown-body。シナリオ
+  // 比較や年ごとの内訳など、ツールごとに列構成が異なる）を、CSVファイル
+  // としてダウンロードする機能。既存の「結果をテキストでコピー」「結果を
+  // 画像で保存」はSNS共有向けの要約だが、CSVはこれらの表データをそのまま
   // Excel・スプレッドシートに取り込んで自分で並べ替え・グラフ化したい
   // という、より踏み込んだ使い方（記録・比較用途）に応えるためのもの。
-  // 新規の集計・フォーマットロジックは実装せず、既にDOMに描画済みの
-  // 表（chart-data-table.jsが元のグラフのtooltip文言をそのまま転記した
-  // もの）をそのまま読み取るだけなので、数値の食い違いは発生しない。
+  // 新規の集計・フォーマットロジックは実装せず、既にDOMに描画済みの表を
+  // そのまま読み取るだけなので、数値の食い違いは発生しない。
 
   var btn = document.getElementById("csv-export-btn");
   if (!btn) return;
@@ -34,9 +35,19 @@
     return tab ? tab.textContent.trim() : "";
   }
 
-  function activeDataTable() {
+  function activeChartTable() {
     var panel = activePanel() || document;
     return panel.querySelector(".chart-data-details table.data-table");
+  }
+
+  // 「結果の内訳」テーブル（*-breakdown-body、シナリオ比較や年ごとの
+  // 内訳など、グラフの年次推移テーブルとは別に画面表示されている表）。
+  // 対象9ハブページはいずれも1つのタブ内に0〜1個しか存在しないため、
+  // tbody[id$="-breakdown-body"]で一意に特定できる。
+  function activeBreakdownTable() {
+    var panel = activePanel() || document;
+    var body = panel.querySelector('tbody[id$="-breakdown-body"]');
+    return body ? body.closest("table") : null;
   }
 
   // RFC4180準拠のフィールドエスケープ。既存の金額表示は
@@ -62,9 +73,11 @@
   }
 
   function buildCsv() {
-    var table = activeDataTable();
-    var rows = table ? tableToRows(table) : [];
-    if (rows.length === 0) return null;
+    var chartTable = activeChartTable();
+    var chartRows = chartTable ? tableToRows(chartTable) : [];
+    var breakdownTable = activeBreakdownTable();
+    var breakdownRows = breakdownTable ? tableToRows(breakdownTable) : [];
+    if (chartRows.length === 0 && breakdownRows.length === 0) return null;
 
     var titleEl = document.querySelector(".page-title h1");
     var title = titleEl ? titleEl.textContent.trim() : document.title.split("|")[0].trim();
@@ -78,7 +91,18 @@
     header.push(csvField("※本試算結果は入力条件に基づく参考値です。将来の成果を保証するものではありません。"));
     header.push("");
 
-    return header.concat(rows).join("\r\n");
+    // 「結果の内訳」テーブルが存在するタブのみ、グラフの年次推移データと
+    // 見出しで区切って両方出力する。存在しないタブでは従来どおり
+    // グラフの年次推移データのみをそのまま出力し、出力形式を変えない。
+    var body;
+    if (chartRows.length > 0 && breakdownRows.length > 0) {
+      body = [csvField("■ グラフの数値データ（年次推移）")]
+        .concat(chartRows, [""], [csvField("■ 結果の内訳")], breakdownRows);
+    } else {
+      body = chartRows.length > 0 ? chartRows : breakdownRows;
+    }
+
+    return header.concat(body).join("\r\n");
   }
 
   function slugify(text) {
