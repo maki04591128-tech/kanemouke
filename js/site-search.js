@@ -130,13 +130,48 @@
   var resultsEl = panel.querySelector("#site-search-results");
   var MAX_RESULTS = 8;
   var currentResults = [];
+  // キーボードだけで操作するユーザーは従来Enterキーで先頭の結果にしか
+  // 直接ジャンプできず、2件目以降を開くにはマウスでクリックするか、
+  // Tabキーで1件ずつフォーカスを送る必要があった。矢印キーで結果リスト内を
+  // 移動できるようにし（フォーカス自体は入力欄に残したままaria-activedescendant
+  // で選択中の項目を伝えるcombobox形式のパターン）、視覚的にもハイライト表示する。
+  var activeIndex = -1;
+
+  input.setAttribute("role", "combobox");
+  input.setAttribute("aria-autocomplete", "list");
+  input.setAttribute("aria-expanded", "false");
+  input.setAttribute("aria-controls", "site-search-results");
+  resultsEl.setAttribute("role", "listbox");
+
+  function setActiveIndex(index) {
+    var links = resultsEl.querySelectorAll(".site-search-result");
+    if (links[activeIndex]) {
+      links[activeIndex].classList.remove("is-active");
+      links[activeIndex].removeAttribute("aria-selected");
+    }
+    activeIndex = index;
+    if (links[activeIndex]) {
+      links[activeIndex].classList.add("is-active");
+      links[activeIndex].setAttribute("aria-selected", "true");
+      input.setAttribute("aria-activedescendant", links[activeIndex].id);
+      links[activeIndex].scrollIntoView({ block: "nearest" });
+    } else {
+      input.removeAttribute("aria-activedescendant");
+    }
+  }
 
   function renderResults() {
     resultsEl.innerHTML = "";
-    currentResults.slice(0, MAX_RESULTS).forEach(function (item) {
+    activeIndex = -1;
+    input.removeAttribute("aria-activedescendant");
+    input.setAttribute("aria-expanded", currentResults.length > 0 ? "true" : "false");
+    currentResults.slice(0, MAX_RESULTS).forEach(function (item, index) {
       var li = document.createElement("li");
+      li.setAttribute("role", "presentation");
       var a = document.createElement("a");
       a.className = "site-search-result";
+      a.id = "site-search-result-" + index;
+      a.setAttribute("role", "option");
       a.href = resolveHref(item.data.href);
       a.innerHTML =
         '<span class="site-search-result-type">' + TYPE_LABEL[item.data.type] + "</span>" +
@@ -216,12 +251,25 @@
     doSearch(input.value);
   });
 
-  // 検索結果が絞り込まれた状態でEnterキーを押すと、先頭の結果へ直接遷移する。
-  // 日本語入力（IME）の変換確定でのEnterと誤反応しないよう、変換中は無視する。
+  // 検索結果が絞り込まれた状態でEnterキーを押すと、矢印キーで選択中の結果
+  // （未選択なら先頭の結果）へ直接遷移する。日本語入力（IME）の変換確定での
+  // Enterと誤反応しないよう、変換中は無視する。
   input.addEventListener("keydown", function (event) {
+    var shownCount = Math.min(currentResults.length, MAX_RESULTS);
+    if (event.key === "ArrowDown" && shownCount > 0) {
+      event.preventDefault();
+      setActiveIndex(activeIndex < shownCount - 1 ? activeIndex + 1 : 0);
+      return;
+    }
+    if (event.key === "ArrowUp" && shownCount > 0) {
+      event.preventDefault();
+      setActiveIndex(activeIndex > 0 ? activeIndex - 1 : shownCount - 1);
+      return;
+    }
     if (event.key !== "Enter" || event.isComposing || event.keyCode === 229) return;
     if (currentResults.length === 0) return;
     event.preventDefault();
-    window.location.href = resolveHref(currentResults[0].data.href);
+    var target = activeIndex >= 0 ? currentResults[activeIndex] : currentResults[0];
+    window.location.href = resolveHref(target.data.href);
   });
 })();
