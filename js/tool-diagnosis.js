@@ -109,6 +109,26 @@
       href: "pages/nenshu-hub.html?tool=kabe",
       title: "年収の壁シミュレーター",
       desc: "配偶者の働き方によって変わる「年収の壁」の目安を確認できます。"
+    },
+    "tsumitate|spouse-child": {
+      href: "pages/kyouiku-hub.html?tool=kyouiku",
+      title: "教育資金シミュレーター",
+      desc: "積立と並行して、お子さまの教育資金の目安もあわせて確認できます。"
+    },
+    "haitou|spouse-child": {
+      href: "pages/kyouiku-hub.html?tool=kyouiku",
+      title: "教育資金シミュレーター",
+      desc: "配当再投資と並行して、お子さまの教育資金の目安もあわせて確認できます。"
+    },
+    "fire|spouse-child": {
+      href: "pages/kyouiku-hub.html?tool=kyouiku",
+      title: "教育資金シミュレーター",
+      desc: "FIRE後の生活費とあわせて、お子さまの教育資金の目安も確認しておくと安心です。"
+    },
+    "souzoku|spouse-child": {
+      href: "pages/hoken-koujo-simulator.html",
+      title: "生命保険料控除・地震保険料控除シミュレーター",
+      desc: "相続・贈与の対策とあわせて、毎年の保険料控除も見直しておくと安心です。"
     }
   };
 
