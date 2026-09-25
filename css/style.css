@@ -1314,6 +1314,79 @@ a { color: var(--color-primary); }
   min-height: 1.1em;
 }
 
+/* 保存した試算結果（js/result-history.js） */
+.result-history {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 16px 0 24px;
+  box-shadow: var(--shadow);
+}
+.result-history h3 {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+}
+.result-history-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.result-history-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg);
+}
+.result-history-link {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--color-text);
+}
+.result-history-link:hover .result-history-summary,
+.result-history-link:focus-visible .result-history-summary {
+  text-decoration: underline;
+}
+.result-history-time {
+  font-size: 0.74rem;
+  color: var(--color-text-muted);
+}
+.result-history-summary {
+  font-size: 0.85rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.result-history-delete {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.result-history-delete:hover {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+.result-history-hint {
+  margin: 10px 0 0;
+  font-size: 0.76rem;
+  color: var(--color-text-muted);
+}
+
 .error-box {
   display: none;
   font-size: 0.85rem;
@@ -1592,6 +1665,7 @@ a { color: var(--color-primary); }
   .ad-slot,
   .hub-tabs,
   .share-box,
+  .result-history,
   .article-actions,
   .goal-nav-section,
   .recent-tools-section,

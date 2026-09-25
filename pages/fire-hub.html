@@ -384,9 +384,16 @@
       <button type="button" id="image-result-btn" class="share-btn secondary" aria-label="現在の試算結果をSNS共有用の画像として保存">結果を画像で保存</button>
       <button type="button" id="text-result-btn" class="share-btn secondary" aria-label="現在の試算結果をテキストとしてクリップボードにコピー">結果をテキストでコピー</button>
       <button type="button" id="csv-export-btn" class="share-btn secondary" aria-label="現在選択中のタブのグラフ数値データをCSVファイルでダウンロード">結果の内訳をCSVでダウンロード</button>
+      <button type="button" id="history-save-btn" class="share-btn secondary" aria-label="現在の試算結果をこの端末に保存して後で見比べる">この結果を保存して比較</button>
       <button type="button" id="reset-inputs-btn" class="share-btn secondary" aria-label="入力した値を初期状態に戻す">入力を初期値に戻す</button>
     </div>
     <span id="share-url-feedback" class="share-feedback" role="status"></span>
+  </div>
+
+  <div class="result-history" id="result-history" hidden>
+    <h3>保存した試算結果（この端末のみ）</h3>
+    <ul class="result-history-list" id="result-history-list"></ul>
+    <p class="result-history-hint">この端末のブラウザにのみ保存され、他の人には共有されません。端末全体で最大20件まで保存でき、超えると古いものから自動的に削除されます。</p>
   </div>
 
   <div class="ad-slot"><!-- AdSense placeholder: ハブページ下部 --></div>
@@ -430,6 +437,7 @@
 <script src="../js/result-image.js"></script>
 <script src="../js/result-text.js"></script>
 <script src="../js/csv-export.js"></script>
+<script src="../js/result-history.js"></script>
 <script src="../js/number-format.js"></script>
 <script src="../js/field-validation.js"></script>
 <script src="../js/result-live.js"></script>
