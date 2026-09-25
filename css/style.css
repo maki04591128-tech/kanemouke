@@ -284,7 +284,8 @@ a { color: var(--color-primary); }
   border-top: 1px solid var(--color-border);
 }
 .site-search-result:hover,
-.site-search-result:focus-visible {
+.site-search-result:focus-visible,
+.site-search-result.is-active {
   background: var(--color-bg);
   outline: none;
 }
@@ -298,7 +299,8 @@ a { color: var(--color-primary); }
   font-weight: 700;
 }
 .site-search-result:hover .site-search-result-type,
-.site-search-result:focus-visible .site-search-result-type {
+.site-search-result:focus-visible .site-search-result-type,
+.site-search-result.is-active .site-search-result-type {
   background: var(--color-surface);
 }
 .site-search-result-title {
