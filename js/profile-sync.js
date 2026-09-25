@@ -29,6 +29,24 @@
   // 年率ではなく満期時の払込総額に対する受取率）は、id命名パターンが似て
   // いても意味が異なるため含めない。
   //
+  // 「積立期間（年）」も、積立複利・必要積立額・信託報酬比較・配当再投資vs受取・
+  // 高配当株ポートフォリオ・iDeCo節税・iDeCo vs NISA優先・小規模企業共済・
+  // iDeCoの受け取り方など複数のツールで同じ「毎月一定額を何年間積み立て／
+  // 拠出し続けるか」という前提を尋ねている。これらはkind: "investPeriod"として
+  // 共有対象に含める。ただし同じ「年数」でも意味が異なるものは対象外：
+  // 暴落シナリオの「暴落が起きるまでの積立期間」「回復後の継続積立期間」
+  // （bouraku-preYears/bouraku-postYears、暴落タイミングという別の前提）、
+  // 一括vs積立の「保有期間」（ikkatsu-years、まとまった資金を一度に投資した
+  // 後の保有年数で積立期間とは資金の入れ方が異なる）、NISA生涯投資枠の
+  // 「シミュレーション期間」（waku-years、枠を使い切るまでの表示上限という別の
+  // 概念）、教育資金の「払込・積立期間」（gakushi-years、子どもが18歳になる
+  // までという年齢に紐づく値で他ツールの投資期間と揃える意味がない）、退職金の
+  // 「勤続年数」（taishokukin-serviceYears、これから積み立てる年数ではなく
+  // 過去に働いた年数）、資産取り崩しの「取り崩し期間上限」（torikuzushi-maxYears、
+  // 積立ではなく取り崩し側の年数）、住宅ローン各種の返済期間（roan-years等）、
+  // 生前贈与の「贈与を続ける年数」（zouyo-giftYears）は、id命名パターンが
+  // 似ていても意味が異なるため含めない。
+  //
   // 統合ハブページ（例：setsuzei-hub.htmlのふるさと納税タブと医療費控除タブ）
   // では、同じkindのフィールドが最初からDOMに同居している。ページ読み込み時の
   // 復元だけでは、読み込み後にタブを切り替えながら片方に入力しても、もう一方の
@@ -79,7 +97,17 @@
     { id: "setsuzei-rate", kind: "investYield" },
     { id: "yuusen-rate", kind: "investYield" },
     { id: "uketori-investRate", kind: "investYield" },
-    { id: "taishokukin-investRate", kind: "investYield" }
+    { id: "taishokukin-investRate", kind: "investYield" },
+
+    { id: "tsumitate-years", kind: "investPeriod" },
+    { id: "hitsuyou-years", kind: "investPeriod" },
+    { id: "shintaku-years", kind: "investPeriod" },
+    { id: "saitoushi-years", kind: "investPeriod" },
+    { id: "portfolio-years", kind: "investPeriod" },
+    { id: "setsuzei-years", kind: "investPeriod" },
+    { id: "yuusen-years", kind: "investPeriod" },
+    { id: "kyosai-years", kind: "investPeriod" },
+    { id: "uketori-contribYears", kind: "investPeriod" }
   ];
 
   function storageAvailable() {
@@ -143,6 +171,11 @@
       if (isNaN(pct)) return null;
       return String(Math.round(pct * 10) / 10);
     }
+    if (field.kind === "investPeriod") {
+      var years = parseInt(el.value, 10);
+      if (isNaN(years)) return null;
+      return String(years);
+    }
     return null;
   }
 
@@ -177,6 +210,16 @@
       if (rateMin !== null && rate < Number(rateMin)) rate = Number(rateMin);
       else if (rateMin === null && rate < 0) rate = 0;
       return String(rate);
+    }
+    if (field.kind === "investPeriod") {
+      var yr = parseInt(profileValue, 10);
+      if (isNaN(yr)) return null;
+      var yrMax = el.getAttribute("max");
+      var yrMin = el.getAttribute("min");
+      if (yrMax !== null && yr > Number(yrMax)) yr = Number(yrMax);
+      if (yrMin !== null && yr < Number(yrMin)) yr = Number(yrMin);
+      else if (yrMin === null && yr < 0) yr = 0;
+      return String(yr);
     }
     return null;
   }
