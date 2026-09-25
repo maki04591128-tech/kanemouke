@@ -1072,6 +1072,27 @@ a { color: var(--color-primary); }
 .faq-item dt { font-weight: 700; margin-bottom: 4px; }
 .faq-item dd { margin: 0; color: var(--color-text-muted); }
 
+/* 見出し・目次リンク・カード見出しなど短い文言の折り返しで、
+   1文字だけが次の行に取り残される「ぶら下がり」を避ける
+   （例：目次「引き出し制限の違い：最大の分かれ目」が
+   「…分かれ」＋「目」の1文字だけの行に割れるケース）。
+   text-wrap: prettyは英語の単語区切りが前提の孤立行回避のため
+   分かち書きのない日本語の1文字ぶら下がりには効かず未対応だったが、
+   text-wrap: balanceは各行の長さ自体を均等化するアルゴリズムのため
+   日本語でも効果がある（Chrome 114+・Safari 17.5+で対応。balanceは
+   長文だと計算コストが高いためブラウザ側で概ね6行程度までに制限され、
+   見出し・リンクのような短いテキストブロック向けの機能なので、
+   本文の長文段落には適用しない）。未対応ブラウザでは通常のwrapと
+   同じ見え方になるだけなので安全に追加できる。 */
+.page-title h1,
+.article-section h2,
+.article-section h3,
+.tool-card h3,
+.faq-item dt,
+.toc-list li {
+  text-wrap: balance;
+}
+
 /* 解説記事の目次（js/toc.js が動的に生成。見出しが3個未満のページには表示しない） */
 .toc {
   margin: 20px 0 0;
