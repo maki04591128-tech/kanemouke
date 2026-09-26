@@ -92,11 +92,24 @@
       title: "学資保険 vs NISA比較シミュレーター",
       desc: "教育資金を学資保険とNISAのどちらで準備すべきか比較できます。"
     }],
-    "ideco|spouse-child": [{
-      href: "pages/kyouiku-hub.html?tool=kyouiku",
-      title: "教育資金シミュレーター",
-      desc: "老後資金の準備とあわせて、お子さまの教育資金の目安も確認できます。"
-    }],
+    // ideco（iDeCo）は、メインのおすすめ（iDeCo節税タブ）と同じ
+    // ideco-hub.html内にある「iDeCovsNISA」タブ（毎月の投資額を
+    // iDeCo優先・NISA優先・半分ずつで比較）が、iDeCoを始めようとする
+    // 全ての家族構成に共通して関連性が高いため、家族の状況ごとの
+    // 個別の関連ツールに加えて必ず1件（既存の関連ツールがある場合は
+    // 2件目として）提示する。
+    "ideco|spouse-child": [
+      {
+        href: "pages/kyouiku-hub.html?tool=kyouiku",
+        title: "教育資金シミュレーター",
+        desc: "老後資金の準備とあわせて、お子さまの教育資金の目安も確認できます。"
+      },
+      {
+        href: "pages/ideco-hub.html?tool=yuusen",
+        title: "iDeCovsNISA 優先順位シミュレーター",
+        desc: "毎月の投資額を「iDeCo優先」「NISA優先」「半分ずつ」で配分した場合の節税額・資産評価額・引き出し制限の違いを比較できます。"
+      }
+    ],
     "jutaku|spouse-child": [{
       href: "pages/kyouiku-hub.html?tool=kyouiku",
       title: "教育資金シミュレーター",
@@ -165,10 +178,27 @@
       title: "生前贈与 vs 相続 比較シミュレーター",
       desc: "生前贈与（暦年贈与・相続時精算課税制度）と、何もせず相続する場合とで、家族全体の負担額の差を比較できます。"
     }],
-    "ideco|spouse": [{
-      href: "pages/haiguusha-fuyou-koujo-guide.html",
-      title: "配偶者控除・配偶者特別控除ガイド",
-      desc: "配偶者の年収によってご自身が受けられる控除額が変わります。iDeCoの節税効果とあわせて確認しておくと安心です。"
+    "ideco|spouse": [
+      {
+        href: "pages/haiguusha-fuyou-koujo-guide.html",
+        title: "配偶者控除・配偶者特別控除ガイド",
+        desc: "配偶者の年収によってご自身が受けられる控除額が変わります。iDeCoの節税効果とあわせて確認しておくと安心です。"
+      },
+      {
+        href: "pages/ideco-hub.html?tool=yuusen",
+        title: "iDeCovsNISA 優先順位シミュレーター",
+        desc: "毎月の投資額を「iDeCo優先」「NISA優先」「半分ずつ」で配分した場合の節税額・資産評価額・引き出し制限の違いを比較できます。"
+      }
+    ],
+    "ideco|single": [{
+      href: "pages/ideco-hub.html?tool=yuusen",
+      title: "iDeCovsNISA 優先順位シミュレーター",
+      desc: "毎月の投資額を「iDeCo優先」「NISA優先」「半分ずつ」で配分した場合の節税額・資産評価額・引き出し制限の違いを比較できます。"
+    }],
+    "ideco|skip": [{
+      href: "pages/ideco-hub.html?tool=yuusen",
+      title: "iDeCovsNISA 優先順位シミュレーター",
+      desc: "毎月の投資額を「iDeCo優先」「NISA優先」「半分ずつ」で配分した場合の節税額・資産評価額・引き出し制限の違いを比較できます。"
     }],
     "jutaku|spouse": [{
       href: "pages/haiguusha-fuyou-koujo-guide.html",
