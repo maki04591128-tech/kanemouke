@@ -74,7 +74,7 @@ window.SITE_SEARCH_DATA = [
   },
   {
     "title": "教育資金・保険シミュレーター まとめ",
-    "desc": "教育資金・学資保険vsNISA・保険料控除・児童手当の4ツールをタブ切り替えで使えます。",
+    "desc": "教育資金・学資保険vsNISA・保険料控除・児童手当・高校無償化の5ツールをタブ切り替えで使えます。",
     "href": "pages/kyouiku-hub.html?tool=kyouiku",
     "category": "教育資金・保険",
     "type": "hub"
@@ -356,6 +356,13 @@ window.SITE_SEARCH_DATA = [
     "title": "児童手当",
     "desc": "2024年10月分から所得制限が撤廃され、支給対象が高校生年代まで拡大された児童手当。お子さまの年齢区分ごとの人数から、毎月・年間の支給額の目安と「第3子以降」の加算対象人数を試算します。",
     "href": "pages/kyouiku-hub.html?tool=jidouteate",
+    "category": "教育資金・保険",
+    "type": "tool"
+  },
+  {
+    "title": "高校無償化（就学支援金）",
+    "desc": "令和8年度（2026年度）から所得制限が完全に撤廃された高等学校等就学支援金。学校の種類（国公立・私立）と在学年数、お子さまの人数から、支援金の支給額と私立高校の自己負担の目安を試算します。",
+    "href": "pages/kyouiku-hub.html?tool=koukou",
     "category": "教育資金・保険",
     "type": "tool"
   },
