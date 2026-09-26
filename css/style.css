@@ -1573,7 +1573,10 @@ a { color: var(--color-primary); }
   font-size: 0.76rem;
   color: var(--color-text-muted);
 }
-.result-compare-close {
+.result-compare-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 10px;
 }
 

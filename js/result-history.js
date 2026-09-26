@@ -309,6 +309,77 @@
     });
   }
 
+  // js/csv-export.js と同じRFC4180準拠のフィールドエスケープ・
+  // UTF-8 BOM付与のロジックを、依存を増やさないためここでも
+  // 独立して実装している（同ファイルの.data-table→CSV変換とは対象の
+  // 表構造が異なり、そのまま流用できないため）。
+  function csvField(text) {
+    var value = String(text == null ? "" : text).replace(/\r\n|\r|\n/g, " ").trim();
+    if (/[",]/.test(value)) {
+      value = '"' + value.replace(/"/g, '""') + '"';
+    }
+    return value;
+  }
+
+  function todayStamp() {
+    var d = new Date();
+    function pad(n) {
+      return n < 10 ? "0" + n : String(n);
+    }
+    return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
+  }
+
+  // 比較表と同じ「入力条件・試算結果」の行構成に、画面上は背景色でしか
+  // 表せない「値が異なる」強調をCSVでも読み取れるよう、末尾に専用の列を
+  // 1本追加してCSV化する（見出し・値そのものは比較表の表示文字列をそのまま
+  // 使うため、新規の集計ロジックは持たない）。
+  function buildCompareCsv(items) {
+    var titleEl = document.querySelector(".page-title h1");
+    var title = titleEl ? titleEl.textContent.trim() : document.title.split("|")[0].trim();
+    var canonical = document.querySelector('link[rel="canonical"]');
+    var url = canonical ? canonical.href : window.location.href;
+
+    var rows = [];
+    rows.push(csvField("ふやすノート " + title + "（保存した試算結果の比較）"));
+    rows.push(csvField(url));
+    rows.push(csvField("※本試算結果は入力条件に基づく参考値です。将来の成果を保証するものではありません。"));
+    rows.push("");
+
+    var header = ["項目"];
+    items.forEach(function (item) {
+      var col = formatSavedAt(item.savedAt);
+      if (item.toolLabel) col += " [" + item.toolLabel + "]";
+      header.push(csvField(col));
+    });
+    header.push(csvField("値が異なる"));
+    rows.push(header.join(","));
+
+    [
+      { title: "■ 入力条件", key: "inputs" },
+      { title: "■ 試算結果", key: "results" }
+    ].forEach(function (section) {
+      var labels = unionLabels(items, section.key);
+      if (labels.length === 0) return;
+      rows.push(csvField(section.title));
+      labels.forEach(function (label) {
+        var values = items.map(function (item) {
+          return valueForLabel(item, section.key, label);
+        });
+        var allSame = values.every(function (v) {
+          return v === values[0];
+        });
+        var line = [csvField(label)];
+        values.forEach(function (v) {
+          line.push(csvField(v === null ? "（該当なし）" : v));
+        });
+        line.push(csvField(allSame ? "" : "○"));
+        rows.push(line.join(","));
+      });
+    });
+
+    return rows.join("\r\n");
+  }
+
   function renderCompareTable(items) {
     if (!comparePanel) return;
     comparePanel.innerHTML = "";
@@ -352,12 +423,37 @@
     note.textContent = "色が付いたセルは、選択した保存結果の間で値が異なる項目です。";
     comparePanel.appendChild(note);
 
+    var actions = document.createElement("div");
+    actions.className = "result-compare-actions";
+
+    var csvBtn = document.createElement("button");
+    csvBtn.type = "button";
+    csvBtn.className = "share-btn secondary";
+    csvBtn.textContent = "比較表をCSVでダウンロード";
+    csvBtn.addEventListener("click", function () {
+      var csv = buildCompareCsv(items);
+      var blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+      var blobUrl = URL.createObjectURL(blob);
+      var link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = "kanemouke_compare_" + todayStamp() + ".csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(function () {
+        URL.revokeObjectURL(blobUrl);
+      }, 1000);
+      showFeedback("比較表をCSVでダウンロードしました。");
+    });
+    actions.appendChild(csvBtn);
+
     var closeBtn = document.createElement("button");
     closeBtn.type = "button";
-    closeBtn.className = "share-btn secondary result-compare-close";
+    closeBtn.className = "share-btn secondary";
     closeBtn.textContent = "比較表を閉じる";
     closeBtn.addEventListener("click", hideComparePanel);
-    comparePanel.appendChild(closeBtn);
+    actions.appendChild(closeBtn);
+    comparePanel.appendChild(actions);
 
     comparePanel.hidden = false;
     comparePanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
