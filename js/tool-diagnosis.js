@@ -110,11 +110,23 @@
         desc: "毎月の投資額を「iDeCo優先」「NISA優先」「半分ずつ」で配分した場合の節税額・資産評価額・引き出し制限の違いを比較できます。"
       }
     ],
-    "jutaku|spouse-child": [{
-      href: "pages/kyouiku-hub.html?tool=kyouiku",
-      title: "教育資金シミュレーター",
-      desc: "住宅ローンと教育資金、両方の負担感をあわせて確認しておくと安心です。"
-    }],
+    // jutaku（住宅ローン）は、メインのおすすめ（住宅ローン控除タブ）と同じ
+    // jutaku-hub.html内にある「変動vs固定金利」タブ（5年ルール・125%ルールを
+    // 踏まえた金利上昇時の返済額・未払利息の試算）が、住宅ローンを組む全ての
+    // 家族構成に共通して関連性が高いため、家族の状況ごとの個別の関連ツールに
+    // 加えて必ず1件（既存の関連ツールがある場合は2件目として）提示する。
+    "jutaku|spouse-child": [
+      {
+        href: "pages/kyouiku-hub.html?tool=kyouiku",
+        title: "教育資金シミュレーター",
+        desc: "住宅ローンと教育資金、両方の負担感をあわせて確認しておくと安心です。"
+      },
+      {
+        href: "pages/jutaku-hub.html?tool=kinri",
+        title: "変動vs固定金利 金利上昇シミュレーター",
+        desc: "住宅ローン控除とあわせて、変動金利が上昇した場合に返済額・未払利息がどう変わるかも確認しておくと安心です。"
+      }
+    ],
     "nenshu|spouse": [{
       href: "pages/nenshu-hub.html?tool=kabe",
       title: "年収の壁シミュレーター",
@@ -130,16 +142,42 @@
       title: "教育資金シミュレーター",
       desc: "積立と並行して、お子さまの教育資金の目安もあわせて確認できます。"
     }],
-    "haitou|spouse-child": [{
-      href: "pages/kyouiku-hub.html?tool=kyouiku",
-      title: "教育資金シミュレーター",
-      desc: "配当再投資と並行して、お子さまの教育資金の目安もあわせて確認できます。"
-    }],
-    "fire|spouse-child": [{
-      href: "pages/kyouiku-hub.html?tool=kyouiku",
-      title: "教育資金シミュレーター",
-      desc: "FIRE後の生活費とあわせて、お子さまの教育資金の目安も確認しておくと安心です。"
-    }],
+    // haitou（配当・高配当株）は、メインのおすすめ（配当再投資タブ）と同じ
+    // haitou-hub.html内にある「課税方式比較」タブ（確定申告不要・申告分離課税・
+    // 総合課税のどれが有利かの比較）が、配当を受け取る全ての家族構成に共通して
+    // 関連性が高いため、家族の状況ごとの個別の関連ツールに加えて必ず1件
+    // （既存の関連ツールがある場合は2件目として）提示する。
+    "haitou|spouse-child": [
+      {
+        href: "pages/kyouiku-hub.html?tool=kyouiku",
+        title: "教育資金シミュレーター",
+        desc: "配当再投資と並行して、お子さまの教育資金の目安もあわせて確認できます。"
+      },
+      {
+        href: "pages/haitou-hub.html?tool=kazei",
+        title: "配当課税方式比較シミュレーター",
+        desc: "配当再投資とあわせて、確定申告不要・申告分離課税・総合課税のどれが有利かも確認しておくと安心です。"
+      }
+    ],
+    // fire（FIRE・資産取り崩し）は、メインのおすすめ（FIRE達成タブ）と同じ
+    // fire-hub.html内にある「資産取り崩し」タブ（定額・定率・定率＋下限額の
+    // 3方式比較。FIRE達成タブの解説文自身が「達成後に取り崩しながら運用を
+    // 続けた場合」に言及し、取り崩しタブの解説文も逆にFIRE達成タブを名指しで
+    // 参照しており、2つのタブは互いに補完しあう関係にある）が、FIREを目指す
+    // 全ての家族構成に共通して関連性が高いため、家族の状況ごとの個別の関連
+    // ツールに加えて必ず1件（既存の関連ツールがある場合は2件目として）提示する。
+    "fire|spouse-child": [
+      {
+        href: "pages/kyouiku-hub.html?tool=kyouiku",
+        title: "教育資金シミュレーター",
+        desc: "FIRE後の生活費とあわせて、お子さまの教育資金の目安も確認しておくと安心です。"
+      },
+      {
+        href: "pages/fire-hub.html?tool=torikuzushi",
+        title: "資産取り崩しシミュレーター（3方式比較）",
+        desc: "FIRE達成後、定額・定率・定率＋下限額のどの取り崩し方式を選ぶかで資産の持続年数が変わります。あわせて確認しておくと安心です。"
+      }
+    ],
     // souzoku（相続・贈与）は、メインのおすすめ（相続税タブ）と同じ
     // souzoku-hub.html内にある「生前贈与vs相続」タブ（暦年贈与・相続時
     // 精算課税制度を含む）が全ての家族構成に共通して関連性が高いため、
@@ -200,25 +238,76 @@
       title: "iDeCovsNISA 優先順位シミュレーター",
       desc: "毎月の投資額を「iDeCo優先」「NISA優先」「半分ずつ」で配分した場合の節税額・資産評価額・引き出し制限の違いを比較できます。"
     }],
-    "jutaku|spouse": [{
-      href: "pages/haiguusha-fuyou-koujo-guide.html",
-      title: "配偶者控除・配偶者特別控除ガイド",
-      desc: "住宅ローンは世帯収入で計画することが多く、配偶者の年収による控除額の変化もあわせて確認しておくと安心です。"
+    "jutaku|spouse": [
+      {
+        href: "pages/haiguusha-fuyou-koujo-guide.html",
+        title: "配偶者控除・配偶者特別控除ガイド",
+        desc: "住宅ローンは世帯収入で計画することが多く、配偶者の年収による控除額の変化もあわせて確認しておくと安心です。"
+      },
+      {
+        href: "pages/jutaku-hub.html?tool=kinri",
+        title: "変動vs固定金利 金利上昇シミュレーター",
+        desc: "住宅ローン控除とあわせて、変動金利が上昇した場合に返済額・未払利息がどう変わるかも確認しておくと安心です。"
+      }
+    ],
+    "jutaku|single": [{
+      href: "pages/jutaku-hub.html?tool=kinri",
+      title: "変動vs固定金利 金利上昇シミュレーター",
+      desc: "住宅ローン控除とあわせて、変動金利が上昇した場合に返済額・未払利息がどう変わるかも確認しておくと安心です。"
+    }],
+    "jutaku|skip": [{
+      href: "pages/jutaku-hub.html?tool=kinri",
+      title: "変動vs固定金利 金利上昇シミュレーター",
+      desc: "住宅ローン控除とあわせて、変動金利が上昇した場合に返済額・未払利息がどう変わるかも確認しておくと安心です。"
     }],
     "tsumitate|spouse": [{
       href: "pages/nisa-hub.html?tool=waku",
       title: "新NISA 生涯投資枠 使いきりシミュレーター",
       desc: "配偶者もNISA口座を持てば、非課税枠を夫婦2人分（合計3,600万円）活用できます。ご自身の枠の使用ペースもあわせて確認できます。"
     }],
-    "haitou|spouse": [{
-      href: "pages/nisa-hub.html?tool=waku",
-      title: "新NISA 生涯投資枠 使いきりシミュレーター",
-      desc: "配当再投資と並行して、配偶者もNISA口座を持てば非課税枠を夫婦2人分に広げられます。生涯投資枠の使用ペースもあわせて確認できます。"
+    "haitou|spouse": [
+      {
+        href: "pages/nisa-hub.html?tool=waku",
+        title: "新NISA 生涯投資枠 使いきりシミュレーター",
+        desc: "配当再投資と並行して、配偶者もNISA口座を持てば非課税枠を夫婦2人分に広げられます。生涯投資枠の使用ペースもあわせて確認できます。"
+      },
+      {
+        href: "pages/haitou-hub.html?tool=kazei",
+        title: "配当課税方式比較シミュレーター",
+        desc: "配当再投資とあわせて、確定申告不要・申告分離課税・総合課税のどれが有利かも確認しておくと安心です。"
+      }
+    ],
+    "haitou|single": [{
+      href: "pages/haitou-hub.html?tool=kazei",
+      title: "配当課税方式比較シミュレーター",
+      desc: "配当再投資とあわせて、確定申告不要・申告分離課税・総合課税のどれが有利かも確認しておくと安心です。"
     }],
-    "fire|spouse": [{
-      href: "pages/nisa-hub.html?tool=waku",
-      title: "新NISA 生涯投資枠 使いきりシミュレーター",
-      desc: "FIREを目指す資産形成では、配偶者もNISA口座を持つことで非課税枠を夫婦2人分に広げられます。生涯投資枠の使用ペースもあわせて確認できます。"
+    "haitou|skip": [{
+      href: "pages/haitou-hub.html?tool=kazei",
+      title: "配当課税方式比較シミュレーター",
+      desc: "配当再投資とあわせて、確定申告不要・申告分離課税・総合課税のどれが有利かも確認しておくと安心です。"
+    }],
+    "fire|spouse": [
+      {
+        href: "pages/nisa-hub.html?tool=waku",
+        title: "新NISA 生涯投資枠 使いきりシミュレーター",
+        desc: "FIREを目指す資産形成では、配偶者もNISA口座を持つことで非課税枠を夫婦2人分に広げられます。生涯投資枠の使用ペースもあわせて確認できます。"
+      },
+      {
+        href: "pages/fire-hub.html?tool=torikuzushi",
+        title: "資産取り崩しシミュレーター（3方式比較）",
+        desc: "FIRE達成後、定額・定率・定率＋下限額のどの取り崩し方式を選ぶかで資産の持続年数が変わります。あわせて確認しておくと安心です。"
+      }
+    ],
+    "fire|single": [{
+      href: "pages/fire-hub.html?tool=torikuzushi",
+      title: "資産取り崩しシミュレーター（3方式比較）",
+      desc: "FIRE達成後、定額・定率・定率＋下限額のどの取り崩し方式を選ぶかで資産の持続年数が変わります。あわせて確認しておくと安心です。"
+    }],
+    "fire|skip": [{
+      href: "pages/fire-hub.html?tool=torikuzushi",
+      title: "資産取り崩しシミュレーター（3方式比較）",
+      desc: "FIRE達成後、定額・定率・定率＋下限額のどの取り崩し方式を選ぶかで資産の持続年数が変わります。あわせて確認しておくと安心です。"
     }]
   };
 
