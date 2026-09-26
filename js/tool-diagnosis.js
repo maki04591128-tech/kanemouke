@@ -127,15 +127,46 @@
         desc: "住宅ローン控除とあわせて、変動金利が上昇した場合に返済額・未払利息がどう変わるかも確認しておくと安心です。"
       }
     ],
-    "nenshu|spouse": [{
-      href: "pages/nenshu-hub.html?tool=kabe",
-      title: "年収の壁シミュレーター",
-      desc: "配偶者の働き方によって変わる「年収の壁」の目安を確認できます。"
+    // nenshu（年収から手取り）は、メインのおすすめ（年収から手取りタブ）と同じ
+    // nenshu-hub.html内にある「賞与の手取り」タブの本文が「額面年収に対する
+    // 手取りを知りたい場合は『年収から手取り額シミュレーター』もあわせてご利用
+    // ください」と、メインの手取りタブへ名指しで誘導している（本文中の明示的な
+    // 相互参照）。年収から手取り額とボーナスの手取り額は家族構成を問わず併せて
+    // 確認したい組み合わせのため、家族の状況ごとの個別の関連ツール（年収の壁）に
+    // 加えて必ず1件（既存の関連ツールがある場合は2件目として）提示する。
+    "nenshu|single": [{
+      href: "pages/nenshu-hub.html?tool=shoyo",
+      title: "賞与（ボーナス）の手取りシミュレーター",
+      desc: "年収から手取り額とあわせて、ボーナスの手取り額も確認できます。"
     }],
-    "nenshu|spouse-child": [{
-      href: "pages/nenshu-hub.html?tool=kabe",
-      title: "年収の壁シミュレーター",
-      desc: "配偶者の働き方によって変わる「年収の壁」の目安を確認できます。"
+    "nenshu|spouse": [
+      {
+        href: "pages/nenshu-hub.html?tool=kabe",
+        title: "年収の壁シミュレーター",
+        desc: "配偶者の働き方によって変わる「年収の壁」の目安を確認できます。"
+      },
+      {
+        href: "pages/nenshu-hub.html?tool=shoyo",
+        title: "賞与（ボーナス）の手取りシミュレーター",
+        desc: "年収から手取り額とあわせて、ボーナスの手取り額も確認できます。"
+      }
+    ],
+    "nenshu|spouse-child": [
+      {
+        href: "pages/nenshu-hub.html?tool=kabe",
+        title: "年収の壁シミュレーター",
+        desc: "配偶者の働き方によって変わる「年収の壁」の目安を確認できます。"
+      },
+      {
+        href: "pages/nenshu-hub.html?tool=shoyo",
+        title: "賞与（ボーナス）の手取りシミュレーター",
+        desc: "年収から手取り額とあわせて、ボーナスの手取り額も確認できます。"
+      }
+    ],
+    "nenshu|skip": [{
+      href: "pages/nenshu-hub.html?tool=shoyo",
+      title: "賞与（ボーナス）の手取りシミュレーター",
+      desc: "年収から手取り額とあわせて、ボーナスの手取り額も確認できます。"
     }],
     // tsumitate（積立複利）は、メインのおすすめ（積立複利タブ）と同じ
     // nisa-hub.html内にある「必要積立額」タブ（目標金額・積立期間・想定
