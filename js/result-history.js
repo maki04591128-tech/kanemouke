@@ -275,14 +275,45 @@
     return null;
   }
 
-  function addCompareSection(tbody, columnCount, title, items, key) {
+  // 値の先頭にある数値部分と、それに続く単位表記（「円」「%」「歳」等）を
+  // 取り出す。単位を含む文字列全体が長すぎる場合（数値の後に長い注記が
+  // 続く等）は誤った差分表示を避けるため対象外とする。
+  function parseLeadingNumber(value) {
+    var m = /^(-?[\d,]+(?:\.\d+)?)\s*(.*)$/.exec(String(value == null ? "" : value).trim());
+    if (!m) return null;
+    var num = parseFloat(m[1].replace(/,/g, ""));
+    if (isNaN(num)) return null;
+    var unit = m[2].trim();
+    if (unit.length > 12) return null;
+    return { num: num, unit: unit };
+  }
+
+  function formatDiffNumber(diff, unit) {
+    var sign = diff > 0 ? "+" : diff < 0 ? "-" : "±";
+    var formatted = Math.abs(diff).toLocaleString("ja-JP", { maximumFractionDigits: 2 });
+    return sign + formatted + (unit ? " " + unit : "");
+  }
+
+  // 2件比較時のみ、before→afterの数値差分を「+120,000 円」のように
+  // 算出する。どちらかが未入力（該当なし）だったり、単位が一致しない
+  // 場合は算出できないため、その場合はnullを返し「値は違うが差分は
+  // 算出できない」ことを呼び出し側で区別できるようにする。
+  function computeDiff(before, after) {
+    if (before === null || after === null) return null;
+    var a = parseLeadingNumber(before);
+    var b = parseLeadingNumber(after);
+    if (!a || !b || a.unit !== b.unit) return null;
+    return formatDiffNumber(b.num - a.num, b.unit);
+  }
+
+  function addCompareSection(tbody, columnCount, title, items, key, showDiff) {
     var labels = unionLabels(items, key);
     if (labels.length === 0) return;
 
     var sectionRow = document.createElement("tr");
     sectionRow.className = "result-compare-section";
     var sectionTh = document.createElement("th");
-    sectionTh.setAttribute("colspan", String(columnCount + 1));
+    sectionTh.setAttribute("colspan", String(columnCount + (showDiff ? 2 : 1)));
     sectionTh.textContent = title;
     sectionRow.appendChild(sectionTh);
     tbody.appendChild(sectionRow);
@@ -305,6 +336,17 @@
         if (!allSame) td.className = "result-compare-diff";
         tr.appendChild(td);
       });
+      if (showDiff) {
+        var diffTd = document.createElement("td");
+        diffTd.className = "result-compare-diffcol";
+        if (allSame) {
+          diffTd.textContent = "";
+        } else {
+          var diff = computeDiff(values[0], values[1]);
+          diffTd.textContent = diff === null ? "—" : diff;
+        }
+        tr.appendChild(diffTd);
+      }
       tbody.appendChild(tr);
     });
   }
@@ -339,6 +381,12 @@
     var canonical = document.querySelector('link[rel="canonical"]');
     var url = canonical ? canonical.href : window.location.href;
 
+    // 2件のみの比較（前後を見比べる最も一般的な使い方）では、○/空欄の
+    // 代わりに実際の増減幅を出す方が「使いやすさ」に資すると判断し、
+    // 末尾列を「差分」に切り替える。3件以上では前後関係が一意に決まらず
+    // 1列に収まらないため、従来どおり○/空欄のままにする。
+    var showDiff = items.length === 2;
+
     var rows = [];
     rows.push(csvField("ふやすノート " + title + "（保存した試算結果の比較）"));
     rows.push(csvField(url));
@@ -351,7 +399,7 @@
       if (item.toolLabel) col += " [" + item.toolLabel + "]";
       header.push(csvField(col));
     });
-    header.push(csvField("値が異なる"));
+    header.push(csvField(showDiff ? "差分（後－前）" : "値が異なる"));
     rows.push(header.join(","));
 
     [
@@ -372,7 +420,14 @@
         values.forEach(function (v) {
           line.push(csvField(v === null ? "（該当なし）" : v));
         });
-        line.push(csvField(allSame ? "" : "○"));
+        if (allSame) {
+          line.push(csvField(""));
+        } else if (showDiff) {
+          var diff = computeDiff(values[0], values[1]);
+          line.push(csvField(diff === null ? "○" : diff));
+        } else {
+          line.push(csvField("○"));
+        }
         rows.push(line.join(","));
       });
     });
@@ -383,6 +438,8 @@
   function renderCompareTable(items) {
     if (!comparePanel) return;
     comparePanel.innerHTML = "";
+
+    var showDiff = items.length === 2;
 
     var wrap = document.createElement("div");
     wrap.className = "table-wrap";
@@ -407,12 +464,17 @@
       }
       headRow.appendChild(th);
     });
+    if (showDiff) {
+      var diffTh = document.createElement("th");
+      diffTh.textContent = "差分（後－前）";
+      headRow.appendChild(diffTh);
+    }
     thead.appendChild(headRow);
     table.appendChild(thead);
 
     var tbody = document.createElement("tbody");
-    addCompareSection(tbody, items.length, "入力条件", items, "inputs");
-    addCompareSection(tbody, items.length, "試算結果", items, "results");
+    addCompareSection(tbody, items.length, "入力条件", items, "inputs", showDiff);
+    addCompareSection(tbody, items.length, "試算結果", items, "results", showDiff);
     table.appendChild(tbody);
 
     wrap.appendChild(table);
@@ -420,7 +482,9 @@
 
     var note = document.createElement("p");
     note.className = "result-compare-note";
-    note.textContent = "色が付いたセルは、選択した保存結果の間で値が異なる項目です。";
+    note.textContent = showDiff
+      ? "色が付いたセルは、選択した保存結果の間で値が異なる項目です。「差分」列は後の結果から前の結果を引いた増減幅です（「—」は単位が異なる等で算出できなかった項目）。"
+      : "色が付いたセルは、選択した保存結果の間で値が異なる項目です。";
     comparePanel.appendChild(note);
 
     var actions = document.createElement("div");

@@ -1568,6 +1568,11 @@ a { color: var(--color-primary); }
   color: #8a4b06;
   font-weight: 700;
 }
+.result-compare-diffcol {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  font-variant-numeric: tabular-nums;
+}
 .result-compare-note {
   margin: 10px 0 0;
   font-size: 0.76rem;
