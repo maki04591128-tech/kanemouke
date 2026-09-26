@@ -129,6 +129,36 @@
       href: "pages/hoken-koujo-simulator.html",
       title: "生命保険料控除・地震保険料控除シミュレーター",
       desc: "相続・贈与の対策とあわせて、毎年の保険料控除も見直しておくと安心です。"
+    },
+    "ideco|spouse": {
+      href: "pages/haiguusha-fuyou-koujo-guide.html",
+      title: "配偶者控除・配偶者特別控除ガイド",
+      desc: "配偶者の年収によってご自身が受けられる控除額が変わります。iDeCoの節税効果とあわせて確認しておくと安心です。"
+    },
+    "jutaku|spouse": {
+      href: "pages/haiguusha-fuyou-koujo-guide.html",
+      title: "配偶者控除・配偶者特別控除ガイド",
+      desc: "住宅ローンは世帯収入で計画することが多く、配偶者の年収による控除額の変化もあわせて確認しておくと安心です。"
+    },
+    "tsumitate|spouse": {
+      href: "pages/nisa-hub.html?tool=waku",
+      title: "新NISA 生涯投資枠 使いきりシミュレーター",
+      desc: "配偶者もNISA口座を持てば、非課税枠を夫婦2人分（合計3,600万円）活用できます。ご自身の枠の使用ペースもあわせて確認できます。"
+    },
+    "haitou|spouse": {
+      href: "pages/nisa-hub.html?tool=waku",
+      title: "新NISA 生涯投資枠 使いきりシミュレーター",
+      desc: "配当再投資と並行して、配偶者もNISA口座を持てば非課税枠を夫婦2人分に広げられます。生涯投資枠の使用ペースもあわせて確認できます。"
+    },
+    "fire|spouse": {
+      href: "pages/nisa-hub.html?tool=waku",
+      title: "新NISA 生涯投資枠 使いきりシミュレーター",
+      desc: "FIREを目指す資産形成では、配偶者もNISA口座を持つことで非課税枠を夫婦2人分に広げられます。生涯投資枠の使用ペースもあわせて確認できます。"
+    },
+    "souzoku|spouse": {
+      href: "pages/souzokuzei-guide.html",
+      title: "相続税とは？基礎控除・税率・配偶者の税額軽減の仕組み 完全ガイド",
+      desc: "配偶者には「1億6,000万円」までの相続税額軽減がありますが、二次相続で税負担が増えるケースもあるため、あわせて確認しておくと安心です。"
     }
   };
 
