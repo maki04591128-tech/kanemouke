@@ -49,8 +49,10 @@
   var WALL_INCOME_TAX = 1780000; // 所得税がかかり始める壁（いわゆる「103万円の壁」。令和8・9年分は時限特例で基礎控除104万+給与所得控除74万＝178万円）
   var WALL_106 = 1060000; // 社会保険の壁（要件に該当する勤務先の場合）
   var WALL_130 = 1300000; // 社会保険の壁（上記要件に該当しない場合）
-  var WALL_HAIGUSHA_MAX = 1500000; // 配偶者特別控除が満額(配偶者側38万円)から逓減し始める壁
-  var WALL_HAIGUSHA_ZERO = 2016000; // 配偶者特別控除が消滅する壁（201万6千円未満）
+  // 配偶者特別控除の壁も、令和8年度税制改正で配偶者の合計所得要件が引き上げられたことに伴い、
+  // 満額維持の上限が給与収入換算150万円→159万円、消滅ラインが201万6千円→207万円に変わっている。
+  var WALL_HAIGUSHA_MAX = 1590000; // 配偶者特別控除が満額(配偶者側38万円)から逓減し始める壁
+  var WALL_HAIGUSHA_ZERO = 2070000; // 配偶者特別控除が消滅する壁（207万円以上）
 
   var els = {
     income: document.getElementById("kabe-income"),
@@ -184,7 +186,7 @@
       wallRow("所得税（いわゆる103万円の壁）", WALL_INCOME_TAX, income, "令和8・9年分は時限特例で178万円（令和10年分以後は168万円に戻る予定）"),
       wallRow(insuranceWallLabel, insuranceWall, income, insuranceApplies ? "従業員51人以上の企業等、加入条件に該当する場合" : "上記の加入条件に該当しない場合"),
       wallRow("配偶者特別控除 満額の壁", WALL_HAIGUSHA_MAX, income, "配偶者側の控除（最大38万円）が満額を維持できるライン"),
-      wallRow("配偶者特別控除 消滅の壁", WALL_HAIGUSHA_ZERO, income, "201万6千円以上で配偶者側の控除がゼロに"),
+      wallRow("配偶者特別控除 消滅の壁", WALL_HAIGUSHA_ZERO, income, "207万円以上で配偶者側の控除がゼロに"),
     ];
     els.wallBody.innerHTML = rows.join("");
 

@@ -21,17 +21,24 @@
     { limit: Infinity, rate: 0.45, deduct: 4796000 },
   ];
 
-  // 給与所得控除額（2025年度税制改正後、最低保障額65万円）
+  // 給与所得控除額（所得税用）。令和8年度税制改正により、令和8・9年分は最低保障額が74万円に時限的に
+  // 引き上げられている（令和10年分以後は本則69万円に戻る予定）。
   var SALARY_DEDUCTION_BRACKETS = [
-    { limit: 1900000, calc: function () { return 650000; } },
+    { limit: 2200000, calc: function () { return 740000; } },
     { limit: 3600000, calc: function (income) { return income * 0.3 + 80000; } },
     { limit: 6600000, calc: function (income) { return income * 0.2 + 440000; } },
     { limit: 8500000, calc: function (income) { return income * 0.1 + 1100000; } },
     { limit: Infinity, calc: function () { return 1950000; } },
   ];
 
-  // 所得税用の控除額（基礎控除は2025年分以降の58万円。合計所得金額2,350万円以下の場合）
-  var INCOME_BASIC_DEDUCTION = 580000;
+  // 所得税の基礎控除額。令和8年度税制改正により、令和8・9年分は合計所得金額（給与収入のみの場合の
+  // 収入金額）に応じて段階的に引き上げられている。
+  function incomeBasicDeduction(grossIncome) {
+    if (grossIncome <= 2060000) return 1040000;
+    if (grossIncome <= 6655556) return 620000;
+    if (grossIncome <= 8500000) return 670000;
+    return 620000; // 合計所得金額2,350万円超（収入2,545万円超）の逓減は簡易化のため未対応
+  }
   var INCOME_SPOUSE_DEDUCTION = 380000;
   var INCOME_DEPENDENT_DEDUCTION = 380000;
 
@@ -118,7 +125,7 @@
 
     var incomeDeductions =
       socialInsurance +
-      INCOME_BASIC_DEDUCTION +
+      incomeBasicDeduction(grossIncome) +
       (hasSpouse ? INCOME_SPOUSE_DEDUCTION : 0) +
       dependents * INCOME_DEPENDENT_DEDUCTION;
     var taxableForIncomeTax = Math.max(0, salaryIncome - incomeDeductions);
