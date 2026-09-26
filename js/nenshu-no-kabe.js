@@ -17,8 +17,20 @@
     { limit: Infinity, rate: 0.45, deduct: 4796000 },
   ];
 
-  // 給与所得控除額（2025年度税制改正後、最低保障額65万円）
-  var SALARY_DEDUCTION_BRACKETS = [
+  // 給与所得控除額（所得税用）。令和8年度税制改正（租税特別措置法第29条の4）により、
+  // 令和8・9年分は最低保障額が74万円に時限的に引き上げられている（令和10年分以後は本則69万円に戻る予定）。
+  // 本ツールは「現在（令和8年分）」の試算を優先し、令和8・9年分の値を採用する。
+  var SALARY_DEDUCTION_BRACKETS_INCOME_TAX = [
+    { limit: 2200000, calc: function () { return 740000; } },
+    { limit: 3600000, calc: function (income) { return income * 0.3 + 80000; } },
+    { limit: 6600000, calc: function (income) { return income * 0.2 + 440000; } },
+    { limit: 8500000, calc: function (income) { return income * 0.1 + 1100000; } },
+    { limit: Infinity, calc: function () { return 1950000; } },
+  ];
+
+  // 給与所得控除額（住民税用）。令和8年度税制改正の最低保障額引き上げ（74万円）は所得税のみが対象で、
+  // 個人住民税の最低保障額は令和8年度分はこれまでと同じ65万円（令和9年度分以後に5万円引き上げの予定）。
+  var SALARY_DEDUCTION_BRACKETS_RESIDENT_TAX = [
     { limit: 1900000, calc: function () { return 650000; } },
     { limit: 3600000, calc: function (income) { return income * 0.3 + 80000; } },
     { limit: 6600000, calc: function (income) { return income * 0.2 + 440000; } },
@@ -26,13 +38,15 @@
     { limit: Infinity, calc: function () { return 1950000; } },
   ];
 
-  // 所得税の基礎控除（2025年分以降。合計所得金額2,350万円以下の場合）
-  var INCOME_BASIC_DEDUCTION = 580000;
-  // 住民税の基礎控除（今回の改正での変更なし）
+  // 所得税の基礎控除。令和8年度税制改正により、令和8・9年分は合計所得金額132万円以下の場合104万円に
+  // 時限的に引き上げられている（令和10年分以後は99万円に戻る予定）。本ツールが対象とする年収帯
+  // （パート・アルバイト収入で「壁」を意識する範囲）はこのケースに該当することを想定し、簡易的に一律で適用する。
+  var INCOME_BASIC_DEDUCTION = 1040000;
+  // 住民税の基礎控除（今回の改正でも変更なし）
   var RESIDENT_BASIC_DEDUCTION = 430000;
 
   var WALL_RESIDENT_TAX = 1080000; // 住民税がかかり始める目安（給与所得控除65万+住民税基礎控除43万）
-  var WALL_INCOME_TAX = 1230000; // 所得税がかかり始める壁（いわゆる「103万円の壁」、2025年分以降は123万円）
+  var WALL_INCOME_TAX = 1780000; // 所得税がかかり始める壁（いわゆる「103万円の壁」。令和8・9年分は時限特例で基礎控除104万+給与所得控除74万＝178万円）
   var WALL_106 = 1060000; // 社会保険の壁（要件に該当する勤務先の場合）
   var WALL_130 = 1300000; // 社会保険の壁（上記要件に該当しない場合）
   var WALL_HAIGUSHA_MAX = 1500000; // 配偶者特別控除が満額(配偶者側38万円)から逓減し始める壁
@@ -66,9 +80,17 @@
     return Math.max(0, Number(n) || 0);
   }
 
-  function salaryDeduction(income) {
-    for (var i = 0; i < SALARY_DEDUCTION_BRACKETS.length; i++) {
-      var b = SALARY_DEDUCTION_BRACKETS[i];
+  function salaryDeductionIncomeTax(income) {
+    for (var i = 0; i < SALARY_DEDUCTION_BRACKETS_INCOME_TAX.length; i++) {
+      var b = SALARY_DEDUCTION_BRACKETS_INCOME_TAX[i];
+      if (income <= b.limit) return b.calc(income);
+    }
+    return 1950000;
+  }
+
+  function salaryDeductionResidentTax(income) {
+    for (var i = 0; i < SALARY_DEDUCTION_BRACKETS_RESIDENT_TAX.length; i++) {
+      var b = SALARY_DEDUCTION_BRACKETS_RESIDENT_TAX[i];
       if (income <= b.limit) return b.calc(income);
     }
     return 1950000;
@@ -85,12 +107,12 @@
 
   // 年収から所得税・住民税・社会保険料（概算）を差し引いた手取り額を試算
   function takeHomeOf(income, insuranceApplies) {
-    var salaryIncome = Math.max(0, income - salaryDeduction(income));
-
-    var taxableIncomeTax = Math.max(0, salaryIncome - INCOME_BASIC_DEDUCTION);
+    var salaryIncomeForIncomeTax = Math.max(0, income - salaryDeductionIncomeTax(income));
+    var taxableIncomeTax = Math.max(0, salaryIncomeForIncomeTax - INCOME_BASIC_DEDUCTION);
     var incomeTax = taxByBracket(taxableIncomeTax) * (1 + RECONSTRUCTION_TAX_RATE);
 
-    var taxableResidentTax = Math.max(0, salaryIncome - RESIDENT_BASIC_DEDUCTION);
+    var salaryIncomeForResidentTax = Math.max(0, income - salaryDeductionResidentTax(income));
+    var taxableResidentTax = Math.max(0, salaryIncomeForResidentTax - RESIDENT_BASIC_DEDUCTION);
     var residentTax = taxableResidentTax > 0 ? taxableResidentTax * RESIDENT_TAX_RATE + RESIDENT_PER_CAPITA : 0;
 
     var insuranceWall = insuranceApplies ? WALL_106 : WALL_130;
@@ -99,7 +121,7 @@
     var takeHome = income - incomeTax - residentTax - socialInsurance;
 
     return {
-      salaryIncome: salaryIncome,
+      salaryIncome: salaryIncomeForIncomeTax,
       incomeTax: incomeTax,
       residentTax: residentTax,
       socialInsurance: socialInsurance,
@@ -145,13 +167,13 @@
         "。社会保険料の負担が始まることで、壁を超えた直後は手取りが一時的に伸び悩む・減ることがあります。";
     } else if (income > WALL_INCOME_TAX) {
       els.verdict.textContent =
-        "所得税の壁（123万円）は超えていますが、社会保険の壁（" + manYen(insuranceWall) + "）は手前です";
+        "所得税の壁（178万円）は超えていますが、社会保険の壁（" + manYen(insuranceWall) + "）は手前です";
       els.verdictSub.textContent =
         "あと " + manYen(insuranceWall - income) + " で社会保険の壁に到達します。手取りの目安は " + manYen(r.takeHome) + "。";
     } else if (income > WALL_RESIDENT_TAX) {
       els.verdict.textContent = "住民税はかかりますが、所得税・社会保険料の壁はまだ手前です";
       els.verdictSub.textContent =
-        "所得税の壁（123万円）まであと " + manYen(WALL_INCOME_TAX - income) + "。手取りの目安は " + manYen(r.takeHome) + "。";
+        "所得税の壁（178万円）まであと " + manYen(WALL_INCOME_TAX - income) + "。手取りの目安は " + manYen(r.takeHome) + "。";
     } else {
       els.verdict.textContent = "どの壁も超えていません。税金・社会保険料はほとんど発生しない範囲です";
       els.verdictSub.textContent = "手取りの目安は年収とほぼ同じ " + manYen(r.takeHome) + " です。";
@@ -159,7 +181,7 @@
 
     var rows = [
       wallRow("住民税（目安）", WALL_RESIDENT_TAX, income, "自治体により非課税ラインは異なります"),
-      wallRow("所得税（いわゆる103万円の壁）", WALL_INCOME_TAX, income, "2025年分以降は基礎控除等の引き上げで123万円に"),
+      wallRow("所得税（いわゆる103万円の壁）", WALL_INCOME_TAX, income, "令和8・9年分は時限特例で178万円（令和10年分以後は168万円に戻る予定）"),
       wallRow(insuranceWallLabel, insuranceWall, income, insuranceApplies ? "従業員51人以上の企業等、加入条件に該当する場合" : "上記の加入条件に該当しない場合"),
       wallRow("配偶者特別控除 満額の壁", WALL_HAIGUSHA_MAX, income, "配偶者側の控除（最大38万円）が満額を維持できるライン"),
       wallRow("配偶者特別控除 消滅の壁", WALL_HAIGUSHA_ZERO, income, "201万6千円以上で配偶者側の控除がゼロに"),
