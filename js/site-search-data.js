@@ -374,6 +374,13 @@ window.SITE_SEARCH_DATA = [
     "type": "tool"
   },
   {
+    "title": "生命保険の必要保障額",
+    "desc": "現在の生活費・お子さまの年齢・教育費プラン・配偶者の年齢や収入・預貯金・遺族年金の見込みから、もしものときに家族に必要な生命保険の金額の目安を試算します。年齢ごとに保障額が減っていく推移もグラフで確認できます。",
+    "href": "pages/kyouiku-hub.html?tool=hoshougaku",
+    "category": "教育資金・保険",
+    "type": "tool"
+  },
+  {
     "title": "退職金の受け取り方",
     "desc": "退職金・企業年金を「一時金」でまとめて受け取るか、「年金」として分割で受け取るか。退職所得控除・公的年金等控除による税金の差と、将来の資産額をあわせて試算します。",
     "href": "pages/nenshu-hub.html?tool=taishokukin",
