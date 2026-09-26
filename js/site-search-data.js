@@ -102,7 +102,7 @@ window.SITE_SEARCH_DATA = [
   },
   {
     "title": "節税・控除シミュレーター まとめ",
-    "desc": "ふるさと納税控除上限額・医療費控除・副業20万円ルールの3ツールをタブ切り替えで使えます。",
+    "desc": "ふるさと納税控除上限額・医療費控除・副業20万円ルール・確定申告要否チェックの4ツールをタブ切り替えで使えます。",
     "href": "pages/setsuzei-hub.html?tool=furusato",
     "category": "節税・控除・確定申告",
     "type": "hub"
@@ -454,6 +454,13 @@ window.SITE_SEARCH_DATA = [
     "title": "副業20万円ルール",
     "desc": "給与所得者が副業をしている場合、副業の所得（収入－必要経費）が年間20万円以下であれば所得税の確定申告は不要です。給与年収・副業の収入・必要経費を入力すると、この「20万円ルール」に該当するかどうかと、確定申告した場合の所得税額の目安を試算します。",
     "href": "pages/setsuzei-hub.html?tool=fukugyo",
+    "category": "節税・控除・確定申告",
+    "type": "tool"
+  },
+  {
+    "title": "確定申告 要否チェック",
+    "desc": "副業・医療費控除・住宅ローン控除・ふるさと納税など8項目をチェックするだけで、確定申告が必要か（義務・任意・不要）を判定します。",
+    "href": "pages/setsuzei-hub.html?tool=kakutei",
     "category": "節税・控除・確定申告",
     "type": "tool"
   },
