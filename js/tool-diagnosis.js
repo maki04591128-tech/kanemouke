@@ -72,94 +72,124 @@
 
   // Q1（家族の状況）× Q2（気になること）の組み合わせによっては、
   // メインのおすすめ1件だけでは拾いきれない関連ツールがある。
-  // 該当する組み合わせだけ「あわせてチェック」として2件目を出す
+  // 該当する組み合わせだけ「あわせてチェック」として2件目以降を出す
   // （すべての組み合わせを網羅するのではなく、明確に関連性が高いものだけに絞る）。
+  // 各キーの値は配列（1〜2件）。表示件数を増やす場合も、情報過多になら
+  // ないよう1件ずつ根拠を確認してから追加すること。
   var RELATED = {
-    "setsuzei|spouse-child": {
+    "setsuzei|spouse-child": [{
       href: "pages/setsuzei-hub.html?tool=iryouhi",
       title: "医療費控除シミュレーター",
       desc: "家族の医療費が年間10万円を超えていれば、あわせて確認しておきたい控除です。"
-    },
-    "setsuzei|spouse": {
+    }],
+    "setsuzei|spouse": [{
       href: "pages/haiguusha-fuyou-koujo-guide.html",
       title: "配偶者控除・配偶者特別控除ガイド",
       desc: "配偶者の年収に応じて控除額がどう変わるかをまとめています。"
-    },
-    "kyouiku|spouse-child": {
+    }],
+    "kyouiku|spouse-child": [{
       href: "pages/gakushihoken-nisa-simulator.html",
       title: "学資保険 vs NISA比較シミュレーター",
       desc: "教育資金を学資保険とNISAのどちらで準備すべきか比較できます。"
-    },
-    "ideco|spouse-child": {
+    }],
+    "ideco|spouse-child": [{
       href: "pages/kyouiku-hub.html?tool=kyouiku",
       title: "教育資金シミュレーター",
       desc: "老後資金の準備とあわせて、お子さまの教育資金の目安も確認できます。"
-    },
-    "jutaku|spouse-child": {
+    }],
+    "jutaku|spouse-child": [{
       href: "pages/kyouiku-hub.html?tool=kyouiku",
       title: "教育資金シミュレーター",
       desc: "住宅ローンと教育資金、両方の負担感をあわせて確認しておくと安心です。"
-    },
-    "nenshu|spouse": {
+    }],
+    "nenshu|spouse": [{
       href: "pages/nenshu-hub.html?tool=kabe",
       title: "年収の壁シミュレーター",
       desc: "配偶者の働き方によって変わる「年収の壁」の目安を確認できます。"
-    },
-    "nenshu|spouse-child": {
+    }],
+    "nenshu|spouse-child": [{
       href: "pages/nenshu-hub.html?tool=kabe",
       title: "年収の壁シミュレーター",
       desc: "配偶者の働き方によって変わる「年収の壁」の目安を確認できます。"
-    },
-    "tsumitate|spouse-child": {
+    }],
+    "tsumitate|spouse-child": [{
       href: "pages/kyouiku-hub.html?tool=kyouiku",
       title: "教育資金シミュレーター",
       desc: "積立と並行して、お子さまの教育資金の目安もあわせて確認できます。"
-    },
-    "haitou|spouse-child": {
+    }],
+    "haitou|spouse-child": [{
       href: "pages/kyouiku-hub.html?tool=kyouiku",
       title: "教育資金シミュレーター",
       desc: "配当再投資と並行して、お子さまの教育資金の目安もあわせて確認できます。"
-    },
-    "fire|spouse-child": {
+    }],
+    "fire|spouse-child": [{
       href: "pages/kyouiku-hub.html?tool=kyouiku",
       title: "教育資金シミュレーター",
       desc: "FIRE後の生活費とあわせて、お子さまの教育資金の目安も確認しておくと安心です。"
-    },
-    "souzoku|spouse-child": {
-      href: "pages/hoken-koujo-simulator.html",
-      title: "生命保険料控除・地震保険料控除シミュレーター",
-      desc: "相続・贈与の対策とあわせて、毎年の保険料控除も見直しておくと安心です。"
-    },
-    "ideco|spouse": {
+    }],
+    // souzoku（相続・贈与）は、メインのおすすめ（相続税タブ）と同じ
+    // souzoku-hub.html内にある「生前贈与vs相続」タブ（暦年贈与・相続時
+    // 精算課税制度を含む）が全ての家族構成に共通して関連性が高いため、
+    // 家族の状況ごとの個別の関連ツールに加えて必ず2件目として提示する。
+    "souzoku|spouse-child": [
+      {
+        href: "pages/hoken-koujo-simulator.html",
+        title: "生命保険料控除・地震保険料控除シミュレーター",
+        desc: "相続・贈与の対策とあわせて、毎年の保険料控除も見直しておくと安心です。"
+      },
+      {
+        href: "pages/souzoku-hub.html?tool=zouyo",
+        title: "生前贈与 vs 相続 比較シミュレーター",
+        desc: "お子さまへの生前贈与（暦年贈与・相続時精算課税制度）と、何もせず相続する場合とで、家族全体の負担額の差を比較できます。"
+      }
+    ],
+    "souzoku|spouse": [
+      {
+        href: "pages/souzokuzei-guide.html",
+        title: "相続税とは？基礎控除・税率・配偶者の税額軽減の仕組み 完全ガイド",
+        desc: "配偶者には「1億6,000万円」までの相続税額軽減がありますが、二次相続で税負担が増えるケースもあるため、あわせて確認しておくと安心です。"
+      },
+      {
+        href: "pages/souzoku-hub.html?tool=zouyo",
+        title: "生前贈与 vs 相続 比較シミュレーター",
+        desc: "生前贈与（暦年贈与・相続時精算課税制度）と、何もせず相続する場合とで、家族全体の負担額の差を比較できます。"
+      }
+    ],
+    "souzoku|single": [{
+      href: "pages/souzoku-hub.html?tool=zouyo",
+      title: "生前贈与 vs 相続 比較シミュレーター",
+      desc: "生前贈与（暦年贈与・相続時精算課税制度）と、何もせず相続する場合とで、家族全体の負担額の差を比較できます。"
+    }],
+    "souzoku|skip": [{
+      href: "pages/souzoku-hub.html?tool=zouyo",
+      title: "生前贈与 vs 相続 比較シミュレーター",
+      desc: "生前贈与（暦年贈与・相続時精算課税制度）と、何もせず相続する場合とで、家族全体の負担額の差を比較できます。"
+    }],
+    "ideco|spouse": [{
       href: "pages/haiguusha-fuyou-koujo-guide.html",
       title: "配偶者控除・配偶者特別控除ガイド",
       desc: "配偶者の年収によってご自身が受けられる控除額が変わります。iDeCoの節税効果とあわせて確認しておくと安心です。"
-    },
-    "jutaku|spouse": {
+    }],
+    "jutaku|spouse": [{
       href: "pages/haiguusha-fuyou-koujo-guide.html",
       title: "配偶者控除・配偶者特別控除ガイド",
       desc: "住宅ローンは世帯収入で計画することが多く、配偶者の年収による控除額の変化もあわせて確認しておくと安心です。"
-    },
-    "tsumitate|spouse": {
+    }],
+    "tsumitate|spouse": [{
       href: "pages/nisa-hub.html?tool=waku",
       title: "新NISA 生涯投資枠 使いきりシミュレーター",
       desc: "配偶者もNISA口座を持てば、非課税枠を夫婦2人分（合計3,600万円）活用できます。ご自身の枠の使用ペースもあわせて確認できます。"
-    },
-    "haitou|spouse": {
+    }],
+    "haitou|spouse": [{
       href: "pages/nisa-hub.html?tool=waku",
       title: "新NISA 生涯投資枠 使いきりシミュレーター",
       desc: "配当再投資と並行して、配偶者もNISA口座を持てば非課税枠を夫婦2人分に広げられます。生涯投資枠の使用ペースもあわせて確認できます。"
-    },
-    "fire|spouse": {
+    }],
+    "fire|spouse": [{
       href: "pages/nisa-hub.html?tool=waku",
       title: "新NISA 生涯投資枠 使いきりシミュレーター",
       desc: "FIREを目指す資産形成では、配偶者もNISA口座を持つことで非課税枠を夫婦2人分に広げられます。生涯投資枠の使用ペースもあわせて確認できます。"
-    },
-    "souzoku|spouse": {
-      href: "pages/souzokuzei-guide.html",
-      title: "相続税とは？基礎控除・税率・配偶者の税額軽減の仕組み 完全ガイド",
-      desc: "配偶者には「1億6,000万円」までの相続税額軽減がありますが、二次相続で税負担が増えるケースもあるため、あわせて確認しておくと安心です。"
-    }
+    }]
   };
 
   var step1 = document.getElementById("diagnosis-step-1");
@@ -174,9 +204,7 @@
   var backBtn = document.getElementById("diagnosis-back");
   var restartBtn = document.getElementById("diagnosis-restart");
   var related = document.getElementById("diagnosis-related");
-  var relatedCard = document.getElementById("diagnosis-related-card");
-  var relatedTitle = document.getElementById("diagnosis-related-title");
-  var relatedDesc = document.getElementById("diagnosis-related-desc");
+  var relatedList = document.getElementById("diagnosis-related-list");
 
   var selectedStatus = null;
 
@@ -225,12 +253,22 @@
       resultNote.textContent = "";
     }
 
-    if (related && relatedCard && relatedTitle && relatedDesc) {
-      var relatedInfo = selectedStatus ? RELATED[concernKey + "|" + selectedStatus] : null;
-      if (relatedInfo) {
-        relatedCard.href = relatedInfo.href;
-        relatedTitle.textContent = relatedInfo.title;
-        relatedDesc.textContent = relatedInfo.desc;
+    if (related && relatedList) {
+      var relatedItems = selectedStatus ? RELATED[concernKey + "|" + selectedStatus] : null;
+      relatedList.innerHTML = "";
+      if (relatedItems && relatedItems.length) {
+        relatedItems.forEach(function (item) {
+          var card = document.createElement("a");
+          card.className = "tool-card diagnosis-related-card";
+          card.href = item.href;
+          var h3 = document.createElement("h3");
+          h3.textContent = item.title;
+          var p = document.createElement("p");
+          p.textContent = item.desc;
+          card.appendChild(h3);
+          card.appendChild(p);
+          relatedList.appendChild(card);
+        });
         related.hidden = false;
       } else {
         related.hidden = true;

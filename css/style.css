@@ -522,6 +522,11 @@ a { color: var(--color-primary); }
   font-weight: 700;
   color: var(--color-text-muted);
 }
+.diagnosis-related-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .diagnosis-related-card {
   display: block;
   max-width: 420px;
