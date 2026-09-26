@@ -1,8 +1,16 @@
 (function () {
   "use strict";
 
-  // 基礎控除は2025年分以降の58万円（合計所得金額2,350万円以下の場合）
-  var INCOME_BASIC_DEDUCTION = 580000;
+  // 所得税の基礎控除は合計所得金額に応じた令和8年分・令和9年分の逓減後の金額（国税庁タックスアンサーNo.1199）
+  function incomeBasicDeduction(totalIncome) {
+    if (totalIncome <= 4890000) return 1040000;
+    if (totalIncome <= 6550000) return 670000;
+    if (totalIncome <= 23500000) return 620000;
+    if (totalIncome <= 24000000) return 480000;
+    if (totalIncome <= 24500000) return 320000;
+    if (totalIncome <= 25000000) return 160000;
+    return 0;
+  }
   var RESIDENT_BASIC_DEDUCTION = 430000;
   var RESIDENT_TAX_RATE = 0.10;
   var RECONSTRUCTION_TAX_RATE = 0.021;
@@ -168,7 +176,7 @@
     var pensionPrincipal = principal - lumpAmount;
     var payment = annualAnnuityPayment(pensionPrincipal, annuityRate, payoutYears);
     var pensionTaxable = pensionTaxableIncome(payment, isOver65);
-    var pensionIncomeTaxBase = Math.max(0, pensionTaxable - INCOME_BASIC_DEDUCTION);
+    var pensionIncomeTaxBase = Math.max(0, pensionTaxable - incomeBasicDeduction(pensionTaxable));
     var pensionResidentTaxBase = Math.max(0, pensionTaxable - RESIDENT_BASIC_DEDUCTION);
     var pensionTaxPerYear =
       incomeTaxWithReconstruction(pensionIncomeTaxBase) + pensionResidentTaxBase * RESIDENT_TAX_RATE;
