@@ -1043,6 +1043,53 @@ a { color: var(--color-primary); }
     white-space: nowrap;
   }
 }
+/* スマホ幅でタブが横スクロールになるハブページのうち、タブ数が多い
+   3ページ（新NISA・教育資金・年収）に限り、よく使われるタブへの
+   ショートカットを.hub-tabsの直前に表示する（183回目の使いやすさ改善）。
+   横スクロールしなくても代表的な3タブへ1タップで飛べるようにし、
+   本文（計算フォーム）到達までのスクロール量をさらに減らす狙い。
+   デスクトップ幅（761px以上）は.hub-tabsが複数行で全タブが見えて
+   いるため非表示のままにする。 */
+.hub-quick-links {
+  display: none;
+}
+@media (max-width: 760px) {
+  .hub-quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0 0;
+  }
+  .hub-quick-links-label {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-right: 2px;
+  }
+  .hub-quick-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: #e8f4ef;
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .hub-quick-link:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .hub-quick-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
 .tab-panel[hidden] {
   display: none;
 }
