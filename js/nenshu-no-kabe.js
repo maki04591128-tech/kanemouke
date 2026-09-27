@@ -38,10 +38,14 @@
     { limit: Infinity, calc: function () { return 1950000; } },
   ];
 
-  // 所得税の基礎控除。令和8年度税制改正により、令和8・9年分は合計所得金額132万円以下の場合104万円に
-  // 時限的に引き上げられている（令和10年分以後は99万円に戻る予定）。本ツールが対象とする年収帯
-  // （パート・アルバイト収入で「壁」を意識する範囲）はこのケースに該当することを想定し、簡易的に一律で適用する。
-  var INCOME_BASIC_DEDUCTION = 1040000;
+  // 所得税の基礎控除額。令和8年度税制改正により、令和8・9年分は年収に応じて段階的に変わる
+  // （nenshu-tedori.js等の他ツールと同じ式。206万円超の年収帯にも対応するため一律104万円としない）。
+  function incomeBasicDeduction(grossIncome) {
+    if (grossIncome <= 2060000) return 1040000;
+    if (grossIncome <= 6655556) return 620000;
+    if (grossIncome <= 8500000) return 670000;
+    return 620000; // 合計所得金額2,350万円超（収入2,545万円超）の逓減は簡易化のため未対応
+  }
   // 住民税の基礎控除（今回の改正でも変更なし）
   var RESIDENT_BASIC_DEDUCTION = 430000;
 
@@ -110,7 +114,7 @@
   // 年収から所得税・住民税・社会保険料（概算）を差し引いた手取り額を試算
   function takeHomeOf(income, insuranceApplies) {
     var salaryIncomeForIncomeTax = Math.max(0, income - salaryDeductionIncomeTax(income));
-    var taxableIncomeTax = Math.max(0, salaryIncomeForIncomeTax - INCOME_BASIC_DEDUCTION);
+    var taxableIncomeTax = Math.max(0, salaryIncomeForIncomeTax - incomeBasicDeduction(income));
     var incomeTax = taxByBracket(taxableIncomeTax) * (1 + RECONSTRUCTION_TAX_RATE);
 
     var salaryIncomeForResidentTax = Math.max(0, income - salaryDeductionResidentTax(income));

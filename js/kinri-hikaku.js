@@ -150,7 +150,7 @@
 
     var rows = variable.reviewRows.map(function (r, idx) {
       var nextRow = variable.reviewRows[idx + 1];
-      var label = idx === 0 ? "当初（1〜5年目）" : (r.year + 1) + "〜" + (nextRow ? nextRow.year : loanYears) + "年目";
+      var label = idx === 0 ? "当初（1〜" + Math.min(5, loanYears) + "年目）" : (r.year + 1) + "〜" + (nextRow ? nextRow.year : loanYears) + "年目";
       return (
         "<tr><td>" + label + "</td><td>" + r.rate.toFixed(2) + " %</td><td>" + yen(r.payment) +
         "</td><td>" + manYen(r.balance) + "</td></tr>"

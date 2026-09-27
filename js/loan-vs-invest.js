@@ -54,7 +54,7 @@
   function simulate(balance, annualRatePct, payment, totalMonths) {
     var r = annualRatePct / 100 / 12;
     var cumInterest = 0;
-    var payoffMonth = null;
+    var payoffMonth = balance <= 0 ? 0 : null;
     var yearly = [];
 
     for (var m = 1; m <= totalMonths; m++) {
