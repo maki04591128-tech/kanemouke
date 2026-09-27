@@ -2,6 +2,7 @@
   "use strict";
 
   var RESIDENT_TAX_RATE = 0.10;
+  var MONTHLY_CONTRIBUTION_MAX = 68000; // iDeCoの掛金上限は職業等で異なるが、最も高い上限（68,000円）を超える入力は制度上あり得ないため一律で防ぐ
 
   var els = {
     monthly: document.getElementById("setsuzei-monthly"),
@@ -58,7 +59,8 @@
   }
 
   function render() {
-    var monthly = Math.max(0, Number(els.monthly.value) || 0);
+    var monthly = Math.min(MONTHLY_CONTRIBUTION_MAX, Math.max(0, Number(els.monthly.value) || 0));
+    els.monthly.value = monthly;
     var incomeTaxRate = Number(els.taxRate.value) / 100;
     var rate = Number(els.rate.value);
     var years = Number(els.years.value);

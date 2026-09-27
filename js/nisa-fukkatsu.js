@@ -75,10 +75,13 @@
     var growthRemainBefore = GROWTH_LIFETIME_CAP - growthUsed;
     var growthRemainAfter = GROWTH_LIFETIME_CAP - newGrowthUsed;
 
+    // つみたて投資枠・成長投資枠は生涯投資枠（1,800万円）を共有するため、両方を同時に使う場合は
+    // 合計が lifetimeRemainAfter を超えてはならない。ここではつみたて枠を先に確保し、
+    // 成長投資枠にはその残りだけを割り当てることで、合計が生涯枠を超えないようにしている。
     var nextYearTsumitate = Math.max(0, Math.min(TSUMITATE_YEARLY_CAP, lifetimeRemainAfter));
     var nextYearGrowth = Math.max(
       0,
-      Math.min(GROWTH_YEARLY_CAP, growthRemainAfter, lifetimeRemainAfter)
+      Math.min(GROWTH_YEARLY_CAP, growthRemainAfter, lifetimeRemainAfter - nextYearTsumitate)
     );
 
     var unrealizedGain = Math.max(0, saleMarketValue - saleCostBasis);
@@ -87,8 +90,9 @@
       manYen(saleCostBasis) + (unrealizedGain > 0 ? "<small>（時価ではなく取得価額分）</small>" : "");
     els.lifetimeRemainAfter.textContent = manYen(lifetimeRemainAfter) + " / 1,800万円";
     els.growthRemainAfter.textContent = manYen(growthRemainAfter) + " / 1,200万円";
-    els.nextYearInvestable.textContent =
-      "つみたて " + manYen(nextYearTsumitate) + " ・ 成長 " + manYen(nextYearGrowth);
+    els.nextYearInvestable.innerHTML =
+      "つみたて " + manYen(nextYearTsumitate) + " ・ 成長 " + manYen(nextYearGrowth) +
+      "<small>（両方を使う場合の合計。生涯投資枠の残りを共有するため合計が残り枠を超えることはありません）</small>";
 
     if (saleCostBasis <= 0) {
       els.verdict.textContent = "取得価額を入力すると、復活する枠の金額がわかります";
