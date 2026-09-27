@@ -363,16 +363,38 @@
         desc: "住宅ローン控除とあわせて、変動金利が上昇した場合に返済額・未払利息がどう変わるかも確認しておくと安心です。"
       }
     ],
-    "jutaku|single": [{
-      href: "pages/jutaku-hub.html?tool=kinri",
-      title: "変動vs固定金利 金利上昇シミュレーター",
-      desc: "住宅ローン控除とあわせて、変動金利が上昇した場合に返済額・未払利息がどう変わるかも確認しておくと安心です。"
-    }],
-    "jutaku|skip": [{
-      href: "pages/jutaku-hub.html?tool=kinri",
-      title: "変動vs固定金利 金利上昇シミュレーター",
-      desc: "住宅ローン控除とあわせて、変動金利が上昇した場合に返済額・未払利息がどう変わるかも確認しておくと安心です。"
-    }],
+    // jutaku|single・jutaku|skipは、spouse・spouse-childと違い既存の関連
+    // ツールが「変動vs固定金利」1件のみだった（2件枠に空きがあった）ため、
+    // 「賃貸vs購入」タブ（住宅ローンハブの5本目のタブ）を1件目として追加する。
+    // 「住宅ローンで迷っている」という関心事は、既に購入を決めた前提の
+    // 住宅ローン控除・金利タイプの検討だけでなく、そもそも賃貸のままでいる
+    // か購入するかで迷っている段階のユーザーも含むと考えられるため。
+    // spouse・spouse-childは既に2件（情報過多を避ける上限）を提示済みのため
+    // 今回は追加しない。
+    "jutaku|single": [
+      {
+        href: "pages/jutaku-hub.html?tool=chintai",
+        title: "賃貸vs購入シミュレーター",
+        desc: "そもそも賃貸のままか購入かで迷っている場合は、総支出で比較できます。"
+      },
+      {
+        href: "pages/jutaku-hub.html?tool=kinri",
+        title: "変動vs固定金利 金利上昇シミュレーター",
+        desc: "住宅ローン控除とあわせて、変動金利が上昇した場合に返済額・未払利息がどう変わるかも確認しておくと安心です。"
+      }
+    ],
+    "jutaku|skip": [
+      {
+        href: "pages/jutaku-hub.html?tool=chintai",
+        title: "賃貸vs購入シミュレーター",
+        desc: "そもそも賃貸のままか購入かで迷っている場合は、総支出で比較できます。"
+      },
+      {
+        href: "pages/jutaku-hub.html?tool=kinri",
+        title: "変動vs固定金利 金利上昇シミュレーター",
+        desc: "住宅ローン控除とあわせて、変動金利が上昇した場合に返済額・未払利息がどう変わるかも確認しておくと安心です。"
+      }
+    ],
     "tsumitate|spouse": [
       {
         href: "pages/nisa-hub.html?tool=waku",
