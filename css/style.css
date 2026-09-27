@@ -969,6 +969,14 @@ a { color: var(--color-primary); }
   align-items: start;
   margin: 24px 0 40px;
 }
+/* グリッドアイテムの初期値min-width:autoのままだと、3列比較テーブルなど
+   幅の広い子要素があるとき、.table-wrapのoverflow-x:autoが効かずグリッド
+   自体が横に広がり横スクロールが発生してしまう（学資保険vsNISA比較タブ等
+   で確認）。min-width:0で明示的に上書きし、内部の.table-wrapで正しく
+   横スクロールに収まるようにする。 */
+.calc-layout > * {
+  min-width: 0;
+}
 @media (max-width: 760px) {
   .calc-layout { grid-template-columns: 1fr; }
 }
