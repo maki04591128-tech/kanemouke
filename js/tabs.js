@@ -95,6 +95,24 @@
     });
   });
 
+  // よく使われるタブへのショートカット（.hub-quick-link[data-tool]）。
+  // タブ数が多いハブページの一部にのみ存在するマークアップだが、
+  // タブ切り替えロジックはここに共通化しておくことで、今後別のハブ
+  // ページに同じマークアップを追加するだけで自動的に動くようにする。
+  // クリックでタブを切り替えた後、.hub-tabs自体を読み飛ばして計算
+  // フォーム（対応するタブパネル）まで直接スクロールする。
+  var quickLinks = Array.prototype.slice.call(document.querySelectorAll(".hub-quick-link"));
+  quickLinks.forEach(function (link) {
+    link.addEventListener("click", function () {
+      var slug = link.dataset.tool;
+      if (!activate(slug)) return;
+      var panel = panelFor(slug);
+      if (panel && typeof panel.scrollIntoView === "function") {
+        panel.scrollIntoView({ block: "start" });
+      }
+    });
+  });
+
   var initialSlug = null;
   var fromUrl = new URLSearchParams(window.location.search).get("tool");
   if (fromUrl && panelFor(fromUrl)) {
