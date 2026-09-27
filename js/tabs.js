@@ -31,6 +31,16 @@
     });
     if (!found) return false;
 
+    var activeTab = tabs.filter(function (t) { return t.dataset.tool === slug; })[0];
+    if (activeTab && typeof activeTab.scrollIntoView === "function") {
+      // スマホ幅ではタブ列が横スクロールになる（css/style.cssの
+      // @media (max-width: 760px) 内の.hub-tabs参照）ため、ディープ
+      // リンク・キーボード操作・クリックのいずれで選択された場合も
+      // 選択中タブ自体が横方向にスクロール範囲外へ隠れないようにする。
+      // block: "nearest" によりページ自体の縦スクロール位置は変えない。
+      activeTab.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }
+
     panels.forEach(function (panel) {
       if (panel.dataset.tool === slug) {
         panel.hidden = false;

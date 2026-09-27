@@ -1017,6 +1017,32 @@ a { color: var(--color-primary); }
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+/* スマホ幅では11個近いタブが複数行に折り返り、本題の計算フォームに
+   到達するまでのスクロール量が増えてしまう（101回目以前の各ハブページ
+   拡張で発生）。横1列のスクロール可能なチップ列に変える定番パターンで
+   本文までの距離を縮める。スクロールバー自体は見た目上非表示にしつつ、
+   スクロール操作自体（キーボード操作時のフォーカス移動含む）は維持する。 */
+@media (max-width: 760px) {
+  .hub-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 14px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .hub-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .hub-tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
 .tab-panel[hidden] {
   display: none;
 }
