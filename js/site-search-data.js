@@ -269,6 +269,13 @@ window.SITE_SEARCH_DATA = [
     "type": "tool"
   },
   {
+    "title": "外国税額控除",
+    "desc": "米国株ETFなど外国株の配当金は、現地での源泉徴収と日本国内での税金が二重にかかります。給与年収・外国株の年間配当額・現地の源泉徴収税率を入力すると、確定申告しない場合と、確定申告して外国税額控除を使った場合の手取り額を比較できます。",
+    "href": "pages/haitou-hub.html?tool=gaikoku",
+    "category": "配当・高配当株",
+    "type": "tool"
+  },
+  {
     "title": "iDeCo節税",
     "desc": "毎月の掛金と課税所得（所得税率）から、掛金が全額所得控除になることによる節税額と、将来の資産評価額をまとめて試算します。",
     "href": "pages/ideco-hub.html?tool=setsuzei",
