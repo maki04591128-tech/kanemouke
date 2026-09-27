@@ -74,7 +74,7 @@ window.SITE_SEARCH_DATA = [
   },
   {
     "title": "教育資金・保険シミュレーター まとめ",
-    "desc": "教育資金・学資保険vsNISA・保険料控除・児童手当・高校無償化の5ツールをタブ切り替えで使えます。",
+    "desc": "教育資金・学資保険vsNISA・保険料控除・児童手当・高校無償化・育児休業給付金・生命保険の必要保障額・奨学金返還の8ツールをタブ切り替えで使えます。",
     "href": "pages/kyouiku-hub.html?tool=kyouiku",
     "category": "教育資金・保険",
     "type": "hub"
@@ -384,6 +384,13 @@ window.SITE_SEARCH_DATA = [
     "title": "生命保険の必要保障額",
     "desc": "現在の生活費・お子さまの年齢・教育費プラン・配偶者の年齢や収入・預貯金・遺族年金の見込みから、もしものときに家族に必要な生命保険の金額の目安を試算します。年齢ごとに保障額が減っていく推移もグラフで確認できます。",
     "href": "pages/kyouiku-hub.html?tool=hoshougaku",
+    "category": "教育資金・保険",
+    "type": "tool"
+  },
+  {
+    "title": "奨学金返還",
+    "desc": "日本学生支援機構（JASSO）奨学金の「定額返還方式」で、第一種（無利子）・第二種（有利子）それぞれの貸与総額・利率・返還期間から、月々の返還額・総返還額・利息総額の目安を試算します。予想年収を入力すると、返還負担率の目安も確認できます。",
+    "href": "pages/kyouiku-hub.html?tool=shogaku",
     "category": "教育資金・保険",
     "type": "tool"
   },
