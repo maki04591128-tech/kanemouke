@@ -138,6 +138,26 @@
         desc: "お子さまの年齢区分ごとの児童手当の支給額の目安を確認できます。"
       }
     ],
+    // kyouiku（教育資金）は「配偶者・子どもあり」の場合のみ関連ツールを
+    // 出していたが、spouse/single/skipでも「教育資金が気になる」を選んだ
+    // 時点で備えたい意図は共通している。ただし児童手当は現に子がいない
+    // 場合は的外れになるため、家族構成を問わない学資保険vsNISA比較のみ
+    // 一貫して提示する。
+    "kyouiku|spouse": [{
+      href: "pages/gakushihoken-nisa-simulator.html",
+      title: "学資保険 vs NISA比較シミュレーター",
+      desc: "教育資金を学資保険とNISAのどちらで準備すべきか比較できます。"
+    }],
+    "kyouiku|single": [{
+      href: "pages/gakushihoken-nisa-simulator.html",
+      title: "学資保険 vs NISA比較シミュレーター",
+      desc: "教育資金を学資保険とNISAのどちらで準備すべきか比較できます。"
+    }],
+    "kyouiku|skip": [{
+      href: "pages/gakushihoken-nisa-simulator.html",
+      title: "学資保険 vs NISA比較シミュレーター",
+      desc: "教育資金を学資保険とNISAのどちらで準備すべきか比較できます。"
+    }],
     // ideco（iDeCo）は、メインのおすすめ（iDeCo節税タブ）と同じ
     // ideco-hub.html内にある「iDeCovsNISA」タブ（毎月の投資額を
     // iDeCo優先・NISA優先・半分ずつで比較）が、iDeCoを始めようとする
