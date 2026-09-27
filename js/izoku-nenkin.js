@@ -8,12 +8,13 @@
   // 遺族基礎年金：831,700円（令和7年度満額、老齢基礎年金と同額）＋子の加算
   // （1人目・2人目 各239,300円、3人目以降 各79,800円）。対象となる子が
   // いる間のみ支給される。
-  // 遺族厚生年金：厚生年金の加入期間が300月（25年）未満で亡くなった場合に
-  // 適用される「300月みなし」の短期要件で、老齢厚生年金の報酬比例部分相当額
-  // （平均年収の月額換算×5.481/1000×加入月数）の3/4を試算する。老齢厚生年金
-  // の受給資格期間（25年以上）を満たした人が死亡した「長期要件」の場合は
-  // 実際の加入月数で計算されるため、本ツールの試算より少なくなる場合がある
-  // （本ツールは300月未満の短期要件のみを対象とする簡易試算）。
+  // 遺族厚生年金：老齢厚生年金の報酬比例部分相当額（平均年収の月額換算×
+  // 5.481/1000×加入月数）の3/4を試算する。加入月数の扱いは短期要件・長期
+  // 要件で異なり、短期要件（厚生年金の被保険者である間等に死亡）は300月
+  // （25年）未満でも300月とみなす一方、長期要件（老齢厚生年金の受給資格
+  // 期間25年以上を満たした人が死亡）は実際の加入月数をそのまま使う。どちら
+  // に該当するかの判定（25年の受給資格期間には国民年金の期間等も通算）は
+  // 行わず、ユーザーが選択する簡易試算とする。
   // 中高齢寡婦加算：厚生年金に加入していた夫が亡くなった際、子の加算の対象
   // となる子がいない40歳以上65歳未満の妻の遺族厚生年金に加算される
   // 623,800円（令和7年度）。夫が受け取る場合や、子のない30歳未満の妻の
@@ -22,6 +23,7 @@
   var els = {
     kouseiYears: document.getElementById("izoku-kouseiYears"),
     kouseiYearsOut: document.getElementById("izoku-kouseiYearsOut"),
+    requirementType: document.getElementById("izoku-requirementType"),
     avgIncome: document.getElementById("izoku-avgIncome"),
     childCount: document.getElementById("izoku-childCount"),
     spouseGender: document.getElementById("izoku-spouseGender"),
@@ -55,7 +57,7 @@
     return Math.max(0, Number(n) || 0);
   }
 
-  function calc(kouseiYears, avgIncomeYen, childCount, spouseGender, spouseAge) {
+  function calc(kouseiYears, avgIncomeYen, childCount, spouseGender, spouseAge, requirementType) {
     var kouseiMonths = kouseiYears * 12;
 
     var childAddition = 0;
@@ -67,7 +69,8 @@
 
     var kousei = 0;
     if (kouseiMonths > 0) {
-      var guaranteedMonths = Math.max(kouseiMonths, SHORT_TERM_MIN_MONTHS);
+      var guaranteedMonths =
+        requirementType === "long" ? kouseiMonths : Math.max(kouseiMonths, SHORT_TERM_MIN_MONTHS);
       var avgMonthlyRemuneration = avgIncomeYen / 12;
       kousei = avgMonthlyRemuneration * KOSEI_RATE * guaranteedMonths * IZOKU_KOSEI_RATIO;
     }
@@ -97,10 +100,11 @@
     var childCount = Math.min(5, clampNonNegative(els.childCount ? els.childCount.value : 0));
     var spouseGender = els.spouseGender ? els.spouseGender.value : "wife";
     var spouseAge = clampNonNegative(els.spouseAge ? els.spouseAge.value : 0);
+    var requirementType = els.requirementType && els.requirementType.value === "long" ? "long" : "short";
 
     if (els.kouseiYearsOut) els.kouseiYearsOut.textContent = kouseiYears + " 年";
 
-    var r = calc(kouseiYears, avgIncome, childCount, spouseGender, spouseAge);
+    var r = calc(kouseiYears, avgIncome, childCount, spouseGender, spouseAge, requirementType);
     var monthly = r.total / 12;
 
     if (els.yearly) els.yearly.textContent = yen(r.total) + " /年";
@@ -132,7 +136,7 @@
     els.breakdownBody.innerHTML =
       "<tr><td>遺族基礎年金（本人分）</td><td>" + yen(r.kiso > 0 ? KISO_FULL_YEARLY : 0) + " /年</td></tr>" +
       "<tr><td>子の加算（" + childCount + "人）</td><td>" + yen(r.childAddition) + " /年</td></tr>" +
-      "<tr><td>遺族厚生年金（短期要件・300月みなし）</td><td>" + yen(r.kousei) + " /年</td></tr>" +
+      "<tr><td>遺族厚生年金（" + (requirementType === "long" ? "長期要件・実加入月数" : "短期要件・300月みなし") + "）</td><td>" + yen(r.kousei) + " /年</td></tr>" +
       "<tr><td>中高齢寡婦加算</td><td>" + yen(r.chukourei) + " /年</td></tr>" +
       "<tr><td><strong>合計（年額）</strong></td><td><strong>" + yen(r.total) + "</strong></td></tr>" +
       "<tr><td><strong>合計（月額）</strong></td><td><strong>" + yen(monthly) + "</strong></td></tr>";
@@ -187,6 +191,7 @@
     el.addEventListener("change", render);
   });
   if (els.spouseGender) els.spouseGender.addEventListener("change", render);
+  if (els.requirementType) els.requirementType.addEventListener("change", render);
 
   render();
 })();
