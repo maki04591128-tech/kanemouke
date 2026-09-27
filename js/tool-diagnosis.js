@@ -77,21 +77,67 @@
   // 各キーの値は配列（1〜2件）。表示件数を増やす場合も、情報過多になら
   // ないよう1件ずつ根拠を確認してから追加すること。
   var RELATED = {
-    "setsuzei|spouse-child": [{
-      href: "pages/setsuzei-hub.html?tool=iryouhi",
-      title: "医療費控除シミュレーター",
-      desc: "家族の医療費が年間10万円を超えていれば、あわせて確認しておきたい控除です。"
+    // setsuzei（節税・控除）は、メインのおすすめ（ふるさと納税タブ）と同じ
+    // setsuzei-hub.html内にある「確定申告要否チェック」タブ（ふるさと納税の
+    // ワンストップ特例未使用・医療費控除・副業所得など、確定申告が必要に
+    // なる複数の理由をまとめて判定する）が、控除・節税を気にする全ての
+    // 家族構成に共通して関連性が高いため、家族の状況ごとの個別の関連ツール
+    // に加えて必ず1件（既存の関連ツールがある場合は2件目として）提示する。
+    // ふるさと納税タブ・医療費控除タブのFAQ自身も「確定申告要否チェック」
+    // タブへ名指しで誘導しており、両タブは補完しあう関係にある。
+    "setsuzei|spouse-child": [
+      {
+        href: "pages/setsuzei-hub.html?tool=iryouhi",
+        title: "医療費控除シミュレーター",
+        desc: "家族の医療費が年間10万円を超えていれば、あわせて確認しておきたい控除です。"
+      },
+      {
+        href: "pages/setsuzei-hub.html?tool=kakutei",
+        title: "確定申告要否チェック",
+        desc: "ふるさと納税や医療費控除など、確定申告が必要かどうかをまとめて確認できます。"
+      }
+    ],
+    "setsuzei|spouse": [
+      {
+        href: "pages/haiguusha-fuyou-koujo-guide.html",
+        title: "配偶者控除・配偶者特別控除ガイド",
+        desc: "配偶者の年収に応じて控除額がどう変わるかをまとめています。"
+      },
+      {
+        href: "pages/setsuzei-hub.html?tool=kakutei",
+        title: "確定申告要否チェック",
+        desc: "ふるさと納税や医療費控除など、確定申告が必要かどうかをまとめて確認できます。"
+      }
+    ],
+    "setsuzei|single": [{
+      href: "pages/setsuzei-hub.html?tool=kakutei",
+      title: "確定申告要否チェック",
+      desc: "ふるさと納税や医療費控除など、確定申告が必要かどうかをまとめて確認できます。"
     }],
-    "setsuzei|spouse": [{
-      href: "pages/haiguusha-fuyou-koujo-guide.html",
-      title: "配偶者控除・配偶者特別控除ガイド",
-      desc: "配偶者の年収に応じて控除額がどう変わるかをまとめています。"
+    "setsuzei|skip": [{
+      href: "pages/setsuzei-hub.html?tool=kakutei",
+      title: "確定申告要否チェック",
+      desc: "ふるさと納税や医療費控除など、確定申告が必要かどうかをまとめて確認できます。"
     }],
-    "kyouiku|spouse-child": [{
-      href: "pages/gakushihoken-nisa-simulator.html",
-      title: "学資保険 vs NISA比較シミュレーター",
-      desc: "教育資金を学資保険とNISAのどちらで準備すべきか比較できます。"
-    }],
+    // kyouiku（教育資金）は、メインのおすすめ（教育資金タブ）と同じ
+    // kyouiku-hub.html内にある「児童手当」タブ（教育資金タブのFAQ自身が
+    // 「児童手当も教育資金の準備に活用できますか？」という設問でこのタブへ
+    // 誘導しており、児童手当タブのFAQも逆に教育資金タブを名指しで参照して
+    // いる）が、進学プランを問わずお子さまがいる家庭に共通して関連性が
+    // 高いため、既存の関連ツール（学資保険vsNISA比較）に加えて2件目として
+    // 提示する。
+    "kyouiku|spouse-child": [
+      {
+        href: "pages/gakushihoken-nisa-simulator.html",
+        title: "学資保険 vs NISA比較シミュレーター",
+        desc: "教育資金を学資保険とNISAのどちらで準備すべきか比較できます。"
+      },
+      {
+        href: "pages/kyouiku-hub.html?tool=jidouteate",
+        title: "児童手当シミュレーター",
+        desc: "お子さまの年齢区分ごとの児童手当の支給額の目安を確認できます。"
+      }
+    ],
     // ideco（iDeCo）は、メインのおすすめ（iDeCo節税タブ）と同じ
     // ideco-hub.html内にある「iDeCovsNISA」タブ（毎月の投資額を
     // iDeCo優先・NISA優先・半分ずつで比較）が、iDeCoを始めようとする
