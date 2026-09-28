@@ -122,6 +122,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "育児休業給付金とは？完全ガイド",
+    "desc": "賃金日額の計算方法、180日を境に67%から50%へ変わる支給率、出生後休業支援給付金の上乗せ、非課税・社会保険料免除の扱い、出産手当金との関係まで解説します。",
+    "href": "pages/ikuji-kyugyo-guide.html",
+    "category": "教育資金・保険",
+    "type": "guide"
+  },
+  {
     "title": "節税・控除シミュレーター まとめ",
     "desc": "ふるさと納税控除上限額・医療費控除・副業20万円ルール・確定申告要否チェックの4ツールをタブ切り替えで使えます。",
     "href": "pages/setsuzei-hub.html?tool=furusato",
