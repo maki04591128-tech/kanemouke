@@ -80,6 +80,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "賃貸vs購入どっちが得？｜「正味支出」で比較する住まい選びの考え方 完全ガイド",
+    "desc": "家賃とローン返済額の単純比較では誤る理由、売却時の資産価値を差し引いた「正味支出」の考え方、条件別の試算例2件、結論を左右する要因を解説します。",
+    "href": "pages/chintai-kounyu-guide.html",
+    "category": "住宅ローン",
+    "type": "guide"
+  },
+  {
     "title": "教育資金・保険シミュレーター まとめ",
     "desc": "教育資金・学資保険vsNISA・保険料控除・児童手当・高校無償化・出産手当金・育児休業給付金・生命保険の必要保障額・奨学金返還の9ツールをタブ切り替えで使えます。",
     "href": "pages/kyouiku-hub.html?tool=kyouiku",
