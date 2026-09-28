@@ -325,6 +325,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "基本手当（失業給付）はいくらもらえる？計算方法・所定給付日数の早見表・給付制限 完全ガイド",
+    "desc": "賃金日額のスライド式計算式・年齢区分別の上限額早見表・離職理由ごとの所定給付日数・給付制限期間のルールまで解説します。",
+    "href": "pages/nenshu-kihon-guide.html",
+    "category": "年収・手取り・退職金",
+    "type": "guide"
+  },
+  {
     "title": "FIRE達成",
     "desc": "現在の資産・毎月の積立額・想定利回りから、いわゆる「4%ルール」など任意の取り崩し率で計算したFIRE（Financial Independence, Retire Early＝経済的自立と早期リタイア）に必要な資産額と、そこに到達するまでの年数・年齢を試算します。達成後に生活費を取り崩しながら運用を続けた場合、資産が何年もつかもあわせて確認できます。",
     "href": "pages/fire-hub.html?tool=fire",
