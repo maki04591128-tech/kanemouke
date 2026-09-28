@@ -115,6 +115,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "出産手当金とは？完全ガイド",
+    "desc": "支給額の計算式、産前・産後の対象日数、給与が一部支給される場合の差額調整、非課税・社会保険料免除の扱い、育児休業給付金との違いまで解説します。",
+    "href": "pages/shussan-teate-guide.html",
+    "category": "教育資金・保険",
+    "type": "guide"
+  },
+  {
     "title": "節税・控除シミュレーター まとめ",
     "desc": "ふるさと納税控除上限額・医療費控除・副業20万円ルール・確定申告要否チェックの4ツールをタブ切り替えで使えます。",
     "href": "pages/setsuzei-hub.html?tool=furusato",
