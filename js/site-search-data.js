@@ -311,6 +311,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "額面年収と手取りの違いとは？手取り額の計算方法・年収別早見表・増やし方 完全ガイド",
+    "desc": "社会保険料・所得税・住民税がどう天引きされるかの計算方法を、年収別の手取り早見表・手取り率が下がる仕組み・手取りを増やす方法とあわせて解説します。",
+    "href": "pages/nenshu-tedori-guide.html",
+    "category": "年収・手取り・退職金",
+    "type": "guide"
+  },
+  {
     "title": "FIRE達成",
     "desc": "現在の資産・毎月の積立額・想定利回りから、いわゆる「4%ルール」など任意の取り崩し率で計算したFIRE（Financial Independence, Retire Early＝経済的自立と早期リタイア）に必要な資産額と、そこに到達するまでの年数・年齢を試算します。達成後に生活費を取り崩しながら運用を続けた場合、資産が何年もつかもあわせて確認できます。",
     "href": "pages/fire-hub.html?tool=fire",
