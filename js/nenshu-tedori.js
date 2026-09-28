@@ -46,8 +46,7 @@
   // 収入金額）に応じて段階的に引き上げられている（国税庁「令和8年度の税制改正による源泉所得税関係の
   // 改正のあらまし」より）。住民税の基礎控除（43万円）は今回の改正の対象外で変更なし。
   function incomeBasicDeduction(grossIncome) {
-    if (grossIncome <= 2060000) return 1040000;
-    if (grossIncome <= 6655556) return 620000;
+    if (grossIncome <= 6655556) return 1040000;
     if (grossIncome <= 8500000) return 670000;
     return 620000; // 合計所得金額2,350万円超（収入2,545万円超）の逓減は簡易化のため未対応
   }

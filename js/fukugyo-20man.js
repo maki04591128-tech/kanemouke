@@ -44,8 +44,7 @@
   // 所得税の基礎控除額。令和8年度税制改正により、令和8・9年分は合計所得金額（給与収入のみの場合の
   // 収入金額）に応じて段階的に引き上げられている。住民税の基礎控除（43万円）は今回の改正の対象外で変更なし。
   function incomeBasicDeduction(grossIncome) {
-    if (grossIncome <= 2060000) return 1040000;
-    if (grossIncome <= 6655556) return 620000;
+    if (grossIncome <= 6655556) return 1040000;
     if (grossIncome <= 8500000) return 670000;
     return 620000; // 合計所得金額2,350万円超（収入2,545万円超）の逓減は簡易化のため未対応
   }
