@@ -318,6 +318,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "賞与（ボーナス）の手取り計算方法とは？税率の決まり方・早見表・甲欄と乙欄の違い 完全ガイド",
+    "desc": "賞与の税率が前月給与で決まる仕組み・前月給与別の税率早見表・甲欄と乙欄の違い・住民税が引かれない理由まで解説します。",
+    "href": "pages/nenshu-shoyo-guide.html",
+    "category": "年収・手取り・退職金",
+    "type": "guide"
+  },
+  {
     "title": "FIRE達成",
     "desc": "現在の資産・毎月の積立額・想定利回りから、いわゆる「4%ルール」など任意の取り崩し率で計算したFIRE（Financial Independence, Retire Early＝経済的自立と早期リタイア）に必要な資産額と、そこに到達するまでの年数・年齢を試算します。達成後に生活費を取り崩しながら運用を続けた場合、資産が何年もつかもあわせて確認できます。",
     "href": "pages/fire-hub.html?tool=fire",
