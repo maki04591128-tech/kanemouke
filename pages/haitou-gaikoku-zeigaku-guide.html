@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>外国税額控除とは？外国株の配当が二重課税になる仕組みと計算方法 完全ガイド | ふやすノート</title>
+<meta name="description" content="米国株ETF等の外国株の配当金が、現地と日本国内の両方で課税される「二重課税」の仕組みと、確定申告で使える「外国税額控除」の控除額の計算方法（限度額・住民税への繰越・翌年以降への繰越控除）、NISA口座では使えない注意点まで、関連する無料シミュレーターへのリンク付きで整理します。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/haitou-gaikoku-zeigaku-guide.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="外国税額控除とは？外国株の配当が二重課税になる仕組みと計算方法 完全ガイド | ふやすノート">
+<meta property="og:description" content="米国株ETF等の外国株の配当金が、現地と日本国内の両方で課税される「二重課税」の仕組みと、確定申告で使える「外国税額控除」の控除額の計算方法（限度額・住民税への繰越・翌年以降への繰越控除）、NISA口座では使えない注意点まで、関連する無料シミュレーターへのリンク付きで整理します。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/haitou-gaikoku-zeigaku-guide.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="外国税額控除とは？外国株の配当が二重課税になる仕組みと計算方法 完全ガイド | ふやすノート">
+<meta name="twitter:description" content="米国株ETF等の外国株の配当金が、現地と日本国内の両方で課税される「二重課税」の仕組みと、確定申告で使える「外国税額控除」の控除額の計算方法（限度額・住民税への繰越・翌年以降への繰越控除）、NISA口座では使えない注意点まで、関連する無料シミュレーターへのリンク付きで整理します。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"></noscript>
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "外国税額控除とは何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "外国株（米国株ETF等）の配当金が、現地の源泉徴収と日本国内の源泉徴収の両方で課税される「二重課税」を調整するため、確定申告で現地に払った税金の一部を日本の所得税・住民税から差し引ける制度です。控除できる金額には「その年の所得税額 ×（国外所得金額 ÷ 所得総額）」で計算する限度額があり、限度額を超えて控除しきれなかった分はさらに住民税からも一定の範囲で控除できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "外国税額控除を使うと必ず得になりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "いいえ。外国税額控除を使うには総合課税または申告分離課税を選んで確定申告する必要があり、総合課税を選ぶと配当所得が給与所得等に合算されるため、控除額よりも税負担の増加が上回るケースもあります。給与収入が多く所得税の限界税率が高い方ほど控除しきれない金額（繰越控除の対象）が生じにくい一方、その分だけ総合課税で配当を合算すること自体が不利に働く場合もあるため、確定申告する場合としない場合の手取り額を比較してから判断するのが安全です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "NISA口座で受け取った外国株の配当金も外国税額控除の対象ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "NISA口座の配当金は日本国内の税金がもともと非課税のため、外国税額控除（＝日本国内の税金から外国の税金を差し引く制度）の対象になりません。現地で源泉徴収された税金は、NISA口座では基本的に取り戻せない点に注意が必要です。この二重課税を避けたい場合は、課税口座（特定口座）で保有し確定申告する必要があります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "控除しきれなかった外国税額はどうなりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "その年の所得税・住民税の控除限度額を超えて控除しきれなかった外国税額は、翌年以降3年間繰り越して、その年に生じる控除余裕額（限度額のうち使い切っていない部分）の範囲で使うことができます。繰越控除を受けるには、控除しきれなかった年も含めて連続して確定申告書を提出しておく必要があります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "外国税額控除の限度額はどうやって計算しますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "所得税分の限度額は「その年の所得税額 ×（国外所得金額 ÷ 所得総額）」で計算します。現地で払った外国税額がこの限度額以下ならその年の所得税だけで全額控除でき、限度額を超える分についてはさらに「所得税の限度額 × 30%」を上限に住民税からも控除できます。それでも控除しきれない分が、翌年以降3年間の繰越控除の対象になります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "配当控除と外国税額控除はどう違いますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "配当控除は日本国内の法人から受け取る配当金について、総合課税を選んだ場合に法人税との二重課税を調整するための税額控除で、外国株の配当には使えません。外国税額控除は逆に、外国株の配当金について現地の税金と日本の税金の二重課税を調整するための制度で、日本国内の法人からの配当には使えません（そもそも二重課税が生じないため）。どちらも「二重課税の調整」という点は共通していますが、対象となる配当の発行体の国が異なります。"
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://maki04591128-tech.github.io/kanemouke/index.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "配当・高配当株",
+      "item": "https://maki04591128-tech.github.io/kanemouke/pages/haitou-hub.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "外国税額控除とは？外国株の配当が二重課税になる仕組みと計算方法 完全ガイド"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+        <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false">
+      <span class="icon" aria-hidden="true"></span>
+      <span>メニュー</span>
+    </button>
+    <nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="container">
+<nav class="breadcrumb-nav" aria-label="パンくずリスト">
+  <ul class="breadcrumb">
+    <li><a href="../index.html">ホーム</a></li>
+    <li><a href="haitou-hub.html">配当・高配当株</a></li>
+    <li aria-current="page">外国税額控除とは？外国株の配当が二重課税になる仕組みと計算方法 完全ガイド</li>
+  </ul>
+</nav>
+
+  <div class="page-title">
+    <h1>外国税額控除とは？外国株の配当が二重課税になる仕組みと計算方法 完全ガイド</h1>
+    <p>米国株ETF（VYM等）をはじめとする外国株の配当金は、現地の税金と日本国内の税金の両方が源泉徴収される「二重課税」の状態になっています。確定申告で「外国税額控除」を使うと、この二重課税分の一部を取り戻せる可能性がありますが、控除できる金額には限度額があり、確定申告すること自体が必ず得になるとは限りません。二重課税が生じる仕組みから、控除額の計算方法、NISA口座では使えない注意点、控除しきれなかった分の繰越控除まで整理します。関連する無料シミュレーターへのリンクも付けているので、あわせてご活用ください。</p>
+    <div class="article-actions">
+      <button type="button" id="print-result-btn" class="share-btn secondary" aria-label="この記事を印刷またはPDFで保存">記事を印刷・PDF保存</button>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 記事ページ上部 --></div>
+
+  <section class="article-section">
+    <h2>外国株の配当金が「二重課税」になる仕組み</h2>
+    <p>米国株ETF・米国個別株などの外国株から配当金を受け取ると、まず現地（米国）の税法に基づいて源泉徴収されます。日米の租税条約が適用される米国株の場合、この現地源泉徴収税率は原則10%です。その配当金（現地で源泉徴収された後の金額）に対して、さらに日本国内でも上場株式等の配当金として20.315%（所得税15.315%＋住民税5%。復興特別所得税を含む）が特定口座で自動的に源泉徴収されます。つまり<strong>同じ配当金に対して、現地と日本の両方で税金が引かれる「二重課税」</strong>の状態になっているのです。この二重課税を放置すると、国内株だけに投資する場合より外国株の実質的な税負担が重くなってしまうため、確定申告によって調整する「外国税額控除」という制度が用意されています。</p>
+
+    <h2>外国税額控除とは</h2>
+    <p>外国税額控除は、現地で払った外国税額の一部を、その年の日本の所得税・住民税から直接差し引ける税額控除です。控除できる金額には上限（限度額）があり、無制限に差し引けるわけではありません。また、外国税額控除を使うには、確定申告不要制度（特定口座で源泉徴収のみで完結させる方法）ではなく、<strong>総合課税または申告分離課税を選んで確定申告する</strong>必要があります。なお、日本国内の法人からの配当で使える「配当控除」は、そもそも二重課税が生じない外国株の配当には適用できません。逆に外国税額控除は日本国内の法人からの配当には使えないため、対象となる配当の発行体の国によって使い分けが必要な点に注意してください。</p>
+
+    <h2>配当所得 課税方式（国内株）と外国税額控除（外国株）の違い</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">比較項目</th><th scope="col">配当所得の課税方式（国内株）</th><th scope="col">外国税額控除（外国株）</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>調整する二重課税</td><td>配当の原資である法人税との二重課税</td><td>現地の源泉徴収税と日本の源泉徴収税との二重課税</td></tr>
+        <tr><td>使える税額控除</td><td>配当控除</td><td>外国税額控除</td></tr>
+        <tr><td>対象となる配当</td><td>日本国内の法人からの配当</td><td>外国法人（米国株ETF等）からの配当</td></tr>
+        <tr><td>確定申告の要否</td><td>申告不要制度も選択可</td><td>控除を使うには確定申告が必須</td></tr>
+      </tbody>
+    </table>
+    <p>国内株の配当金にかかる3つの課税方式（確定申告不要・申告分離課税・総合課税）の違いは、配当所得の課税方式とは？完全ガイドで詳しく解説しています。外国株の配当を含めて確定申告する場合も、総合課税を選ぶか申告分離課税を選ぶかによって配当控除・外国税額控除の使える組み合わせが変わるため、あわせて確認しておくと理解しやすくなります。</p>
+
+    <h2>外国税額控除の限度額の計算方法</h2>
+    <p>外国税額控除には、無制限に控除できるわけではなく、次の2段階の限度額があります。</p>
+    <ol>
+      <li><strong>所得税分の限度額</strong>：その年の所得税額 ×（国外所得金額 ÷ 所得総額）。現地で払った外国税額がこの限度額以下であれば、その年の所得税だけで全額控除できます。</li>
+      <li><strong>住民税分の限度額</strong>：所得税分の限度額を超えてもなお控除しきれない分については、さらに「所得税分の限度額 × 30%」を上限に、住民税からも控除できます。</li>
+    </ol>
+    <p>それでも控除しきれなかった外国税額は、翌年以降3年間繰り越して、その年の控除余裕額（限度額のうち使い切っていない部分）の範囲で使うことができます。給与収入が多く所得税率が高い方ほど所得税分の限度額が大きくなりやすく、外国株の配当額に対して控除しきれない金額が生じにくい傾向がありますが、その分だけ配当所得を総合課税で合算すること自体が税負担を増やす方向に働く場合もあるため、確定申告する場合としない場合の手取り額を比較して判断することが大切です。ご自身の年収・外国株の配当額での具体的な限度額・手取り額の差は、外国税額控除シミュレーターで試算できます。</p>
+
+    <h2>確定申告しない場合との手取り額の違い</h2>
+    <p>外国税額控除を使うかどうかで、最終的な手取り額は次のように変わります。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">シナリオ</th><th scope="col">課税の流れ</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>確定申告しない場合</td><td>現地源泉徴収（原則10%）後の金額に、国内で20.315%が自動的に源泉徴収されて課税関係が終了する</td></tr>
+        <tr><td>確定申告して外国税額控除を使う場合</td><td>配当所得を総合課税（または申告分離課税）で申告し、限度額の範囲で外国税額控除を適用したうえで最終的な税額が確定する</td></tr>
+      </tbody>
+    </table>
+    <p>確定申告不要制度のまま何もしなければ、現地の税金は取り戻せず二重課税分がそのまま手取りから差し引かれています。一方、確定申告して外国税額控除を使うと二重課税分の一部（限度額の範囲）を取り戻せますが、総合課税を選んだ場合は配当所得が給与所得等に合算されるため、所得税率が上がったり、扶養控除・社会保険料の判定に影響したりする可能性もあります。どちらが有利かは年収や外国株の配当額によって変わるため、確定申告しない場合の手取りと、確定申告して外国税額控除を使った場合の手取りを実際に比較してみることをおすすめします。</p>
+
+    <h2>NISA口座では外国税額控除は使えない</h2>
+    <p>NISA口座（成長投資枠・つみたて投資枠）で保有する外国株の配当金は、日本国内の税金がもともと非課税です。外国税額控除は「日本国内の税金から外国の税金を差し引く」制度のため、そもそも日本側の税金が発生しないNISA口座では控除の対象になりません。つまり、<strong>NISA口座で外国株ETFを保有していても、現地で源泉徴収された税金（米国株なら原則10%）は基本的に取り戻せない</strong>ということです。日本国内の税金だけを見ればNISA口座は有利ですが、外国株に関しては現地課税分だけ実質的な利回りが目減りする点は、課税口座で確定申告する場合との比較材料として押さえておきましょう。</p>
+
+    <h2>外国税額控除の手続きの流れ</h2>
+    <p>外国税額控除を受けるための大まかな流れは次のとおりです。</p>
+    <ol>
+      <li>証券会社が発行する特定口座年間取引報告書等で、外国株の配当金額と現地で源泉徴収された外国税額を確認する。</li>
+      <li>確定申告書に配当所得を記載し、総合課税または申告分離課税のいずれかを選択する（確定申告不要制度のままでは外国税額控除は使えない）。</li>
+      <li>確定申告書の「外国税額控除に関する明細書」に、国名・所得の種類・外国税額等を記入し、限度額の計算を行う。</li>
+      <li>控除しきれない金額がある場合は、翌年以降の繰越控除に備えて、その後も連続して確定申告書を提出しておく。</li>
+    </ol>
+    <p>確定申告全体の基本的な流れは確定申告のやり方 完全ガイドで解説しています。</p>
+
+    <h2>よくある誤解</h2>
+    <h3>外国税額控除を使えば現地の税金が全額戻ってくると思っている</h3>
+    <p>外国税額控除で控除できる金額には、所得税額と所得の割合で決まる限度額があります。現地で払った外国税額が限度額を超える場合、超えた分はその年の住民税からさらに一定の範囲で控除できますが、それでも控除しきれない分は翌年以降への繰越控除の対象になるだけで、その年のうちに全額が戻ってくるとは限りません。</p>
+    <h3>NISA口座なら外国株の配当も無条件で非課税だと思っている</h3>
+    <p>NISA口座では日本国内の税金は非課税ですが、現地で源泉徴収される外国税額（米国株なら原則10%）は口座の種類にかかわらず発生し、NISA口座では外国税額控除の対象にならないため基本的に取り戻せません。「NISA＝一切課税されない」と思い込まず、外国株については現地課税分が残る点を理解しておきましょう。</p>
+    <h3>確定申告すれば必ず得になると思っている</h3>
+    <p>外国税額控除を使うには総合課税または申告分離課税を選ぶ必要があり、総合課税を選ぶと配当所得が給与所得等に合算されて税率が上がったり、配偶者控除・扶養控除や社会保険料の判定に影響したりする場合があります。外国税額控除による還付額が、こうした合算による負担増を上回るとは限らないため、確定申告する場合としない場合の手取り額を実際に比較してから判断することが重要です。</p>
+
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>外国税額控除とは何ですか？</dt>
+        <dd>外国株（米国株ETF等）の配当金が、現地の源泉徴収と日本国内の源泉徴収の両方で課税される「二重課税」を調整するため、確定申告で現地に払った税金の一部を日本の所得税・住民税から差し引ける制度です。控除できる金額には「その年の所得税額 ×（国外所得金額 ÷ 所得総額）」で計算する限度額があり、限度額を超えて控除しきれなかった分はさらに住民税からも一定の範囲で控除できます。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>外国税額控除を使うと必ず得になりますか？</dt>
+        <dd>いいえ。外国税額控除を使うには総合課税または申告分離課税を選んで確定申告する必要があり、総合課税を選ぶと配当所得が給与所得等に合算されるため、控除額よりも税負担の増加が上回るケースもあります。給与収入が多く所得税の限界税率が高い方ほど控除しきれない金額（繰越控除の対象）が生じにくい一方、その分だけ総合課税で配当を合算すること自体が不利に働く場合もあるため、確定申告する場合としない場合の手取り額を比較してから判断するのが安全です。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>NISA口座で受け取った外国株の配当金も外国税額控除の対象ですか？</dt>
+        <dd>NISA口座の配当金は日本国内の税金がもともと非課税のため、外国税額控除（＝日本国内の税金から外国の税金を差し引く制度）の対象になりません。現地で源泉徴収された税金は、NISA口座では基本的に取り戻せない点に注意が必要です。この二重課税を避けたい場合は、課税口座（特定口座）で保有し確定申告する必要があります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>控除しきれなかった外国税額はどうなりますか？</dt>
+        <dd>その年の所得税・住民税の控除限度額を超えて控除しきれなかった外国税額は、翌年以降3年間繰り越して、その年に生じる控除余裕額（限度額のうち使い切っていない部分）の範囲で使うことができます。繰越控除を受けるには、控除しきれなかった年も含めて連続して確定申告書を提出しておく必要があります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>外国税額控除の限度額はどうやって計算しますか？</dt>
+        <dd>所得税分の限度額は「その年の所得税額 ×（国外所得金額 ÷ 所得総額）」で計算します。現地で払った外国税額がこの限度額以下ならその年の所得税だけで全額控除でき、限度額を超える分についてはさらに「所得税の限度額 × 30%」を上限に住民税からも控除できます。それでも控除しきれない分が、翌年以降3年間の繰越控除の対象になります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>配当控除と外国税額控除はどう違いますか？</dt>
+        <dd>配当控除は日本国内の法人から受け取る配当金について、総合課税を選んだ場合に法人税との二重課税を調整するための税額控除で、外国株の配当には使えません。外国税額控除は逆に、外国株の配当金について現地の税金と日本の税金の二重課税を調整するための制度で、日本国内の法人からの配当には使えません（そもそも二重課税が生じないため）。どちらも「二重課税の調整」という点は共通していますが、対象となる配当の発行体の国が異なります。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 記事下部 --></div>
+
+  <div class="affiliate-box">
+    <h3>外国株投資の口座開設をあわせて検討するなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>証券会社で外国株の取扱い・特定口座を確認する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>NISA口座の開設を相談する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>あわせて使いたい関連シミュレーター</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="haitou-hub.html?tool=gaikoku">
+        <span class="badge">配当</span>
+        <h3>外国税額控除シミュレーター</h3>
+        <p>給与年収・外国株の年間配当額から、確定申告しない場合と外国税額控除を使った場合の手取り額を比較します。</p>
+      </a>
+      <a class="tool-card" href="haitou-hub.html?tool=kazei">
+        <span class="badge">配当</span>
+        <h3>配当所得 課税方式シミュレーター</h3>
+        <p>課税所得・年間配当額を入力し、総合課税・申告分離課税・確定申告不要の3方式の税負担を比較します。</p>
+      </a>
+      <a class="tool-card" href="haitou-kazei-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>配当所得の課税方式とは？完全ガイド</h3>
+        <p>確定申告不要制度・申告分離課税・総合課税の3つの課税方式の違いを解説した記事です。</p>
+      </a>
+      <a class="tool-card" href="haitou-hub.html?tool=portfolio">
+        <span class="badge">配当</span>
+        <h3>高配当株ポートフォリオ 配当利回りシミュレーター</h3>
+        <p>配当再投資による配当額の複利成長を試算します。</p>
+      </a>
+      <a class="tool-card" href="haitou-saitoushi-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>配当金の再投資とは？完全ガイド</h3>
+        <p>受取型と無分配型で最終的な資産額に差がつく理由（税の繰り延べ効果）を解説します。</p>
+      </a>
+      <a class="tool-card" href="kakutei-shinkoku-hajimekata-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>確定申告のやり方 完全ガイド</h3>
+        <p>確定申告が必要になる主なケースの見分け方から、申告方法選択・提出・納税までの流れを解説します。</p>
+      </a>
+    </div>
+  </section>
+
+  <div class="disclaimer">
+    本ページは外国税額控除に関する一般的な仕組みを解説する記事であり、個別の税務相談・投資助言を目的としたものではありません。外国税額控除の計算は租税条約の内容や保有する外国株の国によって異なる場合があり、本記事は日米の租税条約が適用される米国株を前提に簡略化して説明しています。税制は法改正や個別の事情によって取り扱いが異なる場合がありますので、最新かつ正確な制度の詳細は国税庁等の公式情報でご確認のうえ、個別の判断が必要な場合は税理士・金融機関等の専門家にご相談ください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../js/print-result.js"></script>
+<script src="../js/number-format.js"></script>
+<script src="../js/field-validation.js"></script>
+<script src="../js/back-to-top.js"></script>
+<script src="../js/skip-link.js"></script>
+<script src="../js/toc.js"></script>
+<script src="../js/recent-tools.js"></script>
+<script src="../js/favorites.js"></script>
+<script src="../js/nav-toggle.js"></script>
+<script src="../js/site-search-data.js"></script>
+<script src="../js/site-search.js"></script>
+</body>
+</html>

@@ -171,6 +171,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "外国税額控除とは？外国株の配当が二重課税になる仕組みと計算方法 完全ガイド",
+    "desc": "米国株ETF等の配当が現地と日本の両方で課税される二重課税の仕組み、外国税額控除の限度額の計算方法、NISA口座では使えない注意点、繰越控除までを解説します。",
+    "href": "pages/haitou-gaikoku-zeigaku-guide.html",
+    "category": "配当・高配当株",
+    "type": "guide"
+  },
+  {
     "title": "FIRE・資産取り崩しシミュレーター まとめ",
     "desc": "FIRE達成・資産取り崩し方式比較の2ツールをタブ切り替えで使えます。",
     "href": "pages/fire-hub.html?tool=fire",
