@@ -178,6 +178,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "高配当株ポートフォリオの作り方とは？銘柄選定・増配率・配当金生活の目安 完全ガイド",
+    "desc": "配当利回り・配当性向・増配率による銘柄選定の考え方、減配リスクを抑える分散投資、目標の月間配当金への到達シミュレーションの読み方までを解説します。",
+    "href": "pages/haitou-portfolio-guide.html",
+    "category": "配当・高配当株",
+    "type": "guide"
+  },
+  {
     "title": "FIRE・資産取り崩しシミュレーター まとめ",
     "desc": "FIRE達成・資産取り崩し方式比較の2ツールをタブ切り替えで使えます。",
     "href": "pages/fire-hub.html?tool=fire",
