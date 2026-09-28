@@ -136,6 +136,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "奨学金の返還（返済）とは？完全ガイド",
+    "desc": "第一種（無利子）・第二種（有利子）の定額返還方式の計算方法、所得連動返還方式との違い、減額返還制度・返還期限猶予制度、延滞するとどうなるかまで解説します。",
+    "href": "pages/shogaku-henkan-guide.html",
+    "category": "教育資金・保険",
+    "type": "guide"
+  },
+  {
     "title": "節税・控除シミュレーター まとめ",
     "desc": "ふるさと納税控除上限額・医療費控除・副業20万円ルール・確定申告要否チェックの4ツールをタブ切り替えで使えます。",
     "href": "pages/setsuzei-hub.html?tool=furusato",
