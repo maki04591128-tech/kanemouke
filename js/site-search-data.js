@@ -164,6 +164,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "配当金の再投資とは？複利効果の仕組みと受取型との違い 完全ガイド",
+    "desc": "受取型と無分配型の税負担の違い（税の繰り延べ効果）、投資信託の分配金コースの選び方、個別株の再投資の実務、特別分配金の注意点までを解説します。",
+    "href": "pages/haitou-saitoushi-guide.html",
+    "category": "配当・高配当株",
+    "type": "guide"
+  },
+  {
     "title": "FIRE・資産取り崩しシミュレーター まとめ",
     "desc": "FIRE達成・資産取り崩し方式比較の2ツールをタブ切り替えで使えます。",
     "href": "pages/fire-hub.html?tool=fire",
