@@ -23,8 +23,19 @@
     { limit: Infinity, rate: 0.45, deduct: 4796000 },
   ];
 
-  // 給与所得控除額（2025年度税制改正後、最低保障額65万円）
-  var SALARY_DEDUCTION_BRACKETS = [
+  // 給与所得控除額（所得税用）。令和8年度税制改正により、令和8・9年分は最低保障額が74万円に時限的に
+  // 引き上げられている（令和10年分以後は本則69万円に戻る予定）。
+  var SALARY_DEDUCTION_BRACKETS_INCOME_TAX = [
+    { limit: 2200000, calc: function () { return 740000; } },
+    { limit: 3600000, calc: function (income) { return income * 0.3 + 80000; } },
+    { limit: 6600000, calc: function (income) { return income * 0.2 + 440000; } },
+    { limit: 8500000, calc: function (income) { return income * 0.1 + 1100000; } },
+    { limit: Infinity, calc: function () { return 1950000; } },
+  ];
+
+  // 給与所得控除額（住民税用）。最低保障額の引き上げ（74万円）は所得税のみが対象で、
+  // 個人住民税の最低保障額は令和8年度分もこれまでと同じ65万円。
+  var SALARY_DEDUCTION_BRACKETS_RESIDENT_TAX = [
     { limit: 1900000, calc: function () { return 650000; } },
     { limit: 3600000, calc: function (income) { return income * 0.3 + 80000; } },
     { limit: 6600000, calc: function (income) { return income * 0.2 + 440000; } },
@@ -32,7 +43,19 @@
     { limit: Infinity, calc: function () { return 1950000; } },
   ];
 
-  var INCOME_BASIC_DEDUCTION = 580000; // 所得税の基礎控除（2025年分以降）
+  // 所得税の基礎控除額。令和8年度税制改正により、令和8・9年分は合計所得金額（給与所得＋配当所得等）に
+  // 応じて段階的に引き上げられている（国税庁タックスアンサーNo.1199）。配当を総合課税で合算すると
+  // 合計所得金額が変わり基礎控除の段階も変わるため、給与所得のみの場合／配当を合算した場合をそれぞれ
+  // この関数で算出し直す。住民税の基礎控除（43万円）は今回の改正の対象外で変更なし。
+  function incomeBasicDeduction(totalIncome) {
+    if (totalIncome <= 4890000) return 1040000;
+    if (totalIncome <= 6550000) return 670000;
+    if (totalIncome <= 23500000) return 620000;
+    if (totalIncome <= 24000000) return 480000;
+    if (totalIncome <= 24500000) return 320000;
+    if (totalIncome <= 25000000) return 160000;
+    return 0;
+  }
   var RESIDENT_BASIC_DEDUCTION = 430000; // 住民税の基礎控除
 
   var els = {
@@ -62,9 +85,9 @@
     return Math.max(0, Number(n) || 0);
   }
 
-  function salaryDeduction(income) {
-    for (var i = 0; i < SALARY_DEDUCTION_BRACKETS.length; i++) {
-      var b = SALARY_DEDUCTION_BRACKETS[i];
+  function salaryDeduction(income, brackets) {
+    for (var i = 0; i < brackets.length; i++) {
+      var b = brackets[i];
       if (income <= b.limit) return b.calc(income);
     }
     return 1950000;
@@ -89,12 +112,18 @@
     if (ageGroup === "40to64") socialInsuranceRate += CARE_INSURANCE_RATE;
     var socialInsurance = income * socialInsuranceRate;
 
-    var salaryIncome = Math.max(0, income - salaryDeduction(income));
+    var salaryIncome = Math.max(0, income - salaryDeduction(income, SALARY_DEDUCTION_BRACKETS_INCOME_TAX));
+    var salaryIncomeForResident = Math.max(0, income - salaryDeduction(income, SALARY_DEDUCTION_BRACKETS_RESIDENT_TAX));
 
-    var taxableBase = Math.max(0, salaryIncome - (INCOME_BASIC_DEDUCTION + socialInsurance));
-    var taxableResidentBase = Math.max(0, salaryIncome - (RESIDENT_BASIC_DEDUCTION + socialInsurance));
+    var taxableBase = Math.max(0, salaryIncome - (incomeBasicDeduction(salaryIncome) + socialInsurance));
+    var taxableResidentBase = Math.max(0, salaryIncomeForResident - (RESIDENT_BASIC_DEDUCTION + socialInsurance));
 
-    var taxableWithDividend = taxableBase + dividendGross;
+    // 配当所得を合算すると合計所得金額が変わり、所得税の基礎控除の段階（令和8・9年分）も変わりうるため
+    // 基礎控除はここで合算後の金額から算出し直す（住民税の基礎控除43万円は段階制の対象外）。
+    var taxableWithDividend = Math.max(
+      0,
+      salaryIncome + dividendGross - (incomeBasicDeduction(salaryIncome + dividendGross) + socialInsurance)
+    );
     var taxableResidentWithDividend = taxableResidentBase + dividendGross;
 
     var incomeTaxBase = taxByBracket(taxableBase) * (1 + RECONSTRUCTION_TAX_RATE);
