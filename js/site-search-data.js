@@ -101,6 +101,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "児童手当とは？完全ガイド",
+    "desc": "2024年10月改正後の支給額一覧、大学生年代まで広がった第3子以降の数え方、振込月・申請方法、教育資金づくりへの活用法まで解説します。",
+    "href": "pages/jidouteate-guide.html",
+    "category": "教育資金・保険",
+    "type": "guide"
+  },
+  {
     "title": "節税・控除シミュレーター まとめ",
     "desc": "ふるさと納税控除上限額・医療費控除・副業20万円ルール・確定申告要否チェックの4ツールをタブ切り替えで使えます。",
     "href": "pages/setsuzei-hub.html?tool=furusato",
