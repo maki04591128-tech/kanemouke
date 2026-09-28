@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>額面年収と手取りの違いとは？手取り額の計算方法・年収別早見表・増やし方 完全ガイド | ふやすノート</title>
+<meta name="description" content="求人票に書かれた「年収」と、実際に振り込まれる「手取り」はなぜ違うのか。社会保険料・所得税・住民税がどう天引きされるかの計算方法を、年収別の手取り早見表・手取り率が下がる仕組み・手取りを増やす方法とあわせて解説します。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/nenshu-tedori-guide.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="額面年収と手取りの違いとは？手取り額の計算方法・年収別早見表・増やし方 完全ガイド | ふやすノート">
+<meta property="og:description" content="求人票に書かれた「年収」と、実際に振り込まれる「手取り」はなぜ違うのか。社会保険料・所得税・住民税がどう天引きされるかの計算方法を、年収別の手取り早見表・手取り率が下がる仕組み・手取りを増やす方法とあわせて解説します。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/nenshu-tedori-guide.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="額面年収と手取りの違いとは？手取り額の計算方法・年収別早見表・増やし方 完全ガイド | ふやすノート">
+<meta name="twitter:description" content="求人票に書かれた「年収」と、実際に振り込まれる「手取り」はなぜ違うのか。社会保険料・所得税・住民税がどう天引きされるかの計算方法を、年収別の手取り早見表・手取り率が下がる仕組み・手取りを増やす方法とあわせて解説します。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"></noscript>
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "額面年収と手取り年収の違いは何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「額面年収」は、社会保険料や税金が天引きされる前の、会社が支払う給与・賞与の合計額です。求人票や源泉徴収票の「支払金額」欄に記載される金額はこの額面です。「手取り年収」は、額面から健康保険・厚生年金・雇用保険などの社会保険料と、所得税・住民税を差し引いた後、実際に銀行口座へ振り込まれる（自由に使える）金額を指します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "手取り額はどうやって計算しますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "手取り額は「額面年収－社会保険料－所得税－住民税」で計算します。社会保険料は額面にほぼ一定の料率（健康保険・厚生年金・雇用保険、40〜64歳は介護保険も）を掛けて求めます。所得税・住民税は、額面から給与所得控除・社会保険料控除・基礎控除・配偶者控除や扶養控除などを差し引いた「課税所得」に税率を掛けて計算するため、単純な一定率の天引きではありません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "一般的な手取り率の目安はどれくらいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "独身・扶養家族なしの会社員の場合、額面年収に対する手取り率はおおむね75〜80%程度が目安です。本シミュレーターの試算では、額面年収300万円で手取り率約80.4%、500万円で約78.6%、800万円で約74.2%、1,500万円で約65.8%と、年収が上がるほど手取り率は下がる傾向があります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "年収が上がると手取り率が下がるのはなぜですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "社会保険料（健康保険・雇用保険）と所得税・住民税は、課税所得が一定額を超えると段階的に高い税率が適用される「累進課税」の仕組みになっているためです。厚生年金保険料には標準報酬月額の上限があるため一定額で頭打ちになりますが、所得税は課税所得が195万円を超えるごとに税率が5%→10%→20%→23%→33%→40%→45%と段階的に上がるため、年収が上がるほど額面に占める税金の割合が大きくなり、結果として手取り率は下がっていきます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "配偶者控除・扶養控除があると手取りはどう変わりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "配偶者控除（年収103万円以下の配偶者がいる場合）や扶養控除（16歳以上の扶養親族がいる場合）が適用されると、所得税の課税所得から38万円、住民税の課税所得から33万円が1人あたり差し引かれるため、その分だけ所得税・住民税が安くなり、手取り額は増えます。本シミュレーターでは、配偶者控除の対象となる配偶者の有無と扶養親族の人数を入力すると、この控除を反映した手取り額を確認できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "40歳以上と40歳未満で手取りが違うのはなぜですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "40歳になると公的介護保険の第2号被保険者となり、健康保険料に介護保険料（本人負担分の目安で額面の0.8%程度）が上乗せされるため、40歳未満のときと比べて社会保険料の負担が増え、その分だけ手取り額は少なくなります。65歳になると原則として介護保険料は健康保険料とは別に年金から天引きされる形に切り替わるため、給与からの介護保険料の天引きはなくなりますが、雇用形態により扱いが異なる場合があります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "賞与（ボーナス）の手取りも同じ計算方法ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "毎月の給与と賞与では、所得税の計算方法が異なります。毎月の給与は「給与所得の源泉徴収税額表」を使いますが、賞与は国税庁が公表する「賞与に対する源泉徴収税額の算出率の表」という別の表を使って源泉徴収額を計算します。本シミュレーターの「額面年収」は毎月の給与と賞与の合計を想定した年間ベースの試算のため、賞与だけの手取り額を詳しく知りたい場合は、賞与の手取り額シミュレーターをあわせてご利用ください。"
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://maki04591128-tech.github.io/kanemouke/index.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "年収・手取り・退職金",
+      "item": "https://maki04591128-tech.github.io/kanemouke/pages/nenshu-hub.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "額面年収と手取りの違いとは？手取り額の計算方法・年収別早見表・増やし方 完全ガイド"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+        <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false">
+      <span class="icon" aria-hidden="true"></span>
+      <span>メニュー</span>
+    </button>
+    <nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="container">
+<nav class="breadcrumb-nav" aria-label="パンくずリスト">
+  <ul class="breadcrumb">
+    <li><a href="../index.html">ホーム</a></li>
+    <li><a href="nenshu-hub.html">年収・手取り・退職金</a></li>
+    <li aria-current="page">額面年収と手取りの違いとは？手取り額の計算方法・年収別早見表・増やし方 完全ガイド</li>
+  </ul>
+</nav>
+
+  <div class="page-title">
+    <h1>額面年収と手取りの違いとは？手取り額の計算方法・年収別早見表・増やし方 完全ガイド</h1>
+    <p>「年収500万円」の求人でも、実際に銀行口座へ振り込まれる金額はそれより少なくなります。社会保険料・所得税・住民税がどう差し引かれ、手取り額がいくらになるのかの計算方法を、年収別の早見表とあわせて解説します。</p>
+    <div class="article-actions">
+      <button type="button" id="print-result-btn" class="share-btn secondary" aria-label="この記事を印刷またはPDFで保存">記事を印刷・PDF保存</button>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 記事ページ上部 --></div>
+
+  <section class="article-section">
+    <h2>額面年収と手取り年収の違い</h2>
+    <p>求人票や源泉徴収票の「支払金額」欄に記載される「年収」は、社会保険料や税金が引かれる前の「額面」です。実際に自由に使える「手取り」は、額面から社会保険料（健康保険・厚生年金・雇用保険、40〜64歳は介護保険も）と、所得税・住民税を差し引いた金額になります。「額面年収600万円なのに、手取りは意外と少ない」と感じる背景には、この2つの違いがあります。</p>
+    <p>本記事および本サイトの手取り額シミュレーターでは、額面年収・年齢区分・配偶者控除の有無・扶養親族の人数を入力するだけで、手取り年収・手取り率・月あたりの手取り額の目安を試算できます。</p>
+
+    <h2>手取りを計算するための3つの要素</h2>
+    <p>額面から手取りを計算するには、大きく分けて次の3つを差し引く必要があります。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">差し引かれるもの</th><th scope="col">内容</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>①社会保険料</td><td>健康保険・厚生年金・雇用保険（40〜64歳は介護保険も）。額面にほぼ一定の料率を掛けて計算</td></tr>
+        <tr><td>②所得税</td><td>額面から各種控除を差し引いた「課税所得」に、5〜45%の累進税率を掛けて計算（復興特別所得税を含む）</td></tr>
+        <tr><td>③住民税</td><td>前年の所得を基準に、課税所得の10%（所得割）＋均等割（自治体により異なるが目安5,000円程度）で計算</td></tr>
+      </tbody>
+    </table>
+    <p>額面年収から①〜③の合計を差し引いた金額が「手取り年収」です。①は額面にほぼ比例して増えますが、②・③は控除の仕組みが複雑なため、単純な掛け算だけでは求められません。</p>
+
+    <h2>①社会保険料の計算方法（本人負担分の目安）</h2>
+    <p>社会保険料は、額面に対しておおむね次の料率（本人負担分・協会けんぽの全国平均目安）を掛けて計算します。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">保険の種類</th><th scope="col">本人負担分の料率目安</th><th scope="col">対象</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>健康保険</td><td>約4.99%</td><td>全員</td></tr>
+        <tr><td>厚生年金保険</td><td>約9.15%</td><td>全員（標準報酬月額・賞与額に上限あり）</td></tr>
+        <tr><td>雇用保険（一般の事業）</td><td>約0.6%</td><td>全員</td></tr>
+        <tr><td>介護保険</td><td>約0.8%</td><td>40歳以上65歳未満（第2号被保険者）のみ上乗せ</td></tr>
+      </tbody>
+    </table>
+    <p>合計すると、40歳未満はおよそ14.7%、40〜64歳はおよそ15.5%が社会保険料として天引きされる計算になります。ただし健康保険料率は加入している健康保険組合や都道府県によって、厚生年金保険料には標準報酬月額・賞与額の上限があるため、実際の給与明細の金額とは差が生じます。</p>
+
+    <h2>②所得税の計算方法：給与所得控除・基礎控除を経て課税所得を求める</h2>
+    <p>所得税は、額面をそのまま課税するのではなく、次の順序で「課税所得」を求めてから税率を掛けます。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">手順</th><th scope="col">内容</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1. 給与所得を求める</td><td>額面年収 − 給与所得控除額（年収に応じた速算表で計算。令和8・9年分は最低保障額が74万円に時限的に引き上げ）</td></tr>
+        <tr><td>2. 課税所得を求める</td><td>給与所得 − 基礎控除（合計所得金額に応じて段階的。目安104万円）− 社会保険料控除（①の全額）− 配偶者控除（対象配偶者がいれば38万円）− 扶養控除（扶養親族1人につき38万円）</td></tr>
+        <tr><td>3. 所得税額を求める</td><td>課税所得 × 税率（5〜45%の累進課税） − 控除額（速算表）</td></tr>
+        <tr><td>4. 復興特別所得税を加算</td><td>3の所得税額 × 1.021（2.1%上乗せ）</td></tr>
+      </tbody>
+    </table>
+    <p>課税所得に応じた税率（令和2年分以降の速算表）は次のとおりです。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">課税所得</th><th scope="col">税率</th><th scope="col">控除額</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>195万円以下</td><td>5%</td><td>0円</td></tr>
+        <tr><td>195万円超330万円以下</td><td>10%</td><td>97,500円</td></tr>
+        <tr><td>330万円超695万円以下</td><td>20%</td><td>427,500円</td></tr>
+        <tr><td>695万円超900万円以下</td><td>23%</td><td>636,000円</td></tr>
+        <tr><td>900万円超1,800万円以下</td><td>33%</td><td>1,536,000円</td></tr>
+        <tr><td>1,800万円超4,000万円以下</td><td>40%</td><td>2,796,000円</td></tr>
+        <tr><td>4,000万円超</td><td>45%</td><td>4,796,000円</td></tr>
+      </tbody>
+    </table>
+
+    <h2>③住民税の計算方法：課税所得の10%＋均等割</h2>
+    <p>住民税（所得割）は、所得税とほぼ同じ手順で課税所得を求めますが、給与所得控除の最低保障額（65万円）・基礎控除（43万円）・配偶者控除（33万円）・扶養控除（33万円）は所得税と異なる金額が使われます。課税所得に一律10%（市区町村民税6%＋道府県民税4%が目安）を掛けた「所得割」に、定額の「均等割」（自治体により異なりますが目安5,000円程度）を加えた金額が、住民税の年額です。なお住民税は前年の所得をもとに計算されるため、新卒1年目など前年に所得がなかった場合、1年目は住民税がかからず、2年目から天引きが始まる点に注意が必要です。</p>
+
+    <h2>試算例：額面年収500万円・40歳未満・独身のケース</h2>
+    <p>額面年収500万円・40歳未満・配偶者控除の対象となる配偶者なし・扶養親族0人という条件（本シミュレーターの初期値）での試算例です。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">項目</th><th scope="col">金額</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>額面年収</td><td>5,000,000円</td></tr>
+        <tr><td>社会保険料（健康保険・厚生年金・雇用保険）</td><td>737,000円</td></tr>
+        <tr><td>所得税（復興特別所得税込み）</td><td>91,022円</td></tr>
+        <tr><td>住民税（均等割込み）</td><td>244,300円</td></tr>
+        <tr><td><strong>額面との差額（合計）</strong></td><td><strong>1,072,322円</strong></td></tr>
+        <tr><td><strong>手取り年収</strong></td><td><strong>3,927,678円</strong></td></tr>
+        <tr><td>手取り率</td><td>約78.6%</td></tr>
+        <tr><td>月あたりの手取り目安（年収÷12）</td><td>約327,307円</td></tr>
+      </tbody>
+    </table>
+    <p>額面年収500万円に対して、社会保険料・所得税・住民税の合計で約107万円（額面の約21.4%）が差し引かれ、手取り年収は約393万円（手取り率約78.6%）となる計算です。</p>
+
+    <h2>年収別の手取り早見表（40歳未満・独身・扶養なしの場合）</h2>
+    <p>同じ条件（40歳未満・配偶者控除なし・扶養親族0人）で額面年収を変えた場合の、手取り額・手取り率の目安は次のとおりです。年収が上がるほど、累進課税の影響で手取り率が下がっていく様子が確認できます。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">額面年収</th><th scope="col">手取り年収の目安</th><th scope="col">手取り率</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>300万円</td><td>約241万円</td><td>約80.4%</td></tr>
+        <tr><td>400万円</td><td>約317万円</td><td>約79.3%</td></tr>
+        <tr><td>500万円</td><td>約393万円</td><td>約78.6%</td></tr>
+        <tr><td>600万円</td><td>約466万円</td><td>約77.6%</td></tr>
+        <tr><td>700万円</td><td>約531万円</td><td>約75.9%</td></tr>
+        <tr><td>800万円</td><td>約594万円</td><td>約74.2%</td></tr>
+        <tr><td>1,000万円</td><td>約713万円</td><td>約71.3%</td></tr>
+        <tr><td>1,200万円</td><td>約829万円</td><td>約69.1%</td></tr>
+        <tr><td>1,500万円</td><td>約987万円</td><td>約65.8%</td></tr>
+      </tbody>
+    </table>
+    <p>配偶者控除や扶養控除の対象となる家族がいる場合は、課税所得がその分減るため、同じ額面年収でも手取り率は上の表より高くなります。ご自身の条件に近い試算をしたい場合は、下記のシミュレーターで年齢区分・配偶者控除の有無・扶養人数を入力してご確認ください。</p>
+
+    <h2>手取りを増やすためにできること</h2>
+    <p>額面年収を上げる以外にも、次のような方法で手取り額を実質的に増やせる余地があります。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">方法</th><th scope="col">考え方</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>iDeCo（個人型確定拠出年金）の活用</td><td>掛金の全額が所得控除の対象となり、課税所得が減るため所得税・住民税が軽減される。老後資金づくりと節税を同時に行える</td></tr>
+        <tr><td>ふるさと納税の活用</td><td>実質2,000円の自己負担で返礼品を受け取れる制度。所得税・住民税の控除上限額の範囲内であれば、手取りが直接増えるわけではないが返礼品分だけ家計の負担が軽くなる</td></tr>
+        <tr><td>各種控除の申告漏れを防ぐ</td><td>生命保険料控除・地震保険料控除・医療費控除（セルフメディケーション税制を含む）など、年末調整や確定申告で申告すれば控除できるものを漏れなく反映する</td></tr>
+        <tr><td>新NISAでの資産運用</td><td>手取りそのものは増えないが、運用益が非課税になるため、手取りの一部を効率よく増やす手段として活用できる</td></tr>
+      </tbody>
+    </table>
+    <p>これらの制度はいずれも「額面年収を増やす」のではなく「同じ額面年収に対する手取りを実質的に増やす、または効率よく資産を増やす」ためのものです。それぞれの制度の詳しい仕組みは、下記の関連記事・シミュレーターであわせてご確認ください。</p>
+
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>額面年収と手取り年収の違いは何ですか？</dt>
+        <dd>「額面年収」は、社会保険料や税金が天引きされる前の、会社が支払う給与・賞与の合計額です。求人票や源泉徴収票の「支払金額」欄に記載される金額はこの額面です。「手取り年収」は、額面から健康保険・厚生年金・雇用保険などの社会保険料と、所得税・住民税を差し引いた後、実際に銀行口座へ振り込まれる（自由に使える）金額を指します。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>手取り額はどうやって計算しますか？</dt>
+        <dd>手取り額は「額面年収－社会保険料－所得税－住民税」で計算します。社会保険料は額面にほぼ一定の料率（健康保険・厚生年金・雇用保険、40〜64歳は介護保険も）を掛けて求めます。所得税・住民税は、額面から給与所得控除・社会保険料控除・基礎控除・配偶者控除や扶養控除などを差し引いた「課税所得」に税率を掛けて計算するため、単純な一定率の天引きではありません。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>一般的な手取り率の目安はどれくらいですか？</dt>
+        <dd>独身・扶養家族なしの会社員の場合、額面年収に対する手取り率はおおむね75〜80%程度が目安です。本シミュレーターの試算では、額面年収300万円で手取り率約80.4%、500万円で約78.6%、800万円で約74.2%、1,500万円で約65.8%と、年収が上がるほど手取り率は下がる傾向があります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>年収が上がると手取り率が下がるのはなぜですか？</dt>
+        <dd>社会保険料（健康保険・雇用保険）と所得税・住民税は、課税所得が一定額を超えると段階的に高い税率が適用される「累進課税」の仕組みになっているためです。厚生年金保険料には標準報酬月額の上限があるため一定額で頭打ちになりますが、所得税は課税所得が195万円を超えるごとに税率が5%→10%→20%→23%→33%→40%→45%と段階的に上がるため、年収が上がるほど額面に占める税金の割合が大きくなり、結果として手取り率は下がっていきます。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>配偶者控除・扶養控除があると手取りはどう変わりますか？</dt>
+        <dd>配偶者控除（年収103万円以下の配偶者がいる場合）や扶養控除（16歳以上の扶養親族がいる場合）が適用されると、所得税の課税所得から38万円、住民税の課税所得から33万円が1人あたり差し引かれるため、その分だけ所得税・住民税が安くなり、手取り額は増えます。本シミュレーターでは、配偶者控除の対象となる配偶者の有無と扶養親族の人数を入力すると、この控除を反映した手取り額を確認できます。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>40歳以上と40歳未満で手取りが違うのはなぜですか？</dt>
+        <dd>40歳になると公的介護保険の第2号被保険者となり、健康保険料に介護保険料（本人負担分の目安で額面の0.8%程度）が上乗せされるため、40歳未満のときと比べて社会保険料の負担が増え、その分だけ手取り額は少なくなります。65歳になると原則として介護保険料は健康保険料とは別に年金から天引きされる形に切り替わるため、給与からの介護保険料の天引きはなくなりますが、雇用形態により扱いが異なる場合があります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>賞与（ボーナス）の手取りも同じ計算方法ですか？</dt>
+        <dd>毎月の給与と賞与では、所得税の計算方法が異なります。毎月の給与は「給与所得の源泉徴収税額表」を使いますが、賞与は国税庁が公表する「賞与に対する源泉徴収税額の算出率の表」という別の表を使って源泉徴収額を計算します。本シミュレーターの「額面年収」は毎月の給与と賞与の合計を想定した年間ベースの試算のため、賞与だけの手取り額を詳しく知りたい場合は、賞与の手取り額シミュレーターをあわせてご利用ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 記事下部 --></div>
+
+  <div class="affiliate-box">
+    <h3>手取りを効率よく増やしたいなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>iDeCo・NISAの始め方を無料相談する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>証券口座を開設してNISA・iDeCoを始める</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>あわせて使いたい関連ツール（年収・手取り・退職金）</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="nenshu-hub.html?tool=tedori">
+        <span class="badge">シミュレーター</span>
+        <h3>年収から手取り額シミュレーター</h3>
+        <p>額面年収・年齢区分・配偶者控除の有無・扶養人数から、手取り年収・手取り率の目安を試算します。</p>
+      </a>
+      <a class="tool-card" href="nenshu-hub.html?tool=shoyo">
+        <span class="badge">シミュレーター</span>
+        <h3>賞与の手取り額シミュレーター</h3>
+        <p>賞与の額面から、国税庁の源泉徴収税額の算出率の表に基づいて手取り賞与額を試算します。</p>
+      </a>
+      <a class="tool-card" href="nenshu-no-kabe-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>年収の壁とは？完全ガイド</h3>
+        <p>103万・106万・130万・150万円など、手取りに影響する年収の壁の違いを一覧で解説します。</p>
+      </a>
+      <a class="tool-card" href="shakaihoken-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>社会保険料とは？完全ガイド</h3>
+        <p>手取り計算に欠かせない健康保険・厚生年金・雇用保険の仕組みと保険料率を解説します。</p>
+      </a>
+      <a class="tool-card" href="haiguusha-fuyou-koujo-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>配偶者控除・扶養控除とは？完全ガイド</h3>
+        <p>手取り額に影響する配偶者控除・扶養控除の対象条件と控除額を早見表で整理します。</p>
+      </a>
+      <a class="tool-card" href="ideco-hub.html?tool=setsuzei">
+        <span class="badge">シミュレーター</span>
+        <h3>iDeCo節税シミュレーター</h3>
+        <p>掛金の所得控除による、所得税・住民税の軽減額の目安を試算します。</p>
+      </a>
+    </div>
+  </section>
+
+  <div class="disclaimer">
+    本ページは給与所得者の手取り額の計算方法に関する一般的な情報を解説する記事であり、個別の税務・社会保険に関する助言を目的とするものではありません。社会保険料率は協会けんぽの全国平均目安による概算であり、実際の保険料率は加入する健康保険組合・都道府県・年度により異なります。配偶者控除・配偶者特別控除・扶養控除は簡略化した条件で説明しています。正確な金額は勤務先の給与担当者・税理士・年金事務所等にご確認ください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../js/print-result.js"></script>
+<script src="../js/number-format.js"></script>
+<script src="../js/field-validation.js"></script>
+<script src="../js/back-to-top.js"></script>
+<script src="../js/skip-link.js"></script>
+<script src="../js/toc.js"></script>
+<script src="../js/recent-tools.js"></script>
+<script src="../js/favorites.js"></script>
+<script src="../js/nav-toggle.js"></script>
+<script src="../js/site-search-data.js"></script>
+<script src="../js/site-search.js"></script>
+</body>
+</html>
