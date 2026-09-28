@@ -108,6 +108,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "高校無償化とは？完全ガイド",
+    "desc": "2026年度から所得制限が撤廃された高等学校等就学支援金の仕組み、学校種別ごとの支給額、私立高校の自己負担、申請方法まで解説します。",
+    "href": "pages/koukou-mushouka-guide.html",
+    "category": "教育資金・保険",
+    "type": "guide"
+  },
+  {
     "title": "節税・控除シミュレーター まとめ",
     "desc": "ふるさと納税控除上限額・医療費控除・副業20万円ルール・確定申告要否チェックの4ツールをタブ切り替えで使えます。",
     "href": "pages/setsuzei-hub.html?tool=furusato",
