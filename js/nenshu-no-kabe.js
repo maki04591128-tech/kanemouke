@@ -41,8 +41,7 @@
   // 所得税の基礎控除額。令和8年度税制改正により、令和8・9年分は年収に応じて段階的に変わる
   // （nenshu-tedori.js等の他ツールと同じ式。206万円超の年収帯にも対応するため一律104万円としない）。
   function incomeBasicDeduction(grossIncome) {
-    if (grossIncome <= 2060000) return 1040000;
-    if (grossIncome <= 6655556) return 620000;
+    if (grossIncome <= 6655556) return 1040000;
     if (grossIncome <= 8500000) return 670000;
     return 620000; // 合計所得金額2,350万円超（収入2,545万円超）の逓減は簡易化のため未対応
   }
