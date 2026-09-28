@@ -129,6 +129,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "生命保険の必要保障額とは？完全ガイド",
+    "desc": "「遺族に必要な支出－準備できる資金」という計算式、生活費を70%→50%と見積もる考え方、教育費プランの選び方、住宅ローンの団信との関係、保険の選び方まで解説します。",
+    "href": "pages/hoshougaku-guide.html",
+    "category": "教育資金・保険",
+    "type": "guide"
+  },
+  {
     "title": "節税・控除シミュレーター まとめ",
     "desc": "ふるさと納税控除上限額・医療費控除・副業20万円ルール・確定申告要否チェックの4ツールをタブ切り替えで使えます。",
     "href": "pages/setsuzei-hub.html?tool=furusato",
