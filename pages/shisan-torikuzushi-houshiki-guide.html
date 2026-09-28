@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>資産の取り崩し方式とは？定額・定率・定率＋下限額の違いと選び方 完全ガイド | ふやすノート</title>
+<meta name="description" content="リタイア後・FIRE達成後に資産を取り崩す3つの代表的な方式（定額・定率・定率＋下限額）の仕組みとメリット・デメリット、インフレ率を考慮すべき理由、資産取り崩しシミュレーターの結果の読み方を、関連する無料シミュレーターへのリンク付きで整理します。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/shisan-torikuzushi-houshiki-guide.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="資産の取り崩し方式とは？定額・定率・定率＋下限額の違いと選び方 完全ガイド | ふやすノート">
+<meta property="og:description" content="リタイア後・FIRE達成後に資産を取り崩す3つの代表的な方式（定額・定率・定率＋下限額）の仕組みとメリット・デメリット、インフレ率を考慮すべき理由、資産取り崩しシミュレーターの結果の読み方を、関連する無料シミュレーターへのリンク付きで整理します。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/shisan-torikuzushi-houshiki-guide.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="資産の取り崩し方式とは？定額・定率・定率＋下限額の違いと選び方 完全ガイド | ふやすノート">
+<meta name="twitter:description" content="リタイア後・FIRE達成後に資産を取り崩す3つの代表的な方式（定額・定率・定率＋下限額）の仕組みとメリット・デメリット、インフレ率を考慮すべき理由、資産取り崩しシミュレーターの結果の読み方を、関連する無料シミュレーターへのリンク付きで整理します。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"></noscript>
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "資産の取り崩し方式にはどんな種類がありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "代表的なものとして「定額取り崩し」「定率取り崩し」「定率＋下限額」の3方式があります。定額は毎年一定の金額を取り崩す方式、定率は残高に対して一定の割合を取り崩す方式、定率＋下限額は定率方式をベースにしつつ最低限の取り崩し額を下回らないようにする折衷案です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "定額取り崩しと定率取り崩し、どちらが資産を長持ちさせやすいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "一般的には定率取り崩しの方が資産は尽きにくい傾向があります。残高が減れば取り崩し額も自動的に減るため、理論上は資産が完全にゼロにはなりにくいからです。一方で定額取り崩しは、相場が下落した年も取り崩し額を減らさないため、資産の減り方が急になりやすい方式です。ただし定率取り崩しは晩年に向けて使える金額が目減りしていく点に注意が必要です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「定率＋下限額」方式とはどういう仕組みですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "その年の残高に取り崩し率を掛けた金額と、あらかじめ決めた年間の下限額とを比較し、大きい方をその年の取り崩し額とする方式です。相場が好調なときは定率方式と同じだけ受け取りつつ、相場が悪化して定率方式の金額が下限額を下回った年でも、最低限の生活費を確保しやすくなります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "定額方式の取り崩し額をインフレ率で増額する意味は何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "生活費は物価上昇（インフレ）に応じて年々増えていくのが一般的です。定額取り崩しの金額を最初の年のまま据え置くと、実質的な購買力は年々目減りしてしまいます。想定インフレ率に応じて取り崩し額を毎年増額することで、実質的な生活水準を維持しやすくなりますが、その分資産の減りは速くなります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "FIRE達成シミュレーターの「4%ルール」とはどう違うのですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FIRE達成シミュレーターは「年間生活費÷引き出し率（4%ルールなど）」で必要資産額を計算し、達成後もその引き出し率どおりに定額（または定率）で取り崩す、という単一の前提で試算しています。本ガイドで扱う資産取り崩しシミュレーターは、その取り崩し局面だけを取り出し、定額・定率・定率＋下限額という複数の方式を同じ条件で比較できるようにした、補完的な位置づけのツールです。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "取り崩しシミュレーターの試算に税金や手数料は考慮されていますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "考慮していません。想定運用利回り・取り崩し率・インフレ率はいずれも毎年一定という単純化した仮定に基づく試算であり、運用益への課税や売買手数料・信託報酬等のコストは含まれていません。実際の手取り額はこれらのコストの分だけ試算結果より少なくなる点にご注意ください。"
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://maki04591128-tech.github.io/kanemouke/index.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "FIRE・資産取り崩し",
+      "item": "https://maki04591128-tech.github.io/kanemouke/pages/fire-hub.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "資産の取り崩し方式とは？定額・定率・定率＋下限額の違いと選び方 完全ガイド"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+    <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false">
+      <span class="icon" aria-hidden="true"></span>
+      <span>メニュー</span>
+    </button>
+    <nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="container">
+<nav class="breadcrumb-nav" aria-label="パンくずリスト">
+  <ul class="breadcrumb">
+    <li><a href="../index.html">ホーム</a></li>
+    <li><a href="fire-hub.html">FIRE・資産取り崩し</a></li>
+    <li aria-current="page">資産の取り崩し方式とは？定額・定率・定率＋下限額の違いと選び方 完全ガイド</li>
+  </ul>
+</nav>
+
+  <div class="page-title">
+    <h1>資産の取り崩し方式とは？定額・定率・定率＋下限額の違いと選び方 完全ガイド</h1>
+    <p>リタイア後やFIRE達成後、積み上げてきた資産をどう取り崩していくかは、積立期の資産形成と同じくらい重要なテーマです。「定額」「定率」「定率＋下限額」のどの方式を選ぶかによって、資産が持続する年数や、毎年使える生活費の見通しやすさが大きく変わります。それぞれの方式の仕組みとメリット・デメリット、インフレ率を考慮すべき理由、資産取り崩しシミュレーターの結果の読み方まで整理します。関連する無料シミュレーターへのリンクも付けているので、あわせてご活用ください。</p>
+    <div class="article-actions">
+      <button type="button" id="print-result-btn" class="share-btn secondary" aria-label="この記事を印刷またはPDFで保存">記事を印刷・PDF保存</button>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 記事ページ上部 --></div>
+
+  <section class="article-section">
+    <h2>資産の取り崩し方式はなぜ重要か</h2>
+    <p>FIRE達成シミュレーターでは、目標資産額を「年間生活費÷引き出し率」という一定のルール（4%ルールなど）で計算し、達成後もその引き出し率どおりに取り崩す前提で試算しています。しかし実際にリタイア後の生活が始まると、相場は毎年上下し、生活費も年によって変わります。あらかじめ「どの方式で取り崩すか」を決めておかないと、相場が悪い年に慌てて取り崩し額を減らしたり、逆に相場が良い年に使いすぎたりと、行き当たりばったりの判断になりがちです。取り崩し方式を決めておくことで、資産の持続年数の見通しを立てやすくなり、感情に左右された売却も避けやすくなります。</p>
+
+    <h2>3つの代表的な取り崩し方式</h2>
+    <p>資産取り崩しシミュレーターでは、次の3つの方式を同じ条件（資産額・想定運用利回り）で比較できます。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">方式</th><th scope="col">仕組み</th><th scope="col">向いている人</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>①定額取り崩し</td><td>毎年（またはインフレ率で増額しながら）一定の金額を取り崩す</td><td>毎月・毎年の生活費を一定額として計画したい人</td></tr>
+        <tr><td>②定率取り崩し</td><td>その時点の残高に対して一定の割合を毎年取り崩す</td><td>資産を長持ちさせることを優先したい人</td></tr>
+        <tr><td>③定率＋下限額</td><td>「残高×取り崩し率」と「あらかじめ決めた下限額」のうち大きい方を取り崩す</td><td>資産の持続性と生活費の下限確保を両立したい人</td></tr>
+      </tbody>
+    </table>
+
+    <h2>①定額取り崩しのメリット・デメリット</h2>
+    <p>定額取り崩しは、毎年ほぼ一定の金額を取り崩す方式です。「今年はいくら使えるか」があらかじめ決まっているため、生活費の見通しが立てやすいのが最大のメリットです。一方で、相場が下落した年も取り崩し額を減らさないため、下落局面が続くと資産の減り方が急になりやすいというデメリットがあります。極端なケースでは、相場の低迷が長引くと想定より早く資産が尽きてしまうリスクもあります。</p>
+
+    <h2>②定率取り崩しのメリット・デメリット</h2>
+    <p>定率取り崩しは、その時点の残高に対して一定の割合（例：年4%）だけを取り崩す方式です。残高が減れば取り崩し額も自動的に減るため、理論上は資産が完全にゼロにはなりにくいという特徴があります。資産取り崩しシミュレーターで定率方式を選ぶと「資産が尽きない」という結果が表示されることがあるのはこのためです。一方で、相場が下落した年は取り崩し額（＝その年に使える生活費）も減ってしまうため、生活費の見通しが立てにくく、晩年に向けて使えるお金が目減りしていく可能性がある点がデメリットです。</p>
+
+    <h2>③定率＋下限額方式の考え方</h2>
+    <p>定率＋下限額は、定率方式をベースにしつつ「最低限これだけは取り崩す」という下限額を設ける折衷案です。その年の「残高×取り崩し率」と「あらかじめ決めた下限額」を比較し、大きい方をその年の取り崩し額とします。相場が好調なときは定率方式と同じ金額を受け取りつつ、相場が悪化して定率方式の金額が下限額を下回った年でも、最低限の生活費相当額は確保できるという考え方です。ただし、下限額を高く設定しすぎると、実質的に定額方式に近づき、資産の減りが速くなる点には注意が必要です。</p>
+
+    <h2>インフレ率を考慮すべき理由</h2>
+    <p>資産取り崩しシミュレーターの定額取り崩しには「取り崩し額をインフレ率で毎年増額する」オプションがあります。生活費は物価上昇（インフレ）に応じて年々増えていくのが一般的であり、取り崩し額を最初の年の金額のまま据え置くと、実質的な購買力は年々目減りしてしまいます。想定インフレ率に応じて取り崩し額を毎年増額することで、名目上の生活水準を維持しやすくなりますが、その分だけ資産の減りは速くなります。長期のリタイア生活を想定する場合は、インフレ率を考慮した試算と考慮しない試算の両方を見比べておくことをおすすめします。</p>
+
+    <h2>シミュレーション結果の読み方</h2>
+    <p>資産取り崩しシミュレーターでは、取り崩し開始時点の資産額・想定運用利回り・各方式のパラメータを入力すると、3方式それぞれの「初年度の取り崩し額」と「資産が持続する年数」が表で比較できるほか、資産残高の推移がグラフで表示されます。結果を読むときは、次の点を意識すると条件を調整しやすくなります。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">確認したいこと</th><th scope="col">見るポイント</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>資産がシミュレーション上限年数まで持続するか</td><td>比較表の「資産の持続年数」がシミュレーション上限年数に達しているかを確認する</td></tr>
+        <tr><td>初年度に使える金額の水準感</td><td>3方式の「初年度の取り崩し額」を比較し、生活費として現実的な水準かを確認する</td></tr>
+        <tr><td>方式による持続年数の差</td><td>定額方式と定率方式で持続年数がどれだけ変わるかを比較し、相場変動への耐性をイメージする</td></tr>
+        <tr><td>下限額設定の妥当性</td><td>定率＋下限額の下限額を、定額方式の取り崩し額と比べて高すぎないか確認する</td></tr>
+      </tbody>
+    </table>
+    <p>想定運用利回りやシミュレーション上限年数を変えて何度か試算し直すことで、自分の資産額・生活費の前提でどの方式が現実的かを比較検討しやすくなります。</p>
+
+    <h2>FIRE達成シミュレーターとの関係</h2>
+    <p>FIRE達成シミュレーターは、積立期間から目標資産額への到達時期を試算するツールで、達成後の取り崩しは「引き出し率どおりに取り崩す」という単一の前提で計算しています。これは主に、必要資産額を逆算するための単純化された前提です。実際にリタイアした後は、本ガイドで扱う定額・定率・定率＋下限額のどの方式で取り崩すかによって、資産の持続年数の見通しが変わってきます。FIRE達成を目指す積立期の計画にはFIRE達成シミュレーター、達成後（またはリタイア後）の取り崩し方針の検討には資産取り崩しシミュレーターを、それぞれの局面に応じて使い分けることをおすすめします。</p>
+
+    <h2>よくある誤解</h2>
+    <h3>定率方式なら資産は絶対に尽きないと思っている</h3>
+    <p>定率方式は残高が減れば取り崩し額も比例して減るため、数式の上では資産が限りなくゼロに近づいても完全にはゼロになりません。しかしこれは「毎年決まった割合だけを取り崩し続けた場合」の理論上の性質であり、実際には想定外の大きな出費で追加の取り崩しが必要になることもあります。また、資産が目減りするほど取り崩せる生活費も減っていくため、「尽きない」ことと「生活費が十分に確保できる」ことは別の問題です。</p>
+    <h3>どの方式でも最終的な資産の減り方は同じだと思っている</h3>
+    <p>同じ資産額・同じ想定運用利回りでも、定額・定率・定率＋下限額のどの方式を選ぶかによって、資産が持続する年数や毎年使える金額の推移は大きく異なります。相場の変動に対する耐性も方式ごとに違うため、複数の方式を同じ条件で比較したうえで検討することが重要です。</p>
+    <h3>一度決めた方式をリタイア後ずっと変えてはいけないと思っている</h3>
+    <p>取り崩し方式は一度決めたら固定しなければならないものではありません。実際の相場動向やライフステージの変化に応じて、定期的に前提条件を見直し、必要であれば方式やパラメータを調整することも一般的です。</p>
+
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>資産の取り崩し方式にはどんな種類がありますか？</dt>
+        <dd>代表的なものとして「定額取り崩し」「定率取り崩し」「定率＋下限額」の3方式があります。定額は毎年一定の金額を取り崩す方式、定率は残高に対して一定の割合を取り崩す方式、定率＋下限額は定率方式をベースにしつつ最低限の取り崩し額を下回らないようにする折衷案です。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>定額取り崩しと定率取り崩し、どちらが資産を長持ちさせやすいですか？</dt>
+        <dd>一般的には定率取り崩しの方が資産は尽きにくい傾向があります。残高が減れば取り崩し額も自動的に減るため、理論上は資産が完全にゼロにはなりにくいからです。一方で定額取り崩しは、相場が下落した年も取り崩し額を減らさないため、資産の減り方が急になりやすい方式です。ただし定率取り崩しは晩年に向けて使える金額が目減りしていく点に注意が必要です。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>「定率＋下限額」方式とはどういう仕組みですか？</dt>
+        <dd>その年の残高に取り崩し率を掛けた金額と、あらかじめ決めた年間の下限額とを比較し、大きい方をその年の取り崩し額とする方式です。相場が好調なときは定率方式と同じだけ受け取りつつ、相場が悪化して定率方式の金額が下限額を下回った年でも、最低限の生活費を確保しやすくなります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>定額方式の取り崩し額をインフレ率で増額する意味は何ですか？</dt>
+        <dd>生活費は物価上昇（インフレ）に応じて年々増えていくのが一般的です。定額取り崩しの金額を最初の年のまま据え置くと、実質的な購買力は年々目減りしてしまいます。想定インフレ率に応じて取り崩し額を毎年増額することで、実質的な生活水準を維持しやすくなりますが、その分資産の減りは速くなります。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>FIRE達成シミュレーターの「4%ルール」とはどう違うのですか？</dt>
+        <dd>FIRE達成シミュレーターは「年間生活費÷引き出し率（4%ルールなど）」で必要資産額を計算し、達成後もその引き出し率どおりに定額（または定率）で取り崩す、という単一の前提で試算しています。本ガイドで扱う資産取り崩しシミュレーターは、その取り崩し局面だけを取り出し、定額・定率・定率＋下限額という複数の方式を同じ条件で比較できるようにした、補完的な位置づけのツールです。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>取り崩しシミュレーターの試算に税金や手数料は考慮されていますか？</dt>
+        <dd>考慮していません。想定運用利回り・取り崩し率・インフレ率はいずれも毎年一定という単純化した仮定に基づく試算であり、運用益への課税や売買手数料・信託報酬等のコストは含まれていません。実際の手取り額はこれらのコストの分だけ試算結果より少なくなる点にご注意ください。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 記事下部 --></div>
+
+  <div class="affiliate-box">
+    <h3>リタイア後の資産運用の相談先をあわせて検討するなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>証券会社でNISA口座・取り崩しに使う商品を確認する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>資産運用の相談窓口を探す</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>あわせて使いたい関連シミュレーター</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="fire-hub.html?tool=torikuzushi">
+        <span class="badge">シミュレーター</span>
+        <h3>資産取り崩しシミュレーター</h3>
+        <p>取り崩し開始時点の資産額・想定運用利回りから、定額・定率・定率＋下限額の3方式で資産が何年もつかを比較します。</p>
+      </a>
+      <a class="tool-card" href="fire-hub.html?tool=fire">
+        <span class="badge">シミュレーター</span>
+        <h3>セミリタイア（FIRE）達成シミュレーター</h3>
+        <p>年間生活費・引き出し率から必要資産額を計算し、現在の資産・積立額・利回りから何年後に到達するかを試算します。</p>
+      </a>
+      <a class="tool-card" href="fire-hajimekata-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>FIRE（セミリタイア）の始め方 完全ガイド</h3>
+        <p>4%ルールで必要資産額を計算する考え方から、積立・取り崩し方針の決め方までを解説します。</p>
+      </a>
+      <a class="tool-card" href="nisa-deguchi-senryaku-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>新NISAの出口戦略（取り崩し方）完全ガイド</h3>
+        <p>新NISAで積み立てた資産を、いつ・どう取り崩していくかの考え方や、枠の復活ルールとの関係を解説します。</p>
+      </a>
+      <a class="tool-card" href="nisa-hub.html?tool=fukkatsu">
+        <span class="badge">シミュレーター</span>
+        <h3>新NISA 枠の復活シミュレーター</h3>
+        <p>保有商品を売却した場合に、取得価額分の生涯投資枠が翌年以降どれだけ復活するかを試算します。</p>
+      </a>
+      <a class="tool-card" href="haitou-hub.html?tool=saitoushi">
+        <span class="badge">シミュレーター</span>
+        <h3>配当金・分配金 受取型 vs 無分配型 比較シミュレーター</h3>
+        <p>配当を受け取って生活費に充てる場合と、無分配型で再投資し続ける場合の将来資産額を比較します。</p>
+      </a>
+    </div>
+  </section>
+
+  <div class="disclaimer">
+    本ページは資産の取り崩し方式に関する一般的な考え方を解説する記事であり、特定の取り崩し方式・金融商品の推奨や投資助言を目的としたものではありません。想定運用利回り・取り崩し率・インフレ率はいずれも毎年一定という単純化した仮定に基づく試算であり、将来の運用成果や資産の持続期間を保証するものではありません。運用益への課税や売買手数料・信託報酬等のコストは考慮していません。投資の最終判断はご自身の責任で行い、必要に応じて金融商品取引業者等の専門家にご相談ください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../js/print-result.js"></script>
+<script src="../js/number-format.js"></script>
+<script src="../js/field-validation.js"></script>
+<script src="../js/back-to-top.js"></script>
+<script src="../js/skip-link.js"></script>
+<script src="../js/toc.js"></script>
+<script src="../js/recent-tools.js"></script>
+<script src="../js/favorites.js"></script>
+<script src="../js/nav-toggle.js"></script>
+<script src="../js/site-search-data.js"></script>
+<script src="../js/site-search.js"></script>
+</body>
+</html>

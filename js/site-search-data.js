@@ -199,6 +199,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "資産の取り崩し方式とは？定額・定率・定率＋下限額の違いと選び方 完全ガイド",
+    "desc": "リタイア後・FIRE達成後に資産を取り崩す3つの代表的な方式（定額・定率・定率＋下限額）の仕組みとメリット・デメリット、インフレ率を考慮すべき理由、シミュレーター結果の読み方を解説します。",
+    "href": "pages/shisan-torikuzushi-houshiki-guide.html",
+    "category": "FIRE・資産取り崩し",
+    "type": "guide"
+  },
+  {
     "title": "相続・贈与シミュレーター まとめ",
     "desc": "相続税・生前贈与vs相続比較の2ツールをタブ切り替えで使えます。",
     "href": "pages/souzoku-hub.html?tool=souzokuzei",
