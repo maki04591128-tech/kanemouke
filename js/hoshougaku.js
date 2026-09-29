@@ -46,11 +46,11 @@
     return man.toLocaleString("ja-JP", { maximumFractionDigits: 1 }) + " 万円";
   }
 
-  // 遺族基礎年金（令和7年度の目安額）：本人831,700円＋子の加算（1・2人目は234,800円ずつ、
-  // 3人目以降は78,300円ずつ）。遺族厚生年金は勤務先の給与履歴によって変わるため含まない。
+  // 遺族基礎年金（令和8年度の目安額）：本人847,300円＋子の加算（1・2人目は243,800円ずつ、
+  // 3人目以降は81,300円ずつ）。遺族厚生年金は勤務先の給与履歴によって変わるため含まない。
   function basicSurvivorPension(numChildren) {
-    var addition = Math.min(numChildren, 2) * 234800 + Math.max(0, numChildren - 2) * 78300;
-    return 831700 + addition;
+    var addition = Math.min(numChildren, 2) * 243800 + Math.max(0, numChildren - 2) * 81300;
+    return 847300 + addition;
   }
 
   function computeNeed(childAge, spouseAge, numChildren, eduTotalPerChild, monthlyLiving, spouseIncomeYearly, savings, pensionYearly, funeralCost) {
