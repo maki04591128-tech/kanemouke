@@ -52,6 +52,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "NISA生涯投資枠1,800万円を何年で使い切るべきか 完全ガイド",
+    "desc": "毎月の積立額別に生涯投資枠を使い切るまでの期間を試算し、成長投資枠上限1,200万円との関係や使い切った後の税金まで解説します。",
+    "href": "pages/nisa-waku-guide.html",
+    "category": "積立・新NISA",
+    "type": "guide"
+  },
+  {
     "title": "iDeCo・小規模企業共済シミュレーター まとめ",
     "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済の5ツールをタブ切り替えで使えます。",
     "href": "pages/ideco-hub.html?tool=setsuzei",
