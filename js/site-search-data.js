@@ -437,6 +437,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "在職老齢年金とは？働きながら年金を受け取ると年金が減る仕組みと令和8年度の基準額65万円 完全ガイド",
+    "desc": "基本月額・総報酬月額相当額・支給停止調整額を使った計算式、令和4年度47万円から令和8年度65万円までの基準額改定の経緯、年収別の支給停止額早見表まで解説します。",
+    "href": "pages/zaishoku-nenkin-guide.html",
+    "category": "年収・手取り・退職金",
+    "type": "guide"
+  },
+  {
     "title": "FIRE達成",
     "desc": "現在の資産・毎月の積立額・想定利回りから、いわゆる「4%ルール」など任意の取り崩し率で計算したFIRE（Financial Independence, Retire Early＝経済的自立と早期リタイア）に必要な資産額と、そこに到達するまでの年数・年齢を試算します。達成後に生活費を取り崩しながら運用を続けた場合、資産が何年もつかもあわせて確認できます。",
     "href": "pages/fire-hub.html?tool=fire",
