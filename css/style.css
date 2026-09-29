@@ -1393,6 +1393,20 @@ a { color: var(--color-primary); }
   color: var(--color-accent);
   font-weight: 700;
 }
+/* 解説記事内の表（.article-section .data-table）は<div class="table-wrap">で
+   囲まれていないため、列数の多い表がスマホ幅（390px前後）で見出しが
+   1文字ずつ縦積みになり読みにくくなる問題があった。表本体に
+   display:blockを与えて横スクロール可能にし、見出しセルのみ
+   white-space:nowrapで折り返しを止めることで、見出しの縦積みを防ぎつつ、
+   説明文が長いセル（本文td）は従来どおり折り返して表示する。 */
+.article-section .data-table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.article-section .data-table th {
+  white-space: nowrap;
+}
 
 /* Article / explainer sections */
 .article-section {
