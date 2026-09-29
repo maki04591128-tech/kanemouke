@@ -45,6 +45,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "信託報酬の差は長期でどれだけ効く？完全ガイド",
+    "desc": "わずかな信託報酬の差が長期の積立でなぜ大きな金額差になるのか、月3万円・30年の具体例と実際のファンドの信託報酬水準で解説します。",
+    "href": "pages/shintaku-houshu-guide.html",
+    "category": "積立・新NISA",
+    "type": "guide"
+  },
+  {
     "title": "iDeCo・小規模企業共済シミュレーター まとめ",
     "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済の5ツールをタブ切り替えで使えます。",
     "href": "pages/ideco-hub.html?tool=setsuzei",
