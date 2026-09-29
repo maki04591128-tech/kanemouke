@@ -66,6 +66,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "NISAのつみたて投資枠と成長投資枠、どちらを優先すべきか？配分の考え方 完全ガイド",
+    "desc": "「つみたて優先」「成長優先」「比率按分」「つみたてのみ」の4配分を比較し、成長投資枠だけを優先すると陥りやすい落とし穴を解説します。",
+    "href": "pages/nisa-haibun-guide.html",
+    "category": "積立・新NISA",
+    "type": "guide"
+  },
+  {
     "title": "iDeCo・小規模企業共済シミュレーター まとめ",
     "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済の5ツールをタブ切り替えで使えます。",
     "href": "pages/ideco-hub.html?tool=setsuzei",

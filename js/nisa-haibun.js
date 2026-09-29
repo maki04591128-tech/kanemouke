@@ -121,7 +121,9 @@
 
   // つみたて投資枠・成長投資枠それぞれへの毎月の積立額から、生涯投資枠を使い切るまでの
   // 期間と、その時点（使い切らない場合はMAX_MONTHS時点）での資産評価額を試算する。
-  function simulate(tsumitateMonthly, growthMonthly, ratePct) {
+  // extraTaxableMonthly: 毎月の投資予定額のうち、どちらの枠にも割り当てられなかった分
+  // （例：「つみたて投資枠のみ」戦略で月10万円を超える分）。常に課税口座に回るものとして扱う。
+  function simulate(tsumitateMonthly, growthMonthly, ratePct, extraTaxableMonthly) {
     var monthlyRate = ratePct / 100 / 12;
 
     var cGrowth = 0;
@@ -159,7 +161,7 @@
       yTsumitate += tsumitateIn;
 
       var nisaIn = growthIn + tsumitateIn;
-      var overflow = growthMonthly - growthIn + (tsumitateMonthly - tsumitateIn);
+      var overflow = growthMonthly - growthIn + (tsumitateMonthly - tsumitateIn) + extraTaxableMonthly;
 
       nisaValue = (nisaValue + nisaIn) * (1 + monthlyRate);
       taxablePrincipal += overflow;
@@ -204,7 +206,8 @@
 
     var results = STRATEGIES.map(function (s) {
       var split = s.split(total);
-      var r = simulate(split.tsumitate, split.growth, ratePct);
+      var extra = Math.max(0, total - split.tsumitate - split.growth);
+      var r = simulate(split.tsumitate, split.growth, ratePct, extra);
       return {
         strategy: s,
         split: split,
