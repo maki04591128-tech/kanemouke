@@ -31,6 +31,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "相場暴落時、積立投資はやめるべき？続けるべき？完全ガイド",
+    "desc": "継続・中断・狼狽売りで資産額にどれだけ差が出るかという仕組みから、過去の暴落の回復スピードの違い、暴落前に確認したいチェックリストまで解説します。",
+    "href": "pages/bouraku-taiou-guide.html",
+    "category": "積立・新NISA",
+    "type": "guide"
+  },
+  {
     "title": "iDeCo・小規模企業共済シミュレーター まとめ",
     "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済の5ツールをタブ切り替えで使えます。",
     "href": "pages/ideco-hub.html?tool=setsuzei",
