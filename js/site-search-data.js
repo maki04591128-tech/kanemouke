@@ -38,6 +38,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "一括投資 vs 積立投資、結局どちらが得？完全ガイド",
+    "desc": "期待値で一括投資が有利とされる理由、積立投資（時間分散）が有利になる局面、NISAの年間投資枠との関係まで解説します。",
+    "href": "pages/ikkatsu-vs-tsumitate-guide.html",
+    "category": "積立・新NISA",
+    "type": "guide"
+  },
+  {
     "title": "iDeCo・小規模企業共済シミュレーター まとめ",
     "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済の5ツールをタブ切り替えで使えます。",
     "href": "pages/ideco-hub.html?tool=setsuzei",
