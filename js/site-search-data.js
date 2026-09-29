@@ -59,6 +59,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "生活防衛資金は何ヶ月分必要か？目安の決め方と貯め方 完全ガイド",
+    "desc": "会社員・公務員は3〜6ヶ月分、自営業・フリーランスは6〜12ヶ月分。生活費別の目標金額一覧と、貯めながら積立を始めてよいかを解説します。",
+    "href": "pages/seikatsu-bouei-shikin-guide.html",
+    "category": "積立・新NISA",
+    "type": "guide"
+  },
+  {
     "title": "iDeCo・小規模企業共済シミュレーター まとめ",
     "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済の5ツールをタブ切り替えで使えます。",
     "href": "pages/ideco-hub.html?tool=setsuzei",
