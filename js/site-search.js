@@ -75,10 +75,19 @@
   // 並べると、個別ツール名で検索したときに常にまとめカード（既定タブ）が
   // 先頭に来てしまい、Enterキーでの直接ジャンプが意図と違うタブに着地する。
   // タイトル一致 → カテゴリー一致 → 本文一致のみ、の順で優先度を下げて防ぐ。
-  function matchRank(item, query) {
-    if (item.titleText.indexOf(query) !== -1) return 0;
-    if (item.categoryText.indexOf(query) !== -1) return 1;
+  function matchRank(item, tokens) {
+    if (tokens.every(function (t) { return item.titleText.indexOf(t) !== -1; })) return 0;
+    if (tokens.every(function (t) { return item.categoryText.indexOf(t) !== -1; })) return 1;
     return 2;
+  }
+
+  // クエリを空白（半角・全角）区切りでトークン化する。「FIRE 社会保険」のように
+  // 複数語をスペース区切りで入力した場合、従来はクエリ全体を1つの部分文字列として
+  // しか照合しておらず、語順・区切り方次第でヒットしないことがあった
+  // （例：「社会保険 FIRE」は語順が逆なので不一致）。各トークンがすべて含まれて
+  // いればヒットとみなすAND検索にすることで、語順に関わらずヒットするようにする。
+  function tokenize(query) {
+    return query.split(/[\s　]+/).filter(function (t) { return t.length > 0; });
   }
 
   var TYPE_LABEL = { hub: "まとめ", guide: "解説記事", tool: "ツール" };
@@ -192,12 +201,13 @@
       status.textContent = "";
       return;
     }
+    var tokens = tokenize(query);
     currentResults = items
       .filter(function (item) {
-        return item.text.indexOf(query) !== -1;
+        return tokens.every(function (t) { return item.text.indexOf(t) !== -1; });
       })
       .sort(function (a, b) {
-        return matchRank(a, query) - matchRank(b, query);
+        return matchRank(a, tokens) - matchRank(b, tokens);
       });
     renderResults();
     if (currentResults.length === 0) {
