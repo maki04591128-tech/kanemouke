@@ -81,6 +81,12 @@
     };
   });
 
+  // クエリを空白（半角・全角）区切りでトークン化する。site-search.js（ヘッダー検索）
+  // と同じ理由で、複数語をAND検索できるようにする（詳細はsite-search.js側のコメント参照）。
+  function tokenize(query) {
+    return query.split(/[\s　]+/).filter(function (t) { return t.length > 0; });
+  }
+
   function reset() {
     cards.forEach(function (group) {
       group.section.classList.remove("is-search-hidden");
@@ -98,11 +104,12 @@
   }
 
   function search(query) {
+    var tokens = tokenize(query);
     var total = 0;
     cards.forEach(function (group) {
       var visibleInSection = 0;
       group.items.forEach(function (item) {
-        var match = item.text.indexOf(query) !== -1;
+        var match = tokens.every(function (t) { return item.text.indexOf(t) !== -1; });
         item.el.classList.toggle("is-search-hidden", !match);
         if (match) visibleInSection++;
       });
