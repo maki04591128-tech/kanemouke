@@ -262,6 +262,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "FIRE達成後の社会保険・税金の手続き完全ガイド｜健康保険・年金・住民税はどうなる？",
+    "desc": "任意継続と国民健康保険の選び方、国民年金第1号被保険者への切り替え、退職後も続く住民税の負担、確定申告が必要になるケースまで解説します。",
+    "href": "pages/fire-shakaihoken-zeikin-guide.html",
+    "category": "FIRE・資産取り崩し",
+    "type": "guide"
+  },
+  {
     "title": "相続・贈与シミュレーター まとめ",
     "desc": "相続税・生前贈与vs相続比較の2ツールをタブ切り替えで使えます。",
     "href": "pages/souzoku-hub.html?tool=souzokuzei",
