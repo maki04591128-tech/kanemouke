@@ -73,6 +73,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "新NISAのデメリットは？始める前に知っておきたい6つの注意点 完全ガイド",
+    "desc": "元本割れリスク・損益通算や繰越控除ができない・年間投資枠360万円と生涯投資枠1,800万円の上限・枠の再利用は翌年からなど、6つのデメリットと始めるべき人の判断基準を解説します。",
+    "href": "pages/nisa-demerit-guide.html",
+    "category": "積立・新NISA",
+    "type": "guide"
+  },
+  {
     "title": "iDeCo・小規模企業共済シミュレーター まとめ",
     "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済の5ツールをタブ切り替えで使えます。",
     "href": "pages/ideco-hub.html?tool=setsuzei",
