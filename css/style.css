@@ -1041,6 +1041,26 @@ a { color: var(--color-primary); }
     margin-right: -20px;
     padding-left: 20px;
     padding-right: 20px;
+    /* ?tool=slugでのディープリンクやキーボード操作でjs/tabs.jsが
+       非表示のタブへscrollIntoViewした際、隣のタブが中途半端に
+       欠けた状態で左右の端に表示されることがある（184回目以前の
+       検証で確認）。左右の端にフェードをかけることで、途切れた
+       タブが「壊れて見える」のではなく「まだ続きがある」という
+       自然な見た目・手がかりになるようにする。 */
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 20px,
+      #000 calc(100% - 20px),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 20px,
+      #000 calc(100% - 20px),
+      transparent
+    );
   }
   .hub-tabs::-webkit-scrollbar {
     display: none;
@@ -2011,21 +2031,20 @@ a { color: var(--color-primary); }
   color: #666;
   word-break: break-all;
 }
-/* 印刷時のみ、後述の@page下余白を利用してページ下端に固定表示する
-   （position: fixedはブラウザの印刷機能ではページ毎に繰り返し描画される
-   ため、本文の一部としてではなく全ページ共通のフッターとして機能する。
-   Blink系ブラウザ（Chrome/Edge）で確認済みの挙動。Firefoxは繰り返されず
-   最終ページのみの表示に留まるが、画面表示への影響はなく退行でもない）。 */
+/* 印刷時は本文の一部として通常のフロー内に配置する（かつてはposition:
+   fixedでページ下端に固定していたが、Blink系（Chrome/Edge）は毎ページ
+   繰り返し描画される一方、Firefoxは最終ページのみ、Safari（WebKit）は
+   印刷時にそもそもfixed要素を通常のフロー内に描画するなど、ブラウザ間の
+   挙動差が大きく統一できなかったため撤去。通常のフロー配置なら全ての
+   ブラウザで本文末尾に一度だけ確実に表示される）。 */
 
 /* 結果の印刷・PDF保存（js/print-result.js が window.print() を呼び出す） */
 /* 統合ハブページで「結果を印刷・PDF保存」ボタンを押した際、入力条件と */
 /* 試算結果だけが読みやすく残るよう、ナビ・広告枠・タブ・共有ボックス等の */
 /* 印刷しても意味のない要素を非表示にする。 */
 @media print {
-  /* 下余白を広めに確保し、固定表示するフッター注記（.print-footer-note）
-     が本文の最終行と重ならないようにする。 */
   @page {
-    margin: 15mm 12mm 20mm 12mm;
+    margin: 15mm 12mm;
   }
   .site-header,
   .breadcrumb-nav,
@@ -2065,14 +2084,5 @@ a { color: var(--color-primary); }
   }
   .print-footer-note {
     display: block;
-    position: fixed;
-    left: 12mm;
-    right: 12mm;
-    bottom: 6mm;
-    max-height: 13mm;
-    margin-top: 0;
-    padding-top: 4px;
-    overflow: hidden;
-    background: #fff;
   }
 }
