@@ -766,6 +766,24 @@ a { color: var(--color-primary); }
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  /* 9カテゴリー分のピルはコンテナ幅に対して常に横幅が超過し、デスクトップ
+     幅（1280px）でも最後のピルが右端で中途半端に欠けて見える（251回目で
+     .hub-tabsに適用した端フェードと同じ課題）。両端にフェードをかけ、
+     欠けたピルが「まだ続きがある」という自然な手がかりになるようにする。 */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 20px,
+    #000 calc(100% - 20px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 20px,
+    #000 calc(100% - 20px),
+    transparent
+  );
 }
 .category-nav-inner::-webkit-scrollbar {
   display: none;
