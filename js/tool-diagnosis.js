@@ -65,6 +65,11 @@
       href: "pages/setsuzei-hub.html?tool=fukugyo",
       title: "副業20万円ルール 確定申告要否シミュレーター",
       desc: "副業の所得が20万円を超えたら確定申告が必要かどうかの目安がわかります。"
+    },
+    kakemochi: {
+      href: "pages/setsuzei-hub.html?tool=kakemochi",
+      title: "掛け持ちバイト 確定申告シミュレーター",
+      desc: "2か所以上から給与を受けている場合の確定申告の要否と、合算した所得税額の目安がわかります。"
     }
   };
 
@@ -526,6 +531,42 @@
       href: "pages/setsuzei-hub.html?tool=kakutei",
       title: "確定申告要否チェック",
       desc: "副業20万円ルールは所得税だけの特例のため、住民税の申告も含めて確定申告が必要かをまとめて確認できます。"
+    }],
+    // kakemochi（掛け持ちバイト）は、メインのおすすめ（掛け持ちバイトタブ）と
+    // 同じsetsuzei-hub.html内にある「確定申告要否チェック」タブ（掛け持ち
+    // バイトタブ自身の説明文が「従たる給与の年収合計が20万円を超えると
+    // 確定申告が必要」と述べており、正確な要否確認をこのタブへ誘導している）
+    // が、掛け持ちバイトを気にする全ての家族構成に共通して関連性が高いため、
+    // 必ず1件目として提示する。「配偶者・子どもあり」は、fukugyoと同様に
+    // 掛け持ち収入（給与以外の所得と同じく世帯の合計収入）がふるさと納税の
+    // 控除上限額に直接影響するため、家計全体で調整する機会が多い世帯として
+    // 2件目にふるさと納税控除上限額シミュレーターを追加する。
+    "kakemochi|spouse-child": [
+      {
+        href: "pages/setsuzei-hub.html?tool=kakutei",
+        title: "確定申告要否チェック",
+        desc: "掛け持ちバイトは年末調整だけでは精算できないため、住民税の申告も含めて確定申告が必要かをまとめて確認できます。"
+      },
+      {
+        href: "pages/setsuzei-hub.html?tool=furusato",
+        title: "ふるさと納税 控除上限額シミュレーター",
+        desc: "掛け持ち収入が増えると寄付上限額も変わります。あわせて確認しておくと安心です。"
+      }
+    ],
+    "kakemochi|spouse": [{
+      href: "pages/setsuzei-hub.html?tool=kakutei",
+      title: "確定申告要否チェック",
+      desc: "掛け持ちバイトは年末調整だけでは精算できないため、住民税の申告も含めて確定申告が必要かをまとめて確認できます。"
+    }],
+    "kakemochi|single": [{
+      href: "pages/setsuzei-hub.html?tool=kakutei",
+      title: "確定申告要否チェック",
+      desc: "掛け持ちバイトは年末調整だけでは精算できないため、住民税の申告も含めて確定申告が必要かをまとめて確認できます。"
+    }],
+    "kakemochi|skip": [{
+      href: "pages/setsuzei-hub.html?tool=kakutei",
+      title: "確定申告要否チェック",
+      desc: "掛け持ちバイトは年末調整だけでは精算できないため、住民税の申告も含めて確定申告が必要かをまとめて確認できます。"
     }]
   };
 
