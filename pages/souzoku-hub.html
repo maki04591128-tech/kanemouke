@@ -180,7 +180,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="souzokuzei-estateTotal">遺産総額（課税価格の合計額） <span class="unit">万円</span></label>
-<input id="souzokuzei-estateTotal" max="500000" min="0" step="100" type="number" value="6000"/>
+<input id="souzokuzei-estateTotal" inputmode="numeric" max="500000" min="0" step="100" type="number" value="6000"/>
 <p class="field-hint">預貯金・不動産（相続税評価額）・有価証券などの合計から、非課税財産（お墓など）や債務・葬式費用を差し引いた後のおおよその金額です。</p>
 </div>
 <div class="field">
@@ -192,7 +192,7 @@
 </div>
 <div class="field">
 <label for="souzokuzei-childCount">子の人数 <span class="unit">人</span></label>
-<input id="souzokuzei-childCount" max="10" min="0" step="1" type="number" value="2"/>
+<input id="souzokuzei-childCount" inputmode="numeric" max="10" min="0" step="1" type="number" value="2"/>
 <p class="field-hint">本ツールは「配偶者＋子（第1順位）」が相続人となるケースを想定しています。子がおらず父母・兄弟姉妹のみが相続人になるケース（第2・第3順位）は対象外です。</p>
 </div>
 <div class="field" id="souzokuzei-spouseShareRow">
@@ -274,7 +274,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="zouyo-estateTotal">相続財産の総額（生前贈与を行わなかった場合の想定額） <span class="unit">万円</span></label>
-<input id="zouyo-estateTotal" max="500000" min="0" step="100" type="number" value="10000"/>
+<input id="zouyo-estateTotal" inputmode="numeric" max="500000" min="0" step="100" type="number" value="10000"/>
 </div>
 <div class="field">
 <label for="zouyo-hasSpouse">配偶者の有無</label>
@@ -285,26 +285,26 @@
 </div>
 <div class="field">
 <label for="zouyo-childCount">子の人数 <span class="unit">人</span></label>
-<input id="zouyo-childCount" max="10" min="0" step="1" type="number" value="2"/>
+<input id="zouyo-childCount" inputmode="numeric" max="10" min="0" step="1" type="number" value="2"/>
 <p class="field-hint">本ツールは「配偶者＋子（第1順位）」が相続人となるケースを想定しています。実際の遺産分割は法定相続分どおりに行われるものと仮定して試算します（配偶者の税額軽減により配偶者の実質負担は常に0円になります）。</p>
 </div>
 <div class="field">
 <label for="zouyo-giftRecipients">生前贈与の受贈者数（子・孫など） <span class="unit">人</span></label>
-<input id="zouyo-giftRecipients" max="10" min="0" step="1" type="number" value="2"/>
+<input id="zouyo-giftRecipients" inputmode="numeric" max="10" min="0" step="1" type="number" value="2"/>
 <p class="field-hint">直系尊属から18歳以上の子・孫への贈与（特例贈与財産）を想定しています。暦年贈与・相続時精算課税制度のどちらのシナリオでも同じ人数・贈与額を用います。</p>
 </div>
 <div class="field">
 <label for="zouyo-annualGift">受贈者1人あたりの年間贈与額 <span class="unit">万円</span></label>
-<input id="zouyo-annualGift" max="5000" min="0" step="10" type="number" value="110"/>
+<input id="zouyo-annualGift" inputmode="numeric" max="5000" min="0" step="10" type="number" value="110"/>
 <p class="field-hint">暦年贈与・相続時精算課税制度とも、基礎控除は受贈者1人あたり年間110万円です。</p>
 </div>
 <div class="field">
 <label for="zouyo-giftYears">生前贈与を続ける年数 <span class="unit">年</span></label>
-<input id="zouyo-giftYears" max="50" min="0" step="1" type="number" value="10"/>
+<input id="zouyo-giftYears" inputmode="numeric" max="50" min="0" step="1" type="number" value="10"/>
 </div>
 <div class="field">
 <label for="zouyo-yearsUntilInheritance">相続開始（想定）までの残り年数 <span class="unit">年</span></label>
-<input id="zouyo-yearsUntilInheritance" max="60" min="0" step="1" type="number" value="15"/>
+<input id="zouyo-yearsUntilInheritance" inputmode="numeric" max="60" min="0" step="1" type="number" value="15"/>
 <p class="field-hint">生前贈与を始めてから実際に相続が発生するまでの年数です。生前贈与を行う年数と同じか、それより長い値を入力してください。</p>
 </div>
 <div class="field">

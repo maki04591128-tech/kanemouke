@@ -238,7 +238,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="setsuzei-monthly">毎月の掛金 <span class="unit">円</span></label>
-<input id="setsuzei-monthly" max="68000" min="1000" step="1000" type="number" value="23000"/>
+<input id="setsuzei-monthly" inputmode="numeric" max="68000" min="1000" step="1000" type="number" value="23000"/>
 </div>
 <div class="field">
 <label for="setsuzei-taxRate">所得税率（課税所得に応じた区分）</label>
@@ -333,12 +333,12 @@
 </div>
 <div class="field" id="gendogaku-offsetRow">
 <label for="gendogaku-offsetAmount" id="gendogaku-offsetLabel">他制度の掛金相当額の月額</label>
-<input id="gendogaku-offsetAmount" min="0" step="1000" type="number" value="0"/>
+<input id="gendogaku-offsetAmount" inputmode="numeric" min="0" step="1000" type="number" value="0"/>
 <p class="field-hint" id="gendogaku-offsetHint">勤務先の企業型DC事業主掛金やDBの掛金相当額など、iDeCoと合算枠を共有する他制度の月額掛金です。不明な場合は0のまま（上限まで拠出できるものとして）試算します。正確な金額は勤務先の担当部署にご確認ください。</p>
 </div>
 <div class="field">
 <label for="gendogaku-taxableIncome">年間の課税所得の目安 <span class="unit">円</span></label>
-<input id="gendogaku-taxableIncome" min="0" step="10000" type="number" value="3000000"/>
+<input id="gendogaku-taxableIncome" inputmode="numeric" min="0" step="10000" type="number" value="3000000"/>
 <p class="field-hint">給与所得者は給与所得から社会保険料控除・基礎控除など各種控除を差し引いた金額、自営業者は事業所得から各種控除を差し引いた金額です。所得税の限界税率（速算表）の算出にのみ使用し、正確な節税額は「iDeCo節税シミュレーター」でご確認ください。</p>
 </div>
 </div>
@@ -422,7 +422,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="uketori-amount">受け取り時のiDeCo資産評価額 <span class="unit">万円</span></label>
-<input id="uketori-amount" min="0" step="50" type="number" value="1500"/>
+<input id="uketori-amount" inputmode="numeric" min="0" step="50" type="number" value="1500"/>
 </div>
 <div class="field">
 <label for="uketori-contribYears">iDeCo加入者等期間（掛金拠出年数） <span class="unit" id="uketori-contribYearsOut">25 年</span></label>
@@ -470,15 +470,15 @@
 </div>
 <div class="field">
 <label for="uketori-overlapYear">その一時金を受け取った年 <span class="unit">西暦</span></label>
-<input id="uketori-overlapYear" max="2100" min="1990" step="1" type="number" value="2015"/>
+<input id="uketori-overlapYear" inputmode="numeric" max="2100" min="1990" step="1" type="number" value="2015"/>
 </div>
 <div class="field">
 <label for="uketori-overlapServiceYears">その受け取り時の勤続年数（拠出年数） <span class="unit">年</span></label>
-<input id="uketori-overlapServiceYears" max="60" min="1" step="1" type="number" value="15"/>
+<input id="uketori-overlapServiceYears" inputmode="numeric" max="60" min="1" step="1" type="number" value="15"/>
 </div>
 <div class="field">
 <label for="uketori-overlapAmount">その一時金の受取額 <span class="unit">万円</span></label>
-<input id="uketori-overlapAmount" max="100000" min="0" step="10" type="number" value="600"/>
+<input id="uketori-overlapAmount" inputmode="numeric" max="100000" min="0" step="10" type="number" value="600"/>
 <p class="field-hint">受取額が勤続年数相当の退職所得控除額より少ない場合、重複期間の算定に使う年数が受取額から逆算した年数に調整されます（施行令第70条第2項）。</p>
 </div>
 </div>
@@ -565,16 +565,16 @@
 </div>
 <div class="field" id="yuusen-offsetRow">
 <label for="yuusen-offsetAmount">他制度の掛金相当額の月額 <span class="unit">円</span></label>
-<input id="yuusen-offsetAmount" min="0" step="1000" type="number" value="0"/>
+<input id="yuusen-offsetAmount" inputmode="numeric" min="0" step="1000" type="number" value="0"/>
 <p class="field-hint">企業型DC事業主掛金やDBの掛金相当額など、iDeCoと合算枠を共有する他制度の月額掛金です。不明な場合は0のままで構いません。詳しくは「iDeCo拠出限度額シミュレーター」をご覧ください。</p>
 </div>
 <div class="field">
 <label for="yuusen-budget">毎月の投資に回せる金額（合計） <span class="unit">円</span></label>
-<input id="yuusen-budget" max="300000" min="0" step="1000" type="number" value="30000"/>
+<input id="yuusen-budget" inputmode="numeric" max="300000" min="0" step="1000" type="number" value="30000"/>
 </div>
 <div class="field">
 <label for="yuusen-taxableIncome">年間の課税所得の目安 <span class="unit">円</span></label>
-<input id="yuusen-taxableIncome" min="0" step="10000" type="number" value="3000000"/>
+<input id="yuusen-taxableIncome" inputmode="numeric" min="0" step="10000" type="number" value="3000000"/>
 <p class="field-hint">所得税の限界税率（速算表）の算出にのみ使用します。給与所得者は給与所得から社会保険料控除・基礎控除など各種控除を差し引いた金額の目安です。</p>
 </div>
 <div class="field">
@@ -689,7 +689,7 @@
 </div>
 <div class="field">
 <label for="kyosai-taxableIncome">年間の事業所得等の課税所得の目安 <span class="unit">円</span></label>
-<input id="kyosai-taxableIncome" min="0" step="10000" type="number" value="3000000"/>
+<input id="kyosai-taxableIncome" inputmode="numeric" min="0" step="10000" type="number" value="3000000"/>
 <p class="field-hint">事業所得等から各種控除を差し引いたあとの課税所得の目安です。所得税の限界税率（速算表）の算出にのみ使用します。</p>
 </div>
 <div class="field">

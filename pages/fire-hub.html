@@ -156,15 +156,15 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="fire-currentAge">現在の年齢 <span class="unit">歳</span></label>
-<input id="fire-currentAge" max="79" min="18" step="1" type="number" value="30"/>
+<input id="fire-currentAge" inputmode="numeric" max="79" min="18" step="1" type="number" value="30"/>
 </div>
 <div class="field">
 <label for="fire-currentAssets">現在の資産額 <span class="unit">万円</span></label>
-<input id="fire-currentAssets" min="0" step="10" type="number" value="300"/>
+<input id="fire-currentAssets" inputmode="numeric" min="0" step="10" type="number" value="300"/>
 </div>
 <div class="field">
 <label for="fire-monthly">毎月の積立額 <span class="unit">万円</span></label>
-<input id="fire-monthly" min="0" step="1" type="number" value="10"/>
+<input id="fire-monthly" inputmode="numeric" min="0" step="1" type="number" value="10"/>
 </div>
 <div class="field">
 <label for="fire-returnPct">想定利回り（積立期間中・年率） <span class="unit" id="fire-returnPctOut">5.0 %</span></label>
@@ -172,7 +172,7 @@
 </div>
 <div class="field">
 <label for="fire-annualExpense">リタイア後の年間生活費 <span class="unit">万円</span></label>
-<input id="fire-annualExpense" min="0" step="10" type="number" value="300"/>
+<input id="fire-annualExpense" inputmode="numeric" min="0" step="10" type="number" value="300"/>
 <p class="field-hint">月あたりの生活費の目安は、この金額の12分の1です。</p>
 </div>
 <div class="field">
@@ -263,7 +263,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="torikuzushi-startAssets">取り崩し開始時点の資産額 <span class="unit">万円</span></label>
-<input id="torikuzushi-startAssets" min="0" step="100" type="number" value="3000"/>
+<input id="torikuzushi-startAssets" inputmode="numeric" min="0" step="100" type="number" value="3000"/>
 </div>
 <div class="field">
 <label for="torikuzushi-returnPct">想定運用利回り（取り崩しながら運用を続ける・年率） <span class="unit" id="torikuzushi-returnPctOut">3.0 %</span></label>
@@ -271,12 +271,12 @@
 </div>
 <div class="field">
 <label for="torikuzushi-maxYears">シミュレーション上限年数 <span class="unit">年</span></label>
-<input id="torikuzushi-maxYears" max="70" min="1" step="1" type="number" value="30"/>
+<input id="torikuzushi-maxYears" inputmode="numeric" max="70" min="1" step="1" type="number" value="30"/>
 <p class="field-hint">資産が尽きない場合は、この年数までの推移を表示します（最大70年）。</p>
 </div>
 <div class="field">
 <label for="torikuzushi-fixedAmount">【定額方式】年間取り崩し額 <span class="unit">万円</span></label>
-<input id="torikuzushi-fixedAmount" min="0" step="10" type="number" value="120"/>
+<input id="torikuzushi-fixedAmount" inputmode="numeric" min="0" step="10" type="number" value="120"/>
 <p class="field-hint">毎年ほぼ一定の金額を取り崩す方式です。月あたりの目安は、この金額の12分の1です。</p>
 </div>
 <div class="field">
@@ -298,7 +298,7 @@
 </div>
 <div class="field">
 <label for="torikuzushi-floorAmount">【定率＋下限額方式】年間の下限額 <span class="unit">万円</span></label>
-<input id="torikuzushi-floorAmount" min="0" step="10" type="number" value="80"/>
+<input id="torikuzushi-floorAmount" inputmode="numeric" min="0" step="10" type="number" value="80"/>
 <p class="field-hint">「残高×取り崩し率」と「この下限額」のうち大きい方を、その年の取り崩し額とします。</p>
 </div>
 </div>
