@@ -58,6 +58,7 @@
     verdictSub: document.getElementById("fukugyo-verdictSub"),
     noticeBox: document.getElementById("fukugyo-noticeBox"),
     sideProfit: document.getElementById("fukugyo-result-side-profit"),
+    netTakeHome: document.getElementById("fukugyo-result-net-takehome"),
     incomeTaxFiling: document.getElementById("fukugyo-result-income-tax-filing"),
     residentTaxFiling: document.getElementById("fukugyo-result-resident-tax-filing"),
     taxIfFiled: document.getElementById("fukugyo-result-tax-if-filed"),
@@ -145,8 +146,12 @@
 
     var r = calc(salaryIncome, sideProfit);
     var taxIfFiled = r.incomeTaxMarginal;
+    var incomeTaxOwed = needsIncomeTaxFiling ? r.incomeTaxMarginal : 0;
+    var residentTaxOwed = needsResidentTaxFiling ? r.residentTaxMarginal : 0;
+    var netTakeHome = rawProfit - incomeTaxOwed - residentTaxOwed;
 
     els.sideProfit.textContent = yen(sideProfit) + (rawProfit < 0 ? "（赤字）" : "");
+    els.netTakeHome.textContent = yen(netTakeHome);
     els.incomeTaxFiling.textContent = needsIncomeTaxFiling ? "必要" : "不要";
     els.residentTaxFiling.textContent = needsResidentTaxFiling ? "必要" : "不要（所得なし）";
     els.taxIfFiled.textContent = yen(taxIfFiled);
