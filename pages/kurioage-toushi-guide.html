@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>繰り上げ返済 vs 投資、住宅ローンはどちらを優先すべきか？ 完全ガイド | ふやすノート</title>
+<meta name="description" content="住宅ローンの繰り上げ返済（期間短縮型・返済額軽減型）と投資、どちらを優先すべきかを試算例つきで解説。金利差・残存期間による効果の違い、住宅ローン控除への影響、新NISAの非課税効果まで整理します。">
+<link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/kurioage-toushi-guide.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふやすノート">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="繰り上げ返済 vs 投資、住宅ローンはどちらを優先すべきか？ 完全ガイド | ふやすノート">
+<meta property="og:description" content="住宅ローンの繰り上げ返済（期間短縮型・返済額軽減型）と投資、どちらを優先すべきかを試算例つきで解説。金利差・残存期間による効果の違い、住宅ローン控除への影響、新NISAの非課税効果まで整理します。">
+<meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/kurioage-toushi-guide.html">
+<meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="繰り上げ返済 vs 投資、住宅ローンはどちらを優先すべきか？ 完全ガイド | ふやすノート">
+<meta name="twitter:description" content="住宅ローンの繰り上げ返済（期間短縮型・返済額軽減型）と投資、どちらを優先すべきかを試算例つきで解説。金利差・残存期間による効果の違い、住宅ローン控除への影響、新NISAの非課税効果まで整理します。">
+<meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"></noscript>
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "繰り上げ返済と投資、結局どちらがお得ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "一般的な目安は「住宅ローン金利 < 投資の期待利回り」であれば投資、逆であれば繰り上げ返済が試算上有利になりやすい、というものです。ただし繰り上げ返済の効果（利息軽減額）は借入金利分の利回りがほぼ確定しているのに対し、投資の運用益は元本割れの可能性がある期待値である点が本質的に異なります。本サイトの「ローンvs投資」「繰上返済vs投資」シミュレーターで、ご自身の借入条件・想定利回りを入力して試算してみてください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "期間短縮型と返済額軽減型、繰り上げ返済にはどちらを選ぶべきですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "総支払利息を減らす効果は、同じ金額を繰り上げ返済するなら期間短縮型の方が返済額軽減型より大きくなります。毎月の返済額に余裕がある場合は期間短縮型、毎月のキャッシュフローに余裕を持たせたい場合は返済額軽減型が向いています。本サイトの2つのシミュレーターは、いずれも期間短縮型に相当する効果で試算しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "住宅ローン控除を受けている間は繰り上げ返済しない方がいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "年末残高が住宅の区分ごとの借入限度額を下回っている年に繰り上げ返済すると、翌年以降の年末残高が下がる分、控除額（年末残高×0.7%）が目減りする可能性があります。一方、年末残高がまだ借入限度額を上回っている間（控除期間の初期など）に繰り上げ返済しても、その年の控除額はもともと限度額で頭打ちのため影響は生じにくいです。控除期間が終わってから繰り上げ返済を実行するのも一つの考え方です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "新NISAで運用すれば、必ず投資の方が有利になりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "必ずではありません。新NISAは運用益が非課税になるため、課税口座（税率20.315%）で運用する場合に比べて投資の実質リターンは大きくなり、繰り上げ返済との比較では投資が相対的に有利になりやすい効果はあります。ただし非課税であっても投資の元本割れリスクそのものがなくなるわけではない点は変わりません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "一部だけ繰り上げ返済して、残りは投資に回すこともできますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "可能です。どちらか一方に全額を振り分けるのではなく、まとまった資金の一部を繰り上げ返済（確実な効果）、残りを投資（期待リターン）に分けるのは、リスクを抑えながら両方の効果を得られる現実的な選択肢としてよく用いられます。配分の比率に決まったルールはなく、ご自身のリスク許容度に応じて決めましょう。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "変動金利の場合、将来の金利上昇リスクも考慮すべきですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "考慮すべきです。本記事や本サイトのシミュレーターの試算は、現在の金利が今後も一定であると仮定した単純化です。変動金利で借りている場合、将来金利が上昇すれば繰り上げ返済で軽減できる利息額も変わります。金利タイプごとの特徴は「住宅ローンの金利タイプの選び方 完全ガイド」で解説しています。"
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://maki04591128-tech.github.io/kanemouke/index.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "住宅ローン",
+      "item": "https://maki04591128-tech.github.io/kanemouke/pages/jutaku-hub.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "繰り上げ返済 vs 投資、住宅ローンはどちらを優先すべきか？ 完全ガイド"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="../index.html"><span class="mark"></span>ふやすノート</a>
+        <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false">
+      <span class="icon" aria-hidden="true"></span>
+      <span>メニュー</span>
+    </button>
+    <nav class="site-nav" id="site-nav">
+      <a href="nisa-hub.html">新NISA・積立</a>
+      <a href="ideco-hub.html">iDeCo・小規模企業共済</a>
+      <a href="jutaku-hub.html">住宅ローン</a>
+      <a href="kyouiku-hub.html">教育資金・保険</a>
+      <a href="setsuzei-hub.html">節税・控除・確定申告</a>
+      <a href="haitou-hub.html">配当・高配当株</a>
+      <a href="fire-hub.html">FIRE・資産取り崩し</a>
+      <a href="souzoku-hub.html">相続・贈与</a>
+      <a href="nenshu-hub.html">年収・手取り・退職金</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="container">
+<nav class="breadcrumb-nav" aria-label="パンくずリスト">
+  <ul class="breadcrumb">
+    <li><a href="../index.html">ホーム</a></li>
+    <li><a href="jutaku-hub.html">住宅ローン</a></li>
+    <li aria-current="page">繰り上げ返済 vs 投資、住宅ローンはどちらを優先すべきか？ 完全ガイド</li>
+  </ul>
+</nav>
+
+  <div class="page-title">
+    <h1>繰り上げ返済 vs 投資、住宅ローンはどちらを優先すべきか？ 完全ガイド</h1>
+    <p>住宅ローンの返済に余裕資金を回すなら「繰り上げ返済」と「投資（新NISAなど）」、どちらが得なのか。この記事では、繰り上げ返済の2つの方式の違い、金利・残存期間によって効果がどう変わるかの試算例、見落としがちな住宅ローン控除への影響、新NISAの非課税効果まで、本サイトの「ローンvs投資」「繰上返済vs投資」シミュレーターと同じ計算式にもとづいて解説します。</p>
+    <div class="article-actions">
+      <button type="button" id="print-result-btn" class="share-btn secondary" aria-label="この記事を印刷またはPDFで保存">記事を印刷・PDF保存</button>
+    </div>
+  </div>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 記事ページ上部 --></div>
+
+  <section class="article-section">
+    <h2>比較の基本的な考え方：確定した利回り vs 期待リターン</h2>
+    <p>繰り上げ返済によって減らせる利息は、借入金利にもとづいて確実に計算できます。いわば「借入金利分の利回りが確定する」効果です。一方、投資の運用益は想定利回りどおりに実現するとは限らず、相場の状況によっては元本割れする可能性もある「期待リターン」です。表面上の金額だけを比べるのではなく、この「確実性の違い」を踏まえて判断することが重要です。</p>
+    <p>まずは本サイトの「<a href="jutaku-hub.html?tool=roan">ローンvs投資シミュレーター</a>」「<a href="jutaku-hub.html?tool=kurioage">繰上返済vs投資シミュレーター</a>」で、ご自身の借入残高・金利・返済期間・想定利回りを入力して試算してみましょう。</p>
+
+    <h2>2種類の繰り上げ返済方式：期間短縮型と返済額軽減型</h2>
+    <p>繰り上げ返済には、大きく分けて2つの方式があります。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">方式</th><th scope="col">仕組み</th><th scope="col">利息軽減効果</th><th scope="col">向いている人</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>期間短縮型</td><td>毎月の返済額は変えず、完済までの期間を短くする</td><td>大きい（同じ繰り上げ額なら返済額軽減型より効果が大きい）</td><td>毎月の返済額に余裕がある人</td></tr>
+        <tr><td>返済額軽減型</td><td>完済までの期間は変えず、毎月の返済額を減らす</td><td>期間短縮型より小さい</td><td>毎月のキャッシュフローに余裕を持たせたい人</td></tr>
+      </tbody>
+    </table>
+    <p>本サイトの「ローンvs投資」（毎月コツコツ型）「繰上返済vs投資」（まとまった資金型）の2つのシミュレーターは、いずれも期間短縮型に相当する効果（毎月の返済額は変えず、繰り上げた分だけ早く完済する前提）で試算しています。返済額軽減型を選んだ場合、同じ繰り上げ額でも利息軽減額は本記事の試算例よりやや小さくなる点にご留意ください。</p>
+
+    <h2>試算例①：毎月コツコツ型（借入残高3,000万円・金利1.0%・残り25年）</h2>
+    <p>「ローンvs投資シミュレーター」の初期値（借入残高3,000万円・金利1.0%・返済期間25年・毎月の繰り上げ額2万円・想定運用利回り5.0%）で試算すると、次のようになります。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">項目</th><th scope="col">通常返済</th><th scope="col">毎月2万円を繰り上げ返済</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>完済までの期間</td><td>25.0年</td><td>20.8年（4.2年短縮）</td></tr>
+        <tr><td>総支払利息</td><td>391.9万円</td><td>324.4万円</td></tr>
+      </tbody>
+    </table>
+    <p>利息軽減額は約67.5万円です。一方、同じ「毎月2万円」を完済までの20.8年間、想定利回り5.0%で積立投資に回した場合、元本500万円に対して評価額は約881.0万円（運用益約381.0万円）という試算になります。この条件では、投資の運用益（約381.0万円）が繰り上げ返済の利息軽減額（約67.5万円）を大きく上回りますが、これはあくまで想定利回り5.0%が実現した場合の話であり、実際の運用成果はこれを下回ることも上回ることもあります。</p>
+    <p>毎月の繰り上げ額を1万円・3万円に変えた場合の比較は次のとおりです。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">毎月の繰り上げ額</th><th scope="col">完済短縮</th><th scope="col">利息軽減額</th><th scope="col">積立投資の運用益（想定5.0%）</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1万円</td><td>2.2年（27ヶ月）</td><td>約36.9万円</td><td>約235.9万円</td></tr>
+        <tr><td>2万円</td><td>4.2年（50ヶ月）</td><td>約67.5万円</td><td>約381.0万円</td></tr>
+        <tr><td>3万円</td><td>5.8年（69ヶ月）</td><td>約93.2万円</td><td>約473.2万円</td></tr>
+      </tbody>
+    </table>
+
+    <h2>試算例②：まとまった資金型（残高2,500万円・金利1.0%・残り25年・200万円を繰り上げ）</h2>
+    <p>「繰上返済vs投資シミュレーター」の初期値（借入残高2,500万円・金利1.0%・残りの返済期間25年・まとまった資金200万円・想定運用利回り5.0%）で試算すると、200万円を繰り上げ返済した場合の完済短縮は約2年2ヶ月（26ヶ月）、利息軽減額は約54.0万円です。同じ200万円を25年間、想定利回り5.0%で運用した場合の運用益は税引前で約496.3万円、課税口座（税率20.315%）を前提とした税引後でも約395.4万円で、いずれも利息軽減額を大きく上回ります。</p>
+    <p>この差が大きくなる主な理由は「時間」です。繰り上げ返済の効果は一度きりですが、投資は残りの返済期間25年という長い時間、複利で運用され続けるためです。残存期間・金利を変えた場合の利息軽減額は次のように変化します。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">条件を変えた場合</th><th scope="col">利息軽減額（200万円繰り上げ）</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>残り10年・金利1.0%</td><td>約20.2万円</td></tr>
+        <tr><td>残り25年・金利1.0%（初期値）</td><td>約54.0万円</td></tr>
+        <tr><td>残り30年・金利1.0%</td><td>約66.3万円</td></tr>
+        <tr><td>残り25年・金利0.5%</td><td>約25.5万円</td></tr>
+        <tr><td>残り25年・金利1.5%</td><td>約85.9万円</td></tr>
+        <tr><td>残り25年・金利2.0%</td><td>約121.6万円</td></tr>
+      </tbody>
+    </table>
+    <p>このように、繰り上げ返済の効果は「残存期間が長いほど」「金利が高いほど」大きくなります。同じ資金を繰り上げるなら、なるべく早い時期に実行する方が効果的です。逆に、完済間際（残存期間が短い）や低金利のローンでは、繰り上げ返済の効果は相対的に小さくなります。</p>
+
+    <h2>見落としがちな注意点：住宅ローン控除への影響</h2>
+    <p>住宅ローン控除は、その年の年末残高（住宅の区分ごとの借入限度額が上限）に0.7%を掛けた金額が控除額の枠になる制度です（詳しくは「<a href="jutaku-loan-koujo-guide.html">住宅ローン控除とは？完全ガイド</a>」で解説）。繰り上げ返済によって年末残高が下がると、次の2つのケースで結果が変わります。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">繰り上げ返済時点の状況</th><th scope="col">控除額への影響</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>年末残高が借入限度額をまだ上回っている（控除期間の初期など）</td><td>もともと限度額で頭打ちのため、控除額への影響は生じにくい</td></tr>
+        <tr><td>年末残高が借入限度額を下回っている</td><td>翌年以降の年末残高が下がった分、控除額（残高×0.7%）が目減りする可能性がある</td></tr>
+      </tbody>
+    </table>
+    <p>例えば、控除期間（最長13年間）の残り5年の時点で200万円を繰り上げ返済し、その後の年末残高が単純にその分だけ低い状態が続くと仮定すると、控除額は最大で200万円×0.7%×5年＝7万円ほど目減りする可能性があります（実際は毎年の返済で残高自体も減っていくため差はやや縮小し、また所得税額がそもそも控除枠を使い切れていない場合は影響がありません）。控除期間中に繰り上げ返済を急ぐ理由が特になければ、控除期間が終わってから実行するのも一つの考え方です。</p>
+
+    <h2>新NISAを使うと投資が有利になりやすい理由</h2>
+    <p>上の試算例②で示した運用益の「税引後」の金額（約395.4万円）は、通常の課税口座（特定口座・一般口座、税率20.315%）で運用した場合の想定です。新NISAのつみたて投資枠・成長投資枠で運用すれば運用益は非課税になるため、税引前の金額（約496.3万円）がそのまま手取りになります。同じ想定利回りで比較する限り、新NISAを使う方が投資と繰り上げ返済の比較では投資が相対的に有利になりやすいといえます。ただし非課税であっても、投資の元本割れリスクそのものがなくなるわけではありません。新NISAの基本的な仕組みは「<a href="shin-nisa-hajimekata-guide.html">新NISAの始め方 完全ガイド</a>」で解説しています。</p>
+
+    <h2>判断の優先順位の目安</h2>
+    <p>金利・利回りの比較だけでなく、次のような優先順位で考えることをおすすめします。</p>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">優先度</th><th scope="col">考え方</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>①生活防衛資金の確保</td><td>病気・失業など不測の事態に備える生活費（目安：生活費の3〜12ヶ月分）を、繰り上げ返済にも投資にも回さず現金で確保しておく</td></tr>
+        <tr><td>②住宅ローンより金利の高い借入の返済</td><td>カードローン・リボ払いなど、住宅ローンより明らかに金利が高い借入があれば、そちらの返済を優先する</td></tr>
+        <tr><td>③住宅ローン控除への影響の確認</td><td>控除期間中で年末残高が借入限度額を下回っている場合、繰り上げ返済のタイミングを検討する</td></tr>
+        <tr><td>④繰り上げ返済 or 投資、あるいは併用</td><td>「確実な効果」を取るか「期待リターン」を取るか、リスク許容度に応じて配分を決める（全額どちらかに寄せる必要はない）</td></tr>
+      </tbody>
+    </table>
+    <p>生活防衛資金の目安金額の考え方は「<a href="seikatsu-bouei-shikin-guide.html">生活防衛資金は何ヶ月分必要か？完全ガイド</a>」で詳しく解説しています。</p>
+
+    <h2>よくある誤解</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th scope="col">誤解</th><th scope="col">実際のところ</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>繰り上げ返済は早く済ませるほど、いつやっても効果は同じ</td><td>残存期間が長いほど・金利が高いほど利息軽減効果は大きくなります。同じ金額なら、なるべく早い時期の方が効果的です</td></tr>
+        <tr><td>投資の想定利回りが住宅ローン金利を上回っていれば、必ず投資の方が得</td><td>期待値としては投資が有利でも、投資には元本割れリスクがあります。繰り上げ返済の「確実な効果」との性質の違いを踏まえて判断する必要があります</td></tr>
+        <tr><td>住宅ローン控除を受けている間は、繰り上げ返済をしてはいけない</td><td>年末残高が借入限度額を上回っている間は影響が生じにくく、必ずしも避ける必要はありません。下回っている場合のみ、控除額が目減りする可能性を考慮しましょう</td></tr>
+        <tr><td>繰り上げ返済か投資か、どちらか一方を選ばなければならない</td><td>まとまった資金の一部を繰り上げ返済、残りを投資に回すなど、併用することも可能です</td></tr>
+      </tbody>
+    </table>
+
+    <h3>よくある質問</h3>
+    <dl>
+      <div class="faq-item">
+        <dt>繰り上げ返済と投資、結局どちらがお得ですか？</dt>
+        <dd>一般的な目安は「住宅ローン金利 < 投資の期待利回り」であれば投資、逆であれば繰り上げ返済が試算上有利になりやすい、というものです。ただし繰り上げ返済の効果（利息軽減額）は借入金利分の利回りがほぼ確定しているのに対し、投資の運用益は元本割れの可能性がある期待値である点が本質的に異なります。本サイトの「ローンvs投資」「繰上返済vs投資」シミュレーターで、ご自身の借入条件・想定利回りを入力して試算してみてください。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>期間短縮型と返済額軽減型、繰り上げ返済にはどちらを選ぶべきですか？</dt>
+        <dd>総支払利息を減らす効果は、同じ金額を繰り上げ返済するなら期間短縮型の方が返済額軽減型より大きくなります。毎月の返済額に余裕がある場合は期間短縮型、毎月のキャッシュフローに余裕を持たせたい場合は返済額軽減型が向いています。本サイトの2つのシミュレーターは、いずれも期間短縮型に相当する効果で試算しています。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>住宅ローン控除を受けている間は繰り上げ返済しない方がいいですか？</dt>
+        <dd>年末残高が住宅の区分ごとの借入限度額を下回っている年に繰り上げ返済すると、翌年以降の年末残高が下がる分、控除額（年末残高×0.7%）が目減りする可能性があります。一方、年末残高がまだ借入限度額を上回っている間（控除期間の初期など）に繰り上げ返済しても、その年の控除額はもともと限度額で頭打ちのため影響は生じにくいです。控除期間が終わってから繰り上げ返済を実行するのも一つの考え方です。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>新NISAで運用すれば、必ず投資の方が有利になりますか？</dt>
+        <dd>必ずではありません。新NISAは運用益が非課税になるため、課税口座（税率20.315%）で運用する場合に比べて投資の実質リターンは大きくなり、繰り上げ返済との比較では投資が相対的に有利になりやすい効果はあります。ただし非課税であっても投資の元本割れリスクそのものがなくなるわけではない点は変わりません。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>一部だけ繰り上げ返済して、残りは投資に回すこともできますか？</dt>
+        <dd>可能です。どちらか一方に全額を振り分けるのではなく、まとまった資金の一部を繰り上げ返済（確実な効果）、残りを投資（期待リターン）に分けるのは、リスクを抑えながら両方の効果を得られる現実的な選択肢としてよく用いられます。配分の比率に決まったルールはなく、ご自身のリスク許容度に応じて決めましょう。</dd>
+      </div>
+      <div class="faq-item">
+        <dt>変動金利の場合、将来の金利上昇リスクも考慮すべきですか？</dt>
+        <dd>考慮すべきです。本記事や本サイトのシミュレーターの試算は、現在の金利が今後も一定であると仮定した単純化です。変動金利で借りている場合、将来金利が上昇すれば繰り上げ返済で軽減できる利息額も変わります。金利タイプごとの特徴は「住宅ローンの金利タイプの選び方 完全ガイド」で解説しています。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="ad-slot"><!-- AdSense placeholder: 記事下部 --></div>
+
+  <div class="affiliate-box">
+    <h3>住宅ローンの見直し・資産運用を検討するなら</h3>
+    <div class="affiliate-list">
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>住宅ローンの一括比較・借り換え診断サービスに申し込む</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+      <a class="affiliate-link" href="#" rel="sponsored noopener" target="_blank">
+        <span>新NISA対応のネット証券口座を開設する</span>
+        <span class="cta">詳細を見る →</span>
+      </a>
+    </div>
+    <p class="affiliate-disclosure">上記にはプロモーション（アフィリエイト広告）リンクを含みます。リンク先での申込みにより当サイトが紹介料を得る場合がありますが、表示価格や条件に影響はありません。</p>
+  </div>
+
+  <section class="article-section">
+    <h2>あわせて使いたい関連シミュレーター・記事</h2>
+    <div class="tool-grid">
+      <a class="tool-card" href="jutaku-hub.html?tool=roan">
+        <span class="badge">シミュレーター</span>
+        <h3>ローンvs投資シミュレーター</h3>
+        <p>毎月の繰り上げ返済額と積立投資、それぞれの効果を比較します。</p>
+      </a>
+      <a class="tool-card" href="jutaku-hub.html?tool=kurioage">
+        <span class="badge">シミュレーター</span>
+        <h3>繰上返済vs投資シミュレーター</h3>
+        <p>まとまった資金を繰り上げ返済に使うか投資に回すか、税引後の運用益もあわせて比較します。</p>
+      </a>
+      <a class="tool-card" href="jutaku-loan-koujo-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>住宅ローン控除とは？完全ガイド</h3>
+        <p>年末残高×0.7%の計算方法、借入限度額・控除期間の一覧、控除しきれない額が出る仕組みを解説します。</p>
+      </a>
+      <a class="tool-card" href="kinri-erabikata-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>住宅ローンの金利タイプの選び方 完全ガイド</h3>
+        <p>変動金利・固定金利・固定期間選択型のメリット・デメリットと選び方を解説します。</p>
+      </a>
+      <a class="tool-card" href="seikatsu-bouei-shikin-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>生活防衛資金は何ヶ月分必要か？完全ガイド</h3>
+        <p>繰り上げ返済や投資を始める前に確保しておきたい生活防衛資金の目安の考え方を解説します。</p>
+      </a>
+      <a class="tool-card" href="shin-nisa-hajimekata-guide.html">
+        <span class="badge">解説記事</span>
+        <h3>新NISAの始め方 完全ガイド</h3>
+        <p>つみたて投資枠・成長投資枠の仕組み、非課税保有限度額1,800万円、始め方の手順を解説します。</p>
+      </a>
+    </div>
+  </section>
+
+  <div class="disclaimer">
+    本ページは繰り上げ返済と投資の比較に関する一般的な考え方と、本サイトのシミュレーターと同じ計算式にもとづく試算例を解説する記事であり、個別の返済計画・投資判断に関する助言を目的とするものではありません。試算は現在の金利・想定利回りが今後も一定であることを前提とした単純化であり、実際の金利変動・投資の運用成果を保証するものではありません。住宅ローン控除額の試算は代表的なケースの目安であり、実際の控除額は年末残高・所得税額・住民税所得割額・住宅の区分などにより異なります。投資は元本割れの可能性があるため、最終的な判断はご自身の責任で、必要に応じて金融機関や税理士等の専門家にご相談のうえ行ってください。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; 2026 ふやすノート</span>
+    <nav>
+      <a href="../index.html">トップへ戻る</a>
+      <a href="../about.html">運営者情報</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../disclosure.html">アフィリエイト・広告表記について</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../js/print-result.js"></script>
+<script src="../js/number-format.js"></script>
+<script src="../js/field-validation.js"></script>
+<script src="../js/back-to-top.js"></script>
+<script src="../js/skip-link.js"></script>
+<script src="../js/toc.js"></script>
+<script src="../js/recent-tools.js"></script>
+<script src="../js/favorites.js"></script>
+<script src="../js/nav-toggle.js"></script>
+<script src="../js/site-search-data.js"></script>
+<script src="../js/site-search.js"></script>
+<script src="../js/table-a11y.js"></script>
+</body>
+</html>
