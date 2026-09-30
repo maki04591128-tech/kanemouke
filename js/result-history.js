@@ -448,7 +448,12 @@
 
     var thead = document.createElement("thead");
     var headRow = document.createElement("tr");
-    headRow.appendChild(document.createElement("th"));
+    var cornerTh = document.createElement("th");
+    var cornerLabel = document.createElement("span");
+    cornerLabel.className = "sr-only";
+    cornerLabel.textContent = "比較項目";
+    cornerTh.appendChild(cornerLabel);
+    headRow.appendChild(cornerTh);
     items.forEach(function (item) {
       var th = document.createElement("th");
       var time = document.createElement("span");
@@ -478,6 +483,11 @@
     table.appendChild(tbody);
 
     wrap.appendChild(table);
+    // .table-wrapはstyle.cssでoverflow-x:autoが付き、比較件数が増えると
+    // 横スクロールが必要になる（PC幅でも2件比較時点で発生する）。
+    // js/table-a11y.jsが読み込み時点で存在する.table-wrapには対応済みだが、
+    // この比較表はボタン操作後に生成されるため、ここから明示的に呼ぶ。
+    if (window.enhanceTableWrapA11y) window.enhanceTableWrapA11y(wrap, "試算結果の比較表");
     comparePanel.appendChild(wrap);
 
     var note = document.createElement("p");

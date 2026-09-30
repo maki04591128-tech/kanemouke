@@ -1356,6 +1356,12 @@ a { color: var(--color-primary); }
   overflow-x: auto;
   margin: 18px 0;
 }
+/* js/table-a11y.jsが付与するtabindex="0"でキーボードから横スクロールできる
+   ようになった.table-wrapに、フォーカス時の視認性を他のフォーカス可能要素と揃える。 */
+.table-wrap:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
 .data-table {
   width: 100%;
   border-collapse: collapse;
