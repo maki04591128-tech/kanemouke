@@ -293,11 +293,11 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="furusato-salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
-<input id="furusato-salaryIncome" max="30000000" min="0" step="10000" type="number" value="5000000"/>
+<input id="furusato-salaryIncome" inputmode="numeric" max="30000000" min="0" step="10000" type="number" value="5000000"/>
 </div>
 <div class="field">
 <label for="furusato-socialInsurance">社会保険料の年間支払額（概算） <span class="unit">円</span></label>
-<input id="furusato-socialInsurance" min="0" step="1000" type="number" value="750000"/>
+<input id="furusato-socialInsurance" inputmode="numeric" min="0" step="1000" type="number" value="750000"/>
 <p class="field-hint">目安がわからない場合は年収の約15%で概算しています（給与明細の社会保険料合計×12で置き換えるとより正確です）。</p>
 </div>
 <div class="field">
@@ -309,11 +309,11 @@
 </div>
 <div class="field">
 <label for="furusato-dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
-<input id="furusato-dependents" max="6" min="0" step="1" type="number" value="0"/>
+<input id="furusato-dependents" inputmode="numeric" max="6" min="0" step="1" type="number" value="0"/>
 </div>
 <div class="field">
 <label for="furusato-donationPlan">寄付予定額 <span class="unit">円</span></label>
-<input id="furusato-donationPlan" min="0" step="1000" type="number" value="50000"/>
+<input id="furusato-donationPlan" inputmode="numeric" min="0" step="1000" type="number" value="50000"/>
 </div>
 </div>
 <div>
@@ -401,11 +401,11 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="iryouhi-salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
-<input id="iryouhi-salaryIncome" max="30000000" min="0" step="10000" type="number" value="5000000"/>
+<input id="iryouhi-salaryIncome" inputmode="numeric" max="30000000" min="0" step="10000" type="number" value="5000000"/>
 </div>
 <div class="field">
 <label for="iryouhi-socialInsurance">社会保険料の年間支払額（概算） <span class="unit">円</span></label>
-<input id="iryouhi-socialInsurance" min="0" step="1000" type="number" value="750000"/>
+<input id="iryouhi-socialInsurance" inputmode="numeric" min="0" step="1000" type="number" value="750000"/>
 <p class="field-hint">目安がわからない場合は年収の約15%で概算しています（給与明細の社会保険料合計×12で置き換えるとより正確です）。</p>
 </div>
 <div class="field">
@@ -417,21 +417,21 @@
 </div>
 <div class="field">
 <label for="iryouhi-dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
-<input id="iryouhi-dependents" max="6" min="0" step="1" type="number" value="0"/>
+<input id="iryouhi-dependents" inputmode="numeric" max="6" min="0" step="1" type="number" value="0"/>
 </div>
 <div class="field">
 <label for="iryouhi-medicalTotal">1年間に支払った医療費の合計額 <span class="unit">円</span></label>
-<input id="iryouhi-medicalTotal" min="0" step="1000" type="number" value="300000"/>
+<input id="iryouhi-medicalTotal" inputmode="numeric" min="0" step="1000" type="number" value="300000"/>
 <p class="field-hint">本人・生計を一にする配偶者や親族の分も合算できます。通院の交通費や市販薬の一部も対象になる場合があります。</p>
 </div>
 <div class="field">
 <label for="iryouhi-insuranceReimbursement">保険金などで補填される金額 <span class="unit">円</span></label>
-<input id="iryouhi-insuranceReimbursement" min="0" step="1000" type="number" value="0"/>
+<input id="iryouhi-insuranceReimbursement" inputmode="numeric" min="0" step="1000" type="number" value="0"/>
 <p class="field-hint">生命保険の入院給付金、健康保険の高額療養費・出産育児一時金など、医療費の支払いに対して別途受け取った金額を入力します。</p>
 </div>
 <div class="field">
 <label for="iryouhi-otcAmount">スイッチOTC医薬品の購入額（セルフメディケーション税制用・任意） <span class="unit">円</span></label>
-<input id="iryouhi-otcAmount" min="0" step="1000" type="number" value="0"/>
+<input id="iryouhi-otcAmount" inputmode="numeric" min="0" step="1000" type="number" value="0"/>
 <p class="field-hint">対象の市販薬（スイッチOTC医薬品）の購入額です。通常の医療費控除とは選択制（併用不可）のため、参考として両方の控除額を比較表示します。</p>
 </div>
 </div>
@@ -524,17 +524,17 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="fukugyo-salaryIncome">給与年収 <span class="unit">万円</span></label>
-<input id="fukugyo-salaryIncome" min="0" step="10" type="number" value="500"/>
+<input id="fukugyo-salaryIncome" inputmode="numeric" min="0" step="10" type="number" value="500"/>
 <p class="field-hint">源泉徴収票の「支払金額」の目安です。給与を1か所から受けていて年末調整済みであることを前提とします。</p>
 </div>
 <div class="field">
 <label for="fukugyo-sideIncome">副業の年間収入 <span class="unit">万円</span></label>
-<input id="fukugyo-sideIncome" min="0" step="1" type="number" value="50"/>
+<input id="fukugyo-sideIncome" inputmode="numeric" min="0" step="1" type="number" value="50"/>
 <p class="field-hint">副業（雑所得・事業所得）で得た年間の収入合計額（経費を引く前）を入力してください。</p>
 </div>
 <div class="field">
 <label for="fukugyo-sideExpense">副業の必要経費 <span class="unit">万円</span></label>
-<input id="fukugyo-sideExpense" min="0" step="1" type="number" value="10"/>
+<input id="fukugyo-sideExpense" inputmode="numeric" min="0" step="1" type="number" value="10"/>
 <p class="field-hint">副業の収入を得るために直接かかった費用（仕入れ・機材・通信費の按分分など）の年間合計額です。</p>
 </div>
 </div>

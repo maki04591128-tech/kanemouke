@@ -310,7 +310,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="roan-balance">住宅ローンの残高 <span class="unit">円</span></label>
-<input id="roan-balance" max="200000000" min="1000000" step="100000" type="number" value="30000000"/>
+<input id="roan-balance" inputmode="numeric" max="200000000" min="1000000" step="100000" type="number" value="30000000"/>
 </div>
 <div class="field">
 <label for="roan-loanRate">住宅ローン金利（年率） <span class="unit" id="roan-loanRateOut">1.00 %</span></label>
@@ -322,7 +322,7 @@
 </div>
 <div class="field">
 <label for="roan-extra">毎月の余裕資金（繰り上げ返済 or 積立投資に回す額） <span class="unit">円</span></label>
-<input id="roan-extra" max="500000" min="0" step="1000" type="number" value="20000"/>
+<input id="roan-extra" inputmode="numeric" max="500000" min="0" step="1000" type="number" value="20000"/>
 </div>
 <div class="field">
 <label for="roan-investRate">積立投資の想定利回り（年率） <span class="unit" id="roan-investRateOut">5.0 %</span></label>
@@ -422,7 +422,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="kurioage-balance">住宅ローンの残高 <span class="unit">円</span></label>
-<input id="kurioage-balance" min="0" step="100000" type="number" value="25000000"/>
+<input id="kurioage-balance" inputmode="numeric" min="0" step="100000" type="number" value="25000000"/>
 </div>
 <div class="field">
 <label for="kurioage-loanRate">ローン金利（年率） <span class="unit" id="kurioage-loanRateOut">1.0 %</span></label>
@@ -434,7 +434,7 @@
 </div>
 <div class="field">
 <label for="kurioage-lump">繰上返済 or 投資に回す資金 <span class="unit">円</span></label>
-<input id="kurioage-lump" min="0" step="100000" type="number" value="2000000"/>
+<input id="kurioage-lump" inputmode="numeric" min="0" step="100000" type="number" value="2000000"/>
 </div>
 <div class="field">
 <label for="kurioage-investRate">想定運用利回り（年率） <span class="unit" id="kurioage-investRateOut">5.0 %</span></label>
@@ -517,15 +517,15 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="koujo-principal">借入額（当初） <span class="unit">円</span></label>
-<input id="koujo-principal" min="0" step="100000" type="number" value="35000000"/>
+<input id="koujo-principal" inputmode="numeric" min="0" step="100000" type="number" value="35000000"/>
 </div>
 <div class="field">
 <label for="koujo-loanRate">借入金利（年率） <span class="unit">%</span></label>
-<input id="koujo-loanRate" max="10" min="0" step="0.01" type="number" value="1.0"/>
+<input id="koujo-loanRate" inputmode="decimal" max="10" min="0" step="0.01" type="number" value="1.0"/>
 </div>
 <div class="field">
 <label for="koujo-loanYears">返済期間 <span class="unit">年</span></label>
-<input id="koujo-loanYears" max="50" min="1" step="1" type="number" value="35"/>
+<input id="koujo-loanYears" inputmode="numeric" max="50" min="1" step="1" type="number" value="35"/>
 </div>
 <div class="field">
 <label for="koujo-category">住宅の区分</label>
@@ -548,7 +548,7 @@
 </div>
 <div class="field">
 <label for="koujo-salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
-<input id="koujo-salaryIncome" max="30000000" min="0" step="10000" type="number" value="6000000"/>
+<input id="koujo-salaryIncome" inputmode="numeric" max="30000000" min="0" step="10000" type="number" value="6000000"/>
 </div>
 <div class="field">
 <label for="koujo-hasSpouse">配偶者控除の対象になる配偶者</label>
@@ -559,7 +559,7 @@
 </div>
 <div class="field">
 <label for="koujo-dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
-<input id="koujo-dependents" max="6" min="0" step="1" type="number" value="0"/>
+<input id="koujo-dependents" inputmode="numeric" max="6" min="0" step="1" type="number" value="0"/>
 </div>
 </div>
 <div>
@@ -644,19 +644,19 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="kinri-principal">借入額 <span class="unit">万円</span></label>
-<input id="kinri-principal" min="0" step="50" type="number" value="3000"/>
+<input id="kinri-principal" inputmode="numeric" min="0" step="50" type="number" value="3000"/>
 </div>
 <div class="field">
 <label for="kinri-loanYears">返済期間 <span class="unit">年</span></label>
-<input id="kinri-loanYears" max="50" min="1" step="1" type="number" value="35"/>
+<input id="kinri-loanYears" inputmode="numeric" max="50" min="1" step="1" type="number" value="35"/>
 </div>
 <div class="field">
 <label for="kinri-fixedRate">固定金利プランの金利（全期間一定） <span class="unit">%</span></label>
-<input id="kinri-fixedRate" max="10" min="0" step="0.05" type="number" value="1.7"/>
+<input id="kinri-fixedRate" inputmode="decimal" max="10" min="0" step="0.05" type="number" value="1.7"/>
 </div>
 <div class="field">
 <label for="kinri-variableRate">変動金利プランの当初金利 <span class="unit">%</span></label>
-<input id="kinri-variableRate" max="10" min="0" step="0.05" type="number" value="0.5"/>
+<input id="kinri-variableRate" inputmode="decimal" max="10" min="0" step="0.05" type="number" value="0.5"/>
 </div>
 <div class="field">
 <label for="kinri-scenario">変動金利の今後の金利上昇シナリオ</label>
@@ -762,11 +762,11 @@
 </div>
 <div class="field">
 <label for="chintai-rent">【賃貸】現在の家賃（月額） <span class="unit">円</span></label>
-<input id="chintai-rent" max="500000" min="0" step="1000" type="number" value="90000"/>
+<input id="chintai-rent" inputmode="numeric" max="500000" min="0" step="1000" type="number" value="90000"/>
 </div>
 <div class="field">
 <label for="chintai-rentInitialCost">【賃貸】契約時の初期費用（敷金・礼金・仲介手数料など） <span class="unit">円</span></label>
-<input id="chintai-rentInitialCost" min="0" step="10000" type="number" value="400000"/>
+<input id="chintai-rentInitialCost" inputmode="numeric" min="0" step="10000" type="number" value="400000"/>
 </div>
 <div class="field">
 <label for="chintai-rentUpdateFee">【賃貸】更新料（2年ごと、家賃の月数分） <span class="unit" id="chintai-rentUpdateFeeOut">1.0 ヶ月分</span></label>
@@ -774,11 +774,11 @@
 </div>
 <div class="field">
 <label for="chintai-price">【購入】物件価格 <span class="unit">円</span></label>
-<input id="chintai-price" min="0" step="100000" type="number" value="40000000"/>
+<input id="chintai-price" inputmode="numeric" min="0" step="100000" type="number" value="40000000"/>
 </div>
 <div class="field">
 <label for="chintai-downPayment">【購入】頭金 <span class="unit">円</span></label>
-<input id="chintai-downPayment" min="0" step="100000" type="number" value="8000000"/>
+<input id="chintai-downPayment" inputmode="numeric" min="0" step="100000" type="number" value="8000000"/>
 </div>
 <div class="field">
 <label for="chintai-loanRate">【購入】住宅ローン金利（年率） <span class="unit" id="chintai-loanRateOut">1.00 %</span></label>
@@ -790,20 +790,20 @@
 </div>
 <div class="field">
 <label for="chintai-maintenance">【購入】管理費・修繕積立金（月額） <span class="unit">円</span></label>
-<input id="chintai-maintenance" min="0" step="1000" type="number" value="15000"/>
+<input id="chintai-maintenance" inputmode="numeric" min="0" step="1000" type="number" value="15000"/>
 <p class="field-hint">戸建ての場合は、将来の外壁・屋根等の修繕に備える積立目安額を入力してください。</p>
 </div>
 <div class="field">
 <label for="chintai-propertyTax">【購入】固定資産税・都市計画税（年額） <span class="unit">円</span></label>
-<input id="chintai-propertyTax" min="0" step="10000" type="number" value="150000"/>
+<input id="chintai-propertyTax" inputmode="numeric" min="0" step="10000" type="number" value="150000"/>
 </div>
 <div class="field">
 <label for="chintai-insurance">【購入】火災保険・地震保険（年額） <span class="unit">円</span></label>
-<input id="chintai-insurance" min="0" step="1000" type="number" value="20000"/>
+<input id="chintai-insurance" inputmode="numeric" min="0" step="1000" type="number" value="20000"/>
 </div>
 <div class="field">
 <label for="chintai-purchaseCost">【購入】購入時の諸費用（仲介手数料・登記費用・ローン手数料など） <span class="unit">円</span></label>
-<input id="chintai-purchaseCost" min="0" step="100000" type="number" value="2000000"/>
+<input id="chintai-purchaseCost" inputmode="numeric" min="0" step="100000" type="number" value="2000000"/>
 </div>
 <div class="field">
 <label for="chintai-resaleRate">【購入】比較期間終了時点の資産価値（物件価格に対する割合） <span class="unit" id="chintai-resaleRateOut">50 %</span></label>

@@ -588,7 +588,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="taishokukin-amount">退職金の総額 <span class="unit">万円</span></label>
-<input id="taishokukin-amount" min="0" step="50" type="number" value="2000"/>
+<input id="taishokukin-amount" inputmode="numeric" min="0" step="50" type="number" value="2000"/>
 </div>
 <div class="field">
 <label for="taishokukin-serviceYears">勤続年数 <span class="unit" id="taishokukin-serviceYearsOut">30 年</span></label>
@@ -631,15 +631,15 @@
 </div>
 <div class="field">
 <label for="taishokukin-overlapYear">他の一時金を受け取った年 <span class="unit">西暦</span></label>
-<input id="taishokukin-overlapYear" max="2100" min="1990" step="1" type="number" value="2023"/>
+<input id="taishokukin-overlapYear" inputmode="numeric" max="2100" min="1990" step="1" type="number" value="2023"/>
 </div>
 <div class="field">
 <label for="taishokukin-overlapServiceYears">その受け取り時の勤続年数（拠出年数） <span class="unit">年</span></label>
-<input id="taishokukin-overlapServiceYears" max="60" min="1" step="1" type="number" value="10"/>
+<input id="taishokukin-overlapServiceYears" inputmode="numeric" max="60" min="1" step="1" type="number" value="10"/>
 </div>
 <div class="field">
 <label for="taishokukin-overlapAmount">その一時金の受取額 <span class="unit">万円</span></label>
-<input id="taishokukin-overlapAmount" max="100000" min="0" step="10" type="number" value="400"/>
+<input id="taishokukin-overlapAmount" inputmode="numeric" max="100000" min="0" step="10" type="number" value="400"/>
 <p class="field-hint">受取額が勤続年数相当の退職所得控除額より少ない場合、重複期間の算定に使う年数が受取額から逆算した年数に調整されます（施行令第70条第2項）。</p>
 </div>
 </div>
@@ -729,7 +729,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="kabe-income">年間の給与収入（パート・アルバイト収入） <span class="unit">円</span></label>
-<input id="kabe-income" max="3000000" min="0" step="10000" type="number" value="1300000"/>
+<input id="kabe-income" inputmode="numeric" max="3000000" min="0" step="10000" type="number" value="1300000"/>
 </div>
 <div class="field">
 <label for="kabe-insuranceApplies">勤務先の社会保険 加入条件（106万円の壁）</label>
@@ -825,7 +825,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="tedori-income">額面年収 <span class="unit">万円</span></label>
-<input id="tedori-income" min="0" step="10" type="number" value="500"/>
+<input id="tedori-income" inputmode="numeric" min="0" step="10" type="number" value="500"/>
 </div>
 <div class="field">
 <label for="tedori-ageGroup">年齢区分</label>
@@ -844,7 +844,7 @@
 </div>
 <div class="field">
 <label for="tedori-dependents">扶養親族の人数（16歳以上・一般の扶養親族） <span class="unit">人</span></label>
-<input id="tedori-dependents" max="5" min="0" step="1" type="number" value="0"/>
+<input id="tedori-dependents" inputmode="numeric" max="5" min="0" step="1" type="number" value="0"/>
 </div>
 </div>
 <div>
@@ -928,11 +928,11 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="shoyo-bonus">賞与の額面 <span class="unit">万円</span></label>
-<input id="shoyo-bonus" min="0" step="1" type="number" value="50"/>
+<input id="shoyo-bonus" inputmode="numeric" min="0" step="1" type="number" value="50"/>
 </div>
 <div class="field">
 <label for="shoyo-prevSalary">前月の給与額面（賞与を除く） <span class="unit">万円</span></label>
-<input id="shoyo-prevSalary" min="0" step="1" type="number" value="30"/>
+<input id="shoyo-prevSalary" inputmode="numeric" min="0" step="1" type="number" value="30"/>
 <p class="field-hint">賞与にかかる所得税率は「前月の給与から社会保険料を引いた金額」を基準に決まります。基本給・各種手当を含む前月分の額面を入力してください。</p>
 </div>
 <div class="field">
@@ -1056,7 +1056,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="shobyou-salary">直近の月給（額面） <span class="unit">万円</span></label>
-<input id="shobyou-salary" min="0" step="1" type="number" value="30"/>
+<input id="shobyou-salary" inputmode="numeric" min="0" step="1" type="number" value="30"/>
 <p class="field-hint">本来は「支給開始日以前12か月間の標準報酬月額の平均」を使いますが、本ツールでは直近の月給（額面）で近似します。健康保険の標準報酬月額は5.8万円〜139万円の範囲のため、この範囲外の入力は自動的に調整されます。</p>
 </div>
 <div class="field">
@@ -1074,7 +1074,7 @@
 </div>
 <div class="field" hidden id="shobyou-payFields">
 <label for="shobyou-payDaily">会社から支給される給与（日額） <span class="unit">円</span></label>
-<input id="shobyou-payDaily" min="0" step="100" type="number" value="0"/>
+<input id="shobyou-payDaily" inputmode="numeric" min="0" step="100" type="number" value="0"/>
 </div>
 </div>
 <div>
@@ -1178,12 +1178,12 @@
 </div>
 <div class="field">
 <label for="nenkin-avgIncome">加入期間の平均年収（賞与込み） <span class="unit">万円</span></label>
-<input id="nenkin-avgIncome" min="0" step="10" type="number" value="450"/>
+<input id="nenkin-avgIncome" inputmode="numeric" min="0" step="10" type="number" value="450"/>
 <p class="field-hint">正確な金額は「ねんきん定期便」や日本年金機構の「ねんきんネット」の平均標準報酬額でご確認いただけますが、わからない場合はおおよその平均年収で構いません。</p>
 </div>
 <div class="field">
 <label for="nenkin-unpaidMonths">国民年金の未納・免除月数（あれば） <span class="unit">か月</span></label>
-<input id="nenkin-unpaidMonths" max="480" min="0" step="1" type="number" value="0"/>
+<input id="nenkin-unpaidMonths" inputmode="numeric" max="480" min="0" step="1" type="number" value="0"/>
 <p class="field-hint">学生時代の未納期間や失業中の免除期間など、保険料を納めていない月数があれば入力してください。ない場合は0のままで構いません。</p>
 </div>
 <div class="field">
@@ -1328,12 +1328,12 @@
 </div>
 <div class="field">
 <label for="izoku-avgIncome">加入期間の平均年収（賞与込み） <span class="unit">万円</span></label>
-<input id="izoku-avgIncome" min="0" step="10" type="number" value="450"/>
+<input id="izoku-avgIncome" inputmode="numeric" min="0" step="10" type="number" value="450"/>
 <p class="field-hint">正確な金額は「ねんきん定期便」でご確認いただけますが、わからない場合はおおよその平均年収で構いません。</p>
 </div>
 <div class="field">
 <label for="izoku-childCount">遺族基礎年金の対象となる子どもの人数 <span class="unit">人</span></label>
-<input id="izoku-childCount" max="5" min="0" step="1" type="number" value="1"/>
+<input id="izoku-childCount" inputmode="numeric" max="5" min="0" step="1" type="number" value="1"/>
 <p class="field-hint">18歳になった後の最初の3月31日までのお子さま（障害等級1・2級の場合は20歳未満）の人数です。対象の子がいない場合は0にしてください。</p>
 </div>
 <div class="field">
@@ -1346,7 +1346,7 @@
 </div>
 <div class="field">
 <label for="izoku-spouseAge">配偶者の年齢 <span class="unit">歳</span></label>
-<input id="izoku-spouseAge" max="100" min="0" step="1" type="number" value="35"/>
+<input id="izoku-spouseAge" inputmode="numeric" max="100" min="0" step="1" type="number" value="35"/>
 <p class="field-hint">対象の子がいない状態で40歳以上65歳未満の妻は、中高齢寡婦加算の対象になります。</p>
 </div>
 </div>
@@ -1442,7 +1442,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="kihon-salary">離職前の月給（額面） <span class="unit">万円</span></label>
-<input id="kihon-salary" min="0" step="1" type="number" value="30"/>
+<input id="kihon-salary" inputmode="numeric" min="0" step="1" type="number" value="30"/>
 <p class="field-hint">本来は「離職前6か月間の賃金合計÷180」で計算する賃金日額を使いますが、本ツールでは離職前の月給（額面）÷30で近似します。賃金日額には年齢区分ごとの上限・下限があり、この範囲外は自動的に調整されます。</p>
 </div>
 <div class="field">
@@ -1581,7 +1581,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="kaigo-salary">介護休業開始前の月給（額面） <span class="unit">円</span></label>
-<input id="kaigo-salary" max="2000000" min="0" step="1000" type="number" value="300000"/>
+<input id="kaigo-salary" inputmode="numeric" max="2000000" min="0" step="1000" type="number" value="300000"/>
 <p class="field-hint">本来は「休業開始前6か月間の賃金合計÷180」で計算する賃金日額を使いますが、本ツールでは月給（額面）÷30で近似します。賃金日額には上限・下限があり、この範囲外は自動的に調整されます。</p>
 </div>
 <div class="field">
@@ -1686,12 +1686,12 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="kourei-wagebase">60歳到達時等の賃金月額 <span class="unit">円</span></label>
-<input id="kourei-wagebase" max="1000000" min="0" step="1000" type="number" value="300000"/>
+<input id="kourei-wagebase" inputmode="numeric" max="1000000" min="0" step="1000" type="number" value="300000"/>
 <p class="field-hint">原則として60歳に到達する前6か月間の平均賃金（月額）です。「受給資格確認通知書」に記載の金額を入力してください。算定には上限52万2,000円・下限9万6,090円で調整した金額を使用します。</p>
 </div>
 <div class="field">
 <label for="kourei-wage">支給対象月の賃金（60歳以後の月給） <span class="unit">円</span></label>
-<input id="kourei-wage" max="1000000" min="0" step="1000" type="number" value="200000"/>
+<input id="kourei-wage" inputmode="numeric" max="1000000" min="0" step="1000" type="number" value="200000"/>
 <p class="field-hint">60歳以後に実際に支払われた（支払われる予定の）月給（額面）を入力してください。</p>
 </div>
 <div class="field">
@@ -1801,17 +1801,17 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="zaishoku-kihongaku">基本月額（老齢厚生年金の報酬比例部分） <span class="unit">円</span></label>
-<input id="zaishoku-kihongaku" max="500000" min="0" step="1000" type="number" value="100000"/>
+<input id="zaishoku-kihongaku" inputmode="numeric" max="500000" min="0" step="1000" type="number" value="100000"/>
 <p class="field-hint">加給年金額を除いた、老齢厚生年金（報酬比例部分）の月額です。「ねんきん定期便」や年金決定通知書に記載の年金額（年額）を12で割った金額が目安です。</p>
 </div>
 <div class="field">
 <label for="zaishoku-hyoujun">標準報酬月額 <span class="unit">円</span></label>
-<input id="zaishoku-hyoujun" max="1500000" min="0" step="1000" type="number" value="300000"/>
+<input id="zaishoku-hyoujun" inputmode="numeric" max="1500000" min="0" step="1000" type="number" value="300000"/>
 <p class="field-hint">厚生年金保険の等級表に基づく、現在の給与（月給）に応じた標準報酬月額です。給与明細や「標準報酬決定通知書」に記載されています。</p>
 </div>
 <div class="field">
 <label for="zaishoku-shoyo">直近1年間の標準賞与額の合計 <span class="unit">円</span></label>
-<input id="zaishoku-shoyo" max="5000000" min="0" step="10000" type="number" value="0"/>
+<input id="zaishoku-shoyo" inputmode="numeric" max="5000000" min="0" step="10000" type="number" value="0"/>
 <p class="field-hint">賞与（ボーナス）がある場合、直近1年間に支給された標準賞与額の合計を入力してください。総報酬月額相当額の計算で12分の1にして加算します。</p>
 </div>
 <div class="field">

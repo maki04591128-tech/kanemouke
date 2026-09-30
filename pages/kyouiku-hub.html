@@ -508,7 +508,7 @@
 </div>
 <div class="field">
 <label for="kyouiku-target">教育費の目標総額 <span class="unit">万円</span></label>
-<input id="kyouiku-target" min="0" step="10" type="number" value="980"/>
+<input id="kyouiku-target" inputmode="numeric" min="0" step="10" type="number" value="980"/>
 </div>
 <div class="field">
 <label for="kyouiku-childAge">お子さまの現在の年齢 <span class="unit" id="kyouiku-childAgeOut">3 歳</span></label>
@@ -516,7 +516,7 @@
 </div>
 <div class="field">
 <label for="kyouiku-initial">すでに準備できている金額 <span class="unit">円</span></label>
-<input id="kyouiku-initial" min="0" step="10000" type="number" value="500000"/>
+<input id="kyouiku-initial" inputmode="numeric" min="0" step="10000" type="number" value="500000"/>
 </div>
 <div class="field">
 <label for="kyouiku-rate">想定利回り（年率） <span class="unit" id="kyouiku-rateOut">1.0 %</span></label>
@@ -602,7 +602,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="gakushi-monthly">毎月の払込・積立額 <span class="unit">万円</span></label>
-<input id="gakushi-monthly" min="0" step="0.1" type="number" value="1.5"/>
+<input id="gakushi-monthly" inputmode="decimal" min="0" step="0.1" type="number" value="1.5"/>
 </div>
 <div class="field">
 <label for="gakushi-years">払込・積立期間 <span class="unit" id="gakushi-yearsOut">18 年</span></label>
@@ -695,11 +695,11 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="hoken-salaryIncome">給与収入（年収・額面） <span class="unit">円</span></label>
-<input id="hoken-salaryIncome" max="30000000" min="0" step="10000" type="number" value="5000000"/>
+<input id="hoken-salaryIncome" inputmode="numeric" max="30000000" min="0" step="10000" type="number" value="5000000"/>
 </div>
 <div class="field">
 <label for="hoken-socialInsurance">社会保険料の年間支払額（概算） <span class="unit">円</span></label>
-<input id="hoken-socialInsurance" min="0" step="1000" type="number" value="750000"/>
+<input id="hoken-socialInsurance" inputmode="numeric" min="0" step="1000" type="number" value="750000"/>
 <p class="field-hint">目安がわからない場合は年収の約15%で概算しています（給与明細の社会保険料合計×12で置き換えるとより正確です）。</p>
 </div>
 <div class="field">
@@ -711,26 +711,26 @@
 </div>
 <div class="field">
 <label for="hoken-dependents">扶養親族の人数（配偶者を除く） <span class="unit">人</span></label>
-<input id="hoken-dependents" max="6" min="0" step="1" type="number" value="0"/>
+<input id="hoken-dependents" inputmode="numeric" max="6" min="0" step="1" type="number" value="0"/>
 </div>
 <div class="field">
 <label for="hoken-generalLife">一般生命保険料の年間払込額 <span class="unit">円</span></label>
-<input id="hoken-generalLife" min="0" step="1000" type="number" value="80000"/>
+<input id="hoken-generalLife" inputmode="numeric" min="0" step="1000" type="number" value="80000"/>
 <p class="field-hint">死亡保障などの生命保険。2012年（平成24年）以降に契約した「新制度」の保険料を前提に計算します。</p>
 </div>
 <div class="field">
 <label for="hoken-medicalCare">介護医療保険料の年間払込額 <span class="unit">円</span></label>
-<input id="hoken-medicalCare" min="0" step="1000" type="number" value="40000"/>
+<input id="hoken-medicalCare" inputmode="numeric" min="0" step="1000" type="number" value="40000"/>
 <p class="field-hint">医療保険・がん保険・介護保険など。新制度で新設された区分です。</p>
 </div>
 <div class="field">
 <label for="hoken-personalPension">個人年金保険料の年間払込額 <span class="unit">円</span></label>
-<input id="hoken-personalPension" min="0" step="1000" type="number" value="0"/>
+<input id="hoken-personalPension" inputmode="numeric" min="0" step="1000" type="number" value="0"/>
 <p class="field-hint">「個人年金保険料税制適格特約」が付いた契約のみが対象です。特約のない個人年金保険は一般生命保険料の扱いになります。</p>
 </div>
 <div class="field">
 <label for="hoken-earthquake">地震保険料の年間払込額 <span class="unit">円</span></label>
-<input id="hoken-earthquake" min="0" step="1000" type="number" value="20000"/>
+<input id="hoken-earthquake" inputmode="numeric" min="0" step="1000" type="number" value="20000"/>
 <p class="field-hint">火災保険とセットで加入する地震保険の保険料部分のみが対象です（火災保険料単体は対象外）。</p>
 </div>
 </div>
@@ -819,15 +819,15 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="jidouteate-under3">0歳〜3歳未満のお子さまの人数 <span class="unit">人</span></label>
-<input id="jidouteate-under3" max="10" min="0" step="1" type="number" value="1"/>
+<input id="jidouteate-under3" inputmode="numeric" max="10" min="0" step="1" type="number" value="1"/>
 </div>
 <div class="field">
 <label for="jidouteate-highschool">3歳〜高校生年代（18歳到達後最初の3月31日まで）のお子さまの人数 <span class="unit">人</span></label>
-<input id="jidouteate-highschool" max="10" min="0" step="1" type="number" value="1"/>
+<input id="jidouteate-highschool" inputmode="numeric" max="10" min="0" step="1" type="number" value="1"/>
 </div>
 <div class="field">
 <label for="jidouteate-university">19歳〜大学生年代（22歳到達後最初の3月31日まで）のお子さまの人数 <span class="unit">人</span></label>
-<input id="jidouteate-university" max="10" min="0" step="1" type="number" value="0"/>
+<input id="jidouteate-university" inputmode="numeric" max="10" min="0" step="1" type="number" value="0"/>
 <p class="field-hint">この年齢のお子さまは手当の支給対象外ですが、「第3子以降」を数える際の出生順のカウントには含まれます。</p>
 </div>
 </div>
@@ -916,17 +916,17 @@
 </div>
 <div class="field" id="koukou-privateFields" hidden>
 <label for="koukou-tuition">私立高校の年間授業料 <span class="unit">円</span></label>
-<input id="koukou-tuition" max="2000000" min="0" step="1000" type="number" value="457300"/>
+<input id="koukou-tuition" inputmode="numeric" max="2000000" min="0" step="1000" type="number" value="457300"/>
 <p class="field-hint">文部科学省の調査による全国平均は年額457,331円です。志望校の実際の授業料に置き換えるとより正確になります。</p>
 </div>
 <div class="field">
 <label for="koukou-years">在学予定年数 <span class="unit">年</span></label>
-<input id="koukou-years" max="3" min="1" step="1" type="number" value="3"/>
+<input id="koukou-years" inputmode="numeric" max="3" min="1" step="1" type="number" value="3"/>
 <p class="field-hint">現在1年生であれば3年、2年生であれば残り2年、3年生であれば残り1年を入力してください。</p>
 </div>
 <div class="field">
 <label for="koukou-children">同時に高校に在学するお子さまの人数 <span class="unit">人</span></label>
-<input id="koukou-children" max="5" min="1" step="1" type="number" value="1"/>
+<input id="koukou-children" inputmode="numeric" max="5" min="1" step="1" type="number" value="1"/>
 </div>
 </div>
 <div>
@@ -1007,7 +1007,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="shussan-salary">直近の月給（額面） <span class="unit">万円</span></label>
-<input id="shussan-salary" min="0" step="1" type="number" value="30"/>
+<input id="shussan-salary" inputmode="numeric" min="0" step="1" type="number" value="30"/>
 <p class="field-hint">本来は「支給開始日以前12か月間の標準報酬月額の平均」を使いますが、本ツールでは直近の月給（額面）で近似します。健康保険の標準報酬月額は5.8万円〜139万円の範囲のため、この範囲外の入力は自動的に調整されます。</p>
 </div>
 <div class="field">
@@ -1033,7 +1033,7 @@
 </div>
 <div class="field" hidden id="shussan-payFields">
 <label for="shussan-payDaily">会社から支給される給与（日額） <span class="unit">円</span></label>
-<input id="shussan-payDaily" min="0" step="100" type="number" value="0"/>
+<input id="shussan-payDaily" inputmode="numeric" min="0" step="100" type="number" value="0"/>
 </div>
 </div>
 <div>
@@ -1124,7 +1124,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="ikuji-salary">育休開始前の月給（額面、賞与を除く） <span class="unit">円</span></label>
-<input id="ikuji-salary" max="2000000" min="0" step="1000" type="number" value="300000"/>
+<input id="ikuji-salary" inputmode="numeric" max="2000000" min="0" step="1000" type="number" value="300000"/>
 <p class="field-hint">本来は休業開始前6か月間の賃金合計÷180で算定される「賃金日額」を、月給÷30で近似して計算します。</p>
 </div>
 <div class="field">
@@ -1227,7 +1227,7 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="hoshougaku-livingCost">現在の世帯の生活費（月額） <span class="unit">円</span></label>
-<input id="hoshougaku-livingCost" max="1000000" min="0" step="1000" type="number" value="300000"/>
+<input id="hoshougaku-livingCost" inputmode="numeric" max="1000000" min="0" step="1000" type="number" value="300000"/>
 <p class="field-hint">末子が独立するまでは現在の70%、その後は配偶者一人分として50%が続くと仮定します。</p>
 </div>
 <div class="field">
@@ -1250,7 +1250,7 @@
 </div>
 <div class="field">
 <label for="hoshougaku-eduTarget">教育費の目安（お子さま1人あたり） <span class="unit">万円</span></label>
-<input id="hoshougaku-eduTarget" min="0" step="10" type="number" value="980"/>
+<input id="hoshougaku-eduTarget" inputmode="numeric" min="0" step="10" type="number" value="980"/>
 </div>
 <div class="field">
 <label for="hoshougaku-spouseAge">配偶者の現在の年齢 <span class="unit" id="hoshougaku-spouseAgeOut">35 歳</span></label>
@@ -1258,21 +1258,21 @@
 </div>
 <div class="field">
 <label for="hoshougaku-spouseIncome">配偶者の年収（現在） <span class="unit">万円</span></label>
-<input id="hoshougaku-spouseIncome" min="0" step="10" type="number" value="300"/>
+<input id="hoshougaku-spouseIncome" inputmode="numeric" min="0" step="10" type="number" value="300"/>
 <p class="field-hint">65歳になるまでこの年収が続くと仮定します。専業主婦（主夫）の場合は0を入力してください。</p>
 </div>
 <div class="field">
 <label for="hoshougaku-savings">現在の預貯金・資産 <span class="unit">万円</span></label>
-<input id="hoshougaku-savings" min="0" step="10" type="number" value="200"/>
+<input id="hoshougaku-savings" inputmode="numeric" min="0" step="10" type="number" value="200"/>
 </div>
 <div class="field">
 <label for="hoshougaku-pension">遺族年金の年額の見込み <span class="unit">万円</span></label>
-<input id="hoshougaku-pension" min="0" step="1" type="number" value="107"/>
+<input id="hoshougaku-pension" inputmode="numeric" min="0" step="1" type="number" value="107"/>
 <p class="field-hint" id="hoshougaku-pensionHint"></p>
 </div>
 <div class="field">
 <label for="hoshougaku-funeral">葬儀費用・整理資金 <span class="unit">万円</span></label>
-<input id="hoshougaku-funeral" min="0" step="10" type="number" value="200"/>
+<input id="hoshougaku-funeral" inputmode="numeric" min="0" step="10" type="number" value="200"/>
 </div>
 </div>
 <div>
@@ -1352,17 +1352,17 @@
 <h2>条件を入力</h2>
 <div class="field">
 <label for="shogaku-type1Total">第一種奨学金（無利子）貸与総額 <span class="unit">円</span></label>
-<input id="shogaku-type1Total" max="10000000" min="0" step="10000" type="number" value="1440000"/>
+<input id="shogaku-type1Total" inputmode="numeric" max="10000000" min="0" step="10000" type="number" value="1440000"/>
 <p class="field-hint">利用していない場合は0を入力してください。</p>
 </div>
 <div class="field">
 <label for="shogaku-type2Total">第二種奨学金（有利子）貸与総額 <span class="unit">円</span></label>
-<input id="shogaku-type2Total" max="10000000" min="0" step="10000" type="number" value="2400000"/>
+<input id="shogaku-type2Total" inputmode="numeric" max="10000000" min="0" step="10000" type="number" value="2400000"/>
 <p class="field-hint">利用していない場合は0を入力してください。</p>
 </div>
 <div class="field">
 <label for="shogaku-type2Rate">第二種の利率（年利） <span class="unit">%</span></label>
-<input id="shogaku-type2Rate" max="3" min="0" step="0.1" type="number" value="1.0"/>
+<input id="shogaku-type2Rate" inputmode="decimal" max="3" min="0" step="0.1" type="number" value="1.0"/>
 <p class="field-hint">上限は年3%です。実際の利率は貸与終了時に確定するため、貸与奨学生証書・返還誓約書に記載の利率を入力してください。</p>
 </div>
 <div class="field">
@@ -1372,7 +1372,7 @@
 </div>
 <div class="field">
 <label for="shogaku-income">卒業後の予想年収（額面） <span class="unit">万円</span></label>
-<input id="shogaku-income" min="0" step="10" type="number" value="300"/>
+<input id="shogaku-income" inputmode="numeric" min="0" step="10" type="number" value="300"/>
 <p class="field-hint">入力すると、年収に対する年間返還額の割合の目安を表示します（任意）。</p>
 </div>
 </div>
