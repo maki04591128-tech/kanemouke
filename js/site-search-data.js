@@ -88,7 +88,7 @@ window.SITE_SEARCH_DATA = [
   },
   {
     "title": "iDeCo・小規模企業共済シミュレーター まとめ",
-    "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済の5ツールをタブ切り替えで使えます。",
+    "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済・付加年金の6ツールをタブ切り替えで使えます。",
     "href": "pages/ideco-hub.html?tool=setsuzei",
     "category": "iDeCo・小規模企業共済",
     "type": "hub"
@@ -132,6 +132,13 @@ window.SITE_SEARCH_DATA = [
     "title": "小規模企業共済とは？掛金・節税額・共済金の受け取り方 完全ガイド",
     "desc": "自営業者・フリーランス向けの退職金制度「小規模企業共済」の掛金の決め方、節税の仕組み、一括受取vs分割受取の税金の違い、iDeCoとの違いを解説します。",
     "href": "pages/shoukibo-kyosai-guide.html",
+    "category": "iDeCo・小規模企業共済",
+    "type": "guide"
+  },
+  {
+    "title": "付加年金とは？仕組み・掛金400円・年金額200円×納付月数・国民年金基金との違い 完全ガイド",
+    "desc": "自営業者・フリーランスが月400円の付加保険料で老齢基礎年金に上乗せできる「付加年金」の仕組み、受給開始から2年で元が取れる理由、繰上げ・繰下げの影響、国民年金基金・iDeCoとの違いを解説します。",
+    "href": "pages/fukanenkin-guide.html",
     "category": "iDeCo・小規模企業共済",
     "type": "guide"
   },
@@ -573,6 +580,13 @@ window.SITE_SEARCH_DATA = [
     "title": "小規模企業共済",
     "desc": "「小規模企業共済」は、自営業者・フリーランスや中小企業の役員が加入できる、いわば経営者・個人事業主向けの退職金制度です。掛金の全額が所得控除の対象になるため、iDeCoと並ぶ代表的な節税手段として知られています。掛金月額・加入年数・課税所得を入力するだけで、加入期間中の節税額と、共済金を受け取るときの税金の目安がわかります。",
     "href": "pages/ideco-hub.html?tool=kyosai",
+    "category": "iDeCo・小規模企業共済",
+    "type": "tool"
+  },
+  {
+    "title": "付加年金",
+    "desc": "自営業者・フリーランスが月400円の付加保険料を納めることで、老齢基礎年金に「200円×納付月数」の年金を上乗せできる制度です。納付予定月数・受給開始年齢・受給後の想定年数から、総払込額と元が取れるまでの年数を試算します。",
+    "href": "pages/ideco-hub.html?tool=fukanenkin",
     "category": "iDeCo・小規模企業共済",
     "type": "tool"
   },
