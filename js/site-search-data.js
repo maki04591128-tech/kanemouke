@@ -59,6 +59,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "NISA枠の復活とは？仕組みと注意点、いつ・いくら戻るか 完全ガイド",
+    "desc": "売却で復活するのは時価ではなく取得価額（簿価）分だけという仕組みと、いつから使えるか、成長投資枠とつみたて投資枠の違い、売って買い直す戦略の注意点を解説します。",
+    "href": "pages/nisa-fukkatsu-guide.html",
+    "category": "積立・新NISA",
+    "type": "guide"
+  },
+  {
     "title": "生活防衛資金は何ヶ月分必要か？目安の決め方と貯め方 完全ガイド",
     "desc": "会社員・公務員は3〜6ヶ月分、自営業・フリーランスは6〜12ヶ月分。生活費別の目標金額一覧と、貯めながら積立を始めてよいかを解説します。",
     "href": "pages/seikatsu-bouei-shikin-guide.html",
