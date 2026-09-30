@@ -656,6 +656,10 @@
     step1.hidden = true;
     step2.hidden = true;
     result.hidden = false;
+
+    if (window.FN_upgradeFavoriteCards) {
+      window.FN_upgradeFavoriteCards(result);
+    }
   }
 
   function reset() {

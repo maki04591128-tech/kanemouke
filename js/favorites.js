@@ -90,7 +90,13 @@
     if (badge && badge.textContent.trim() && !badge.classList.contains("featured-badge")) {
       return badge.textContent.trim();
     }
-    var container = card.closest("section, #featured-section, #recent-tools-section, #favorite-tools-section");
+    // 30秒診断の結果・関連カードは<section class="container">の中に
+    // #favorite-tools-sectionと一緒に入れ子になっており、"section"だけで探すと
+    // 外側のcontainerまで遡って「お気に入り」の見出しを誤って拾ってしまうため、
+    // #diagnosis-resultで先に止める（中にh2は無いのでcategoryは空になる）。
+    var container = card.closest(
+      "section, #featured-section, #recent-tools-section, #favorite-tools-section, #diagnosis-result"
+    );
     var heading = container ? container.querySelector("h2") : null;
     return heading ? heading.textContent.trim() : "";
   }
@@ -176,4 +182,9 @@
 
   renderFavoritesSection();
   upgradeCards(document);
+
+  // 30秒診断（js/tool-diagnosis.js）は結果カード・関連カードを診断完了後に
+  // 動的生成するため、ページ読み込み時のupgradeCards(document)では★を付けられない。
+  // 診断側から結果表示のたびに呼び出せるよう、この関数を公開しておく。
+  window.FN_upgradeFavoriteCards = upgradeCards;
 })();
