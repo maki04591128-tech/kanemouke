@@ -150,6 +150,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "住宅ローンの毎月の余裕資金、繰り上げ返済と積立投資どちらに回す？ 完全ガイド",
+    "desc": "「ローンvs投資」シミュレーターの仕組み、金利・利回りによる有利不利の逆転、iDeCo/NISA枠との関係、まとまった資金の場合との違いを試算例つきで解説します。",
+    "href": "pages/jutaku-yoyuu-shikin-guide.html",
+    "category": "住宅ローン",
+    "type": "guide"
+  },
+  {
     "title": "教育資金・保険シミュレーター まとめ",
     "desc": "教育資金・学資保険vsNISA・保険料控除・児童手当・高校無償化・出産手当金・育児休業給付金・生命保険の必要保障額・奨学金返還の9ツールをタブ切り替えで使えます。",
     "href": "pages/kyouiku-hub.html?tool=kyouiku",
