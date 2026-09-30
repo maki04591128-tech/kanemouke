@@ -802,6 +802,13 @@ a { color: var(--color-primary); }
 .tool-category {
   scroll-margin-top: 132px;
 }
+/* トップページの「自分で目的から選ぶ」から、カテゴリー内の特定カードへ
+   直接ジャンプするためのアンカー先（例: #goal-fukugyo-target）。
+   .tool-category と同じオフセットで、固定ヘッダー・カテゴリーナビに
+   隠れないようにする。 */
+[id^="goal-"][id$="-target"] {
+  scroll-margin-top: 132px;
+}
 .tool-category + .tool-category {
   margin-top: 8px;
 }
