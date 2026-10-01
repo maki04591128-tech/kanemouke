@@ -528,6 +528,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "国民年金の任意加入制度とは？対象者・保険料17,920円・申込み方法・特例任意加入 完全ガイド",
+    "desc": "60〜65歳の任意加入・65〜70歳の特例任意加入・海外居住者の任意加入という3パターンの対象者の条件、保険料、申込み方法、付加年金・iDeCoとの関係まで解説します。",
+    "href": "pages/kokumin-nenkin-ninni-kanyu-guide.html",
+    "category": "年収・手取り・退職金",
+    "type": "guide"
+  },
+  {
     "title": "FIRE達成",
     "desc": "現在の資産・毎月の積立額・想定利回りから、いわゆる「4%ルール」など任意の取り崩し率で計算したFIRE（Financial Independence, Retire Early＝経済的自立と早期リタイア）に必要な資産額と、そこに到達するまでの年数・年齢を試算します。達成後に生活費を取り崩しながら運用を続けた場合、資産が何年もつかもあわせて確認できます。",
     "href": "pages/fire-hub.html?tool=fire",
