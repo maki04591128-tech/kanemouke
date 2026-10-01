@@ -6,12 +6,14 @@
     target: document.getElementById("kyouiku-target"),
     childAge: document.getElementById("kyouiku-childAge"),
     initial: document.getElementById("kyouiku-initial"),
+    offset: document.getElementById("kyouiku-offset"),
     rate: document.getElementById("kyouiku-rate"),
     childAgeOut: document.getElementById("kyouiku-childAgeOut"),
     rateOut: document.getElementById("kyouiku-rateOut"),
     monthly: document.getElementById("kyouiku-result-monthly"),
     principal: document.getElementById("kyouiku-result-principal"),
     profit: document.getElementById("kyouiku-result-profit"),
+    netTarget: document.getElementById("kyouiku-result-netTarget"),
   };
 
   var GOAL_AGE = 18;
@@ -74,12 +76,15 @@
     var childAge = Number(els.childAge.value);
     var years = Math.max(1, GOAL_AGE - childAge);
     var initial = Math.max(0, Number(els.initial.value) || 0);
+    var offsetMan = Math.max(0, Number(els.offset.value) || 0);
+    var offset = offsetMan * 10000;
+    var netTarget = Math.max(0, target - offset);
     var rate = Number(els.rate.value);
 
     els.childAgeOut.textContent = childAge + " 歳";
     els.rateOut.textContent = rate.toFixed(1) + " %";
 
-    var monthly = requiredMonthly(target, initial, rate, years);
+    var monthly = requiredMonthly(netTarget, initial, rate, years);
     var yearly = simulateSeries(initial, monthly, rate, years);
     var finalPoint = yearly[yearly.length - 1];
     var profit = finalPoint.balance - finalPoint.principal;
@@ -87,6 +92,7 @@
     els.monthly.textContent = yen(monthly);
     els.principal.textContent = yen(finalPoint.principal);
     els.profit.textContent = (profit >= 0 ? "+" : "") + manYen(profit);
+    els.netTarget.textContent = yen(netTarget);
 
     var labels = yearly.map(function (d) { return (childAge + d.year) + "歳"; });
     var principalData = yearly.map(function (d) { return Math.round(d.principal); });
@@ -144,7 +150,7 @@
   }
 
   els.course.addEventListener("change", onCourseChange);
-  [els.target, els.childAge, els.initial, els.rate].forEach(function (el) {
+  [els.target, els.childAge, els.initial, els.offset, els.rate].forEach(function (el) {
     el.addEventListener("input", render);
   });
 
