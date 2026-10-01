@@ -14,6 +14,9 @@
     variableRate: document.getElementById("kinri-variableRate"),
     scenario: document.getElementById("kinri-scenario"),
     applyRule: document.getElementById("kinri-applyRule"),
+    refinanceYear: document.getElementById("kinri-refinanceYear"),
+    refinanceRate: document.getElementById("kinri-refinanceRate"),
+    refinanceCost: document.getElementById("kinri-refinanceCost"),
     verdict: document.getElementById("kinri-verdict"),
     verdictSub: document.getElementById("kinri-verdictSub"),
     resultFixedTotal: document.getElementById("kinri-result-fixed-total"),
@@ -21,6 +24,10 @@
     resultDiff: document.getElementById("kinri-result-diff"),
     resultUnpaid: document.getElementById("kinri-result-unpaid"),
     tableBody: document.getElementById("kinri-review-body"),
+    refinanceCard: document.getElementById("kinri-refinanceCard"),
+    refinanceTotal: document.getElementById("kinri-result-refinance-total"),
+    refinanceNote: document.getElementById("kinri-refinanceNote"),
+    legendRefinance: document.getElementById("kinri-legend-refinance"),
   };
 
   var chart = null;
@@ -68,7 +75,10 @@
   // 変動金利：5年ごとに金利見直し。5年ルール・125%ルールを適用する場合、
   // 見直し後の毎月返済額は直前の返済額の125%を上限とし、
   // 上限超過分（利息が返済額を上回る分＝未払利息）は元金に上乗せする（未払利息）。
-  function simulateVariable(principal, initialRatePct, months, scenario, applyRule) {
+  // stopMonthを指定すると、本来の返済期間（months）に基づく金利見直しスケジュールは
+  // そのままに、stopMonth経過時点までの状態（残高・累計返済額等）だけを返す。これにより
+  // 「返済途中で固定金利へ借り換える」シナリオの、借り換え直前までの状態を取得できる。
+  function simulateVariable(principal, initialRatePct, months, scenario, applyRule, stopMonth) {
     var rate = initialRatePct;
     var balance = principal;
     var payment = monthlyPayment(balance, rate, months);
@@ -77,8 +87,9 @@
     var totalInterest = 0;
     var unpaidInterestTotal = 0;
     var reviewRows = [{ year: 0, rate: rate, payment: payment, balance: balance }];
+    var limit = stopMonth ? Math.min(months, stopMonth) : months;
 
-    for (var m = 1; m <= months; m++) {
+    for (var m = 1; m <= limit; m++) {
       if (m > 1 && (m - 1) % 60 === 0) {
         rate = rate + scenario.stepPct;
         var remainingMonths = months - m + 1;
@@ -125,6 +136,9 @@
     var scenario = SCENARIOS[els.scenario.value] || SCENARIOS.flat;
     var applyRule = els.applyRule.value === "yes";
     var months = Math.round(loanYears * 12);
+    var refinanceYear = Math.min(Math.max(0, Math.round(Number(els.refinanceYear.value) || 0)), Math.max(0, loanYears - 1));
+    var refinanceRate = Number(els.refinanceRate.value);
+    var refinanceCost = clampNonNegative(els.refinanceCost.value) * 10000;
 
     var fixed = simulateFixed(principal, fixedRate, months);
     var variable = simulateVariable(principal, variableRate, months, scenario, applyRule);
@@ -132,21 +146,50 @@
     var variableGrandTotal = variable.totalPaid + variable.lumpSumDue;
     var diff = fixed.totalPaid - variableGrandTotal;
 
+    var refinanceMonths = refinanceYear * 12;
+    var refinanceBalances = null;
+    var refinanceGrandTotal = 0;
+    if (refinanceYear > 0) {
+      var beforeRefinance = simulateVariable(principal, variableRate, months, scenario, applyRule, refinanceMonths);
+      var afterRefinance = simulateFixed(beforeRefinance.lumpSumDue, refinanceRate, months - refinanceMonths);
+      refinanceBalances = beforeRefinance.balances.concat(afterRefinance.balances.slice(1));
+      refinanceGrandTotal = beforeRefinance.totalPaid + afterRefinance.totalPaid + refinanceCost;
+    }
+
     els.resultFixedTotal.textContent = manYen(fixed.totalPaid);
     els.resultVariableTotal.textContent = manYen(variableGrandTotal);
     els.resultDiff.textContent = manYen(Math.abs(diff)) + (diff >= 0 ? "（変動が有利）" : "（固定が有利）");
     els.resultUnpaid.textContent = variable.unpaidInterestTotal > 0 ? manYen(variable.unpaidInterestTotal) : "発生なし";
 
+    var verdictSubText;
     if (variable.lumpSumDue > 0) {
       els.verdict.textContent = "このシナリオでは返済期間内に完済できず、" + manYen(variable.lumpSumDue) + " が最終回に一括請求される見込みです";
-      els.verdictSub.textContent = "5年ルール・125%ルールにより毎月の返済額の上昇が抑えられる一方、利息の増加分（未払利息）が元金に上乗せされ続けると、当初の返済期間では完済できない場合があります。";
+      verdictSubText = "5年ルール・125%ルールにより毎月の返済額の上昇が抑えられる一方、利息の増加分（未払利息）が元金に上乗せされ続けると、当初の返済期間では完済できない場合があります。";
     } else if (diff > 0) {
       els.verdict.textContent = "このシナリオでは変動金利の方が総返済額で " + manYen(diff) + " 有利です";
-      els.verdictSub.textContent = "ただし将来の金利動向は誰にも予測できません。上昇シナリオを変えて、どこまで金利が上がると固定金利より不利になるかも確認してみましょう。";
+      verdictSubText = "ただし将来の金利動向は誰にも予測できません。上昇シナリオを変えて、どこまで金利が上がると固定金利より不利になるかも確認してみましょう。";
     } else {
       els.verdict.textContent = "このシナリオでは固定金利の方が総返済額で " + manYen(-diff) + " 有利です";
-      els.verdictSub.textContent = "金利上昇シナリオが厳しいほど、返済当初の金利が低い変動金利のメリットは小さくなっていきます。";
+      verdictSubText = "金利上昇シナリオが厳しいほど、返済当初の金利が低い変動金利のメリットは小さくなっていきます。";
     }
+
+    if (refinanceYear > 0) {
+      var diffVsVariable = variableGrandTotal - refinanceGrandTotal;
+      var diffVsFixed = fixed.totalPaid - refinanceGrandTotal;
+      els.refinanceCard.style.display = "";
+      els.refinanceTotal.textContent = manYen(refinanceGrandTotal);
+      els.refinanceNote.textContent =
+        refinanceYear + "年目の年末に、変動金利から固定金利（年利" + refinanceRate.toFixed(2) + "%）へ借り換えると仮定した場合の総返済額は" +
+        manYen(refinanceGrandTotal) + "（借り換え費用" + manYen(refinanceCost) + "込み）です。そのまま変動金利を続けた場合（" +
+        manYen(variableGrandTotal) + "）との差は" + (diffVsVariable >= 0 ? "+" : "") + manYen(diffVsVariable) +
+        "、当初から固定金利を選んだ場合（" + manYen(fixed.totalPaid) + "）との差は" + (diffVsFixed >= 0 ? "+" : "") + manYen(diffVsFixed) + "です（プラスは借り換えが有利）。";
+      verdictSubText += "「借り換えを実行する年目」が入力されているため、" + refinanceYear + "年目に固定金利へ借り換えた場合の試算を下に表示しています。";
+      if (els.legendRefinance) els.legendRefinance.style.display = "";
+    } else {
+      els.refinanceCard.style.display = "none";
+      if (els.legendRefinance) els.legendRefinance.style.display = "none";
+    }
+    els.verdictSub.textContent = verdictSubText;
 
     var rows = variable.reviewRows.map(function (r, idx) {
       var nextRow = variable.reviewRows[idx + 1];
@@ -162,34 +205,45 @@
     var labels = [];
     var fixedBalances = [];
     var variableBalances = [];
+    var refinanceBalancesTicks = refinanceBalances ? [] : null;
     for (var y = 0; y <= loanYears; y += stepYears) {
       var idx = Math.min(y * 12, months);
       labels.push(y + "年目");
       fixedBalances.push(Math.round(fixed.balances[idx]));
       variableBalances.push(Math.round(variable.balances[idx]));
+      if (refinanceBalancesTicks) refinanceBalancesTicks.push(Math.round(refinanceBalances[idx]));
     }
 
-    var data = {
-      labels: labels,
-      datasets: [
-        {
-          label: "固定金利：残高",
-          data: fixedBalances,
-          borderColor: "#0f5f4c",
-          backgroundColor: "#0f5f4c",
-          fill: false,
-          tension: 0.15,
-        },
-        {
-          label: "変動金利：残高",
-          data: variableBalances,
-          borderColor: "#d98e04",
-          backgroundColor: "#d98e04",
-          fill: false,
-          tension: 0.15,
-        },
-      ],
-    };
+    var datasets = [
+      {
+        label: "固定金利：残高",
+        data: fixedBalances,
+        borderColor: "#0f5f4c",
+        backgroundColor: "#0f5f4c",
+        fill: false,
+        tension: 0.15,
+      },
+      {
+        label: "変動金利：残高",
+        data: variableBalances,
+        borderColor: "#d98e04",
+        backgroundColor: "#d98e04",
+        fill: false,
+        tension: 0.15,
+      },
+    ];
+    if (refinanceBalancesTicks) {
+      datasets.push({
+        label: "借り換えあり：残高",
+        data: refinanceBalancesTicks,
+        borderColor: "#5b3fa0",
+        backgroundColor: "#5b3fa0",
+        borderDash: [6, 4],
+        fill: false,
+        tension: 0.15,
+      });
+    }
+    var data = { labels: labels, datasets: datasets };
     var options = {
       responsive: true,
       maintainAspectRatio: false,
@@ -220,7 +274,17 @@
     if (window.renderChartDataTable) window.renderChartDataTable("kinri-balanceDataTable", chart);
   }
 
-  [els.principal, els.loanYears, els.fixedRate, els.variableRate, els.scenario, els.applyRule].forEach(function (el) {
+  [
+    els.principal,
+    els.loanYears,
+    els.fixedRate,
+    els.variableRate,
+    els.scenario,
+    els.applyRule,
+    els.refinanceYear,
+    els.refinanceRate,
+    els.refinanceCost,
+  ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
