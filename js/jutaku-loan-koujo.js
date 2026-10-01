@@ -48,6 +48,11 @@
   var INCOME_DEPENDENT_DEDUCTION = 380000;
   var RESIDENT_TAX_RATE = 0.10;
 
+  // 繰上返済（期間短縮型）のタイミング別比較で使うプリセット（0＝繰上返済なし）。
+  // NISA枠配分シミュレーター（js/nisa-haibun.js の DELAY_SCENARIOS）・生前贈与vs相続
+  // シミュレーター（js/zouyo-souzoku.js の DELAY_SCENARIOS）と同じ「0を基準とした年数配列」の形式。
+  var PREPAY_YEAR_SCENARIOS = [0, 1, 3, 5, 10];
+
   var els = {
     principal: document.getElementById("koujo-principal"),
     loanRate: document.getElementById("koujo-loanRate"),
@@ -58,6 +63,7 @@
     salaryIncome: document.getElementById("koujo-salaryIncome"),
     hasSpouse: document.getElementById("koujo-hasSpouse"),
     dependents: document.getElementById("koujo-dependents"),
+    prepayAmount: document.getElementById("koujo-prepayAmount"),
     verdict: document.getElementById("koujo-verdict"),
     verdictSub: document.getElementById("koujo-verdictSub"),
     resultLimit: document.getElementById("koujo-result-limit"),
@@ -66,6 +72,9 @@
     resultTotal: document.getElementById("koujo-result-total"),
     resultIncomeTax: document.getElementById("koujo-result-income-tax"),
     tableBody: document.getElementById("koujo-breakdown-body"),
+    prepayTableWrap: document.getElementById("koujo-prepayTableWrap"),
+    prepayNote: document.getElementById("koujo-prepayNote"),
+    prepayBody: document.getElementById("koujo-prepay-body"),
   };
 
   var chart = null;
@@ -115,7 +124,11 @@
     return (principal * i) / (1 - Math.pow(1 + i, -months));
   }
 
-  function simulateLoan(principal, annualRatePct, months) {
+  // prepayAtMonth / prepayAmount は任意（省略時は従来どおり繰上返済なしの残高推移を返す）。
+  // 指定した場合、その月の返済直後に prepayAmount を残高から一括で差し引く「期間短縮型」の
+  // 繰上返済（js/loan-vs-invest.js の「繰上返済vs投資」タブと同じ考え方）として扱い、毎月の
+  // 返済額（当初のpayment）は変えずに以降の返済を続ける。
+  function simulateLoan(principal, annualRatePct, months, prepayAtMonth, prepayAmount) {
     var i = annualRatePct / 100 / 12;
     var payment = monthlyPayment(principal, annualRatePct, months);
     var balance = principal;
@@ -125,39 +138,29 @@
       var due = payment;
       if (due > balance + interest) due = balance + interest;
       balance = Math.max(0, balance + interest - due);
+      if (prepayAtMonth && m === prepayAtMonth && prepayAmount > 0) {
+        balance = Math.max(0, balance - prepayAmount);
+      }
       balances.push(balance);
     }
     return balances;
   }
 
-  function render() {
-    var principal = clampNonNegative(els.principal.value);
-    var loanRate = Number(els.loanRate.value);
-    var loanYears = Math.max(1, Number(els.loanYears.value) || 1);
-    var categoryKey = els.category.value;
-    var category = CATEGORY_TABLE[categoryKey];
-    var kosodate = els.kosodate.value === "yes";
-    var grossIncome = clampNonNegative(els.salaryIncome.value);
-    var hasSpouse = els.hasSpouse.value === "yes";
-    var dependents = Math.max(0, Math.round(Number(els.dependents.value) || 0));
+  // balances（simulateLoanが返す年末ではなく月末残高の配列、balances[0]=借入当初）から、
+  // その返済スケジュールで実際に支払うことになる利息の合計を逆算する。完済後（残高0）の月は
+  // 利息0として自然に合算されるため、prepayAtMonthで完済が早まったスケジュールにもそのまま使える。
+  function totalInterestFromBalances(balances, annualRatePct) {
+    var i = annualRatePct / 100 / 12;
+    var total = 0;
+    for (var m = 1; m < balances.length; m++) {
+      total += balances[m - 1] * i;
+    }
+    return total;
+  }
 
-    els.kosodateRow.style.display = category.kosodateApplicable ? "" : "none";
-
-    var limit = category.kosodateApplicable && kosodate ? category.limitKosodate : category.limitNormal;
-    var creditPeriod = category.period;
-
-    var salaryIncome = salaryIncomeAfterDeduction(grossIncome);
-    var incomeDeductions =
-      incomeBasicDeduction(grossIncome) + (hasSpouse ? INCOME_SPOUSE_DEDUCTION : 0) + dependents * INCOME_DEPENDENT_DEDUCTION;
-    var taxableForIncomeTax = Math.max(0, salaryIncome - incomeDeductions);
-    var taxAmount = incomeTaxAmount(taxableForIncomeTax);
-    var residentTaxCap = Math.min(taxableForIncomeTax * RESIDENT_TAX_CREDIT_RATE_CAP, RESIDENT_TAX_CREDIT_YEN_CAP);
-
-    var overIncomeLimit = salaryIncome > INCOME_LIMIT_FOR_ELIGIBILITY;
-
-    var loanMonths = Math.round(loanYears * 12);
-    var balances = simulateLoan(principal, loanRate, loanMonths);
-
+  // 1年分の年末残高推移（balances）と制度条件から、creditPeriod年間の控除スケジュールを計算する。
+  // render() 内の本来の計算ロジックを、繰上返済ありのシナリオにもそのまま再利用できるよう切り出したもの。
+  function computeCreditSchedule(balances, creditPeriod, loanMonths, limit, overIncomeLimit, taxAmount, residentTaxCap) {
     var rows = [];
     var totalCredit = 0;
     var totalUnused = 0;
@@ -188,6 +191,43 @@
       });
     }
 
+    return { rows: rows, totalCredit: totalCredit, totalUnused: totalUnused, firstYearCredit: firstYearCredit };
+  }
+
+  function render() {
+    var principal = clampNonNegative(els.principal.value);
+    var loanRate = Number(els.loanRate.value);
+    var loanYears = Math.max(1, Number(els.loanYears.value) || 1);
+    var categoryKey = els.category.value;
+    var category = CATEGORY_TABLE[categoryKey];
+    var kosodate = els.kosodate.value === "yes";
+    var grossIncome = clampNonNegative(els.salaryIncome.value);
+    var hasSpouse = els.hasSpouse.value === "yes";
+    var dependents = Math.max(0, Math.round(Number(els.dependents.value) || 0));
+
+    els.kosodateRow.style.display = category.kosodateApplicable ? "" : "none";
+
+    var limit = category.kosodateApplicable && kosodate ? category.limitKosodate : category.limitNormal;
+    var creditPeriod = category.period;
+
+    var salaryIncome = salaryIncomeAfterDeduction(grossIncome);
+    var incomeDeductions =
+      incomeBasicDeduction(grossIncome) + (hasSpouse ? INCOME_SPOUSE_DEDUCTION : 0) + dependents * INCOME_DEPENDENT_DEDUCTION;
+    var taxableForIncomeTax = Math.max(0, salaryIncome - incomeDeductions);
+    var taxAmount = incomeTaxAmount(taxableForIncomeTax);
+    var residentTaxCap = Math.min(taxableForIncomeTax * RESIDENT_TAX_CREDIT_RATE_CAP, RESIDENT_TAX_CREDIT_YEN_CAP);
+
+    var overIncomeLimit = salaryIncome > INCOME_LIMIT_FOR_ELIGIBILITY;
+
+    var loanMonths = Math.round(loanYears * 12);
+    var balances = simulateLoan(principal, loanRate, loanMonths);
+
+    var schedule = computeCreditSchedule(balances, creditPeriod, loanMonths, limit, overIncomeLimit, taxAmount, residentTaxCap);
+    var rows = schedule.rows;
+    var totalCredit = schedule.totalCredit;
+    var totalUnused = schedule.totalUnused;
+    var firstYearCredit = schedule.firstYearCredit;
+
     els.resultLimit.textContent = manYen(limit);
     els.resultPeriod.textContent = creditPeriod + " 年";
     els.resultFirstYear.textContent = yen(firstYearCredit);
@@ -216,6 +256,54 @@
         );
       })
       .join("");
+
+    // ---- 繰上返済（期間短縮型）を実行すると控除額・利息はどう変わる？ ----
+    // 繰上返済額が0（初期値）の間は比較表を表示せず、既存の試算結果に一切影響しない。
+    var prepayAmount = clampNonNegative(els.prepayAmount.value);
+    if (prepayAmount > 0) {
+      els.prepayTableWrap.style.display = "";
+      var baseInterest = totalInterestFromBalances(balances, loanRate);
+      var prepayRows = PREPAY_YEAR_SCENARIOS.filter(function (y) {
+        return y === 0 || y * 12 <= loanMonths;
+      }).map(function (y) {
+        var yearBalances = y === 0 ? balances : simulateLoan(principal, loanRate, loanMonths, y * 12, prepayAmount);
+        var yearSchedule = computeCreditSchedule(yearBalances, creditPeriod, loanMonths, limit, overIncomeLimit, taxAmount, residentTaxCap);
+        var interest = totalInterestFromBalances(yearBalances, loanRate);
+        return {
+          year: y,
+          totalCredit: yearSchedule.totalCredit,
+          creditDiff: yearSchedule.totalCredit - totalCredit,
+          interestSaved: baseInterest - interest,
+        };
+      });
+
+      els.prepayBody.innerHTML = prepayRows
+        .map(function (r) {
+          var label = r.year === 0 ? "繰上返済なし" : r.year + "年目の年末に実行";
+          var creditDiffText = r.year === 0 ? "－" : (r.creditDiff >= 0 ? "+" : "－") + manYen(Math.abs(r.creditDiff));
+          var interestSavedText = r.year === 0 ? "－" : manYen(Math.max(0, r.interestSaved));
+          return (
+            "<tr><td>" + label + "</td><td>" + manYen(r.totalCredit) + "</td><td>" + creditDiffText +
+            "</td><td>" + interestSavedText + "</td></tr>"
+          );
+        })
+        .join("");
+
+      var fiveYearRow = prepayRows.filter(function (r) { return r.year === 5; })[0];
+      var referenceRow = fiveYearRow || prepayRows[prepayRows.length - 1];
+      if (referenceRow && referenceRow.year > 0) {
+        els.prepayNote.textContent =
+          manYen(prepayAmount) + "の繰上返済（期間短縮型）を" + referenceRow.year + "年目の年末に実行すると、" + creditPeriod +
+          "年間の住宅ローン控除額は繰上返済しない場合より約 " + manYen(Math.abs(referenceRow.creditDiff)) +
+          " 少なくなる一方、完済までの利息は約 " + manYen(Math.max(0, referenceRow.interestSaved)) +
+          " 軽減される見込みです。実行するタイミングが早いほど利息軽減効果は大きくなりやすい一方、年末残高が借入限度額を下回る年ほど控除額への影響も大きくなる傾向があります。";
+      } else {
+        els.prepayNote.textContent =
+          "返済期間が短いため、比較できるタイミングの候補が限られています。下の表で実際に試算できるタイミングをご確認ください。";
+      }
+    } else {
+      els.prepayTableWrap.style.display = "none";
+    }
 
     var labels = rows.map(function (r) { return r.year + "年目"; });
     var data = {
@@ -281,6 +369,7 @@
     els.salaryIncome,
     els.hasSpouse,
     els.dependents,
+    els.prepayAmount,
   ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
