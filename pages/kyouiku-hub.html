@@ -519,6 +519,11 @@
 <input id="kyouiku-initial" inputmode="numeric" min="0" step="10000" type="number" value="500000"/>
 </div>
 <div class="field">
+<label for="kyouiku-offset">児童手当・奨学金などの受取見込み額（任意） <span class="unit">万円</span></label>
+<input id="kyouiku-offset" inputmode="numeric" min="0" step="10" type="number" value="0"/>
+<p class="field-hint">児童手当を使わずに積み立てた場合の見込み総額（「<a href="kyouiku-hub.html?tool=jidouteate">児童手当</a>」タブで目安を試算できます）や、見込んでいる奨学金・祖父母等からの援助額を入力すると、その分だけ目標金額から差し引いて毎月の積立額を計算します。</p>
+</div>
+<div class="field">
 <label for="kyouiku-rate">想定利回り（年率） <span class="unit" id="kyouiku-rateOut">1.0 %</span></label>
 <input id="kyouiku-rate" max="8" min="0" step="0.1" type="range" value="1"/>
 </div>
@@ -536,6 +541,10 @@
 <div class="result-card">
 <div class="label">運用益（想定）</div>
 <div class="value" id="kyouiku-result-profit">-</div>
+</div>
+<div class="result-card">
+<div class="label">受取見込み額差引後の必要積立総額</div>
+<div class="value" id="kyouiku-result-netTarget">-</div>
 </div>
 </div>
 <div class="chart-wrap">
@@ -583,7 +592,11 @@
 </div>
 <div class="faq-item">
 <dt>児童手当も教育資金の準備に活用できますか？</dt>
-<dd>はい。児童手当を使わずに貯蓄・積立に回すと、教育資金の大きな助けになります。「<a href="kyouiku-hub.html?tool=jidouteate">児童手当</a>」タブで、お子さまの年齢区分ごとの支給額の目安を確認できます。</dd>
+<dd>はい。児童手当を使わずに貯蓄・積立に回すと、教育資金の大きな助けになります。「<a href="kyouiku-hub.html?tool=jidouteate">児童手当</a>」タブで、お子さまの年齢区分ごとの支給額の目安を確認できます。確認した受取見込み総額は、上の「児童手当・奨学金などの受取見込み額」欄に入力すると、その分だけ目標金額から差し引いた毎月の積立額を試算できます。</dd>
+</div>
+<div class="faq-item">
+<dt>「児童手当・奨学金などの受取見込み額」には何を入力すればいいですか？</dt>
+<dd>教育費の目標総額のうち、積立以外の方法でまかなえる見込みの金額です。児童手当を使わず貯蓄に回す場合の受取見込み総額、進学後に受給予定の給付型奨学金、祖父母等からの援助予定額などを合算して入力してください。未入力（0円）の場合は、従来どおり目標総額の全額を積立で準備する前提で計算します。</dd>
 </div>
 <div class="faq-item">
 <dt>高校の学費はどのくらい安くなりますか？</dt>
