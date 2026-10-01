@@ -522,6 +522,11 @@
 <label for="hitsuyou-years">積立期間 <span class="unit" id="hitsuyou-yearsOut">25 年</span></label>
 <input id="hitsuyou-years" max="40" min="1" step="1" type="range" value="25"/>
 </div>
+<div class="field">
+<label for="hitsuyou-inflation">想定インフレ率（年率・任意） <span class="unit" id="hitsuyou-inflationOut">0.0 %</span></label>
+<input id="hitsuyou-inflation" max="5" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint">目標金額は「今の価値（現在の物価水準）」で入力してください。インフレ率を入力すると、物価上昇分を加味した積立終了時点の名目目標額を自動計算し、その金額を達成するための毎月積立額を逆算します。0%のままなら、従来どおり目標金額をそのまま将来の名目目標として計算します。</p>
+</div>
 </div>
 <div>
 <div class="result-summary">
@@ -536,6 +541,10 @@
 <div class="result-card">
 <div class="label">運用益（想定）</div>
 <div class="value" id="hitsuyou-result-profit">-</div>
+</div>
+<div class="result-card" id="hitsuyou-result-nominalTarget-card">
+<div class="label">インフレ考慮後の目標金額（名目）</div>
+<div class="value" id="hitsuyou-result-nominalTarget">-</div>
 </div>
 </div>
 <div class="chart-wrap">
@@ -566,6 +575,10 @@
 <div class="faq-item">
 <dt>想定利回りをどのくらいに設定すればよいですか？</dt>
 <dd>将来の利回りを保証するものではないため、単一の数値で計画を立てるのではなく、複数の利回りパターンで必要積立額を比較し、達成が難しそうな場合は目標や期間の見直しも検討することをおすすめします。</dd>
+</div>
+<div class="faq-item">
+<dt>「想定インフレ率」を入力すると何が変わりますか？</dt>
+<dd>目標金額の欄には「今の物価水準で、いくら必要か」という現在価値の金額を入力してください。想定インフレ率を入力すると、「目標金額 ×（1+インフレ率）の積立年数乗」で積立終了時点の名目目標額を計算し、その名目目標額を達成するために必要な毎月積立額を逆算します。物価が上がる分だけ将来は同じ買い物によりお金が必要になるため、インフレ率を考慮すると必要積立額は大きくなります。0%のままなら、従来どおり目標金額をそのまま名目目標として扱い、計算結果は変わりません。なお、本ツールではインフレ率が期間中ずっと一定であることを前提とした簡便な試算です。</dd>
 </div>
 </dl>
 </section>

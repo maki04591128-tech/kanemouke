@@ -6,11 +6,14 @@
     initial: document.getElementById("hitsuyou-initial"),
     rate: document.getElementById("hitsuyou-rate"),
     years: document.getElementById("hitsuyou-years"),
+    inflation: document.getElementById("hitsuyou-inflation"),
     rateOut: document.getElementById("hitsuyou-rateOut"),
     yearsOut: document.getElementById("hitsuyou-yearsOut"),
+    inflationOut: document.getElementById("hitsuyou-inflationOut"),
     monthly: document.getElementById("hitsuyou-result-monthly"),
     principal: document.getElementById("hitsuyou-result-principal"),
     profit: document.getElementById("hitsuyou-result-profit"),
+    nominalTarget: document.getElementById("hitsuyou-result-nominalTarget"),
   };
 
   var chart = null;
@@ -64,11 +67,15 @@
     var initial = Math.max(0, Number(els.initial.value) || 0);
     var rate = Number(els.rate.value);
     var years = Number(els.years.value);
+    var inflation = Number(els.inflation.value) || 0;
 
     els.rateOut.textContent = rate.toFixed(1) + " %";
     els.yearsOut.textContent = years + " 年";
+    els.inflationOut.textContent = inflation.toFixed(1) + " %";
 
-    var monthly = requiredMonthly(target, initial, rate, years);
+    var nominalTarget = target * Math.pow(1 + inflation / 100, years);
+
+    var monthly = requiredMonthly(nominalTarget, initial, rate, years);
     var yearly = simulateSeries(initial, monthly, rate, years);
     var finalPoint = yearly[yearly.length - 1];
     var profit = finalPoint.balance - finalPoint.principal;
@@ -76,6 +83,7 @@
     els.monthly.textContent = yen(monthly);
     els.principal.textContent = yen(finalPoint.principal);
     els.profit.textContent = (profit >= 0 ? "+" : "") + manYen(profit);
+    els.nominalTarget.textContent = yen(nominalTarget);
 
     var labels = yearly.map(function (d) { return d.year + "年"; });
     var principalData = yearly.map(function (d) { return Math.round(d.principal); });
@@ -132,7 +140,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("hitsuyou-growthDataTable", chart);
   }
 
-  [els.target, els.initial, els.rate, els.years].forEach(function (el) {
+  [els.target, els.initial, els.rate, els.years, els.inflation].forEach(function (el) {
     el.addEventListener("input", render);
   });
 
