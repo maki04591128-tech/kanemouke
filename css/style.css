@@ -1202,7 +1202,7 @@ a { color: var(--color-primary); }
   color: var(--color-text-muted);
   margin-bottom: 6px;
 }
-.field label .unit { font-weight: 400; }
+.field label .unit { font-weight: 400; white-space: nowrap; flex-shrink: 0; margin-left: 8px; }
 .field-hint {
   font-size: 0.78rem;
   color: var(--color-text-muted);
