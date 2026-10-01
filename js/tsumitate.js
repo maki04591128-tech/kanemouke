@@ -6,11 +6,14 @@
     monthly: document.getElementById("tsumitate-monthly"),
     rate: document.getElementById("tsumitate-rate"),
     years: document.getElementById("tsumitate-years"),
+    inflation: document.getElementById("tsumitate-inflation"),
     rateOut: document.getElementById("tsumitate-rateOut"),
     yearsOut: document.getElementById("tsumitate-yearsOut"),
+    inflationOut: document.getElementById("tsumitate-inflationOut"),
     total: document.getElementById("tsumitate-result-total"),
     principal: document.getElementById("tsumitate-result-principal"),
     profit: document.getElementById("tsumitate-result-profit"),
+    real: document.getElementById("tsumitate-result-real"),
     fundSelect: document.getElementById("tsumitate-fundSelect"),
     fundHint: document.getElementById("tsumitate-fundHint"),
   };
@@ -63,16 +66,20 @@
     var monthly = Math.max(0, Number(els.monthly.value) || 0);
     var rate = Number(els.rate.value);
     var years = Number(els.years.value);
+    var inflation = Number(els.inflation.value) || 0;
 
     els.rateOut.textContent = rate.toFixed(1) + " %";
     els.yearsOut.textContent = years + " 年";
+    els.inflationOut.textContent = inflation.toFixed(1) + " %";
 
     var result = simulate(initial, monthly, rate, years);
     var profit = result.balance - result.principal;
+    var realValue = result.balance / Math.pow(1 + inflation / 100, years);
 
     els.total.textContent = yen(result.balance);
     els.principal.textContent = yen(result.principal);
     els.profit.textContent = (profit >= 0 ? "+" : "") + manYen(profit);
+    els.real.textContent = yen(realValue);
 
     var labels = result.yearly.map(function (d) { return d.year + "年"; });
     var principalData = result.yearly.map(function (d) { return Math.round(d.principal); });
@@ -136,7 +143,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("tsumitate-growthDataTable", chart);
   }
 
-  [els.initial, els.monthly, els.rate, els.years].forEach(function (el) {
+  [els.initial, els.monthly, els.rate, els.years, els.inflation].forEach(function (el) {
     el.addEventListener("input", render);
   });
 

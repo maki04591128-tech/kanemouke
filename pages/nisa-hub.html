@@ -404,7 +404,7 @@
   </div>
 
   <section class="tab-panel" id="tabpanel-tsumitate" role="tabpanel" aria-labelledby="tab-btn-tsumitate" data-tool="tsumitate">
-    <p class="tab-panel-intro">毎月の積立額・想定利回り・積立年数から、将来の資産額を試算します。新NISAのつみたて投資枠やiDeCoの計画づくりにご活用ください。始める前に知っておきたい注意点は<a href="nisa-demerit-guide.html">新NISAのデメリットは？完全ガイド</a>でまとめています。</p>
+    <p class="tab-panel-intro">毎月の積立額・想定利回り・積立年数から、将来の資産額を試算します。新NISAのつみたて投資枠やiDeCoの計画づくりにご活用ください。想定インフレ率を入力すると、物価上昇を加味した「実質的な価値」もあわせて確認できます。始める前に知っておきたい注意点は<a href="nisa-demerit-guide.html">新NISAのデメリットは？完全ガイド</a>でまとめています。</p>
     <div class="calc-layout">
 <div class="panel">
 <h2>条件を入力</h2>
@@ -431,11 +431,16 @@
 <label for="tsumitate-years">積立期間 <span class="unit" id="tsumitate-yearsOut">20 年</span></label>
 <input id="tsumitate-years" max="40" min="1" step="1" type="range" value="20"/>
 </div>
+<div class="field">
+<label for="tsumitate-inflation">想定インフレ率（年率・任意） <span class="unit" id="tsumitate-inflationOut">0.0 %</span></label>
+<input id="tsumitate-inflation" max="5" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint">物価上昇を加味した「現在の貨幣価値に直した実質価値」も知りたい場合に入力してください。0%のままなら、従来どおり物価上昇を考慮しない名目値のみの表示になります。</p>
+</div>
 </div>
 <div>
 <div class="result-summary">
 <div class="result-card">
-<div class="label">将来の資産評価額</div>
+<div class="label">将来の資産評価額（名目値）</div>
 <div class="value" id="tsumitate-result-total">-</div>
 </div>
 <div class="result-card">
@@ -445,6 +450,10 @@
 <div class="result-card accent">
 <div class="label">運用益</div>
 <div class="value" id="tsumitate-result-profit">-</div>
+</div>
+<div class="result-card" id="tsumitate-result-real-card">
+<div class="label">実質価値（物価上昇を考慮）</div>
+<div class="value" id="tsumitate-result-real">-</div>
 </div>
 </div>
 <div class="chart-wrap">
@@ -481,6 +490,10 @@
 <div class="faq-item">
 <dt>「実際の投資信託から選ぶ」は何のための機能ですか？</dt>
 <dd>eMAXIS SlimシリーズやSBI・Vシリーズなど、新NISAでよく選ばれる代表的なインデックスファンドを選ぶと、そのファンドの信託報酬（実質年率）を差し引いた想定利回りの目安を自動入力する機能です。信託報酬は各運用会社の公表資料に基づく参考値、想定利回りは資産クラスの長期平均としてよく参考にされる目安レンジの中央値であり、個別ファンドの将来の運用成果を保証するものではありません。自動入力後もスライダーで自由に調整できます。最新の信託報酬は目論見書・運用会社の公式サイトでご確認ください。</dd>
+</div>
+<div class="faq-item">
+<dt>「想定インフレ率」と「実質価値」とは何ですか？</dt>
+<dd>将来の資産評価額（名目値）は、物価が上昇した分だけ「今のお金の価値」に換算すると目減りします。想定インフレ率を入力すると、将来の資産評価額を「将来の資産評価額 ÷ (1+インフレ率)の積立年数乗」で現在の貨幣価値に割り引いた実質価値を表示します。例えば想定利回り5％・想定インフレ率2％なら、物価上昇分を差し引いた実質的な増え方は年率3％程度に近い水準になります。0％のままなら実質価値は名目値と同じ金額になります。</dd>
 </div>
 </dl>
 </section>
