@@ -388,6 +388,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "サイドFIREとは？フルFIREとの違い・必要資産額の考え方・始め方 完全ガイド",
+    "desc": "資産収入と緩やかな労働収入を組み合わせるサイドFIREの考え方、フルFIREとのメリット・デメリット比較、税金・社会保険の注意点、始め方の手順まで解説します。",
+    "href": "pages/side-fire-guide.html",
+    "category": "FIRE・資産取り崩し",
+    "type": "guide"
+  },
+  {
     "title": "相続・贈与シミュレーター まとめ",
     "desc": "相続税・生前贈与vs相続比較の2ツールをタブ切り替えで使えます。",
     "href": "pages/souzoku-hub.html?tool=souzokuzei",
