@@ -353,6 +353,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "株式の譲渡益（売却益）にかかる税金とは？計算方法・損益通算・繰越控除3年間の仕組み 完全ガイド",
+    "desc": "税率20.315%の内訳・取得費を含めた計算方法から、損益通算・繰越控除（最長3年間）の仕組み、NISA口座の売却損が対象外になる注意点までを解説します。",
+    "href": "pages/kabu-jouto-zeikin-guide.html",
+    "category": "配当・高配当株",
+    "type": "guide"
+  },
+  {
     "title": "FIRE・資産取り崩しシミュレーター まとめ",
     "desc": "FIRE達成・資産取り崩し方式比較の2ツールをタブ切り替えで使えます。",
     "href": "pages/fire-hub.html?tool=fire",
