@@ -1619,13 +1619,31 @@ a { color: var(--color-primary); }
   font-size: 0.82rem;
   color: var(--color-text-muted);
 }
+/* 2026-10-01のブラッシュアップ：share-box-controls内の7個のボタンは、
+   従来は`display:flex`でテキスト幅なりにラップするため、ボタンごとの
+   横幅がばらばらになり（例：「URLをコピー」は約120px、「結果の内訳を
+   CSVでダウンロード」は約245px）、モバイル幅375pxでは1行に1個ずつしか
+   並ばず6個が縦に長く積み重なる見た目になっていた。機能同士の違いが
+   一目でわかりにくく、目的のボタンを探すのに毎回スクロールが必要だった。
+   `.share-box-controls`だけ`display:grid`＋`auto-fit`に変更してボタンの
+   横幅を揃えて整列させ、`::before`の絵文字アイコン（サイト内の
+   `.goal-icon`等と同じ装飾用の視覚記号という扱い。CSS生成コンテンツの
+   ためスクリーンリーダーの読み上げ対象にはならず、アクセシビリティ上は
+   decorativeとして扱える）で機能を一目で見分けられるようにした。
+   `min-height: 44px`はモバイルのタッチターゲットサイズ（推奨44px前後）
+   確保のため`.share-btn`全体（記事ページの単独の「印刷・PDF保存」
+   ボタンを含む）に適用し、横幅いっぱいに広げる`width: 100%`は
+   `.share-box-controls`内のボタンだけに限定して、記事ページ側の
+   レイアウトに影響しないようにした。アイコンは`::before`擬似要素の
+   ためDOMの子要素ではなく、`js/result-image.js`がWeb Share API対応
+   環境で`btn.textContent`を書き換える処理とも干渉しない。 */
 .share-box-controls {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
 }
 .share-box-controls input[type="text"] {
-  flex: 1 1 260px;
+  grid-column: 1 / -1;
   min-width: 0;
   padding: 10px 12px;
   border: 1px solid var(--color-border);
@@ -1635,7 +1653,11 @@ a { color: var(--color-primary); }
   color: var(--color-text-muted);
 }
 .share-btn {
-  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
   padding: 10px 18px;
   border: none;
   border-radius: 8px;
@@ -1643,15 +1665,34 @@ a { color: var(--color-primary); }
   color: #fff;
   font-weight: 700;
   font-size: 0.85rem;
+  line-height: 1.3;
+  text-align: center;
   cursor: pointer;
 }
+.share-box-controls .share-btn {
+  width: 100%;
+  padding: 10px 10px;
+}
 .share-btn:hover { background: var(--color-primary-dark); }
+.share-btn:focus-visible {
+  outline: 2px solid var(--color-primary-dark);
+  outline-offset: 2px;
+}
 .share-btn.secondary {
   background: var(--color-bg);
   color: var(--color-primary-dark);
   border: 1px solid var(--color-primary);
 }
 .share-btn.secondary:hover { background: #eaf5f1; }
+/* 各ボタンの機能を一目で見分けられるようにする装飾アイコン（上記コメント参照） */
+#share-url-btn::before { content: "🔗"; }
+#print-result-btn::before { content: "🖨️"; }
+#image-result-btn::before { content: "🖼️"; }
+#text-result-btn::before { content: "📋"; }
+#csv-export-btn::before { content: "📥"; }
+#history-save-btn::before { content: "💾"; }
+#reset-inputs-btn::before { content: "↺"; }
+#result-compare-btn::before { content: "📊"; }
 .share-feedback {
   display: block;
   margin-top: 8px;
