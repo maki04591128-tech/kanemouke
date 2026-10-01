@@ -118,6 +118,15 @@
       balances.push(balance);
     }
 
+    // 5年ごとの返済額再計算を繰り返すと、浮動小数点演算の丸め誤差で
+    // 本来ちょうど0円になるはずの完済時残高がごく僅かな正の値（1円未満）
+    // として残ることがある。1円未満の残高は実質的に完済済みとみなし、
+    // 「一括請求が発生した」という誤った表示を防ぐため0に補正する。
+    if (balance > 0 && balance < 1) {
+      balance = 0;
+      balances[balances.length - 1] = 0;
+    }
+
     return {
       balances: balances,
       totalPaid: totalPaid,
