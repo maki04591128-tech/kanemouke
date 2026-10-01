@@ -11,6 +11,7 @@
     returnPct: document.getElementById("fire-returnPct"),
     returnPctOut: document.getElementById("fire-returnPctOut"),
     annualExpense: document.getElementById("fire-annualExpense"),
+    sideIncome: document.getElementById("fire-sideIncome"),
     withdrawalPct: document.getElementById("fire-withdrawalPct"),
     withdrawalPctOut: document.getElementById("fire-withdrawalPctOut"),
     postReturnPct: document.getElementById("fire-postReturnPct"),
@@ -101,6 +102,8 @@
     var monthlyYen = Math.max(0, Number(els.monthly.value) || 0) * 10000;
     var returnPct = Number(els.returnPct.value);
     var annualExpenseYen = Math.max(0, Number(els.annualExpense.value) || 0) * 10000;
+    var sideIncomeYen = Math.max(0, Number(els.sideIncome.value) || 0) * 10000;
+    var netExpenseYen = Math.max(0, annualExpenseYen - sideIncomeYen);
     var withdrawalPct = Number(els.withdrawalPct.value);
     var postReturnPct = Number(els.postReturnPct.value);
     var inflationPct = Number(els.inflationPct.value);
@@ -110,7 +113,7 @@
     els.postReturnPctOut.textContent = postReturnPct.toFixed(1) + " %";
     els.inflationPctOut.textContent = inflationPct.toFixed(1) + " %";
 
-    var targetYen = withdrawalPct > 0 ? annualExpenseYen / (withdrawalPct / 100) : Infinity;
+    var targetYen = withdrawalPct > 0 ? netExpenseYen / (withdrawalPct / 100) : Infinity;
 
     var acc = accumulate(currentAssetsYen, monthlyYen, returnPct, targetYen, MAX_ACCUMULATE_YEARS);
 
@@ -135,7 +138,7 @@
       els.reach.textContent = formatYearsMonths(acc.reachMonth) + "後（" + reachAge.toFixed(1) + "歳）";
       els.reachAssets.textContent = manYen(reachAssetsYen);
 
-      sus = sustain(reachAssetsYen, annualExpenseYen, postReturnPct, inflationPct, MAX_SUSTAIN_YEARS);
+      sus = sustain(reachAssetsYen, netExpenseYen, postReturnPct, inflationPct, MAX_SUSTAIN_YEARS);
 
       if (sus.depletedYear === null) {
         els.sustain.textContent = MAX_SUSTAIN_YEARS + "年以上（枯渇しない見込み）";
@@ -144,17 +147,25 @@
       }
 
       els.verdict.textContent =
-        "現在" + currentAge + "歳なら、" + formatYearsMonths(acc.reachMonth) + "後（" + reachAge.toFixed(1) + "歳）にFIREを達成できる見込みです";
+        "現在" + currentAge + "歳なら、" + formatYearsMonths(acc.reachMonth) + "後（" + reachAge.toFixed(1) + "歳）に" + (sideIncomeYen > 0 ? "サイドFIREを" : "FIREを") + "達成できる見込みです";
 
       if (sus.depletedYear === null) {
-        els.verdictSub.textContent = "達成後にこの生活費・引き出し率・運用利回りで取り崩しを続けても、" + MAX_SUSTAIN_YEARS + "年以上資産が持続する見込みです。";
+        els.verdictSub.textContent =
+          "達成後にこの生活費" + (sideIncomeYen > 0 ? "・労働収入" : "") + "・引き出し率・運用利回りで取り崩しを続けても、" + MAX_SUSTAIN_YEARS + "年以上資産が持続する見込みです。";
       } else {
         els.verdictSub.textContent =
-          "ただし同じ生活費で取り崩しを続けると、リタイアから約" + sus.depletedYear + "年後（" + Math.round(reachAge + sus.depletedYear) + "歳ごろ）に資産が尽きる計算です。引き出し率を下げる、リタイア後の運用利回りを見直すなどの対策を検討してください。";
+          "ただし同じ生活費" + (sideIncomeYen > 0 ? "・労働収入" : "") + "で取り崩しを続けると、リタイアから約" + sus.depletedYear + "年後（" + Math.round(reachAge + sus.depletedYear) + "歳ごろ）に資産が尽きる計算です。引き出し率を下げる、リタイア後の運用利回りを見直すなどの対策を検討してください。";
       }
     }
 
+    var sideIncomeRow = sideIncomeYen > 0
+      ? "<tr><td>リタイア後の労働収入（サイドFIRE）</td><td>" + manYen(sideIncomeYen) + "/年</td></tr>" +
+        "<tr><td>資産の取り崩しでまかなう年間生活費</td><td>" + manYen(netExpenseYen) + "</td></tr>"
+      : "";
+
     els.breakdownBody.innerHTML =
+      "<tr><td>年間生活費</td><td>" + manYen(annualExpenseYen) + "</td></tr>" +
+      sideIncomeRow +
       "<tr><td>FIRE達成に必要な資産額</td><td>" + manYen(targetYen) + "</td></tr>" +
       "<tr><td>現在の資産額</td><td>" + manYen(currentAssetsYen) + "</td></tr>" +
       "<tr><td><strong>達成までの期間</strong></td><td><strong>" + els.reach.textContent + "</strong></td></tr>" +
@@ -244,7 +255,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("fire-growthDataTable", chart);
   }
 
-  [els.currentAge, els.currentAssets, els.monthly, els.returnPct, els.annualExpense, els.withdrawalPct, els.postReturnPct, els.inflationPct].forEach(function (el) {
+  [els.currentAge, els.currentAssets, els.monthly, els.returnPct, els.annualExpense, els.sideIncome, els.withdrawalPct, els.postReturnPct, els.inflationPct].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });

@@ -176,6 +176,11 @@
 <p class="field-hint">月あたりの生活費の目安は、この金額の12分の1です。</p>
 </div>
 <div class="field">
+<label for="fire-sideIncome">年間労働収入（任意） <span class="unit">万円</span></label>
+<input id="fire-sideIncome" inputmode="numeric" min="0" step="10" type="number" value="0"/>
+<p class="field-hint">完全にリタイアせず、パート・業務委託などで一部の生活費を労働収入でまかなう「サイドFIRE」を試算する場合に入力してください。年間生活費からこの金額を差し引いた残りの金額だけを資産の取り崩しでまかなう前提で、必要資産額と資産の持続年数を再計算します。0のままなら通常のFIRE（完全リタイア）として試算します。考え方の詳細は「<a href="side-fire-guide.html">サイドFIREとは？完全ガイド</a>」で解説しています。</p>
+</div>
+<div class="field">
 <label for="fire-withdrawalPct">想定引き出し率（安全な取り崩し率） <span class="unit" id="fire-withdrawalPctOut">4.0 %</span></label>
 <input id="fire-withdrawalPct" max="6" min="2.5" step="0.5" type="range" value="4.0"/>
 <p class="field-hint">米国株式市場の過去データに基づく「4%ルール」（トリニティ・スタディ）が有名ですが、より安全側に見積もる場合は3〜3.5%程度で試算する考え方もあります。</p>
