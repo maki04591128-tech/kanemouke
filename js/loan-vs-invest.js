@@ -9,15 +9,19 @@
     termYears: document.getElementById("kurioage-termYears"),
     lump: document.getElementById("kurioage-lump"),
     investRate: document.getElementById("kurioage-investRate"),
+    delayYears: document.getElementById("kurioage-delayYears"),
     loanRateOut: document.getElementById("kurioage-loanRateOut"),
     termYearsOut: document.getElementById("kurioage-termYearsOut"),
     investRateOut: document.getElementById("kurioage-investRateOut"),
+    delayYearsOut: document.getElementById("kurioage-delayYearsOut"),
     monthsSaved: document.getElementById("kurioage-result-months-saved"),
     interestSaved: document.getElementById("kurioage-result-interest-saved"),
     investProfit: document.getElementById("kurioage-result-invest-profit"),
+    delayDiff: document.getElementById("kurioage-result-delay-diff"),
     detailInterestSaved: document.getElementById("kurioage-detail-interest-saved"),
     detailInvestProfit: document.getElementById("kurioage-detail-invest-profit"),
     detailInvestProfitAfterTax: document.getElementById("kurioage-detail-invest-profit-after-tax"),
+    detailDelayDiff: document.getElementById("kurioage-detail-delay-diff"),
     conclusion: document.getElementById("kurioage-conclusion"),
   };
 
@@ -78,6 +82,7 @@
       payoffMonth: payoffMonth === null ? totalMonths : payoffMonth,
       totalInterest: cumInterest,
       yearly: yearly,
+      finalBalance: balance,
     };
   }
 
@@ -87,24 +92,41 @@
     var termYears = Number(els.termYears.value);
     var lump = Math.min(Math.max(0, Number(els.lump.value) || 0), balance);
     var investRate = Number(els.investRate.value);
+    var delayYears = Math.min(Math.max(0, Number(els.delayYears.value) || 0), Math.max(0, termYears - 1));
 
     els.loanRateOut.textContent = loanRate.toFixed(2) + " %";
     els.termYearsOut.textContent = termYears + " 年";
     els.investRateOut.textContent = investRate.toFixed(1) + " %";
+    els.delayYearsOut.textContent = delayYears + " 年";
 
     var termMonths = termYears * 12;
     var payment = monthlyPayment(balance, loanRate, termMonths);
+    var investMonthlyRate = investRate / 100 / 12;
 
     var original = simulate(balance, loanRate, payment, termMonths);
     var originalYearly = original.yearly;
 
-    var withPrepay = simulate(balance - lump, loanRate, payment, termMonths);
-    var withPrepayYearly = withPrepay.yearly;
+    // "Delayed prepayment" models putting the lump sum into investments
+    // first and using it to prepay `delayYears` later: the loan follows
+    // the original schedule during the delay (phase1), then the grown
+    // lump sum is applied to whatever balance remains (phase2). With
+    // delayYears = 0 this reduces exactly to an immediate prepayment.
+    var delayMonths = delayYears * 12;
+    var phase1 = simulate(balance, loanRate, payment, delayMonths);
+    var lumpGrown = lump * Math.pow(1 + investMonthlyRate, delayMonths);
+    var prepayAmount = Math.min(lumpGrown, phase1.finalBalance);
+    var phase2 = simulate(phase1.finalBalance - prepayAmount, loanRate, payment, termMonths - delayMonths);
 
-    var monthsSaved = termMonths - withPrepay.payoffMonth;
-    var interestSaved = original.totalInterest - withPrepay.totalInterest;
+    var totalInterestDelayed = phase1.totalInterest + phase2.totalInterest;
+    var totalMonthsDelayed = delayMonths + phase2.payoffMonth;
+    var monthsSaved = termMonths - totalMonthsDelayed;
+    var interestSaved = original.totalInterest - totalInterestDelayed;
 
-    var investMonthlyRate = investRate / 100 / 12;
+    // Reference: prepaying immediately (delayYears = 0), for the "delay diff" card.
+    var immediatePrepay = simulate(balance - lump, loanRate, payment, termMonths);
+    var immediateInterestSaved = original.totalInterest - immediatePrepay.totalInterest;
+    var delayDiff = interestSaved - immediateInterestSaved;
+
     var investFV = lump * Math.pow(1 + investMonthlyRate, termMonths);
     var investProfit = investFV - lump;
     var investProfitAfterTax = investProfit * (1 - CAPITAL_GAINS_TAX_RATE);
@@ -112,9 +134,11 @@
     els.monthsSaved.textContent = monthsSaved > 0 ? monthsToText(monthsSaved) : "-";
     els.interestSaved.textContent = manYen(interestSaved);
     els.investProfit.textContent = manYen(investProfit);
+    els.delayDiff.textContent = (delayDiff > 0 ? "+" : delayDiff < 0 ? "-" : "±") + manYen(Math.abs(delayDiff));
     els.detailInterestSaved.textContent = yen(interestSaved);
     els.detailInvestProfit.textContent = yen(investProfit);
     els.detailInvestProfitAfterTax.textContent = yen(investProfitAfterTax);
+    els.detailDelayDiff.textContent = (delayDiff > 0 ? "+" : delayDiff < 0 ? "-" : "±") + yen(Math.abs(delayDiff));
 
     var diff = investProfit - interestSaved;
     var conclusionText;
@@ -127,11 +151,22 @@
     } else {
       conclusionText = "この条件では、繰上返済による利息軽減額の方が、投資に回した場合の運用益（税引前）より約 " + manYen(-diff) + " 大きくなります。繰上返済はリスクなく確実に効果が得られる一方、手元資金の流動性は下がる点にご留意ください。";
     }
+    if (delayYears > 0 && lump > 0) {
+      conclusionText += "「繰上返済を実行するまでの年数」を" + delayYears + "年に設定しているため、それまでの" + delayYears + "年間は資金を運用に回し、その評価額（" + manYen(lumpGrown) + "）を" + delayYears + "年後の繰上返済に充てる前提で試算しています。今すぐ実行する場合と比べた利息軽減額の差は" + (delayDiff >= 0 ? "+" : "-") + manYen(Math.abs(delayDiff)) + "です。";
+    }
     els.conclusion.textContent = conclusionText;
 
     var labels = originalYearly.map(function (d) { return d.month / 12 + "年"; });
     var interestSavedCum = originalYearly.map(function (d, i) {
-      return Math.round(d.cumInterest - withPrepayYearly[i].cumInterest);
+      var year = i + 1;
+      var cumInterestDelayed;
+      if (year <= delayYears) {
+        cumInterestDelayed = d.cumInterest;
+      } else {
+        var relIdx = year - delayYears - 1;
+        cumInterestDelayed = phase1.totalInterest + phase2.yearly[relIdx].cumInterest;
+      }
+      return Math.round(d.cumInterest - cumInterestDelayed);
     });
     var investProfitCum = originalYearly.map(function (d) {
       return Math.round(lump * Math.pow(1 + investMonthlyRate, d.month) - lump);
@@ -191,7 +226,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("kurioage-growthDataTable", chart);
   }
 
-  [els.balance, els.loanRate, els.termYears, els.lump, els.investRate].forEach(function (el) {
+  [els.balance, els.loanRate, els.termYears, els.lump, els.investRate, els.delayYears].forEach(function (el) {
     el.addEventListener("input", render);
   });
 
