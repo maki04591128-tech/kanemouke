@@ -10,6 +10,9 @@
   var TAX_RATE = 0.20315; // 課税口座の運用益にかかる税率（所得税・復興特別所得税・住民税の合計）
   var MAX_MONTHS = 50 * 12; // 打ち切り年数（この期間内に使い切らない場合は「未達」として扱う）
 
+  var DELAY_COMPARE_YEARS = 20; // 「開始タイミング」比較の基準年数（この年数後の資産評価額を比較する）
+  var DELAY_SCENARIOS = [0, 1, 3, 5, 10]; // 比較する「積立開始を遅らせる年数」のプリセット
+
   var STRATEGIES = [
     {
       key: "tsumitateFirst",
@@ -72,6 +75,8 @@
     verdictSub: document.getElementById("haibun-verdictSub"),
     splitBody: document.getElementById("haibun-split-body"),
     compareBody: document.getElementById("haibun-compare-body"),
+    delayNote: document.getElementById("haibun-delay-note"),
+    delayBody: document.getElementById("haibun-delay-body"),
   };
 
   var chart = null;
@@ -119,11 +124,13 @@
     return { growthIn: growthIn, tsumitateIn: tsumitateIn };
   }
 
-  // つみたて投資枠・成長投資枠それぞれへの毎月の積立額から、生涯投資枠を使い切るまでの
+  // つみたて投資枠・成長投資枠それぞれの毎月の積立額から、生涯投資枠を使い切るまでの
   // 期間と、その時点（使い切らない場合はMAX_MONTHS時点）での資産評価額を試算する。
   // extraTaxableMonthly: 毎月の投資予定額のうち、どちらの枠にも割り当てられなかった分
   // （例：「つみたて投資枠のみ」戦略で月10万円を超える分）。常に課税口座に回るものとして扱う。
-  function simulate(tsumitateMonthly, growthMonthly, ratePct, extraTaxableMonthly) {
+  // monthsOverride: 指定すると、枠を使い切った後も打ち切らずちょうどこの月数まで試算する
+  // （「開始タイミング」比較のように、固定の年数時点の資産評価額を知りたい場合に使う）。
+  function simulate(tsumitateMonthly, growthMonthly, ratePct, extraTaxableMonthly, monthsOverride) {
     var monthlyRate = ratePct / 100 / 12;
 
     var cGrowth = 0;
@@ -137,7 +144,8 @@
     var fillMonth = null;
     var yearlySeries = [];
 
-    for (var m = 1; m <= MAX_MONTHS; m++) {
+    var loopMax = monthsOverride ? monthsOverride : MAX_MONTHS;
+    for (var m = 1; m <= loopMax; m++) {
       if ((m - 1) % 12 === 0) {
         yGrowth = 0;
         yTsumitate = 0;
@@ -176,7 +184,7 @@
         yearlySeries.push({ year: m / 12, total: nisaValue + (taxableValue - gain * TAX_RATE) });
       }
 
-      if (fillMonth !== null && m >= fillMonth + 12) break;
+      if (!monthsOverride && fillMonth !== null && m >= fillMonth + 12) break;
     }
 
     var taxableGain = Math.max(0, taxableValue - taxablePrincipal);
@@ -271,6 +279,38 @@
         els.verdictSub.textContent = "この積立額であれば、どの配分方法でも最終的に生涯投資枠をすべて使い切ります。";
       }
     }
+
+    // ---- 「今すぐ始めるか、先延ばしするかで何が変わる？」比較 ----
+    // 最も早く枠を使い切れる配分方法（fastest）と同じ毎月の投資予定額・想定利回りのまま、
+    // 積立を始めるタイミングだけを遅らせた場合、DELAY_COMPARE_YEARS年後の資産評価額がどれだけ
+    // 変わるかをプリセットの年数（0・1・3・5・10年）で比較する。
+    var delaySplit = fastest.split;
+    var delayExtra = Math.max(0, total - delaySplit.tsumitate - delaySplit.growth);
+    var delayHorizonMonths = DELAY_COMPARE_YEARS * 12;
+    var delayRows = DELAY_SCENARIOS.map(function (delayYears) {
+      var activeMonths = Math.max(0, delayHorizonMonths - delayYears * 12);
+      var finalAsset =
+        activeMonths > 0
+          ? simulate(delaySplit.tsumitate, delaySplit.growth, ratePct, delayExtra, activeMonths).finalAsset
+          : 0;
+      return { delayYears: delayYears, finalAsset: finalAsset };
+    });
+    var immediateFinalAsset = delayRows[0].finalAsset;
+
+    els.delayBody.innerHTML = delayRows
+      .map(function (row) {
+        var diff = row.finalAsset - immediateFinalAsset;
+        var diffText =
+          row.delayYears === 0 ? "－" : (diff >= 0 ? "+" : "－") + manYen(Math.abs(diff));
+        var label = row.delayYears === 0 ? "今すぐ始める" : row.delayYears + "年後に始める";
+        return "<tr><td>" + label + "</td><td>" + manYen(row.finalAsset) + "</td><td>" + diffText + "</td></tr>";
+      })
+      .join("");
+
+    var fiveYearRow = delayRows.filter(function (r) { return r.delayYears === 5; })[0];
+    var fiveYearDiff = immediateFinalAsset - fiveYearRow.finalAsset;
+    els.delayNote.textContent =
+      "毎月合計 " + manYen(total) + "・想定利回り " + ratePct.toFixed(1) + "% のまま、" + "「" + fastest.strategy.label + "」と同じ配分で積立を始めるタイミングだけを5年遅らせると、" + DELAY_COMPARE_YEARS + "年後の資産評価額は今すぐ始めた場合より約 " + manYen(Math.max(0, fiveYearDiff)) + " 少なくなる見込みです。";
 
     var labels = fastest.result.series.map(function (d) { return d.year + "年"; });
     var datasets = results.map(function (item, idx) {
