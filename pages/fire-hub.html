@@ -262,7 +262,7 @@
   </div>
   </section>
   <section class="tab-panel" id="tabpanel-torikuzushi" role="tabpanel" aria-labelledby="tab-btn-torikuzushi" data-tool="torikuzushi" hidden>
-    <p class="tab-panel-intro">リタイア後（またはFIRE達成後）に資産を取り崩しながら暮らす際、「定額」「定率」「定率＋下限額」のどの方式を選ぶかで資産の持続年数は大きく変わります。取り崩し開始時点の資産額・想定運用利回り・各方式のパラメータを入力すると、3方式それぞれで資産が何年もつかをまとめて比較できます。3方式それぞれの仕組みとメリット・デメリット、インフレ率を考慮すべき理由は「<a href="shisan-torikuzushi-houshiki-guide.html">資産の取り崩し方式とは？完全ガイド</a>」で詳しく解説しています。</p>
+    <p class="tab-panel-intro">リタイア後（またはFIRE達成後）に資産を取り崩しながら暮らす際、「定額」「定率」「定率＋下限額」のどの方式を選ぶかで資産の持続年数は大きく変わります。取り崩し開始時点の資産額・想定運用利回り・各方式のパラメータを入力すると、3方式それぞれで資産が何年もつかをまとめて比較できます。公的年金やサイドFIRE後の労働収入などがある場合は、受け取り開始年とあわせて入力することで、その分だけ資産からの取り崩しを抑えた試算に反映できます。3方式それぞれの仕組みとメリット・デメリット、インフレ率を考慮すべき理由は「<a href="shisan-torikuzushi-houshiki-guide.html">資産の取り崩し方式とは？完全ガイド</a>」で詳しく解説しています。</p>
     <div class="calc-layout">
 <div class="panel">
 <h2>条件を入力</h2>
@@ -306,6 +306,16 @@
 <input id="torikuzushi-floorAmount" inputmode="numeric" min="0" step="10" type="number" value="80"/>
 <p class="field-hint">「残高×取り崩し率」と「この下限額」のうち大きい方を、その年の取り崩し額とします。</p>
 </div>
+<div class="field">
+<label for="torikuzushi-incomeAmount">年金・給与などの年間収入（取り崩し開始後） <span class="unit">万円</span></label>
+<input id="torikuzushi-incomeAmount" inputmode="numeric" min="0" step="10" type="number" value="0"/>
+<p class="field-hint">公的年金やサイドFIRE後の労働収入など、資産を取り崩しながら別途受け取れる収入があれば入力してください。3方式いずれも、この収入で生活費をまかなえる分だけ資産からの取り崩しを減らして計算します（0円なら従来どおり収入なしの試算になります）。</p>
+</div>
+<div class="field">
+<label for="torikuzushi-incomeStartYear">収入の受け取り開始年目 <span class="unit">年目から</span></label>
+<input id="torikuzushi-incomeStartYear" inputmode="numeric" min="1" step="1" type="number" value="1"/>
+<p class="field-hint">例えば取り崩し開始の5年後に年金受給が始まる場合は「6」を入力してください（1年目から受け取る場合は「1」のままにします）。上の収入額が0円の間は影響しません。</p>
+</div>
 </div>
 <div>
 <div class="verdict-banner">
@@ -343,7 +353,7 @@
 <h2>3方式の比較</h2>
 <table class="data-table data-table--result">
 <thead>
-<tr><th scope="col">取り崩し方式</th><th scope="col">初年度の取り崩し額</th><th scope="col">資産の持続年数</th></tr>
+<tr><th scope="col">取り崩し方式</th><th scope="col">初年度の資産からの取り崩し額</th><th scope="col">資産の持続年数</th></tr>
 </thead>
 <tbody id="torikuzushi-compare-body"></tbody>
 </table>
@@ -369,6 +379,10 @@
 <div class="faq-item">
 <dt>FIRE達成シミュレーターとの違いは何ですか？</dt>
 <dd>「FIRE達成シミュレーター」は積立期間から目標資産額への到達時期を試算し、達成後の取り崩しは「引き出し率どおりに定額を取り崩す」という単一の前提で計算しています。本ツールはその取り崩し局面だけを取り出し、定額・定率・定率＋下限額という複数の方式を比較できるようにした、補完的な位置づけのツールです。</dd>
+</div>
+<div class="faq-item">
+<dt>年金・労働収入はどのように試算に反映されますか？</dt>
+<dd>「年金・給与などの年間収入」に入力した金額は、受け取り開始年目以降、3方式それぞれが算出するその年の生活費（取り崩し額）から差し引かれ、残りの差額だけを資産から取り崩す計算になります。定率方式・定率＋下限額方式では、取り崩し率そのものではなく、取り崩し率で算出した金額から収入分を差し引く扱いです。収入額が生活費を上回る年は、資産からの取り崩しは0円（資産は運用のみで増加）として扱います。年金額は受給開始後にも物価スライド等で変動し得ますが、本ツールでは簡便化のため一定額が続く前提です。</dd>
 </div>
 </dl>
 </section>
