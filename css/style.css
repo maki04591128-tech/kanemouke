@@ -239,6 +239,7 @@ a { color: var(--color-primary); }
 }
 .site-search-input {
   width: 100%;
+  min-height: 44px;
   padding: 11px 16px 11px 40px;
   border: 1px solid var(--color-border);
   border-radius: 999px;
@@ -717,7 +718,9 @@ a { color: var(--color-primary); }
   margin-right: 2px;
 }
 .tool-search-suggestion {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 5px 14px;
   border: 1px solid var(--color-border);
   border-radius: 999px;
@@ -753,7 +756,9 @@ a { color: var(--color-primary); }
   line-height: 1.6;
 }
 .tool-search-no-results-reset {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 9px 20px;
   border: 1px solid var(--color-primary);
   border-radius: 999px;
