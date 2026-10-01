@@ -204,6 +204,14 @@
     },
     {
       "@type": "Question",
+      "name": "将来、変動金利から固定金利へ借り換えた場合も試算できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「借り換えを実行する年目」に1以上の年数を入力すると、その年の年末まで入力した金利上昇シナリオで変動金利を返済し、残りの期間は「借り換え後の固定金利」で返済を続けた場合の総返済額（借り換え費用込み）を試算できます。0のまま（初期値）であれば借り換えなしの試算のままで、表示内容は変わりません。借り換え費用（事務手数料・登記費用・保証料等）は金融機関や借入条件により数万円〜百万円超まで幅があるため、実際に検討する際は各金融機関に見積もりを確認してください。"
+      }
+    },
+    {
+      "@type": "Question",
       "name": "賃貸が有利になりやすいのはどんな条件ですか？",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -713,7 +721,7 @@
   </div>
   </section>
   <section class="tab-panel" id="tabpanel-kinri" role="tabpanel" aria-labelledby="tab-btn-kinri" data-tool="kinri" hidden>
-    <p class="tab-panel-intro">借入額・返済期間・金利を入力し、今後の金利上昇シナリオを選ぶと、全期間固定金利と変動金利で総返済額がどれだけ変わるかを試算します。変動金利は「5年ルール」「125%ルール」を考慮した場合としない場合を切り替えて比較できます。変動金利・固定金利それぞれの特徴や自分に合った選び方は「<a href="kinri-erabikata-guide.html">住宅ローンの金利タイプの選び方 完全ガイド</a>」で詳しく解説しています。</p>
+    <p class="tab-panel-intro">借入額・返済期間・金利を入力し、今後の金利上昇シナリオを選ぶと、全期間固定金利と変動金利で総返済額がどれだけ変わるかを試算します。変動金利は「5年ルール」「125%ルール」を考慮した場合としない場合を切り替えて比較できます。「借り換えを実行する年目」を入力すると、途中まで変動金利で返済し、その年に固定金利へ借り換えた場合の総返済額（借り換え費用込み）も試算できます。変動金利・固定金利それぞれの特徴や自分に合った選び方は「<a href="kinri-erabikata-guide.html">住宅ローンの金利タイプの選び方 完全ガイド</a>」で詳しく解説しています。</p>
     <div class="calc-layout">
 <div class="panel">
 <h2>条件を入力</h2>
@@ -750,6 +758,20 @@
 </select>
 <p class="field-hint">「適用する」を選ぶと、金利が上がっても5年間は毎月返済額が変わらず、6年目以降の見直しでも上昇幅は直前の返済額の125%までに抑えられます。ただし抑えられた分の利息（未払利息）は元金に上乗せされます。</p>
 </div>
+<div class="field">
+<label for="kinri-refinanceYear">借り換えを実行する年目（変動→固定、任意） <span class="unit">年目</span></label>
+<input id="kinri-refinanceYear" inputmode="numeric" max="49" min="0" step="1" type="number" value="0"/>
+<p class="field-hint">0のまま（初期値）なら借り換えなしで試算します。年目を入力すると、その年の年末に変動金利から固定金利へ借り換えた場合の総返済額を下に表示します。</p>
+</div>
+<div class="field">
+<label for="kinri-refinanceRate">借り換え後の固定金利 <span class="unit">%</span></label>
+<input id="kinri-refinanceRate" inputmode="decimal" max="10" min="0" step="0.05" type="number" value="1.7"/>
+</div>
+<div class="field">
+<label for="kinri-refinanceCost">借り換え費用（諸費用、一括） <span class="unit">万円</span></label>
+<input id="kinri-refinanceCost" inputmode="numeric" max="200" min="0" step="1" type="number" value="30"/>
+<p class="field-hint">事務手数料・登記費用・保証料等の目安です。金融機関や借入条件により数万円〜百万円超まで幅があります。</p>
+</div>
 </div>
 <div>
 <div class="verdict-banner">
@@ -773,7 +795,12 @@
 <div class="label">変動金利で発生する未払利息</div>
 <div class="value" id="kinri-result-unpaid">-</div>
 </div>
+<div class="result-card" id="kinri-refinanceCard" style="display:none">
+<div class="label">借り換えた場合の総返済額（諸費用込み）</div>
+<div class="value" id="kinri-result-refinance-total">-</div>
 </div>
+</div>
+<p class="field-hint" id="kinri-refinanceNote"></p>
 <div class="chart-wrap">
 <div class="chart-canvas-wrap" style="height:280px">
 <canvas aria-hidden="true" height="280" id="kinri-balanceChart"></canvas>
@@ -781,6 +808,7 @@
 <div class="legend-note">
 <span><span class="legend-dot" style="background:#0f5f4c"></span>固定金利の残高推移</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>変動金利の残高推移</span>
+<span id="kinri-legend-refinance" style="display:none"><span class="legend-dot" style="background:#5b3fa0"></span>借り換えありの残高推移</span>
 </div>
 </div>
 <details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="kinri-balanceDataTable"></table></div></details>
@@ -819,6 +847,10 @@
 <div class="faq-item">
 <dt>住宅ローン控除への影響も知りたいのですが？</dt>
 <dd>本ツールは固定金利と変動金利の総返済額・残高推移を比較するもので、住宅ローン控除額そのものは試算していません。入力した借入額・金利・返済期間から住宅ローン控除の見込み額を確認したい場合は、「<a href="jutaku-hub.html?tool=koujo">住宅ローン控除シミュレーター</a>」タブをご利用ください。</dd>
+</div>
+<div class="faq-item">
+<dt>将来、変動金利から固定金利へ借り換えた場合も試算できますか？</dt>
+<dd>「借り換えを実行する年目」に1以上の年数を入力すると、その年の年末まで入力した金利上昇シナリオで変動金利を返済し、残りの期間は「借り換え後の固定金利」で返済を続けた場合の総返済額（借り換え費用込み）を試算できます。0のまま（初期値）であれば借り換えなしの試算のままで、表示内容は変わりません。借り換え費用（事務手数料・登記費用・保証料等）は金融機関や借入条件により数万円〜百万円超まで幅があるため、実際に検討する際は各金融機関に見積もりを確認してください。</dd>
 </div>
 </dl>
 </section>
