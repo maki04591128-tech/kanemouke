@@ -36,6 +36,9 @@
   var SEISAN_SPECIAL_DEDUCTION = 25000000; // 受贈者1人あたり累計（贈与者との組み合わせごと）
   var SEISAN_FLAT_RATE = 0.20; // 特別控除を使い切った後の超過分にかかる税率
 
+  // 「生前贈与の開始を遅らせるとどうなる？」比較の、開始を遅らせる年数のプリセット
+  var DELAY_SCENARIOS = [0, 2, 5, 10];
+
   function clampNonNegative(n) {
     return Math.max(0, Number(n) || 0);
   }
@@ -274,6 +277,37 @@
     };
   }
 
+  /**
+   * 「生前贈与の開始を遅らせるとどうなる？」比較の1行分を算出する。
+   * 相続開始（想定）までの残り年数はそのままに、生前贈与を始めるタイミングだけを delayYears 年遅らせた
+   * ケースを、calc() の yearsUntilInheritance を同じ年数だけ短縮することで表現する（贈与を続ける年数
+   * giftYears は変えないため、相続開始までに残された年数が足りない場合は calc() 内部の effectiveGiftYears
+   * のクリップにより自動的に短縮される）。
+   */
+  function delayScenarioRow(baseInput, delayYears) {
+    var remainingYears = Math.max(0, clampNonNegativeInt(baseInput.yearsUntilInheritance) - delayYears);
+    var delayedInput = {
+      estateTotal: baseInput.estateTotal,
+      hasSpouse: baseInput.hasSpouse,
+      childCount: baseInput.childCount,
+      giftRecipients: baseInput.giftRecipients,
+      annualGiftPerRecipient: baseInput.annualGiftPerRecipient,
+      giftYears: baseInput.giftYears,
+      yearsUntilInheritance: remainingYears,
+      lookbackPeriod: baseInput.lookbackPeriod,
+    };
+    var dr = calc(delayedInput);
+    var bestKey = dr.scenarioB.total <= dr.scenarioC.total ? "B" : "C";
+    var bestTotal = Math.min(dr.scenarioB.total, dr.scenarioC.total);
+    return { delayYears: delayYears, remainingYears: remainingYears, bestKey: bestKey, bestTotal: bestTotal };
+  }
+
+  function delayComparison(baseInput) {
+    return DELAY_SCENARIOS.map(function (delayYears) {
+      return delayScenarioRow(baseInput, delayYears);
+    });
+  }
+
   // Node.js（単体テスト）向けに公開
   if (typeof module !== "undefined" && module.exports) {
     module.exports = {
@@ -282,6 +316,8 @@
       seisanKazeiPerRecipient: seisanKazeiPerRecipient,
       taxOnInheritanceShare: taxOnInheritanceShare,
       legalHeirs: legalHeirs,
+      delayComparison: delayComparison,
+      DELAY_SCENARIOS: DELAY_SCENARIOS,
     };
   }
 
@@ -305,6 +341,8 @@
     scenarioBTotal: document.getElementById("zouyo-result-scenario-b-total"),
     scenarioCTotal: document.getElementById("zouyo-result-scenario-c-total"),
     tableBody: document.getElementById("zouyo-breakdown-body"),
+    delayNote: document.getElementById("zouyo-delay-note"),
+    delayBody: document.getElementById("zouyo-delay-body"),
   };
 
   var chart = null;
@@ -324,10 +362,15 @@
     C: "シナリオC（相続時精算課税制度）",
   };
 
+  var DELAY_SHORT_LABEL = {
+    B: "暦年贈与",
+    C: "相続時精算課税制度",
+  };
+
   function render() {
     var childCount = Math.max(0, Math.min(10, Math.round(Number(els.childCount.value) || 0)));
 
-    var r = calc({
+    var baseInput = {
       estateTotal: clampNonNegative(els.estateTotal.value) * 10000,
       hasSpouse: els.hasSpouse.value === "yes",
       childCount: childCount,
@@ -336,7 +379,8 @@
       giftYears: els.giftYears.value,
       yearsUntilInheritance: els.yearsUntilInheritance.value,
       lookbackPeriod: els.lookbackPeriod.value,
-    });
+    };
+    var r = calc(baseInput);
 
     if (r.heirs.count === 0) {
       els.verdict.textContent = "相続人の情報を入力してください";
@@ -346,6 +390,8 @@
         el.textContent = "－";
       });
       els.tableBody.innerHTML = "";
+      els.delayBody.innerHTML = "";
+      els.delayNote.textContent = "－";
       if (chart) {
         chart.destroy();
         chart = null;
@@ -409,6 +455,30 @@
           : "<tr><td>" + row[0] + "</td><td>" + row[1] + "</td></tr>";
       })
       .join("");
+
+    var delayRows = delayComparison(baseInput);
+    var immediateTotal = delayRows[0].bestTotal;
+    els.delayBody.innerHTML = delayRows
+      .map(function (row) {
+        var diff = row.bestTotal - immediateTotal;
+        var diffText = row.delayYears === 0 ? "－" : (diff >= 0 ? "+" : "－") + manYen(Math.abs(diff));
+        var label = row.delayYears === 0 ? "今すぐ始める" : row.delayYears + "年後に始める";
+        return (
+          "<tr><td>" + label + "</td><td>" + DELAY_SHORT_LABEL[row.bestKey] + "</td><td>" + manYen(row.bestTotal) + "</td><td>" + diffText + "</td></tr>"
+        );
+      })
+      .join("");
+    var fiveYearRow = delayRows.filter(function (row) { return row.delayYears === 5; })[0];
+    var fiveYearDiff = fiveYearRow.bestTotal - immediateTotal;
+    if (fiveYearDiff <= 0) {
+      els.delayNote.textContent =
+        "相続財産総額・贈与額・贈与を続ける年数などの条件を変えずに生前贈与の開始を5年遅らせても、今回の条件では負担額合計（最も有利な方式で比較）はほぼ変わらない試算です。";
+    } else {
+      els.delayNote.textContent =
+        "相続財産総額・贈与額・贈与を続ける年数などの条件を変えずに生前贈与の開始だけを5年遅らせると、相続開始までに贈与できる年数が減るため、負担額合計（最も有利な方式で比較）は今すぐ始めた場合より約 " +
+        manYen(fiveYearDiff) +
+        " 増える見込みです。";
+    }
 
     var ctx = document.getElementById("zouyo-growthChart").getContext("2d");
     var data = {
