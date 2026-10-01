@@ -535,6 +535,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "離婚時の年金分割とは？合意分割・3号分割の違いと請求期限（原則5年） 完全ガイド",
+    "desc": "離婚時に厚生年金の記録を分け合う合意分割・3号分割の違い、按分割合の決め方、2026年4月から原則5年に延長された請求期限、手続きの流れと注意点まで解説します。",
+    "href": "pages/nenkin-bunkatsu-guide.html",
+    "category": "年収・手取り・退職金",
+    "type": "guide"
+  },
+  {
     "title": "FIRE達成",
     "desc": "現在の資産・毎月の積立額・想定利回りから、いわゆる「4%ルール」など任意の取り崩し率で計算したFIRE（Financial Independence, Retire Early＝経済的自立と早期リタイア）に必要な資産額と、そこに到達するまでの年数・年齢を試算します。達成後に生活費を取り崩しながら運用を続けた場合、資産が何年もつかもあわせて確認できます。",
     "href": "pages/fire-hub.html?tool=fire",
