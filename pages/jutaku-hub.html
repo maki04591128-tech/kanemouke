@@ -420,7 +420,7 @@
   </div>
   </section>
   <section class="tab-panel" id="tabpanel-kurioage" role="tabpanel" aria-labelledby="tab-btn-kurioage" data-tool="kurioage" hidden>
-    <p class="tab-panel-intro">まとまった資金ができたとき、住宅ローンの繰上返済（期間短縮型）に使う場合と、新NISAなどで運用に回す場合とで、どちらが有利かを試算します。金利・残存期間による効果の違いや住宅ローン控除への影響は「<a href="kurioage-toushi-guide.html">繰り上げ返済 vs 投資 完全ガイド</a>」で詳しく解説しています。</p>
+    <p class="tab-panel-intro">まとまった資金ができたとき、住宅ローンの繰上返済（期間短縮型）に使う場合と、新NISAなどで運用に回す場合とで、どちらが有利かを試算します。「繰上返済を実行するまでの年数」を調整すると、すぐに繰上返済せずしばらく運用してから実行する場合の損得も比較できます。金利・残存期間による効果の違いや住宅ローン控除への影響は「<a href="kurioage-toushi-guide.html">繰り上げ返済 vs 投資 完全ガイド</a>」で詳しく解説しています。</p>
     <div class="calc-layout">
 <div class="panel">
 <h2>条件を入力</h2>
@@ -444,6 +444,10 @@
 <label for="kurioage-investRate">想定運用利回り（年率） <span class="unit" id="kurioage-investRateOut">5.0 %</span></label>
 <input id="kurioage-investRate" max="10" min="0" step="0.1" type="range" value="5"/>
 </div>
+<div class="field">
+<label for="kurioage-delayYears">繰上返済を実行するまでの年数（それまでは運用に回す） <span class="unit" id="kurioage-delayYearsOut">0 年</span></label>
+<input id="kurioage-delayYears" max="20" min="0" step="1" type="range" value="0"/>
+</div>
 </div>
 <div>
 <div class="result-summary">
@@ -458,6 +462,10 @@
 <div class="result-card accent">
 <div class="label">同じ資金を運用した場合の運用益（税引前）</div>
 <div class="value" id="kurioage-result-invest-profit">-</div>
+</div>
+<div class="result-card">
+<div class="label">今すぐ実行した場合との差（先延ばしの損得）</div>
+<div class="value" id="kurioage-result-delay-diff">-</div>
 </div>
 </div>
 <div class="chart-wrap">
@@ -489,6 +497,10 @@
 <dt>運用益（税引後の目安・課税口座 20.315%の場合）</dt>
 <dd id="kurioage-detail-invest-profit-after-tax">-</dd>
 </div>
+<div class="faq-item">
+<dt>今すぐ繰上返済した場合と比べた、利息軽減額の差</dt>
+<dd id="kurioage-detail-delay-diff">-</dd>
+</div>
 </dl>
 <h3>よくある質問</h3>
 <dl>
@@ -507,6 +519,14 @@
 <div class="faq-item">
 <dt>毎月の余裕資金をコツコツ繰上返済・積立投資に回す場合は？</dt>
 <dd>本ツールはまとまった資金を一度に繰上返済（期間短縮型）に使う場合を前提にしています。毎月の余裕資金を継続的に繰り上げ返済または積立投資に回す場合の試算は「<a href="jutaku-hub.html?tool=roan">ローンvs投資シミュレーター</a>」タブ、判断の考え方は「<a href="jutaku-yoyuu-shikin-guide.html">毎月の余裕資金、繰り上げ返済と積立投資どちらに回す？ 完全ガイド</a>」をご覧ください。</dd>
+</div>
+<div class="faq-item">
+<dt>「繰上返済を実行するまでの年数」は何のための項目ですか？</dt>
+<dd>資金ができてもすぐには繰上返済せず、しばらく運用に回してから、その時点の評価額で繰上返済する場合を試算できる項目です。0年（初期値）は「今すぐ繰上返済する」場合と同じ結果になります。年数を増やすと、その期間は資金を運用利回りで増やしてから繰上返済に充てる一方、その間はローン残高が減らないため利息の支払いも続く点を織り込んで試算します。運用利回りがローン金利より十分高い場合は先延ばしした方が有利に、低い場合は不利になる傾向があります。「今すぐ実行した場合との差」カードで、先延ばしによる損得を確認できます。</dd>
+</div>
+<div class="faq-item">
+<dt>繰上返済を先延ばしする場合、注意点はありますか？</dt>
+<dd>この試算は、運用利回りが設定した年率どおりに一定で推移すると仮定した単純化したモデルです。実際の運用成果は市況によって変動し、元本割れする可能性もあります。繰上返済による利息軽減効果はほぼ確定しているのに対し、先延ばしして運用に回す期間はその分だけ不確実性が高まる点にご留意のうえ、あくまで参考値としてご活用ください。</dd>
 </div>
 </dl>
 </section>
