@@ -5,6 +5,11 @@
   var BASIC_DEDUCTION_FIXED = 30000000;
   var BASIC_DEDUCTION_PER_HEIR = 6000000;
   var INSURANCE_EXEMPTION_PER_HEIR = 5000000;
+  var MINOR_DEDUCTION_PER_YEAR = 100000;
+  var MINOR_AGE_LIMIT = 18;
+  var DISABLED_DEDUCTION_PER_YEAR_GENERAL = 100000;
+  var DISABLED_DEDUCTION_PER_YEAR_SPECIAL = 200000;
+  var DISABLED_AGE_LIMIT = 85;
 
   var INHERITANCE_TAX_BRACKETS = [
     { limit: 10000000, rate: 0.10, deduct: 0 },
@@ -92,6 +97,59 @@
   }
 
   /**
+   * 相続税の総額に未成年者控除・障害者控除を適用した後の家族全体の納税額を算出する
+   * （js/souzokuzei.js の3段階繰越ロジック〈本人→他の子→配偶者〉と同一の考え方）。
+   * 本ツールは実際の遺産分割が法定相続分どおりに行われるものと仮定しており、配偶者の
+   * 税額軽減により配偶者の納税額は常に0円になるため、繰越先としての配偶者の控除余力も
+   * 常に0円になる（js/souzokuzei.js のように取得割合を調整できるようになった場合に備えて
+   * 同じ繰越処理を残している）。
+   */
+  function applyHeirDeductions(totalTax, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge) {
+    var spouseFinalTax = 0;
+    var childrenAllocatedTaxTotal = totalTax * (1 - heirs.spouseShare);
+
+    var minorDeductionEach = minorCount > 0 ? (MINOR_AGE_LIMIT - minorAge) * MINOR_DEDUCTION_PER_YEAR : 0;
+    var minorDeductionTotal = minorDeductionEach * minorCount;
+    var disabledPerYear = disabledType === "special" ? DISABLED_DEDUCTION_PER_YEAR_SPECIAL : DISABLED_DEDUCTION_PER_YEAR_GENERAL;
+    var disabilityDeductionEach = disabledCount > 0 ? (DISABLED_AGE_LIMIT - disabledAge) * disabledPerYear : 0;
+    var disabilityDeductionTotal = disabilityDeductionEach * disabledCount;
+
+    var childTaxPerChildBase = childCount > 0 ? childrenAllocatedTaxTotal / childCount : 0;
+    var plainChildCount = Math.max(0, childCount - minorCount - disabledCount);
+    var plainChildrenTaxTotal = childTaxPerChildBase * plainChildCount;
+
+    var minorRemainingTotal = Math.max(0, childTaxPerChildBase - minorDeductionEach) * minorCount;
+    var minorExcessRemaining = Math.max(0, minorDeductionEach - childTaxPerChildBase) * minorCount;
+    var minorCarryToPlain = Math.min(minorExcessRemaining, plainChildrenTaxTotal);
+    plainChildrenTaxTotal -= minorCarryToPlain;
+    minorExcessRemaining -= minorCarryToPlain;
+    var minorCarryToSpouse = Math.min(minorExcessRemaining, spouseFinalTax);
+    spouseFinalTax -= minorCarryToSpouse;
+    minorExcessRemaining -= minorCarryToSpouse;
+    var appliedMinorDeduction = minorDeductionTotal - minorExcessRemaining;
+
+    var disabledRemainingTotal = Math.max(0, childTaxPerChildBase - disabilityDeductionEach) * disabledCount;
+    var disabledExcessRemaining = Math.max(0, disabilityDeductionEach - childTaxPerChildBase) * disabledCount;
+    var disabledCarryToPlain = Math.min(disabledExcessRemaining, plainChildrenTaxTotal);
+    plainChildrenTaxTotal -= disabledCarryToPlain;
+    disabledExcessRemaining -= disabledCarryToPlain;
+    var disabledCarryToSpouse = Math.min(disabledExcessRemaining, spouseFinalTax);
+    spouseFinalTax -= disabledCarryToSpouse;
+    disabledExcessRemaining -= disabledCarryToSpouse;
+    var appliedDisabilityDeduction = disabilityDeductionTotal - disabledExcessRemaining;
+
+    childrenAllocatedTaxTotal = minorRemainingTotal + disabledRemainingTotal + plainChildrenTaxTotal;
+
+    return {
+      familyPayable: spouseFinalTax + childrenAllocatedTaxTotal,
+      appliedMinorDeduction: appliedMinorDeduction,
+      appliedDisabilityDeduction: appliedDisabilityDeduction,
+      minorDeductionEach: minorDeductionEach,
+      disabilityDeductionEach: disabilityDeductionEach,
+    };
+  }
+
+  /**
    * 暦年贈与を選んだ場合の、1受贈者・1年あたりの贈与のうち「相続財産への持ち戻し（生前贈与加算）」対象額と、
    * それに対応する贈与税額を算出する。
    *
@@ -175,6 +233,11 @@
    *   lookbackPeriod: 3 または 7（暦年贈与の持ち戻し対象期間）
    *   lifeInsurance: 生命保険金の受取額（円、相続人が受け取った分。任意、既定0）
    *   retirementBenefit: 死亡退職金の受取額（円、相続人が受け取った分。任意、既定0）
+   *   minorCount: 未成年（18歳未満）の子の人数（任意、既定0。childCountを上限にクランプ）
+   *   minorAge: 未成年の子の年齢・代表年齢（任意、既定0）
+   *   disabledCount: 障害のある子の人数（任意、既定0。childCount－minorCountを上限にクランプ）
+   *   disabledType: "general"（一般障害者）または"special"（特別障害者。既定general）
+   *   disabledAge: 障害のある子の年齢・代表年齢（任意、既定0）
    */
   function calc(input) {
     var estateTotal = clampNonNegative(input.estateTotal);
@@ -187,6 +250,11 @@
     var lookbackPeriod = Number(input.lookbackPeriod) === 3 ? 3 : 7;
     var lifeInsuranceAmount = clampNonNegative(input.lifeInsurance);
     var retirementBenefitAmount = clampNonNegative(input.retirementBenefit);
+    var minorCount = Math.min(childCount, clampNonNegativeInt(input.minorCount));
+    var minorAge = Math.min(MINOR_AGE_LIMIT - 1, Math.max(0, clampNonNegativeInt(input.minorAge)));
+    var disabledCount = Math.min(Math.max(0, childCount - minorCount), clampNonNegativeInt(input.disabledCount));
+    var disabledType = input.disabledType === "special" ? "special" : "general";
+    var disabledAge = Math.min(DISABLED_AGE_LIMIT - 1, Math.max(0, clampNonNegativeInt(input.disabledAge)));
 
     var heirs = legalHeirs(hasSpouse, childCount);
     var basicDeduction = BASIC_DEDUCTION_FIXED + BASIC_DEDUCTION_PER_HEIR * heirs.count;
@@ -206,8 +274,10 @@
     var taxableEstateA = Math.max(0, estateTotal - basicDeduction - insuranceExemptionTotal);
     var totalTaxA = inheritanceTaxTotal(taxableEstateA, heirs, childCount);
     // 実際の遺産分割は法定相続分どおりに行われるものと仮定する（配偶者の税額軽減により配偶者の
-    // 実質負担は常に0円になるため、家族全体の負担額は子（配偶者以外の相続人）の負担分と一致する）
-    var familyPayableA = totalTaxA * (1 - heirs.spouseShare);
+    // 実質負担は常に0円になるため、家族全体の負担額は子（配偶者以外の相続人）の負担分と一致する）。
+    // 未成年者控除・障害者控除がある場合は、その対象となる子の税額からの繰越しも反映する。
+    var deductionA = applyHeirDeductions(totalTaxA, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge);
+    var familyPayableA = deductionA.familyPayable;
     var scenarioATotal = familyPayableA;
 
     // ---- シナリオB：暦年贈与を選んだ場合 ----
@@ -223,7 +293,8 @@
     var taxableForInheritanceB = estateAfterGiftsB + totalAddbackNetB;
     var taxableEstateB = Math.max(0, taxableForInheritanceB - basicDeduction - insuranceExemptionTotal);
     var totalTaxB = inheritanceTaxTotal(taxableEstateB, heirs, childCount);
-    var familyInheritanceTaxB = Math.max(0, totalTaxB * (1 - heirs.spouseShare) - totalGiftTaxCreditB);
+    var deductionB = applyHeirDeductions(totalTaxB, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge);
+    var familyInheritanceTaxB = Math.max(0, deductionB.familyPayable - totalGiftTaxCreditB);
     var scenarioBTotal = totalGiftTaxB + familyInheritanceTaxB;
 
     // ---- シナリオC：相続時精算課税制度を選んだ場合 ----
@@ -239,7 +310,8 @@
     var taxableForInheritanceC = estateAfterGiftsC + totalAddbackC;
     var taxableEstateC = Math.max(0, taxableForInheritanceC - basicDeduction - insuranceExemptionTotal);
     var totalTaxC = inheritanceTaxTotal(taxableEstateC, heirs, childCount);
-    var familyInheritanceTaxC = Math.max(0, totalTaxC * (1 - heirs.spouseShare) - totalGiftTaxCreditC);
+    var deductionC = applyHeirDeductions(totalTaxC, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge);
+    var familyInheritanceTaxC = Math.max(0, deductionC.familyPayable - totalGiftTaxCreditC);
     var scenarioCTotal = totalGiftTaxC + familyInheritanceTaxC;
 
     // 3パターンのうち負担額が最小のものを判定
@@ -261,11 +333,18 @@
       retirementBenefitExemption: retirementBenefitExemption,
       effectiveGiftYears: effectiveGiftYears,
       bestKey: bestKey,
+      minorCount: minorCount,
+      minorAge: minorAge,
+      disabledCount: disabledCount,
+      disabledType: disabledType,
+      disabledAge: disabledAge,
 
       scenarioA: {
         taxableEstate: taxableEstateA,
         totalTax: totalTaxA,
         familyPayable: familyPayableA,
+        appliedMinorDeduction: deductionA.appliedMinorDeduction,
+        appliedDisabilityDeduction: deductionA.appliedDisabilityDeduction,
         total: scenarioATotal,
       },
       scenarioB: {
@@ -277,6 +356,8 @@
         taxableEstate: taxableEstateB,
         totalTax: totalTaxB,
         familyInheritanceTax: familyInheritanceTaxB,
+        appliedMinorDeduction: deductionB.appliedMinorDeduction,
+        appliedDisabilityDeduction: deductionB.appliedDisabilityDeduction,
         total: scenarioBTotal,
       },
       scenarioC: {
@@ -289,6 +370,8 @@
         taxableEstate: taxableEstateC,
         totalTax: totalTaxC,
         familyInheritanceTax: familyInheritanceTaxC,
+        appliedMinorDeduction: deductionC.appliedMinorDeduction,
+        appliedDisabilityDeduction: deductionC.appliedDisabilityDeduction,
         total: scenarioCTotal,
       },
     };
@@ -314,6 +397,11 @@
       lookbackPeriod: baseInput.lookbackPeriod,
       lifeInsurance: baseInput.lifeInsurance,
       retirementBenefit: baseInput.retirementBenefit,
+      minorCount: baseInput.minorCount,
+      minorAge: baseInput.minorAge,
+      disabledCount: baseInput.disabledCount,
+      disabledType: baseInput.disabledType,
+      disabledAge: baseInput.disabledAge,
     };
     var dr = calc(delayedInput);
     var bestKey = dr.scenarioB.total <= dr.scenarioC.total ? "B" : "C";
@@ -335,6 +423,7 @@
       seisanKazeiPerRecipient: seisanKazeiPerRecipient,
       taxOnInheritanceShare: taxOnInheritanceShare,
       legalHeirs: legalHeirs,
+      applyHeirDeductions: applyHeirDeductions,
       delayComparison: delayComparison,
       DELAY_SCENARIOS: DELAY_SCENARIOS,
     };
@@ -356,6 +445,16 @@
     lookbackPeriod: document.getElementById("zouyo-lookbackPeriod"),
     lifeInsurance: document.getElementById("zouyo-lifeInsurance"),
     retirementBenefit: document.getElementById("zouyo-retirementBenefit"),
+    minorCount: document.getElementById("zouyo-minorCount"),
+    minorAge: document.getElementById("zouyo-minorAge"),
+    minorRow: document.getElementById("zouyo-minorRow"),
+    minorAgeRow: document.getElementById("zouyo-minorAgeRow"),
+    disabledCount: document.getElementById("zouyo-disabledCount"),
+    disabledType: document.getElementById("zouyo-disabledType"),
+    disabledAge: document.getElementById("zouyo-disabledAge"),
+    disabledRow: document.getElementById("zouyo-disabledRow"),
+    disabledTypeRow: document.getElementById("zouyo-disabledTypeRow"),
+    disabledAgeRow: document.getElementById("zouyo-disabledAgeRow"),
     verdict: document.getElementById("zouyo-verdict"),
     verdictSub: document.getElementById("zouyo-verdictSub"),
     scenarioATotal: document.getElementById("zouyo-result-scenario-a-total"),
@@ -388,8 +487,40 @@
     C: "相続時精算課税制度",
   };
 
+  function updateVisibility(childCount) {
+    if (childCount > 0) {
+      els.minorRow.style.display = "";
+      els.minorCount.max = String(childCount);
+      els.disabledRow.style.display = "";
+      els.disabledCount.max = String(childCount);
+    } else {
+      els.minorRow.style.display = "none";
+      els.minorAgeRow.style.display = "none";
+      els.disabledRow.style.display = "none";
+      els.disabledTypeRow.style.display = "none";
+      els.disabledAgeRow.style.display = "none";
+    }
+  }
+
+  function deductionNote(scenario) {
+    var notes = [];
+    if (scenario.appliedMinorDeduction > 0) notes.push("未成年者控除 " + manYen(scenario.appliedMinorDeduction));
+    if (scenario.appliedDisabilityDeduction > 0) notes.push("障害者控除 " + manYen(scenario.appliedDisabilityDeduction));
+    return notes.length > 0 ? "（" + notes.join("・") + "を反映済み）" : "";
+  }
+
   function render() {
     var childCount = Math.max(0, Math.min(10, Math.round(Number(els.childCount.value) || 0)));
+    updateVisibility(childCount);
+
+    var minorCount = Math.min(childCount, Math.max(0, Math.round(Number(els.minorCount.value) || 0)));
+    els.minorAgeRow.style.display = minorCount > 0 ? "" : "none";
+    var disabledCount = Math.min(
+      Math.max(0, childCount - minorCount),
+      Math.max(0, Math.round(Number(els.disabledCount.value) || 0))
+    );
+    els.disabledTypeRow.style.display = disabledCount > 0 ? "" : "none";
+    els.disabledAgeRow.style.display = disabledCount > 0 ? "" : "none";
 
     var baseInput = {
       estateTotal: clampNonNegative(els.estateTotal.value) * 10000,
@@ -402,6 +533,11 @@
       lookbackPeriod: els.lookbackPeriod.value,
       lifeInsurance: clampNonNegative(els.lifeInsurance.value) * 10000,
       retirementBenefit: clampNonNegative(els.retirementBenefit.value) * 10000,
+      minorCount: els.minorCount.value,
+      minorAge: els.minorAge.value,
+      disabledCount: els.disabledCount.value,
+      disabledType: els.disabledType.value,
+      disabledAge: els.disabledAge.value,
     };
     var r = calc(baseInput);
 
@@ -433,14 +569,17 @@
     var secondTotal = totalsByKey[sorted[1]];
     var THRESHOLD = 10000; // 1万円未満はほぼ差がないものとして扱う
 
+    var scenariosByKey = { A: r.scenarioA, B: r.scenarioB, C: r.scenarioC };
+    var bestScenarioNote = deductionNote(scenariosByKey[bestKey]);
+
     if (secondTotal - bestTotal < THRESHOLD) {
       els.verdict.textContent = "この条件では負担額にほぼ差がありません";
       els.verdictSub.textContent =
-        SCENARIO_LABEL.A + " " + manYen(r.scenarioA.total) + " ／ " + SCENARIO_LABEL.B + " " + manYen(r.scenarioB.total) + " ／ " + SCENARIO_LABEL.C + " " + manYen(r.scenarioC.total) + "。いずれもほぼ同水準です。";
+        SCENARIO_LABEL.A + " " + manYen(r.scenarioA.total) + " ／ " + SCENARIO_LABEL.B + " " + manYen(r.scenarioB.total) + " ／ " + SCENARIO_LABEL.C + " " + manYen(r.scenarioC.total) + "。いずれもほぼ同水準です" + bestScenarioNote + "。";
     } else {
       els.verdict.textContent = "この条件では「" + SCENARIO_LABEL[bestKey] + "」が最も有利です";
       els.verdictSub.textContent =
-        "負担額合計は " + SCENARIO_LABEL.A + " " + manYen(r.scenarioA.total) + " ／ " + SCENARIO_LABEL.B + " " + manYen(r.scenarioB.total) + " ／ " + SCENARIO_LABEL.C + " " + manYen(r.scenarioC.total) + "。最も負担額を抑えられるのは「" + SCENARIO_LABEL[bestKey] + "」で、2番目に少ない方式より " + manYen(secondTotal - bestTotal) + " 少なくなる試算です。";
+        "負担額合計は " + SCENARIO_LABEL.A + " " + manYen(r.scenarioA.total) + " ／ " + SCENARIO_LABEL.B + " " + manYen(r.scenarioB.total) + " ／ " + SCENARIO_LABEL.C + " " + manYen(r.scenarioC.total) + "。最も負担額を抑えられるのは「" + SCENARIO_LABEL[bestKey] + "」で、2番目に少ない方式より " + manYen(secondTotal - bestTotal) + " 少なくなる試算です" + bestScenarioNote + "。";
     }
 
     var rows = [
@@ -456,7 +595,15 @@
     }
     rows.push(
       ["課税遺産総額", manYen(r.scenarioA.taxableEstate)],
-      ["相続税の総額（速算表ベース）", manYen(r.scenarioA.totalTax)],
+      ["相続税の総額（速算表ベース）", manYen(r.scenarioA.totalTax)]
+    );
+    if (r.scenarioA.appliedMinorDeduction > 0) {
+      rows.push(["未成年者控除の反映額", manYen(r.scenarioA.appliedMinorDeduction)]);
+    }
+    if (r.scenarioA.appliedDisabilityDeduction > 0) {
+      rows.push(["障害者控除の反映額", manYen(r.scenarioA.appliedDisabilityDeduction)]);
+    }
+    rows.push(
       ["家族の負担額合計", manYen(r.scenarioA.familyPayable)],
       ["【シナリオB：暦年贈与】", ""],
       ["生前贈与の累計額（実行分）", manYen(r.scenarioB.totalGiftAmount)],
@@ -464,7 +611,15 @@
       ["相続財産への持ち戻し額（生前贈与加算、100万円控除後）", manYen(r.scenarioB.addbackNet)],
       ["贈与税額控除（持ち戻し分の二重課税排除）", manYen(r.scenarioB.giftTaxCredit)],
       ["相続税の課税価格", manYen(r.scenarioB.taxableForInheritance)],
-      ["課税遺産総額", manYen(r.scenarioB.taxableEstate)],
+      ["課税遺産総額", manYen(r.scenarioB.taxableEstate)]
+    );
+    if (r.scenarioB.appliedMinorDeduction > 0) {
+      rows.push(["未成年者控除の反映額", manYen(r.scenarioB.appliedMinorDeduction)]);
+    }
+    if (r.scenarioB.appliedDisabilityDeduction > 0) {
+      rows.push(["障害者控除の反映額", manYen(r.scenarioB.appliedDisabilityDeduction)]);
+    }
+    rows.push(
       ["相続税の家族負担額（贈与税額控除後）", manYen(r.scenarioB.familyInheritanceTax)],
       ["負担額合計（贈与税＋相続税）", manYen(r.scenarioB.total)],
       ["【シナリオC：相続時精算課税制度】", ""],
@@ -474,7 +629,15 @@
       ["相続財産への加算額（基礎控除を除く全額、贈与時の価額）", manYen(r.scenarioC.addback)],
       ["贈与税額控除（納付済み贈与税を全額控除）", manYen(r.scenarioC.giftTaxCredit)],
       ["相続税の課税価格", manYen(r.scenarioC.taxableForInheritance)],
-      ["課税遺産総額", manYen(r.scenarioC.taxableEstate)],
+      ["課税遺産総額", manYen(r.scenarioC.taxableEstate)]
+    );
+    if (r.scenarioC.appliedMinorDeduction > 0) {
+      rows.push(["未成年者控除の反映額", manYen(r.scenarioC.appliedMinorDeduction)]);
+    }
+    if (r.scenarioC.appliedDisabilityDeduction > 0) {
+      rows.push(["障害者控除の反映額", manYen(r.scenarioC.appliedDisabilityDeduction)]);
+    }
+    rows.push(
       ["相続税の家族負担額（贈与税額控除後）", manYen(r.scenarioC.familyInheritanceTax)],
       ["負担額合計（贈与税＋相続税）", manYen(r.scenarioC.total)]
     );
@@ -565,6 +728,11 @@
     els.lookbackPeriod,
     els.lifeInsurance,
     els.retirementBenefit,
+    els.minorCount,
+    els.minorAge,
+    els.disabledCount,
+    els.disabledType,
+    els.disabledAge,
   ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
