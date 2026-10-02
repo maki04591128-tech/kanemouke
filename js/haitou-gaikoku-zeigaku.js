@@ -4,6 +4,8 @@
   var RESIDENT_TAX_RATE = 0.10;
   var RECONSTRUCTION_TAX_RATE = 0.021;
   var WITHHOLDING_RATE = 0.20315; // 上場株式等の配当の源泉徴収税率（所得税15.315%＋住民税5%）
+  var WITHHOLDING_RATE_INCOME_TAX_PORTION = 0.15315; // 20.315%のうち所得税・復興特別所得税の部分（申告分離課税の税率も同じ）
+  var WITHHOLDING_RATE_RESIDENT_TAX_PORTION = 0.05; // 20.315%のうち住民税の部分
   var RESIDENT_CREDIT_RATIO = 0.30; // 住民税の外国税額控除限度額（所得税限度額の30% = 道府県民税12%+市町村民税18%相当）
 
   // 社会保険料率（本人負担分の目安。協会けんぽ全国平均・2025年度水準を想定した概算）
@@ -68,6 +70,7 @@
     verdictSub: document.getElementById("gaikoku-verdictSub"),
     netNoFile: document.getElementById("gaikoku-result-net-nofile"),
     netFile: document.getElementById("gaikoku-result-net-file"),
+    netFileSeparate: document.getElementById("gaikoku-result-net-file-separate"),
     diff: document.getElementById("gaikoku-result-diff"),
     unusedCredit: document.getElementById("gaikoku-result-unused-credit"),
     breakdownBody: document.getElementById("gaikoku-breakdown-body"),
@@ -155,6 +158,29 @@
 
     var netFile = dividendGross - foreignTax - japanTaxOnDividendAfterCredit;
 
+    // シナリオC: 確定申告して申告分離課税を選び、外国税額控除を適用する場合。
+    // 申告分離課税では配当所得は給与所得等と合算されず、常に一律20.315%
+    // （所得税・復興特別所得税15.315%＋住民税5%）で課税される。外国税額控除の
+    // 限度額は、総合課税のシナリオBと同じ「所得税額 ×（国外所得金額÷所得総額）」
+    // の考え方を踏襲しつつ、所得税額には給与分の累進税額に分離課税分の
+    // 一律税額を単純合算した金額を用いる（国税庁の実際の計算は所得の種類ごとの
+    // 按分がより複雑だが、本ツールでは総合課税シナリオと同じ簡略化を適用する）。
+    var dividendIncomeTaxSeparate = dividendGross * WITHHOLDING_RATE_INCOME_TAX_PORTION;
+    var dividendResidentTaxSeparate = dividendGross * WITHHOLDING_RATE_RESIDENT_TAX_PORTION;
+    var totalIncomeTaxSeparate = incomeTaxBase + dividendIncomeTaxSeparate;
+    var limitIncomeTaxSeparate = grossTotalIncome > 0 ? totalIncomeTaxSeparate * (dividendGross / grossTotalIncome) : 0;
+    var creditedIncomeTaxSeparate = Math.min(foreignTax, limitIncomeTaxSeparate);
+    var remainingForeignTaxSeparate = Math.max(0, foreignTax - creditedIncomeTaxSeparate);
+    var limitResidentTaxSeparate = limitIncomeTaxSeparate * RESIDENT_CREDIT_RATIO;
+    var creditedResidentTaxSeparate = Math.min(remainingForeignTaxSeparate, limitResidentTaxSeparate);
+    var unusedForeignTaxSeparate = Math.max(0, remainingForeignTaxSeparate - creditedResidentTaxSeparate);
+
+    var japanTaxOnDividendSeparateAfterCredit =
+      Math.max(0, dividendIncomeTaxSeparate - creditedIncomeTaxSeparate) +
+      Math.max(0, dividendResidentTaxSeparate - creditedResidentTaxSeparate);
+
+    var netFileSeparate = dividendGross - foreignTax - japanTaxOnDividendSeparateAfterCredit;
+
     return {
       foreignTax: foreignTax,
       domesticWithholding: domesticWithholding,
@@ -163,6 +189,10 @@
       creditedTotal: creditedIncomeTax + creditedResidentTax,
       unusedForeignTax: unusedForeignTax,
       netFile: netFile,
+      japanTaxOnDividendSeparateAfterCredit: japanTaxOnDividendSeparateAfterCredit,
+      creditedTotalSeparate: creditedIncomeTaxSeparate + creditedResidentTaxSeparate,
+      unusedForeignTaxSeparate: unusedForeignTaxSeparate,
+      netFileSeparate: netFileSeparate,
     };
   }
 
@@ -174,34 +204,45 @@
     els.foreignRateOut.textContent = Number(els.foreignRate.value).toFixed(1) + " %";
 
     var r = calc(income, ageGroup, dividendGross, foreignRate);
-    var diff = r.netFile - r.netNoFile;
+
+    var separateIsBetterFiling = r.netFileSeparate > r.netFile;
+    var bestFileNet = separateIsBetterFiling ? r.netFileSeparate : r.netFile;
+    var bestFileLabel = separateIsBetterFiling ? "申告分離課税" : "総合課税";
+    var bestFileUnused = separateIsBetterFiling ? r.unusedForeignTaxSeparate : r.unusedForeignTax;
+    var diff = bestFileNet - r.netNoFile;
 
     els.netNoFile.textContent = yen(r.netNoFile);
     els.netFile.textContent = yen(r.netFile);
+    els.netFileSeparate.textContent = yen(r.netFileSeparate);
     els.diff.textContent = (diff >= 0 ? "+" : "") + yen(diff);
-    els.unusedCredit.textContent = r.unusedForeignTax > 1 ? yen(r.unusedForeignTax) : "なし";
+    els.unusedCredit.textContent = bestFileUnused > 1 ? yen(bestFileUnused) : "なし";
+
+    els.netFile.parentElement.classList.toggle("accent", !separateIsBetterFiling);
+    els.netFileSeparate.parentElement.classList.toggle("accent", separateIsBetterFiling);
 
     if (dividendGross <= 0) {
       els.verdict.textContent = "外国株の年間配当額を入力すると、確定申告した方が得かどうかを比較できます";
       els.verdictSub.textContent = "";
     } else if (diff > 0) {
-      els.verdict.textContent = "確定申告して「外国税額控除」を使った方が有利です";
+      els.verdict.textContent = "確定申告して「" + bestFileLabel + "」で外国税額控除を使った方が有利です";
       els.verdictSub.textContent =
-        "確定申告しない場合の手取りは " + yen(r.netNoFile) + " ですが、総合課税を選んで外国税額控除を使うと手取りが " +
-        yen(r.netFile) + "（" + yen(diff) + " 増）になる計算です。総合課税を選ぶと配当所得が合計所得金額に加算され、扶養控除の判定や国民健康保険料等に影響する場合がある点にご留意ください。";
+        "確定申告しない場合の手取りは " + yen(r.netNoFile) + " ですが、" + bestFileLabel + "を選んで外国税額控除を使うと手取りが " +
+        yen(bestFileNet) + "（" + yen(diff) + " 増）になる計算です。総合課税を選ぶと配当所得が合計所得金額に加算され、扶養控除の判定や国民健康保険料等に影響する場合がある一方、申告分離課税は配当所得を他の所得と合算しないため、そうした影響を避けられます。";
     } else {
       els.verdict.textContent = "この条件では確定申告しない方が有利です";
       els.verdictSub.textContent =
-        "総合課税を選ぶと配当所得が他の所得と合算されて累進税率がかかるため、外国税額控除を使っても手取りは " +
-        yen(r.netFile) + "（確定申告しない場合より " + yen(Math.abs(diff)) + " 少ない）になる計算です。もともとの給与収入などが多く所得税の限界税率が高い方ほど、総合課税を選ぶこと自体が不利になりやすい傾向があります。";
+        "確定申告して外国税額控除を使っても、最も有利な" + bestFileLabel + "で手取りは " +
+        yen(bestFileNet) + "（確定申告しない場合より " + yen(Math.abs(diff)) + " 少ない）になる計算です。総合課税は配当所得が他の所得と合算されて累進税率がかかるため、もともとの給与収入が多く所得税の限界税率が高い方ほど不利になりやすく、申告分離課税（一律20.315%）でも外国税額控除の限度額を使いきれない場合は確定申告のメリットが出にくい傾向があります。";
     }
 
     var rows = [
       { label: "外国（現地）での源泉徴収税額", value: yen(r.foreignTax), note: "配当額面 × 現地源泉徴収税率" },
       { label: "確定申告しない場合の国内源泉徴収額", value: yen(r.domesticWithholding), note: "外国税引後の配当額に20.315%を自動で源泉徴収" },
-      { label: "確定申告した場合の外国税額控除で軽減した税額", value: yen(r.creditedTotal), note: "所得税・住民税から控除（限度額あり）" },
-      { label: "確定申告した場合の国内での税額（控除後）", value: yen(r.japanTaxOnDividendAfterCredit), note: "総合課税で配当を合算した分の所得税・住民税、控除後" },
-      { label: "使いきれず翌年以降に繰り越せる外国税額（参考）", value: r.unusedForeignTax > 1 ? yen(r.unusedForeignTax) : "なし", note: "限度額を超えた分は3年間繰越可能（本ツールでは繰越後の計算は含めていません）" },
+      { label: "確定申告（総合課税）した場合の外国税額控除で軽減した税額", value: yen(r.creditedTotal), note: "所得税・住民税から控除（限度額あり）" },
+      { label: "確定申告（総合課税）した場合の国内での税額（控除後）", value: yen(r.japanTaxOnDividendAfterCredit), note: "総合課税で配当を合算した分の所得税・住民税、控除後" },
+      { label: "確定申告（申告分離課税）した場合の外国税額控除で軽減した税額", value: yen(r.creditedTotalSeparate), note: "所得税・住民税から控除（限度額あり）" },
+      { label: "確定申告（申告分離課税）した場合の国内での税額（控除後）", value: yen(r.japanTaxOnDividendSeparateAfterCredit), note: "配当に一律20.315%課税した分の所得税・住民税、控除後" },
+      { label: "使いきれず翌年以降に繰り越せる外国税額（有利な方法で申告した場合・参考）", value: bestFileUnused > 1 ? yen(bestFileUnused) : "なし", note: "限度額を超えた分は3年間繰越可能（本ツールでは繰越後の計算は含めていません）" },
     ];
     els.breakdownBody.innerHTML = rows
       .map(function (row) {
@@ -211,12 +252,12 @@
 
     var ctx = document.getElementById("gaikoku-growthChart").getContext("2d");
     var data = {
-      labels: ["確定申告しない場合", "確定申告して外国税額控除を使う場合"],
+      labels: ["確定申告しない場合", "確定申告して総合課税+外国税額控除", "確定申告して申告分離課税+外国税額控除"],
       datasets: [
         {
           label: "手取り配当額",
-          data: [Math.round(r.netNoFile), Math.round(r.netFile)],
-          backgroundColor: ["#7fa998", "#0f5f4c"],
+          data: [Math.round(r.netNoFile), Math.round(r.netFile), Math.round(r.netFileSeparate)],
+          backgroundColor: ["#7fa998", "#0f5f4c", "#3f7f9c"],
         },
       ],
     };
