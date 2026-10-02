@@ -11,6 +11,13 @@
   var DISABLED_DEDUCTION_PER_YEAR_SPECIAL = 200000;
   var DISABLED_AGE_LIMIT = 85;
 
+  // 小規模宅地等の特例：区分ごとの限度面積（㎡）と減額割合
+  var LOT_TYPES = {
+    residential: { area: 330, rate: 0.8, label: "特定居住用宅地等" },
+    business: { area: 400, rate: 0.8, label: "特定事業用宅地等" },
+    rental: { area: 200, rate: 0.5, label: "貸付事業用宅地等" },
+  };
+
   // 相続税の速算表（各法定相続人の法定相続分に応じた取得金額に適用）
   var TAX_BRACKETS = [
     { limit: 10000000, rate: 0.10, deduct: 0 },
@@ -42,6 +49,13 @@
     disabledRow: document.getElementById("souzokuzei-disabledRow"),
     disabledTypeRow: document.getElementById("souzokuzei-disabledTypeRow"),
     disabledAgeRow: document.getElementById("souzokuzei-disabledAgeRow"),
+    hasLot: document.getElementById("souzokuzei-hasLot"),
+    lotType: document.getElementById("souzokuzei-lotType"),
+    lotValue: document.getElementById("souzokuzei-lotValue"),
+    lotArea: document.getElementById("souzokuzei-lotArea"),
+    lotTypeRow: document.getElementById("souzokuzei-lotTypeRow"),
+    lotValueRow: document.getElementById("souzokuzei-lotValueRow"),
+    lotAreaRow: document.getElementById("souzokuzei-lotAreaRow"),
     verdict: document.getElementById("souzokuzei-verdict"),
     verdictSub: document.getElementById("souzokuzei-verdictSub"),
     totalTax: document.getElementById("souzokuzei-result-total-tax"),
@@ -118,6 +132,10 @@
     var childCount = Math.max(0, Math.round(Number(els.childCount.value) || 0));
 
     updateVisibility(hasSpouse, childCount);
+    var hasLot = els.hasLot.value === "yes";
+    els.lotTypeRow.style.display = hasLot ? "" : "none";
+    els.lotValueRow.style.display = hasLot ? "" : "none";
+    els.lotAreaRow.style.display = hasLot ? "" : "none";
 
     var heirs = legalHeirs(hasSpouse, childCount);
     els.spouseSharePctOut.textContent = els.spouseSharePct.value + " %";
@@ -175,7 +193,24 @@
     var disabilityDeductionEach = disabledCount > 0 ? (DISABLED_AGE_LIMIT - disabledAge) * disabledPerYear : 0;
     var disabilityDeductionTotal = disabilityDeductionEach * disabledCount;
 
-    var taxableEstate = Math.max(0, estateTotal - basicDeduction - lifeInsuranceExemption - retirementBenefitExemption);
+    // 小規模宅地等の特例：自宅・事業用・貸付用の土地のうち1件分について、
+    // 「評価額 ×（限度面積÷土地全体の面積、上限100%）× 減額割合」で評価減を計算し、
+    // 遺産総額から基礎控除・非課税枠と同様に追加で差し引く。配偶者・同居親族・
+    // 家なき子特例といった取得者ごとの適用要件の判定は行わない簡易モデル。
+    var lotType = LOT_TYPES.hasOwnProperty(els.lotType.value) ? els.lotType.value : "residential";
+    var lotValueAmount = clampNonNegative(els.lotValue.value) * 10000;
+    var lotArea = clampNonNegative(els.lotArea.value);
+    var lotReduction = 0;
+    if (hasLot && lotValueAmount > 0 && lotArea > 0) {
+      var lotLimit = LOT_TYPES[lotType];
+      var lotEligibleRatio = Math.min(1, lotLimit.area / lotArea);
+      lotReduction = Math.min(lotValueAmount, lotValueAmount * lotEligibleRatio * lotLimit.rate);
+    }
+
+    var taxableEstate = Math.max(
+      0,
+      estateTotal - basicDeduction - lifeInsuranceExemption - retirementBenefitExemption - lotReduction
+    );
 
     var totalTax = 0;
     if (taxableEstate > 0) {
@@ -278,6 +313,12 @@
     if (retirementBenefitAmount > 0) {
       rows.push(["死亡退職金の非課税枠（上限 " + manYen(insuranceCap) + "）", manYen(retirementBenefitExemption)]);
     }
+    if (lotReduction > 0) {
+      rows.push([
+        "小規模宅地等の特例による評価減（" + LOT_TYPES[lotType].label + "）",
+        manYen(lotReduction),
+      ]);
+    }
     rows.push(["課税遺産総額", manYen(taxableEstate)]);
     rows.push(["相続税の総額（速算表ベース）", manYen(totalTax)]);
     if (hasSpouse) {
@@ -355,7 +396,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("souzokuzei-growthDataTable", chart);
   }
 
-  [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit, els.minorCount, els.minorAge, els.disabledCount, els.disabledType, els.disabledAge].forEach(function (el) {
+  [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit, els.minorCount, els.minorAge, els.disabledCount, els.disabledType, els.disabledAge, els.hasLot, els.lotType, els.lotValue, els.lotArea].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
