@@ -239,7 +239,7 @@
       "name": "家賃の値上がりは考慮されていますか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "本シミュレーターは、比較期間中の家賃が横ばい（上昇なし）で続くという簡略化した前提です。実際には契約更新時に家賃が見直される場合があるため、家賃相場の上昇が見込まれる場合は、現在の家賃をやや高めに設定して試算すると、より保守的な（賃貸に厳しい）比較ができます。"
+        "text": "「家賃上昇率（年率）」欄に想定する上昇率を入力すると、1年ごとに複利で家賃が上がっていく前提で試算できます。初期値の0%は、これまでどおり家賃が横ばいで続く場合です。更新料も、その時点の（上昇後の）家賃を基準に計算されます。実際の値上がり幅は地域・物件・契約条件によって異なるため、複数の上昇率で試してみることをおすすめします。"
       }
     },
     {
@@ -880,6 +880,11 @@
 <input id="chintai-rentUpdateFee" max="2" min="0" step="0.5" type="range" value="1"/>
 </div>
 <div class="field">
+<label for="chintai-rentIncreaseRate">【賃貸】家賃上昇率（年率） <span class="unit" id="chintai-rentIncreaseRateOut">0.0 %</span></label>
+<input id="chintai-rentIncreaseRate" max="3" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint">1年ごとにこの上昇率で家賃が複利で上がっていくと仮定します。初期値の0%は、これまでどおり家賃が横ばいで続く場合です。更新料も、その時点の（上昇後の）家賃を基準に計算します。</p>
+</div>
+<div class="field">
 <label for="chintai-price">【購入】物件価格 <span class="unit">円</span></label>
 <input id="chintai-price" inputmode="numeric" min="0" step="100000" type="number" value="40000000"/>
 </div>
@@ -976,6 +981,10 @@
 <dt>賃貸の更新料合計</dt>
 <dd id="chintai-detail-update-fee">-</dd>
 </div>
+<div class="faq-item">
+<dt>比較期間終了時点の家賃（月額、上昇率反映後）</dt>
+<dd id="chintai-detail-final-rent">-</dd>
+</div>
 </dl>
 </section>
 <section class="article-section">
@@ -998,7 +1007,7 @@
 </div>
 <div class="faq-item">
 <dt>家賃の値上がりは考慮されていますか？</dt>
-<dd>本シミュレーターは、比較期間中の家賃が横ばい（上昇なし）で続くという簡略化した前提です。実際には契約更新時に家賃が見直される場合があるため、家賃相場の上昇が見込まれる場合は、現在の家賃をやや高めに設定して試算すると、より保守的な（賃貸に厳しい）比較ができます。</dd>
+<dd>「家賃上昇率（年率）」欄に想定する上昇率を入力すると、1年ごとに複利で家賃が上がっていく前提で試算できます。初期値の0%は、これまでどおり家賃が横ばいで続く場合です。更新料も、その時点の（上昇後の）家賃を基準に計算されます。実際の値上がり幅は地域・物件・契約条件によって異なるため、複数の上昇率で試してみることをおすすめします。</dd>
 </div>
 <div class="faq-item">
 <dt>マンションと戸建てで何を変えればいいですか？</dt>
