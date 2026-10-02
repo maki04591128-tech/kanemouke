@@ -17,8 +17,13 @@
   // 行わず、ユーザーが選択する簡易試算とする。
   // 中高齢寡婦加算：厚生年金に加入していた夫が亡くなった際、子の加算の対象
   // となる子がいない40歳以上65歳未満の妻の遺族厚生年金に加算される
-  // 635,500円（令和8年度）。夫が受け取る場合や、子のない30歳未満の妻の
-  // 遺族厚生年金が5年間の有期給付になる点は考慮していない。
+  // 635,500円（令和8年度）。
+  // 有期給付：子の加算の対象となる子がおらず、死亡時点で30歳未満の妻の
+  // 遺族厚生年金は、5年間の有期給付となる（6年目以降は遺族厚生年金・
+  // 中高齢寡婦加算のいずれも支給されない）。この条件に該当する場合は
+  // 結果欄に注記を表示する。夫が遺族厚生年金を受け取る場合に適用される
+  // 年齢要件（原則55歳以上、60歳まで支給停止となる場合がある等）は、
+  // 本シミュレーターでは考慮していない。
 
   var els = {
     kouseiYears: document.getElementById("izoku-kouseiYears"),
@@ -30,6 +35,7 @@
     spouseAge: document.getElementById("izoku-spouseAge"),
     verdict: document.getElementById("izoku-verdict"),
     verdictSub: document.getElementById("izoku-verdictSub"),
+    limitedNotice: document.getElementById("izoku-limitedNotice"),
     yearly: document.getElementById("izoku-result-yearly"),
     monthly: document.getElementById("izoku-result-monthly"),
     kiso: document.getElementById("izoku-result-kiso"),
@@ -48,6 +54,8 @@
   var CHUKOUREI_KAFU_KASAN = 635500; // 中高齢寡婦加算（令和8年度）
   var CHUKOUREI_MIN_AGE = 40;
   var CHUKOUREI_MAX_AGE = 65; // 65歳未満が対象
+  var YOUNG_WIFE_AGE_LIMIT = 30; // 子のない30歳未満の妻は有期給付の対象
+  var YOUNG_WIFE_LIMITED_YEARS = 5; // 有期給付の支給期間
 
   function yen(n) {
     return Math.round(n).toLocaleString("ja-JP") + " 円";
@@ -83,12 +91,22 @@
       spouseAge < CHUKOUREI_MAX_AGE;
     var chukourei = chukoureiEligible ? CHUKOUREI_KAFU_KASAN : 0;
 
+    // 子の加算の対象となる子がおらず、死亡時点で30歳未満の妻は、遺族厚生年金が
+    // 5年間の有期給付となる（年齢が不明な場合（0歳のまま）は判定しない）。
+    var youngWifeLimited =
+      kousei > 0 &&
+      spouseGender === "wife" &&
+      childCount === 0 &&
+      spouseAge > 0 &&
+      spouseAge < YOUNG_WIFE_AGE_LIMIT;
+
     return {
       kiso: kiso,
       childAddition: childAddition,
       kousei: kousei,
       chukourei: chukourei,
       total: kiso + kousei + chukourei,
+      youngWifeLimited: youngWifeLimited,
     };
   }
 
@@ -112,6 +130,21 @@
     if (els.kiso) els.kiso.textContent = yen(r.kiso) + " /年";
     if (els.kousei) els.kousei.textContent = yen(r.kousei) + " /年";
     if (els.chukourei) els.chukourei.textContent = yen(r.chukourei) + " /年";
+
+    if (els.limitedNotice) {
+      if (r.youngWifeLimited) {
+        els.limitedNotice.style.display = "block";
+        els.limitedNotice.innerHTML =
+          "<p><strong>有期給付（5年間）の対象です：</strong>子の加算の対象となるお子さまがおらず、死亡時点で30歳未満の妻の遺族厚生年金は、支給開始から" +
+          YOUNG_WIFE_LIMITED_YEARS +
+          "年間の有期給付となります。上記の年額・月額は、この" +
+          YOUNG_WIFE_LIMITED_YEARS +
+          "年間に受け取れる金額の目安であり、6年目以降は遺族厚生年金・中高齢寡婦加算のいずれも支給されません（新たに対象となる子が生まれた場合などを除く）。</p>";
+      } else {
+        els.limitedNotice.style.display = "none";
+        els.limitedNotice.innerHTML = "";
+      }
+    }
 
     if (els.verdict) {
       if (r.total > 0) {
