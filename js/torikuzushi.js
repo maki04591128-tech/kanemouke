@@ -17,6 +17,8 @@
     floorAmount: document.getElementById("torikuzushi-floorAmount"),
     incomeAmount: document.getElementById("torikuzushi-incomeAmount"),
     incomeStartYear: document.getElementById("torikuzushi-incomeStartYear"),
+    incomeSlidePct: document.getElementById("torikuzushi-incomeSlidePct"),
+    incomeSlidePctOut: document.getElementById("torikuzushi-incomeSlidePctOut"),
     verdict: document.getElementById("torikuzushi-verdict"),
     verdictSub: document.getElementById("torikuzushi-verdictSub"),
     resultFixed: document.getElementById("torikuzushi-result-fixed"),
@@ -97,13 +99,17 @@
     var floorAmountYen = Math.max(0, Number(els.floorAmount.value) || 0) * 10000;
     var incomeAmountYen = Math.max(0, Number(els.incomeAmount.value) || 0) * 10000;
     var incomeStartYear = Math.max(1, Math.round(Number(els.incomeStartYear.value) || 1));
+    var incomeSlidePct = Math.max(0, Number(els.incomeSlidePct.value) || 0);
 
     els.returnPctOut.textContent = returnPct.toFixed(1) + " %";
     els.inflationPctOut.textContent = inflationPct.toFixed(1) + " %";
     els.fixedRatePctOut.textContent = fixedRatePct.toFixed(1) + " %";
+    els.incomeSlidePctOut.textContent = incomeSlidePct.toFixed(1) + " %";
 
     function income(y) {
-      return y >= incomeStartYear ? incomeAmountYen : 0;
+      if (y < incomeStartYear) return 0;
+      var factor = Math.pow(1 + incomeSlidePct / 100, y - incomeStartYear);
+      return incomeAmountYen * factor;
     }
 
     var fixed = simulate(startAssetsYen, returnPct, maxYears, function (y) {
@@ -168,7 +174,9 @@
     var depletedOnly = methods.filter(function (item) { return item.result.depletedYear !== null; });
 
     var incomeNote = incomeAmountYen > 0
-      ? "（" + incomeStartYear + "年目以降、年金・労働収入 " + manYen(incomeAmountYen) + " 分を生活費から差し引いて試算しています）"
+      ? "（" + incomeStartYear + "年目以降、年金・労働収入 " + manYen(incomeAmountYen) +
+        (incomeSlidePct > 0 ? "（年率" + incomeSlidePct.toFixed(1) + "%で増額）" : "") +
+        " 分を生活費から差し引いて試算しています）"
       : "";
 
     if (survivedAll) {
@@ -252,6 +260,7 @@
     els.floorAmount,
     els.incomeAmount,
     els.incomeStartYear,
+    els.incomeSlidePct,
   ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
