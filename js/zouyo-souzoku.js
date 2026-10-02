@@ -95,6 +95,69 @@
     return { count: 0, spouseShare: 0, childShareEach: 0 };
   }
 
+  /**
+   * 複数（最大2件）の土地について、小規模宅地等の特例による評価減の合計額を計算する
+   * （js/souzokuzei.js の combineLotReductions() と完全に同じロジック）。
+   */
+  function combineLotReductions(lots) {
+    var items = lots.map(function (lot) {
+      var limit = LOT_TYPES[lot.type];
+      var ownUsedArea = Math.min(lot.area, limit.area);
+      var reductionIfFull = lot.area > 0 ? lot.value * (ownUsedArea / lot.area) * limit.rate : 0;
+      return {
+        label: limit.label,
+        weightedDemand: ownUsedArea * (200 / limit.area),
+        reductionIfFull: reductionIfFull,
+      };
+    });
+
+    var hasRental = lots.some(function (lot) {
+      return lot.type === "rental";
+    });
+    var totalWeightedDemand = items.reduce(function (sum, it) {
+      return sum + it.weightedDemand;
+    }, 0);
+
+    if (!hasRental || items.length <= 1 || totalWeightedDemand <= 200) {
+      return {
+        total: items.reduce(function (sum, it) {
+          return sum + it.reductionIfFull;
+        }, 0),
+        items: items.map(function (it) {
+          return { label: it.label, reduction: it.reductionIfFull };
+        }),
+        prorated: false,
+      };
+    }
+
+    var order = items
+      .map(function (it, index) {
+        return { it: it, index: index, density: it.weightedDemand > 0 ? it.reductionIfFull / it.weightedDemand : 0 };
+      })
+      .sort(function (a, b) {
+        return b.density - a.density;
+      });
+
+    var budget = 200;
+    var reductionByIndex = [];
+    order.forEach(function (entry) {
+      var used = Math.min(entry.it.weightedDemand, budget);
+      var ratio = entry.it.weightedDemand > 0 ? used / entry.it.weightedDemand : 0;
+      reductionByIndex[entry.index] = entry.it.reductionIfFull * ratio;
+      budget -= used;
+    });
+
+    return {
+      total: reductionByIndex.reduce(function (sum, r) {
+        return sum + r;
+      }, 0),
+      items: items.map(function (it, index) {
+        return { label: it.label, reduction: reductionByIndex[index] };
+      }),
+      prorated: true,
+    };
+  }
+
   // 課税価格から相続税の総額を算出（js/souzokuzei.js と同じ考え方）
   function inheritanceTaxTotal(taxableEstate, heirs, childCount) {
     if (taxableEstate <= 0 || heirs.count === 0) return 0;
@@ -249,6 +312,10 @@
    *   lotType: "residential" | "business" | "rental"（土地の区分。任意、既定residential）
    *   lotValue: 特例適用前の土地の相続税評価額（円、相続財産総額に含む分。任意、既定0）
    *   lotArea: 土地の面積（㎡。任意、既定0）
+   *   hasLot2: boolean（2件目の土地にも特例を適用するか。任意、既定false。hasLotがfalseの場合は無視）
+   *   lotType2: "residential" | "business" | "rental"（2件目の土地の区分。任意、既定residential）
+   *   lotValue2: 2件目の土地の特例適用前の相続税評価額（円。任意、既定0）
+   *   lotArea2: 2件目の土地の面積（㎡。任意、既定0）
    */
   function calc(input) {
     var estateTotal = clampNonNegative(input.estateTotal);
@@ -270,6 +337,10 @@
     var lotType = LOT_TYPES.hasOwnProperty(input.lotType) ? input.lotType : "residential";
     var lotValueAmount = clampNonNegative(input.lotValue);
     var lotArea = clampNonNegative(input.lotArea);
+    var hasLot2 = hasLot && !!input.hasLot2;
+    var lotType2 = LOT_TYPES.hasOwnProperty(input.lotType2) ? input.lotType2 : "residential";
+    var lotValueAmount2 = clampNonNegative(input.lotValue2);
+    var lotArea2 = clampNonNegative(input.lotArea2);
 
     var heirs = legalHeirs(hasSpouse, childCount);
     var basicDeduction = BASIC_DEDUCTION_FIXED + BASIC_DEDUCTION_PER_HEIR * heirs.count;
@@ -281,17 +352,19 @@
     var retirementBenefitExemption = Math.min(retirementBenefitAmount, insuranceCap);
     var insuranceExemptionTotal = lifeInsuranceExemption + retirementBenefitExemption;
 
-    // 小規模宅地等の特例：自宅・事業用・貸付用の土地のうち1件分について、
-    // 「評価額 ×（限度面積÷土地全体の面積、上限100%）× 減額割合」で評価減を計算する
-    // （js/souzokuzei.js と同一の計算式）。土地自体は生前贈与の対象ではなく生前贈与の
-    // 有無・方式に関わらず評価額は変わらないため、生命保険金・死亡退職金の非課税枠と
-    // 同様に3シナリオすべての課税遺産総額から同額を差し引く。
-    var lotReduction = 0;
+    // 小規模宅地等の特例：自宅・事業用・貸付用の土地（最大2件）について、
+    // combineLotReductions() で評価減の合計額を計算する（js/souzokuzei.js と同一の計算式）。
+    // 土地自体は生前贈与の対象ではなく生前贈与の有無・方式に関わらず評価額は変わらないため、
+    // 生命保険金・死亡退職金の非課税枠と同様に3シナリオすべての課税遺産総額から同額を差し引く。
+    var lots = [];
     if (hasLot && lotValueAmount > 0 && lotArea > 0) {
-      var lotLimit = LOT_TYPES[lotType];
-      var lotEligibleRatio = Math.min(1, lotLimit.area / lotArea);
-      lotReduction = Math.min(lotValueAmount, lotValueAmount * lotEligibleRatio * lotLimit.rate);
+      lots.push({ type: lotType, value: lotValueAmount, area: lotArea });
     }
+    if (hasLot2 && lotValueAmount2 > 0 && lotArea2 > 0) {
+      lots.push({ type: lotType2, value: lotValueAmount2, area: lotArea2 });
+    }
+    var lotCombined = lots.length > 0 ? combineLotReductions(lots) : { total: 0, items: [], prorated: false };
+    var lotReduction = lotCombined.total;
 
     // 相続開始より後に贈与することはできないため、実際に贈与が行われる年数は yearsUntilInheritance を上限にする
     var effectiveGiftYears = Math.min(giftYears, yearsUntilInheritance);
@@ -359,7 +432,7 @@
       lifeInsuranceExemption: lifeInsuranceExemption,
       retirementBenefitExemption: retirementBenefitExemption,
       lotReduction: lotReduction,
-      lotType: lotType,
+      lotCombined: lotCombined,
       effectiveGiftYears: effectiveGiftYears,
       bestKey: bestKey,
       minorCount: minorCount,
@@ -435,6 +508,10 @@
       lotType: baseInput.lotType,
       lotValue: baseInput.lotValue,
       lotArea: baseInput.lotArea,
+      hasLot2: baseInput.hasLot2,
+      lotType2: baseInput.lotType2,
+      lotValue2: baseInput.lotValue2,
+      lotArea2: baseInput.lotArea2,
     };
     var dr = calc(delayedInput);
     var bestKey = dr.scenarioB.total <= dr.scenarioC.total ? "B" : "C";
@@ -458,6 +535,8 @@
       legalHeirs: legalHeirs,
       applyHeirDeductions: applyHeirDeductions,
       delayComparison: delayComparison,
+      combineLotReductions: combineLotReductions,
+      LOT_TYPES: LOT_TYPES,
       DELAY_SCENARIOS: DELAY_SCENARIOS,
     };
   }
@@ -495,6 +574,14 @@
     lotTypeRow: document.getElementById("zouyo-lotTypeRow"),
     lotValueRow: document.getElementById("zouyo-lotValueRow"),
     lotAreaRow: document.getElementById("zouyo-lotAreaRow"),
+    lot2Row: document.getElementById("zouyo-lot2Row"),
+    hasLot2: document.getElementById("zouyo-hasLot2"),
+    lotType2: document.getElementById("zouyo-lotType2"),
+    lotValue2: document.getElementById("zouyo-lotValue2"),
+    lotArea2: document.getElementById("zouyo-lotArea2"),
+    lotType2Row: document.getElementById("zouyo-lotType2Row"),
+    lotValue2Row: document.getElementById("zouyo-lotValue2Row"),
+    lotArea2Row: document.getElementById("zouyo-lotArea2Row"),
     verdict: document.getElementById("zouyo-verdict"),
     verdictSub: document.getElementById("zouyo-verdictSub"),
     scenarioATotal: document.getElementById("zouyo-result-scenario-a-total"),
@@ -566,6 +653,11 @@
     els.lotTypeRow.style.display = hasLot ? "" : "none";
     els.lotValueRow.style.display = hasLot ? "" : "none";
     els.lotAreaRow.style.display = hasLot ? "" : "none";
+    els.lot2Row.style.display = hasLot ? "" : "none";
+    var hasLot2 = hasLot && els.hasLot2.value === "yes";
+    els.lotType2Row.style.display = hasLot2 ? "" : "none";
+    els.lotValue2Row.style.display = hasLot2 ? "" : "none";
+    els.lotArea2Row.style.display = hasLot2 ? "" : "none";
 
     var baseInput = {
       estateTotal: clampNonNegative(els.estateTotal.value) * 10000,
@@ -587,6 +679,10 @@
       lotType: els.lotType.value,
       lotValue: clampNonNegative(els.lotValue.value) * 10000,
       lotArea: clampNonNegative(els.lotArea.value),
+      hasLot2: hasLot2,
+      lotType2: els.lotType2.value,
+      lotValue2: clampNonNegative(els.lotValue2.value) * 10000,
+      lotArea2: clampNonNegative(els.lotArea2.value),
     };
     var r = calc(baseInput);
 
@@ -642,8 +738,22 @@
     if (r.retirementBenefitAmount > 0) {
       rows.push(["死亡退職金の非課税枠（上限 " + manYen(r.insuranceCap) + "、全シナリオ共通）", manYen(r.retirementBenefitExemption)]);
     }
-    if (r.lotReduction > 0) {
-      rows.push(["小規模宅地等の特例による評価減（" + LOT_TYPES[r.lotType].label + "、全シナリオ共通）", manYen(r.lotReduction)]);
+    if (r.lotCombined.items.length === 1 && r.lotCombined.items[0].reduction > 0) {
+      rows.push([
+        "小規模宅地等の特例による評価減（" + r.lotCombined.items[0].label + "、全シナリオ共通）",
+        manYen(r.lotCombined.items[0].reduction),
+      ]);
+    } else if (r.lotCombined.items.length > 1) {
+      r.lotCombined.items.forEach(function (item, index) {
+        if (item.reduction > 0) {
+          rows.push([
+            "小規模宅地等の特例による評価減（" + (index + 1) + "件目：" + item.label + "）" +
+              (r.lotCombined.prorated ? "※限度面積を按分" : "") +
+              "（全シナリオ共通）",
+            manYen(item.reduction),
+          ]);
+        }
+      });
     }
     rows.push(
       ["課税遺産総額", manYen(r.scenarioA.taxableEstate)],
@@ -789,6 +899,10 @@
     els.lotType,
     els.lotValue,
     els.lotArea,
+    els.hasLot2,
+    els.lotType2,
+    els.lotValue2,
+    els.lotArea2,
   ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
