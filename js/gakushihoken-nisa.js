@@ -9,16 +9,42 @@
     returnRateOut: document.getElementById("gakushi-returnRateOut"),
     nisaRate: document.getElementById("gakushi-nisaRate"),
     nisaRateOut: document.getElementById("gakushi-nisaRateOut"),
+    lifeDeductionEnable: document.getElementById("gakushi-lifeDeductionEnable"),
+    lifeDeductionFields: document.getElementById("gakushi-lifeDeductionFields"),
+    lifeTaxRate: document.getElementById("gakushi-lifeTaxRate"),
     verdict: document.getElementById("gakushi-verdict"),
     verdictSub: document.getElementById("gakushi-verdictSub"),
     resultPrincipal: document.getElementById("gakushi-result-principal"),
     resultHoken: document.getElementById("gakushi-result-hoken"),
     resultNisa: document.getElementById("gakushi-result-nisa"),
     resultDiff: document.getElementById("gakushi-result-diff"),
+    resultTaxBenefitCard: document.getElementById("gakushi-result-taxBenefit-card"),
+    resultHokenEffective: document.getElementById("gakushi-result-hokenEffective"),
     breakdownBody: document.getElementById("gakushi-breakdown-body"),
   };
 
   var chart = null;
+
+  // 生命保険料控除（新制度）区分ごとの計算。学資保険は通常「一般生命保険料控除」の1区分のみに該当する前提の簡易版。
+  var LIFE_INCOME_CATEGORY_CAP = 40000;
+  var LIFE_RESIDENT_CATEGORY_CAP = 28000;
+  var RESIDENT_TAX_RATE = 0.10;
+
+  function lifeDeductionIncome(premium) {
+    if (premium <= 0) return 0;
+    if (premium <= 20000) return premium;
+    if (premium <= 40000) return premium / 2 + 10000;
+    if (premium <= 80000) return premium / 4 + 20000;
+    return LIFE_INCOME_CATEGORY_CAP;
+  }
+
+  function lifeDeductionResident(premium) {
+    if (premium <= 0) return 0;
+    if (premium <= 12000) return premium;
+    if (premium <= 32000) return premium / 2 + 6000;
+    if (premium <= 56000) return premium / 4 + 14000;
+    return LIFE_RESIDENT_CATEGORY_CAP;
+  }
 
   function yen(n) {
     return Math.round(n).toLocaleString("ja-JP") + " 円";
@@ -63,8 +89,21 @@
     els.returnRateOut.textContent = returnRatePct.toFixed(1) + " %";
     els.nisaRateOut.textContent = nisaRatePct.toFixed(1) + " %";
 
+    var lifeDeductionEnabled = els.lifeDeductionEnable.value === "yes";
+    els.lifeDeductionFields.hidden = !lifeDeductionEnabled;
+    var lifeTaxRatePct = Number(els.lifeTaxRate.value);
+
     var principal = monthly * 12 * years;
     var hokenPayout = principal * (returnRatePct / 100);
+
+    var annualPremium = monthly * 12;
+    var annualLifeIncomeDed = lifeDeductionIncome(annualPremium);
+    var annualLifeResidentDed = lifeDeductionResident(annualPremium);
+    var annualTaxBenefit = lifeDeductionEnabled
+      ? annualLifeIncomeDed * (lifeTaxRatePct / 100) + annualLifeResidentDed * RESIDENT_TAX_RATE
+      : 0;
+    var totalTaxBenefit = annualTaxBenefit * years;
+    var hokenEffective = hokenPayout + totalTaxBenefit;
 
     var nisa = simulateNisa(monthly, nisaRatePct, years);
     var nisaFinal = nisa.balance;
@@ -72,8 +111,12 @@
     els.resultPrincipal.textContent = yen(principal);
     els.resultHoken.textContent = yen(hokenPayout);
     els.resultNisa.textContent = yen(nisaFinal);
+    els.resultTaxBenefitCard.hidden = !lifeDeductionEnabled;
+    if (lifeDeductionEnabled) {
+      els.resultHokenEffective.textContent = yen(hokenEffective);
+    }
 
-    var diff = nisaFinal - hokenPayout;
+    var diff = nisaFinal - hokenEffective;
     els.resultDiff.textContent = (diff >= 0 ? "+" : "") + manYen(diff) + "（NISA－学資保険）";
 
     if (Math.abs(diff) < 5000) {
@@ -91,12 +134,22 @@
       els.verdictSub.textContent += "　なお返戻率が100%を下回る条件は、保障を手厚くしたタイプなどで払込保険料より受取総額が少なくなる「元本割れ」を意味します。";
     }
 
+    if (lifeDeductionEnabled) {
+      els.verdictSub.textContent +=
+        "　学資保険料にかかる生命保険料控除の軽減額（払込期間合計、概算 " + yen(totalTaxBenefit) + "）を学資保険側の受取額に加算して比較しています。";
+    }
+
     els.breakdownBody.innerHTML =
       "<tr><td>毎月の払込・積立額</td><td colspan=\"2\">" + manYen(monthly) + "</td></tr>" +
       "<tr><td>払込・積立期間</td><td colspan=\"2\">" + years + " 年（" + (years * 12) + " 回）</td></tr>" +
       "<tr><td>払込・積立累計額（元本）</td><td>" + yen(principal) + "</td><td>" + yen(principal) + "</td></tr>" +
       "<tr><td>適用する率</td><td>返戻率 " + returnRatePct.toFixed(1) + " %</td><td>想定利回り 年 " + nisaRatePct.toFixed(1) + " %（複利）</td></tr>" +
-      "<tr><td><strong>満期・運用終了時点の受取額</strong></td><td><strong>" + yen(hokenPayout) + "</strong></td><td><strong>" + yen(nisaFinal) + "</strong></td></tr>";
+      "<tr><td><strong>満期・運用終了時点の受取額</strong></td><td><strong>" + yen(hokenPayout) + "</strong></td><td><strong>" + yen(nisaFinal) + "</strong></td></tr>" +
+      (lifeDeductionEnabled
+        ? "<tr><td>生命保険料控除による軽減額（年間、所得税＋住民税の概算）</td><td colspan=\"2\">" + yen(annualTaxBenefit) + "</td></tr>" +
+          "<tr><td>軽減額の払込期間合計（概算、学資保険側に加算）</td><td colspan=\"2\">" + yen(totalTaxBenefit) + "</td></tr>" +
+          "<tr><td><strong>控除を考慮した実質受取額</strong></td><td><strong>" + yen(hokenEffective) + "</strong></td><td><strong>" + yen(nisaFinal) + "</strong></td></tr>"
+        : "");
 
     var labels = nisa.yearly.map(function (d) { return d.year + "年"; });
     var hokenSeries = nisa.yearly.map(function () { return Math.round(hokenPayout); });
@@ -167,7 +220,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("gakushi-growthDataTable", chart);
   }
 
-  [els.monthly, els.years, els.returnRate, els.nisaRate].forEach(function (el) {
+  [els.monthly, els.years, els.returnRate, els.nisaRate, els.lifeDeductionEnable, els.lifeTaxRate].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
