@@ -4,6 +4,7 @@
   var BASIC_DEDUCTION_FIXED = 30000000;
   var BASIC_DEDUCTION_PER_HEIR = 6000000;
   var SPOUSE_TAX_FREE_MIN = 160000000;
+  var INSURANCE_EXEMPTION_PER_HEIR = 5000000;
 
   // 相続税の速算表（各法定相続人の法定相続分に応じた取得金額に適用）
   var TAX_BRACKETS = [
@@ -24,6 +25,8 @@
     spouseShareRow: document.getElementById("souzokuzei-spouseShareRow"),
     spouseSharePct: document.getElementById("souzokuzei-spouseSharePct"),
     spouseSharePctOut: document.getElementById("souzokuzei-spouseSharePctOut"),
+    lifeInsurance: document.getElementById("souzokuzei-lifeInsurance"),
+    retirementBenefit: document.getElementById("souzokuzei-retirementBenefit"),
     verdict: document.getElementById("souzokuzei-verdict"),
     verdictSub: document.getElementById("souzokuzei-verdictSub"),
     totalTax: document.getElementById("souzokuzei-result-total-tax"),
@@ -109,7 +112,18 @@
     }
 
     var basicDeduction = BASIC_DEDUCTION_FIXED + BASIC_DEDUCTION_PER_HEIR * heirs.count;
-    var taxableEstate = Math.max(0, estateTotal - basicDeduction);
+
+    // 生命保険金・死亡退職金の非課税枠（それぞれ別枠で「500万円×法定相続人の数」まで）。
+    // 入力値は遺産総額に含めて入力してもらう前提のため、非課税枠相当額を遺産総額から
+    // 追加で差し引く（基礎控除と同様の扱い）。相続人以外が受け取った分は対象外だが、
+    // 本ツールは相続人（配偶者・子）が受け取った前提で簡略化している。
+    var insuranceCap = INSURANCE_EXEMPTION_PER_HEIR * heirs.count;
+    var lifeInsuranceAmount = clampNonNegative(els.lifeInsurance.value) * 10000;
+    var retirementBenefitAmount = clampNonNegative(els.retirementBenefit.value) * 10000;
+    var lifeInsuranceExemption = Math.min(lifeInsuranceAmount, insuranceCap);
+    var retirementBenefitExemption = Math.min(retirementBenefitAmount, insuranceCap);
+
+    var taxableEstate = Math.max(0, estateTotal - basicDeduction - lifeInsuranceExemption - retirementBenefitExemption);
 
     var totalTax = 0;
     if (taxableEstate > 0) {
@@ -162,9 +176,15 @@
       ["遺産総額（課税価格の合計額）", manYen(estateTotal)],
       ["法定相続人の数", heirs.count + " 人"],
       ["基礎控除額", manYen(basicDeduction)],
-      ["課税遺産総額", manYen(taxableEstate)],
-      ["相続税の総額（速算表ベース）", manYen(totalTax)],
     ];
+    if (lifeInsuranceAmount > 0) {
+      rows.push(["生命保険金の非課税枠（上限 " + manYen(insuranceCap) + "）", manYen(lifeInsuranceExemption)]);
+    }
+    if (retirementBenefitAmount > 0) {
+      rows.push(["死亡退職金の非課税枠（上限 " + manYen(insuranceCap) + "）", manYen(retirementBenefitExemption)]);
+    }
+    rows.push(["課税遺産総額", manYen(taxableEstate)]);
+    rows.push(["相続税の総額（速算表ベース）", manYen(totalTax)]);
     if (hasSpouse) {
       rows.push(["配偶者の取得額（実際）", manYen(spouseActualAmount)]);
       rows.push(["配偶者の税額軽減額", manYen(spouseReduction)]);
@@ -184,9 +204,9 @@
       .join("");
 
     var ctx = document.getElementById("souzokuzei-growthChart").getContext("2d");
-    var exemptPortion = Math.min(estateTotal, basicDeduction);
+    var exemptPortion = estateTotal - taxableEstate;
     var data = {
-      labels: ["基礎控除相当額（非課税）", "課税遺産総額（税率が適用される部分）"],
+      labels: ["非課税部分（基礎控除・保険金等の非課税枠）", "課税遺産総額（税率が適用される部分）"],
       datasets: [
         {
           data: [Math.round(exemptPortion), Math.round(taxableEstate)],
@@ -223,7 +243,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("souzokuzei-growthDataTable", chart);
   }
 
-  [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct].forEach(function (el) {
+  [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
