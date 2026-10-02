@@ -7,6 +7,9 @@
   var INSURANCE_EXEMPTION_PER_HEIR = 5000000;
   var MINOR_DEDUCTION_PER_YEAR = 100000;
   var MINOR_AGE_LIMIT = 18;
+  var DISABLED_DEDUCTION_PER_YEAR_GENERAL = 100000;
+  var DISABLED_DEDUCTION_PER_YEAR_SPECIAL = 200000;
+  var DISABLED_AGE_LIMIT = 85;
 
   // 相続税の速算表（各法定相続人の法定相続分に応じた取得金額に適用）
   var TAX_BRACKETS = [
@@ -33,6 +36,12 @@
     minorAge: document.getElementById("souzokuzei-minorAge"),
     minorRow: document.getElementById("souzokuzei-minorRow"),
     minorAgeRow: document.getElementById("souzokuzei-minorAgeRow"),
+    disabledCount: document.getElementById("souzokuzei-disabledCount"),
+    disabledType: document.getElementById("souzokuzei-disabledType"),
+    disabledAge: document.getElementById("souzokuzei-disabledAge"),
+    disabledRow: document.getElementById("souzokuzei-disabledRow"),
+    disabledTypeRow: document.getElementById("souzokuzei-disabledTypeRow"),
+    disabledAgeRow: document.getElementById("souzokuzei-disabledAgeRow"),
     verdict: document.getElementById("souzokuzei-verdict"),
     verdictSub: document.getElementById("souzokuzei-verdictSub"),
     totalTax: document.getElementById("souzokuzei-result-total-tax"),
@@ -92,9 +101,14 @@
     if (childCount > 0) {
       els.minorRow.style.display = "";
       els.minorCount.max = String(childCount);
+      els.disabledRow.style.display = "";
+      els.disabledCount.max = String(childCount);
     } else {
       els.minorRow.style.display = "none";
       els.minorAgeRow.style.display = "none";
+      els.disabledRow.style.display = "none";
+      els.disabledTypeRow.style.display = "none";
+      els.disabledAgeRow.style.display = "none";
     }
   }
 
@@ -145,6 +159,22 @@
     var minorDeductionEach = minorCount > 0 ? (MINOR_AGE_LIMIT - minorAge) * MINOR_DEDUCTION_PER_YEAR : 0;
     var minorDeductionTotal = minorDeductionEach * minorCount;
 
+    // 障害者控除：障害のある相続人1人につき「（85歳－相続開始時の年齢）×10万円（特別障害者は20万円）」を
+    // 本人の相続税額から差し引く。未成年者控除と同じ子を重複してカウントしないよう、
+    // 障害者の人数は「子の人数－未成年の子の人数」の範囲に収める（両方に該当する子がいる場合は
+    // 未成年者控除の人数を優先し、障害者の人数には含めない前提の簡易モデル）。
+    var disabledCount = Math.min(
+      Math.max(0, childCount - minorCount),
+      Math.max(0, Math.round(Number(els.disabledCount.value) || 0))
+    );
+    var disabledType = els.disabledType.value === "special" ? "special" : "general";
+    var disabledAge = Math.min(DISABLED_AGE_LIMIT - 1, Math.max(0, Math.round(Number(els.disabledAge.value) || 0)));
+    els.disabledTypeRow.style.display = disabledCount > 0 ? "" : "none";
+    els.disabledAgeRow.style.display = disabledCount > 0 ? "" : "none";
+    var disabledPerYear = disabledType === "special" ? DISABLED_DEDUCTION_PER_YEAR_SPECIAL : DISABLED_DEDUCTION_PER_YEAR_GENERAL;
+    var disabilityDeductionEach = disabledCount > 0 ? (DISABLED_AGE_LIMIT - disabledAge) * disabledPerYear : 0;
+    var disabilityDeductionTotal = disabilityDeductionEach * disabledCount;
+
     var taxableEstate = Math.max(0, estateTotal - basicDeduction - lifeInsuranceExemption - retirementBenefitExemption);
 
     var totalTax = 0;
@@ -170,27 +200,40 @@
     var spouseReduction = estateTotal > 0 ? totalTax * (taxFreeBase / estateTotal) : 0;
     var spouseFinalTax = Math.max(0, spouseAllocatedTax - spouseReduction);
 
-    // 未成年者控除の適用：まず未成年の相続人本人の相続税額から差し引き、
-    // 引ききれない分は扶養義務者（他の子→配偶者の順）の税額から差し引く。
-    var childTaxPerChildBeforeMinor = childCount > 0 ? childrenAllocatedTaxTotal / childCount : 0;
-    var nonMinorChildCount = childCount - minorCount;
-    var minorsRemainingTotal = Math.max(0, childTaxPerChildBeforeMinor - minorDeductionEach) * minorCount;
-    var excessToCarry = Math.max(0, minorDeductionEach - childTaxPerChildBeforeMinor) * minorCount;
-    var nonMinorChildrenTaxTotal = childTaxPerChildBeforeMinor * nonMinorChildCount;
-    var carryToNonMinorChildren = Math.min(excessToCarry, nonMinorChildrenTaxTotal);
-    nonMinorChildrenTaxTotal -= carryToNonMinorChildren;
-    excessToCarry -= carryToNonMinorChildren;
-    var carryToSpouse = Math.min(excessToCarry, spouseFinalTax);
-    spouseFinalTax -= carryToSpouse;
-    excessToCarry -= carryToSpouse;
+    // 未成年者控除・障害者控除の適用：まず本人の相続税額から差し引き、引ききれない分は
+    // 扶養義務者（控除の対象外の「その他の子」→配偶者の順）の税額から差し引く。未成年者控除→
+    // 障害者控除の順で処理するため、障害者控除の繰越しは未成年者控除の繰越し処理後の残額に対して行う。
+    var childTaxPerChildBase = childCount > 0 ? childrenAllocatedTaxTotal / childCount : 0;
+    var plainChildCount = Math.max(0, childCount - minorCount - disabledCount);
+    var plainChildrenTaxTotal = childTaxPerChildBase * plainChildCount;
 
-    childrenAllocatedTaxTotal = minorsRemainingTotal + nonMinorChildrenTaxTotal;
-    var appliedMinorDeduction = minorDeductionTotal - excessToCarry;
+    var minorRemainingTotal = Math.max(0, childTaxPerChildBase - minorDeductionEach) * minorCount;
+    var minorExcessRemaining = Math.max(0, minorDeductionEach - childTaxPerChildBase) * minorCount;
+    var minorCarryToPlain = Math.min(minorExcessRemaining, plainChildrenTaxTotal);
+    plainChildrenTaxTotal -= minorCarryToPlain;
+    minorExcessRemaining -= minorCarryToPlain;
+    var minorCarryToSpouse = Math.min(minorExcessRemaining, spouseFinalTax);
+    spouseFinalTax -= minorCarryToSpouse;
+    minorExcessRemaining -= minorCarryToSpouse;
+    var appliedMinorDeduction = minorDeductionTotal - minorExcessRemaining;
+
+    var disabledRemainingTotal = Math.max(0, childTaxPerChildBase - disabilityDeductionEach) * disabledCount;
+    var disabledExcessRemaining = Math.max(0, disabilityDeductionEach - childTaxPerChildBase) * disabledCount;
+    var disabledCarryToPlain = Math.min(disabledExcessRemaining, plainChildrenTaxTotal);
+    plainChildrenTaxTotal -= disabledCarryToPlain;
+    disabledExcessRemaining -= disabledCarryToPlain;
+    var disabledCarryToSpouse = Math.min(disabledExcessRemaining, spouseFinalTax);
+    spouseFinalTax -= disabledCarryToSpouse;
+    disabledExcessRemaining -= disabledCarryToSpouse;
+    var appliedDisabilityDeduction = disabilityDeductionTotal - disabledExcessRemaining;
+
+    childrenAllocatedTaxTotal = minorRemainingTotal + disabledRemainingTotal + plainChildrenTaxTotal;
 
     var familyPayable = spouseFinalTax + childrenAllocatedTaxTotal;
     var childEachFinalTax = childCount > 0 ? childrenAllocatedTaxTotal / childCount : 0;
-    var minorChildFinalTaxEach = minorCount > 0 ? minorsRemainingTotal / minorCount : 0;
-    var nonMinorChildFinalTaxEach = nonMinorChildCount > 0 ? nonMinorChildrenTaxTotal / nonMinorChildCount : 0;
+    var minorChildFinalTaxEach = minorCount > 0 ? minorRemainingTotal / minorCount : 0;
+    var disabledChildFinalTaxEach = disabledCount > 0 ? disabledRemainingTotal / disabledCount : 0;
+    var plainChildFinalTaxEach = plainChildCount > 0 ? plainChildrenTaxTotal / plainChildCount : 0;
 
     els.totalTax.textContent = manYen(totalTax);
     els.basicDeduction.textContent = manYen(basicDeduction);
@@ -207,14 +250,21 @@
         "配偶者の税額軽減により配偶者の納税額は " + manYen(spouseFinalTax) + "" +
         (childCount > 0 ? "、子の納税額は合計 " + manYen(childrenAllocatedTaxTotal) + "" : "") +
         "、家族全体の納税額は " + manYen(familyPayable) + " になる見込みです" +
-        (appliedMinorDeduction > 0 ? "（未成年者控除 " + manYen(appliedMinorDeduction) + " を反映済み）" : "") +
+        deductionNote() +
         "。";
     } else {
       els.verdict.textContent = "相続税の総額は " + manYen(totalTax) + " の見込みです";
       els.verdictSub.textContent =
         "配偶者がいないため税額軽減の対象はなく、子" + childCount + "人で合計 " + manYen(familyPayable) + " を負担する見込みです（1人あたり " + manYen(childEachFinalTax) + "）" +
-        (appliedMinorDeduction > 0 ? "（未成年者控除 " + manYen(appliedMinorDeduction) + " を反映済み）" : "") +
+        deductionNote() +
         "。";
+    }
+
+    function deductionNote() {
+      var notes = [];
+      if (appliedMinorDeduction > 0) notes.push("未成年者控除 " + manYen(appliedMinorDeduction));
+      if (appliedDisabilityDeduction > 0) notes.push("障害者控除 " + manYen(appliedDisabilityDeduction));
+      return notes.length > 0 ? "（" + notes.join("・") + "を反映済み）" : "";
     }
 
     var rows = [
@@ -240,8 +290,17 @@
       if (minorCount > 0) {
         rows.push(["未成年者控除額（1人あたり、" + minorAge + "歳の場合）", manYen(minorDeductionEach)]);
         rows.push(["未成年の子1人あたりの納税額（控除後）", manYen(minorChildFinalTaxEach)]);
-        if (nonMinorChildCount > 0) {
-          rows.push(["成年の子1人あたりの納税額", manYen(nonMinorChildFinalTaxEach)]);
+      }
+      if (disabledCount > 0) {
+        rows.push([
+          "障害者控除額（1人あたり、" + (disabledType === "special" ? "特別障害者" : "一般障害者") + "・" + disabledAge + "歳の場合）",
+          manYen(disabilityDeductionEach),
+        ]);
+        rows.push(["障害のある子1人あたりの納税額（控除後）", manYen(disabledChildFinalTaxEach)]);
+      }
+      if (minorCount > 0 || disabledCount > 0) {
+        if (plainChildCount > 0) {
+          rows.push(["その他の子1人あたりの納税額", manYen(plainChildFinalTaxEach)]);
         }
       } else {
         rows.push(["子1人あたりの納税額", manYen(childEachFinalTax)]);
@@ -296,7 +355,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("souzokuzei-growthDataTable", chart);
   }
 
-  [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit, els.minorCount, els.minorAge].forEach(function (el) {
+  [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit, els.minorCount, els.minorAge, els.disabledCount, els.disabledType, els.disabledAge].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
