@@ -79,7 +79,7 @@
       "name": "学資保険の保険料は生命保険料控除の対象になりますか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "多くの学資保険は「一般生命保険料控除」の対象です。年間の払込保険料に応じて所得税・住民税が軽減されますが、本シミュレーターでは金額を簡略化するため控除額を試算に含めていません。控除額の目安は「生命保険料控除・地震保険料控除シミュレーター」で別途ご確認ください。"
+        "text": "多くの学資保険は「一般生命保険料控除」の対象です。年間の払込保険料に応じて所得税・住民税が軽減されます。「学資保険vsNISA」タブで「生命保険料控除による軽減額を考慮する」を選び、ご自身の所得税率を指定すると、軽減額を学資保険側の実質受取額に加算した比較ができます（地震保険料控除や他の生命保険料との合算上限は考慮していない概算です）。より詳しい控除額の計算は「生命保険料控除・地震保険料控除シミュレーター」でもご確認いただけます。"
       }
     },
     {
@@ -640,6 +640,29 @@
 <input id="gakushi-nisaRate" max="10" min="0" step="0.1" type="range" value="5.0"/>
 <p class="field-hint">つみたて投資枠の運用益は非課税のため、税金は考慮していません。将来の運用成果を保証するものではない点にご留意ください。</p>
 </div>
+<div class="field">
+<label for="gakushi-lifeDeductionEnable">生命保険料控除による軽減額を考慮する</label>
+<select id="gakushi-lifeDeductionEnable">
+<option selected value="no">考慮しない（払込保険料と返戻金のみで比較）</option>
+<option value="yes">考慮する（学資保険料は生命保険料控除の対象）</option>
+</select>
+<p class="field-hint">学資保険の保険料の多くは「一般生命保険料控除」の対象で、所得税・住民税が軽減されます。積立NISAにはこの控除がないため、「考慮する」を選ぶと軽減額を学資保険側の実質受取額に加算して比較します。</p>
+</div>
+<div hidden id="gakushi-lifeDeductionFields">
+<div class="field">
+<label for="gakushi-lifeTaxRate">適用する所得税率（限界税率の目安）</label>
+<select id="gakushi-lifeTaxRate">
+<option value="5">5 %（課税所得195万円以下）</option>
+<option selected value="10">10 %（課税所得195万円超330万円以下）</option>
+<option value="20">20 %（課税所得330万円超695万円以下）</option>
+<option value="23">23 %（課税所得695万円超900万円以下）</option>
+<option value="33">33 %（課税所得900万円超1,800万円以下）</option>
+<option value="40">40 %（課税所得1,800万円超4,000万円以下）</option>
+<option value="45">45 %（課税所得4,000万円超）</option>
+</select>
+<p class="field-hint">ご自身の所得税の限界税率に近いものを選んでください。目安は「<a href="hoken-koujo-simulator.html">生命保険料控除・地震保険料控除シミュレーター</a>」でも確認できます。住民税率は一律10%として計算し、地震保険料控除や他の生命保険料控除との合算上限は考慮していない概算です。</p>
+</div>
+</div>
 </div>
 <div>
 <div class="verdict-banner">
@@ -662,6 +685,10 @@
 <div class="result-card">
 <div class="label">受取額の差</div>
 <div class="value" id="gakushi-result-diff">-</div>
+</div>
+<div class="result-card" hidden id="gakushi-result-taxBenefit-card">
+<div class="label">学資保険：生命保険料控除を含めた実質受取額</div>
+<div class="value" id="gakushi-result-hokenEffective">-</div>
 </div>
 </div>
 <div class="chart-wrap">
@@ -693,7 +720,7 @@
 <dl>
 <div class="faq-item">
 <dt>学資保険の保険料は生命保険料控除の対象になりますか？</dt>
-<dd>多くの学資保険は「一般生命保険料控除」の対象です。年間の払込保険料に応じて所得税・住民税が軽減されますが、本シミュレーターでは金額を簡略化するため控除額を試算に含めていません。控除額の目安は「生命保険料控除・地震保険料控除シミュレーター」で別途ご確認ください。</dd>
+<dd>多くの学資保険は「一般生命保険料控除」の対象です。年間の払込保険料に応じて所得税・住民税が軽減されます。「生命保険料控除による軽減額を考慮する」を選び、ご自身の所得税率を指定すると、軽減額を学資保険側の実質受取額に加算した比較ができます（地震保険料控除や他の生命保険料との合算上限は考慮していない概算です）。より詳しい控除額の計算は「<a href="hoken-koujo-simulator.html">生命保険料控除・地震保険料控除シミュレーター</a>」でもご確認いただけます。</dd>
 </div>
 <div class="faq-item">
 <dt>満期保険金を受け取ると税金がかかりますか？</dt>
