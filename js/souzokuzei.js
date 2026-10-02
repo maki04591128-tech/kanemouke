@@ -5,6 +5,8 @@
   var BASIC_DEDUCTION_PER_HEIR = 6000000;
   var SPOUSE_TAX_FREE_MIN = 160000000;
   var INSURANCE_EXEMPTION_PER_HEIR = 5000000;
+  var MINOR_DEDUCTION_PER_YEAR = 100000;
+  var MINOR_AGE_LIMIT = 18;
 
   // 相続税の速算表（各法定相続人の法定相続分に応じた取得金額に適用）
   var TAX_BRACKETS = [
@@ -27,6 +29,10 @@
     spouseSharePctOut: document.getElementById("souzokuzei-spouseSharePctOut"),
     lifeInsurance: document.getElementById("souzokuzei-lifeInsurance"),
     retirementBenefit: document.getElementById("souzokuzei-retirementBenefit"),
+    minorCount: document.getElementById("souzokuzei-minorCount"),
+    minorAge: document.getElementById("souzokuzei-minorAge"),
+    minorRow: document.getElementById("souzokuzei-minorRow"),
+    minorAgeRow: document.getElementById("souzokuzei-minorAgeRow"),
     verdict: document.getElementById("souzokuzei-verdict"),
     verdictSub: document.getElementById("souzokuzei-verdictSub"),
     totalTax: document.getElementById("souzokuzei-result-total-tax"),
@@ -83,6 +89,13 @@
     } else {
       els.spouseShareRow.style.display = "none";
     }
+    if (childCount > 0) {
+      els.minorRow.style.display = "";
+      els.minorCount.max = String(childCount);
+    } else {
+      els.minorRow.style.display = "none";
+      els.minorAgeRow.style.display = "none";
+    }
   }
 
   function render() {
@@ -123,6 +136,15 @@
     var lifeInsuranceExemption = Math.min(lifeInsuranceAmount, insuranceCap);
     var retirementBenefitExemption = Math.min(retirementBenefitAmount, insuranceCap);
 
+    // 未成年者控除：未成年（18歳未満）の相続人1人につき「（18歳－年齢）×10万円」を
+    // 本人の相続税額から差し引く。複数人いる場合は全員が同じ代表年齢であると
+    // 仮定して試算する（年齢が人ごとに異なる場合の厳密な計算は対象外）。
+    var minorCount = Math.min(childCount, Math.max(0, Math.round(Number(els.minorCount.value) || 0)));
+    var minorAge = Math.min(MINOR_AGE_LIMIT - 1, Math.max(0, Math.round(Number(els.minorAge.value) || 0)));
+    els.minorAgeRow.style.display = minorCount > 0 ? "" : "none";
+    var minorDeductionEach = minorCount > 0 ? (MINOR_AGE_LIMIT - minorAge) * MINOR_DEDUCTION_PER_YEAR : 0;
+    var minorDeductionTotal = minorDeductionEach * minorCount;
+
     var taxableEstate = Math.max(0, estateTotal - basicDeduction - lifeInsuranceExemption - retirementBenefitExemption);
 
     var totalTax = 0;
@@ -148,8 +170,27 @@
     var spouseReduction = estateTotal > 0 ? totalTax * (taxFreeBase / estateTotal) : 0;
     var spouseFinalTax = Math.max(0, spouseAllocatedTax - spouseReduction);
 
+    // 未成年者控除の適用：まず未成年の相続人本人の相続税額から差し引き、
+    // 引ききれない分は扶養義務者（他の子→配偶者の順）の税額から差し引く。
+    var childTaxPerChildBeforeMinor = childCount > 0 ? childrenAllocatedTaxTotal / childCount : 0;
+    var nonMinorChildCount = childCount - minorCount;
+    var minorsRemainingTotal = Math.max(0, childTaxPerChildBeforeMinor - minorDeductionEach) * minorCount;
+    var excessToCarry = Math.max(0, minorDeductionEach - childTaxPerChildBeforeMinor) * minorCount;
+    var nonMinorChildrenTaxTotal = childTaxPerChildBeforeMinor * nonMinorChildCount;
+    var carryToNonMinorChildren = Math.min(excessToCarry, nonMinorChildrenTaxTotal);
+    nonMinorChildrenTaxTotal -= carryToNonMinorChildren;
+    excessToCarry -= carryToNonMinorChildren;
+    var carryToSpouse = Math.min(excessToCarry, spouseFinalTax);
+    spouseFinalTax -= carryToSpouse;
+    excessToCarry -= carryToSpouse;
+
+    childrenAllocatedTaxTotal = minorsRemainingTotal + nonMinorChildrenTaxTotal;
+    var appliedMinorDeduction = minorDeductionTotal - excessToCarry;
+
     var familyPayable = spouseFinalTax + childrenAllocatedTaxTotal;
     var childEachFinalTax = childCount > 0 ? childrenAllocatedTaxTotal / childCount : 0;
+    var minorChildFinalTaxEach = minorCount > 0 ? minorsRemainingTotal / minorCount : 0;
+    var nonMinorChildFinalTaxEach = nonMinorChildCount > 0 ? nonMinorChildrenTaxTotal / nonMinorChildCount : 0;
 
     els.totalTax.textContent = manYen(totalTax);
     els.basicDeduction.textContent = manYen(basicDeduction);
@@ -165,11 +206,15 @@
       els.verdictSub.textContent =
         "配偶者の税額軽減により配偶者の納税額は " + manYen(spouseFinalTax) + "" +
         (childCount > 0 ? "、子の納税額は合計 " + manYen(childrenAllocatedTaxTotal) + "" : "") +
-        "、家族全体の納税額は " + manYen(familyPayable) + " になる見込みです。";
+        "、家族全体の納税額は " + manYen(familyPayable) + " になる見込みです" +
+        (appliedMinorDeduction > 0 ? "（未成年者控除 " + manYen(appliedMinorDeduction) + " を反映済み）" : "") +
+        "。";
     } else {
       els.verdict.textContent = "相続税の総額は " + manYen(totalTax) + " の見込みです";
       els.verdictSub.textContent =
-        "配偶者がいないため税額軽減の対象はなく、子" + childCount + "人で合計 " + manYen(familyPayable) + " を負担する見込みです（1人あたり " + manYen(childEachFinalTax) + "）。";
+        "配偶者がいないため税額軽減の対象はなく、子" + childCount + "人で合計 " + manYen(familyPayable) + " を負担する見込みです（1人あたり " + manYen(childEachFinalTax) + "）" +
+        (appliedMinorDeduction > 0 ? "（未成年者控除 " + manYen(appliedMinorDeduction) + " を反映済み）" : "") +
+        "。";
     }
 
     var rows = [
@@ -192,7 +237,15 @@
     }
     if (childCount > 0) {
       rows.push(["子1人あたりの取得額（実際・均等割）", manYen(childActualAmountEach)]);
-      rows.push(["子1人あたりの納税額", manYen(childEachFinalTax)]);
+      if (minorCount > 0) {
+        rows.push(["未成年者控除額（1人あたり、" + minorAge + "歳の場合）", manYen(minorDeductionEach)]);
+        rows.push(["未成年の子1人あたりの納税額（控除後）", manYen(minorChildFinalTaxEach)]);
+        if (nonMinorChildCount > 0) {
+          rows.push(["成年の子1人あたりの納税額", manYen(nonMinorChildFinalTaxEach)]);
+        }
+      } else {
+        rows.push(["子1人あたりの納税額", manYen(childEachFinalTax)]);
+      }
       rows.push(["子の納税額合計", manYen(childrenAllocatedTaxTotal)]);
     }
     rows.push(["家族全体の納税額合計", manYen(familyPayable)]);
@@ -243,7 +296,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("souzokuzei-growthDataTable", chart);
   }
 
-  [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit].forEach(function (el) {
+  [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit, els.minorCount, els.minorAge].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
