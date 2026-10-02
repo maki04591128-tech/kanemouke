@@ -18,6 +18,8 @@
     rentInitialCost: document.getElementById("chintai-rentInitialCost"),
     rentUpdateFee: document.getElementById("chintai-rentUpdateFee"),
     rentUpdateFeeOut: document.getElementById("chintai-rentUpdateFeeOut"),
+    rentIncreaseRate: document.getElementById("chintai-rentIncreaseRate"),
+    rentIncreaseRateOut: document.getElementById("chintai-rentIncreaseRateOut"),
     price: document.getElementById("chintai-price"),
     downPayment: document.getElementById("chintai-downPayment"),
     loanRate: document.getElementById("chintai-loanRate"),
@@ -41,6 +43,7 @@
     detailLoanRemain: document.getElementById("chintai-detail-loan-remain"),
     detailUpkeep: document.getElementById("chintai-detail-upkeep"),
     detailUpdateFee: document.getElementById("chintai-detail-update-fee"),
+    detailFinalRent: document.getElementById("chintai-detail-final-rent"),
   };
 
   if (!els.years) return;
@@ -62,18 +65,35 @@
     return (balance * i) / (1 - Math.pow(1 + i, -months));
   }
 
-  // 賃貸シナリオ：家賃は横ばい（上昇なし）を前提とした簡略化モデル。
-  function simulateRent(monthsTotal, rentMonthly, updateFeeMonths, initialCost) {
+  // 賃貸シナリオ：家賃上昇率（年率）が0%の場合は横ばいのまま。
+  // 0%より大きい場合、1年ごと（13ヶ月目・25ヶ月目…）に複利で家賃を引き上げる。
+  // 更新料（2年ごと）は、その時点の（上昇後の）家賃を基準に計算する。
+  function simulateRent(monthsTotal, rentMonthly, updateFeeMonths, initialCost, rentIncreaseRatePct) {
+    var growth = 1 + (Number(rentIncreaseRatePct) || 0) / 100;
+    var currentRent = rentMonthly;
+    var cumulativeRent = 0;
+    var cumulativeUpdateFee = 0;
     var yearly = [initialCost];
     for (var m = 1; m <= monthsTotal; m++) {
+      if (m > 1 && (m - 1) % 12 === 0) {
+        currentRent = currentRent * growth;
+      }
+      cumulativeRent += currentRent;
+      if (m % 24 === 0) {
+        cumulativeUpdateFee += currentRent * updateFeeMonths;
+      }
       if (m % 12 === 0) {
-        var updatesSoFar = Math.floor(m / 24);
-        yearly.push(initialCost + rentMonthly * m + updatesSoFar * rentMonthly * updateFeeMonths);
+        yearly.push(initialCost + cumulativeRent + cumulativeUpdateFee);
       }
     }
     var total = yearly[yearly.length - 1];
-    var totalUpdateFee = Math.floor(monthsTotal / 24) * rentMonthly * updateFeeMonths;
-    return { yearly: yearly, total: total, totalRentPaid: rentMonthly * monthsTotal, totalUpdateFee: totalUpdateFee };
+    return {
+      yearly: yearly,
+      total: total,
+      totalRentPaid: cumulativeRent,
+      totalUpdateFee: cumulativeUpdateFee,
+      finalRent: currentRent,
+    };
   }
 
   // 購入シナリオ：元利均等返済。ローン完済後（比較期間の方が長い場合）は
@@ -127,6 +147,7 @@
     var rentMonthly = clampNonNegative(els.rent.value);
     var rentInitialCost = clampNonNegative(els.rentInitialCost.value);
     var rentUpdateFeeMonths = clampNonNegative(els.rentUpdateFee.value);
+    var rentIncreaseRate = clampNonNegative(els.rentIncreaseRate.value);
 
     var price = clampNonNegative(els.price.value);
     var downPayment = clampNonNegative(els.downPayment.value);
@@ -140,11 +161,12 @@
 
     els.yearsOut.textContent = years + " 年";
     els.rentUpdateFeeOut.textContent = rentUpdateFeeMonths.toFixed(1) + " ヶ月分";
+    els.rentIncreaseRateOut.textContent = rentIncreaseRate.toFixed(1) + " %";
     els.loanRateOut.textContent = loanRate.toFixed(2) + " %";
     els.loanYearsOut.textContent = loanYears + " 年";
     els.resaleRateOut.textContent = resaleRate + " %";
 
-    var rent = simulateRent(months, rentMonthly, rentUpdateFeeMonths, rentInitialCost);
+    var rent = simulateRent(months, rentMonthly, rentUpdateFeeMonths, rentInitialCost, rentIncreaseRate);
     var buy = simulateBuy(months, price, downPayment, loanRate, loanYears, maintenance, propertyTax, insurance, purchaseCost, resaleRate);
 
     els.resultRentTotal.textContent = yen(rent.total);
@@ -169,6 +191,7 @@
     els.detailLoanRemain.textContent = buy.remainingBalance > 0 ? yen(buy.remainingBalance) : "完済済み";
     els.detailUpkeep.textContent = yen(buy.upkeepTotal);
     els.detailUpdateFee.textContent = yen(rent.totalUpdateFee);
+    els.detailFinalRent.textContent = yen(rent.finalRent);
 
     var labels = [];
     for (var y = 0; y <= years; y++) labels.push(y + "年目");
@@ -225,7 +248,7 @@
   }
 
   [
-    els.years, els.rent, els.rentInitialCost, els.rentUpdateFee,
+    els.years, els.rent, els.rentInitialCost, els.rentUpdateFee, els.rentIncreaseRate,
     els.price, els.downPayment, els.loanRate, els.loanYears,
     els.maintenance, els.propertyTax, els.insurance, els.purchaseCost, els.resaleRate,
   ].forEach(function (el) {
