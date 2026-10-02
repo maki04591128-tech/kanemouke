@@ -4,6 +4,7 @@
   // ---- 相続税（js/souzokuzei.js と完全に同じ値・ロジック） ----
   var BASIC_DEDUCTION_FIXED = 30000000;
   var BASIC_DEDUCTION_PER_HEIR = 6000000;
+  var INSURANCE_EXEMPTION_PER_HEIR = 5000000;
 
   var INHERITANCE_TAX_BRACKETS = [
     { limit: 10000000, rate: 0.10, deduct: 0 },
@@ -172,6 +173,8 @@
    *   giftYears: 生前贈与を続ける年数
    *   yearsUntilInheritance: 相続開始までの残り年数
    *   lookbackPeriod: 3 または 7（暦年贈与の持ち戻し対象期間）
+   *   lifeInsurance: 生命保険金の受取額（円、相続人が受け取った分。任意、既定0）
+   *   retirementBenefit: 死亡退職金の受取額（円、相続人が受け取った分。任意、既定0）
    */
   function calc(input) {
     var estateTotal = clampNonNegative(input.estateTotal);
@@ -182,16 +185,25 @@
     var giftYears = clampNonNegativeInt(input.giftYears);
     var yearsUntilInheritance = clampNonNegativeInt(input.yearsUntilInheritance);
     var lookbackPeriod = Number(input.lookbackPeriod) === 3 ? 3 : 7;
+    var lifeInsuranceAmount = clampNonNegative(input.lifeInsurance);
+    var retirementBenefitAmount = clampNonNegative(input.retirementBenefit);
 
     var heirs = legalHeirs(hasSpouse, childCount);
     var basicDeduction = BASIC_DEDUCTION_FIXED + BASIC_DEDUCTION_PER_HEIR * heirs.count;
+
+    // 生命保険金・死亡退職金の非課税枠（それぞれ別枠で「500万円×法定相続人の数」まで）。
+    // 相続の有無・方式に関わらず一定のため、3シナリオすべての課税遺産総額から同額を差し引く。
+    var insuranceCap = INSURANCE_EXEMPTION_PER_HEIR * heirs.count;
+    var lifeInsuranceExemption = Math.min(lifeInsuranceAmount, insuranceCap);
+    var retirementBenefitExemption = Math.min(retirementBenefitAmount, insuranceCap);
+    var insuranceExemptionTotal = lifeInsuranceExemption + retirementBenefitExemption;
 
     // 相続開始より後に贈与することはできないため、実際に贈与が行われる年数は yearsUntilInheritance を上限にする
     var effectiveGiftYears = Math.min(giftYears, yearsUntilInheritance);
     if (!isFinite(effectiveGiftYears) || effectiveGiftYears < 0) effectiveGiftYears = 0;
 
     // ---- シナリオA：生前贈与なし ----
-    var taxableEstateA = Math.max(0, estateTotal - basicDeduction);
+    var taxableEstateA = Math.max(0, estateTotal - basicDeduction - insuranceExemptionTotal);
     var totalTaxA = inheritanceTaxTotal(taxableEstateA, heirs, childCount);
     // 実際の遺産分割は法定相続分どおりに行われるものと仮定する（配偶者の税額軽減により配偶者の
     // 実質負担は常に0円になるため、家族全体の負担額は子（配偶者以外の相続人）の負担分と一致する）
@@ -209,7 +221,7 @@
 
     var estateAfterGiftsB = Math.max(0, estateTotal - totalGiftAmountB);
     var taxableForInheritanceB = estateAfterGiftsB + totalAddbackNetB;
-    var taxableEstateB = Math.max(0, taxableForInheritanceB - basicDeduction);
+    var taxableEstateB = Math.max(0, taxableForInheritanceB - basicDeduction - insuranceExemptionTotal);
     var totalTaxB = inheritanceTaxTotal(taxableEstateB, heirs, childCount);
     var familyInheritanceTaxB = Math.max(0, totalTaxB * (1 - heirs.spouseShare) - totalGiftTaxCreditB);
     var scenarioBTotal = totalGiftTaxB + familyInheritanceTaxB;
@@ -225,7 +237,7 @@
 
     var estateAfterGiftsC = Math.max(0, estateTotal - totalGiftAmountC);
     var taxableForInheritanceC = estateAfterGiftsC + totalAddbackC;
-    var taxableEstateC = Math.max(0, taxableForInheritanceC - basicDeduction);
+    var taxableEstateC = Math.max(0, taxableForInheritanceC - basicDeduction - insuranceExemptionTotal);
     var totalTaxC = inheritanceTaxTotal(taxableEstateC, heirs, childCount);
     var familyInheritanceTaxC = Math.max(0, totalTaxC * (1 - heirs.spouseShare) - totalGiftTaxCreditC);
     var scenarioCTotal = totalGiftTaxC + familyInheritanceTaxC;
@@ -242,6 +254,11 @@
       heirs: heirs,
       estateTotal: estateTotal,
       basicDeduction: basicDeduction,
+      insuranceCap: insuranceCap,
+      lifeInsuranceAmount: lifeInsuranceAmount,
+      retirementBenefitAmount: retirementBenefitAmount,
+      lifeInsuranceExemption: lifeInsuranceExemption,
+      retirementBenefitExemption: retirementBenefitExemption,
       effectiveGiftYears: effectiveGiftYears,
       bestKey: bestKey,
 
@@ -295,6 +312,8 @@
       giftYears: baseInput.giftYears,
       yearsUntilInheritance: remainingYears,
       lookbackPeriod: baseInput.lookbackPeriod,
+      lifeInsurance: baseInput.lifeInsurance,
+      retirementBenefit: baseInput.retirementBenefit,
     };
     var dr = calc(delayedInput);
     var bestKey = dr.scenarioB.total <= dr.scenarioC.total ? "B" : "C";
@@ -335,6 +354,8 @@
     giftYears: document.getElementById("zouyo-giftYears"),
     yearsUntilInheritance: document.getElementById("zouyo-yearsUntilInheritance"),
     lookbackPeriod: document.getElementById("zouyo-lookbackPeriod"),
+    lifeInsurance: document.getElementById("zouyo-lifeInsurance"),
+    retirementBenefit: document.getElementById("zouyo-retirementBenefit"),
     verdict: document.getElementById("zouyo-verdict"),
     verdictSub: document.getElementById("zouyo-verdictSub"),
     scenarioATotal: document.getElementById("zouyo-result-scenario-a-total"),
@@ -379,6 +400,8 @@
       giftYears: els.giftYears.value,
       yearsUntilInheritance: els.yearsUntilInheritance.value,
       lookbackPeriod: els.lookbackPeriod.value,
+      lifeInsurance: clampNonNegative(els.lifeInsurance.value) * 10000,
+      retirementBenefit: clampNonNegative(els.retirementBenefit.value) * 10000,
     };
     var r = calc(baseInput);
 
@@ -424,6 +447,14 @@
       ["【シナリオA：生前贈与なし（相続のみ）】", ""],
       ["相続財産総額", manYen(r.estateTotal)],
       ["基礎控除額", manYen(r.basicDeduction)],
+    ];
+    if (r.lifeInsuranceAmount > 0) {
+      rows.push(["生命保険金の非課税枠（上限 " + manYen(r.insuranceCap) + "、全シナリオ共通）", manYen(r.lifeInsuranceExemption)]);
+    }
+    if (r.retirementBenefitAmount > 0) {
+      rows.push(["死亡退職金の非課税枠（上限 " + manYen(r.insuranceCap) + "、全シナリオ共通）", manYen(r.retirementBenefitExemption)]);
+    }
+    rows.push(
       ["課税遺産総額", manYen(r.scenarioA.taxableEstate)],
       ["相続税の総額（速算表ベース）", manYen(r.scenarioA.totalTax)],
       ["家族の負担額合計", manYen(r.scenarioA.familyPayable)],
@@ -445,8 +476,8 @@
       ["相続税の課税価格", manYen(r.scenarioC.taxableForInheritance)],
       ["課税遺産総額", manYen(r.scenarioC.taxableEstate)],
       ["相続税の家族負担額（贈与税額控除後）", manYen(r.scenarioC.familyInheritanceTax)],
-      ["負担額合計（贈与税＋相続税）", manYen(r.scenarioC.total)],
-    ];
+      ["負担額合計（贈与税＋相続税）", manYen(r.scenarioC.total)]
+    );
     els.tableBody.innerHTML = rows
       .map(function (row) {
         var isHeader = row[1] === "";
@@ -532,6 +563,8 @@
     els.giftYears,
     els.yearsUntilInheritance,
     els.lookbackPeriod,
+    els.lifeInsurance,
+    els.retirementBenefit,
   ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
