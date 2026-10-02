@@ -11,6 +11,13 @@
   var DISABLED_DEDUCTION_PER_YEAR_SPECIAL = 200000;
   var DISABLED_AGE_LIMIT = 85;
 
+  // 小規模宅地等の特例：区分ごとの限度面積（㎡）と減額割合（js/souzokuzei.js と同じ値）
+  var LOT_TYPES = {
+    residential: { area: 330, rate: 0.8, label: "特定居住用宅地等" },
+    business: { area: 400, rate: 0.8, label: "特定事業用宅地等" },
+    rental: { area: 200, rate: 0.5, label: "貸付事業用宅地等" },
+  };
+
   var INHERITANCE_TAX_BRACKETS = [
     { limit: 10000000, rate: 0.10, deduct: 0 },
     { limit: 30000000, rate: 0.15, deduct: 500000 },
@@ -238,6 +245,10 @@
    *   disabledCount: 障害のある子の人数（任意、既定0。childCount－minorCountを上限にクランプ）
    *   disabledType: "general"（一般障害者）または"special"（特別障害者。既定general）
    *   disabledAge: 障害のある子の年齢・代表年齢（任意、既定0）
+   *   hasLot: boolean（自宅などの土地に小規模宅地等の特例を適用するか。任意、既定false）
+   *   lotType: "residential" | "business" | "rental"（土地の区分。任意、既定residential）
+   *   lotValue: 特例適用前の土地の相続税評価額（円、相続財産総額に含む分。任意、既定0）
+   *   lotArea: 土地の面積（㎡。任意、既定0）
    */
   function calc(input) {
     var estateTotal = clampNonNegative(input.estateTotal);
@@ -255,6 +266,10 @@
     var disabledCount = Math.min(Math.max(0, childCount - minorCount), clampNonNegativeInt(input.disabledCount));
     var disabledType = input.disabledType === "special" ? "special" : "general";
     var disabledAge = Math.min(DISABLED_AGE_LIMIT - 1, Math.max(0, clampNonNegativeInt(input.disabledAge)));
+    var hasLot = !!input.hasLot;
+    var lotType = LOT_TYPES.hasOwnProperty(input.lotType) ? input.lotType : "residential";
+    var lotValueAmount = clampNonNegative(input.lotValue);
+    var lotArea = clampNonNegative(input.lotArea);
 
     var heirs = legalHeirs(hasSpouse, childCount);
     var basicDeduction = BASIC_DEDUCTION_FIXED + BASIC_DEDUCTION_PER_HEIR * heirs.count;
@@ -266,12 +281,24 @@
     var retirementBenefitExemption = Math.min(retirementBenefitAmount, insuranceCap);
     var insuranceExemptionTotal = lifeInsuranceExemption + retirementBenefitExemption;
 
+    // 小規模宅地等の特例：自宅・事業用・貸付用の土地のうち1件分について、
+    // 「評価額 ×（限度面積÷土地全体の面積、上限100%）× 減額割合」で評価減を計算する
+    // （js/souzokuzei.js と同一の計算式）。土地自体は生前贈与の対象ではなく生前贈与の
+    // 有無・方式に関わらず評価額は変わらないため、生命保険金・死亡退職金の非課税枠と
+    // 同様に3シナリオすべての課税遺産総額から同額を差し引く。
+    var lotReduction = 0;
+    if (hasLot && lotValueAmount > 0 && lotArea > 0) {
+      var lotLimit = LOT_TYPES[lotType];
+      var lotEligibleRatio = Math.min(1, lotLimit.area / lotArea);
+      lotReduction = Math.min(lotValueAmount, lotValueAmount * lotEligibleRatio * lotLimit.rate);
+    }
+
     // 相続開始より後に贈与することはできないため、実際に贈与が行われる年数は yearsUntilInheritance を上限にする
     var effectiveGiftYears = Math.min(giftYears, yearsUntilInheritance);
     if (!isFinite(effectiveGiftYears) || effectiveGiftYears < 0) effectiveGiftYears = 0;
 
     // ---- シナリオA：生前贈与なし ----
-    var taxableEstateA = Math.max(0, estateTotal - basicDeduction - insuranceExemptionTotal);
+    var taxableEstateA = Math.max(0, estateTotal - basicDeduction - insuranceExemptionTotal - lotReduction);
     var totalTaxA = inheritanceTaxTotal(taxableEstateA, heirs, childCount);
     // 実際の遺産分割は法定相続分どおりに行われるものと仮定する（配偶者の税額軽減により配偶者の
     // 実質負担は常に0円になるため、家族全体の負担額は子（配偶者以外の相続人）の負担分と一致する）。
@@ -291,7 +318,7 @@
 
     var estateAfterGiftsB = Math.max(0, estateTotal - totalGiftAmountB);
     var taxableForInheritanceB = estateAfterGiftsB + totalAddbackNetB;
-    var taxableEstateB = Math.max(0, taxableForInheritanceB - basicDeduction - insuranceExemptionTotal);
+    var taxableEstateB = Math.max(0, taxableForInheritanceB - basicDeduction - insuranceExemptionTotal - lotReduction);
     var totalTaxB = inheritanceTaxTotal(taxableEstateB, heirs, childCount);
     var deductionB = applyHeirDeductions(totalTaxB, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge);
     var familyInheritanceTaxB = Math.max(0, deductionB.familyPayable - totalGiftTaxCreditB);
@@ -308,7 +335,7 @@
 
     var estateAfterGiftsC = Math.max(0, estateTotal - totalGiftAmountC);
     var taxableForInheritanceC = estateAfterGiftsC + totalAddbackC;
-    var taxableEstateC = Math.max(0, taxableForInheritanceC - basicDeduction - insuranceExemptionTotal);
+    var taxableEstateC = Math.max(0, taxableForInheritanceC - basicDeduction - insuranceExemptionTotal - lotReduction);
     var totalTaxC = inheritanceTaxTotal(taxableEstateC, heirs, childCount);
     var deductionC = applyHeirDeductions(totalTaxC, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge);
     var familyInheritanceTaxC = Math.max(0, deductionC.familyPayable - totalGiftTaxCreditC);
@@ -331,6 +358,8 @@
       retirementBenefitAmount: retirementBenefitAmount,
       lifeInsuranceExemption: lifeInsuranceExemption,
       retirementBenefitExemption: retirementBenefitExemption,
+      lotReduction: lotReduction,
+      lotType: lotType,
       effectiveGiftYears: effectiveGiftYears,
       bestKey: bestKey,
       minorCount: minorCount,
@@ -402,6 +431,10 @@
       disabledCount: baseInput.disabledCount,
       disabledType: baseInput.disabledType,
       disabledAge: baseInput.disabledAge,
+      hasLot: baseInput.hasLot,
+      lotType: baseInput.lotType,
+      lotValue: baseInput.lotValue,
+      lotArea: baseInput.lotArea,
     };
     var dr = calc(delayedInput);
     var bestKey = dr.scenarioB.total <= dr.scenarioC.total ? "B" : "C";
@@ -455,6 +488,13 @@
     disabledRow: document.getElementById("zouyo-disabledRow"),
     disabledTypeRow: document.getElementById("zouyo-disabledTypeRow"),
     disabledAgeRow: document.getElementById("zouyo-disabledAgeRow"),
+    hasLot: document.getElementById("zouyo-hasLot"),
+    lotType: document.getElementById("zouyo-lotType"),
+    lotValue: document.getElementById("zouyo-lotValue"),
+    lotArea: document.getElementById("zouyo-lotArea"),
+    lotTypeRow: document.getElementById("zouyo-lotTypeRow"),
+    lotValueRow: document.getElementById("zouyo-lotValueRow"),
+    lotAreaRow: document.getElementById("zouyo-lotAreaRow"),
     verdict: document.getElementById("zouyo-verdict"),
     verdictSub: document.getElementById("zouyo-verdictSub"),
     scenarioATotal: document.getElementById("zouyo-result-scenario-a-total"),
@@ -522,6 +562,11 @@
     els.disabledTypeRow.style.display = disabledCount > 0 ? "" : "none";
     els.disabledAgeRow.style.display = disabledCount > 0 ? "" : "none";
 
+    var hasLot = els.hasLot.value === "yes";
+    els.lotTypeRow.style.display = hasLot ? "" : "none";
+    els.lotValueRow.style.display = hasLot ? "" : "none";
+    els.lotAreaRow.style.display = hasLot ? "" : "none";
+
     var baseInput = {
       estateTotal: clampNonNegative(els.estateTotal.value) * 10000,
       hasSpouse: els.hasSpouse.value === "yes",
@@ -538,6 +583,10 @@
       disabledCount: els.disabledCount.value,
       disabledType: els.disabledType.value,
       disabledAge: els.disabledAge.value,
+      hasLot: hasLot,
+      lotType: els.lotType.value,
+      lotValue: clampNonNegative(els.lotValue.value) * 10000,
+      lotArea: clampNonNegative(els.lotArea.value),
     };
     var r = calc(baseInput);
 
@@ -592,6 +641,9 @@
     }
     if (r.retirementBenefitAmount > 0) {
       rows.push(["死亡退職金の非課税枠（上限 " + manYen(r.insuranceCap) + "、全シナリオ共通）", manYen(r.retirementBenefitExemption)]);
+    }
+    if (r.lotReduction > 0) {
+      rows.push(["小規模宅地等の特例による評価減（" + LOT_TYPES[r.lotType].label + "、全シナリオ共通）", manYen(r.lotReduction)]);
     }
     rows.push(
       ["課税遺産総額", manYen(r.scenarioA.taxableEstate)],
@@ -733,6 +785,10 @@
     els.disabledCount,
     els.disabledType,
     els.disabledAge,
+    els.hasLot,
+    els.lotType,
+    els.lotValue,
+    els.lotArea,
   ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
