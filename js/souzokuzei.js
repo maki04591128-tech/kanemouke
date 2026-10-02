@@ -56,6 +56,14 @@
     lotTypeRow: document.getElementById("souzokuzei-lotTypeRow"),
     lotValueRow: document.getElementById("souzokuzei-lotValueRow"),
     lotAreaRow: document.getElementById("souzokuzei-lotAreaRow"),
+    lot2Row: document.getElementById("souzokuzei-lot2Row"),
+    hasLot2: document.getElementById("souzokuzei-hasLot2"),
+    lotType2: document.getElementById("souzokuzei-lotType2"),
+    lotValue2: document.getElementById("souzokuzei-lotValue2"),
+    lotArea2: document.getElementById("souzokuzei-lotArea2"),
+    lotType2Row: document.getElementById("souzokuzei-lotType2Row"),
+    lotValue2Row: document.getElementById("souzokuzei-lotValue2Row"),
+    lotArea2Row: document.getElementById("souzokuzei-lotArea2Row"),
     verdict: document.getElementById("souzokuzei-verdict"),
     verdictSub: document.getElementById("souzokuzei-verdictSub"),
     totalTax: document.getElementById("souzokuzei-result-total-tax"),
@@ -90,6 +98,75 @@
       }
     }
     return 0;
+  }
+
+  /**
+   * 複数（最大2件）の土地について、小規模宅地等の特例による評価減の合計額を計算する。
+   * ・貸付事業用宅地等を含まない組み合わせ（特定居住用＋特定事業用等）は限度面積をそのまま合算でき、
+   *   各土地が自分の区分の限度面積までフルに適用される（プロラタ計算は不要）。
+   * ・貸付事業用宅地等を含む組み合わせは、「（特定居住用の面積×200/330）＋（特定事業用等の面積×200/400）
+   *   ＋貸付事業用の面積 ≦ 200㎡」となるよう限度面積を按分する必要がある。本ツールでは、各土地の
+   *   「限度面積あたりの評価減額（評価減額÷按分後の必要面積）」が大きい土地から優先的に限度面積の
+   *   残り枠を割り当てることで、合計の評価減額が最大になる組み合わせを試算する。
+   */
+  function combineLotReductions(lots) {
+    var items = lots.map(function (lot) {
+      var limit = LOT_TYPES[lot.type];
+      var ownUsedArea = Math.min(lot.area, limit.area);
+      var reductionIfFull = lot.area > 0 ? lot.value * (ownUsedArea / lot.area) * limit.rate : 0;
+      return {
+        label: limit.label,
+        weightedDemand: ownUsedArea * (200 / limit.area),
+        reductionIfFull: reductionIfFull,
+      };
+    });
+
+    var hasRental = lots.some(function (lot) {
+      return lot.type === "rental";
+    });
+    var totalWeightedDemand = items.reduce(function (sum, it) {
+      return sum + it.weightedDemand;
+    }, 0);
+
+    if (!hasRental || items.length <= 1 || totalWeightedDemand <= 200) {
+      return {
+        total: items.reduce(function (sum, it) {
+          return sum + it.reductionIfFull;
+        }, 0),
+        items: items.map(function (it) {
+          return { label: it.label, reduction: it.reductionIfFull };
+        }),
+        prorated: false,
+      };
+    }
+
+    // 限度面積（200㎡相当）の枠を使い切る必要があるため、1㎡あたりの評価減額が大きい土地から優先的に割り当てる
+    var order = items
+      .map(function (it, index) {
+        return { it: it, index: index, density: it.weightedDemand > 0 ? it.reductionIfFull / it.weightedDemand : 0 };
+      })
+      .sort(function (a, b) {
+        return b.density - a.density;
+      });
+
+    var budget = 200;
+    var reductionByIndex = [];
+    order.forEach(function (entry) {
+      var used = Math.min(entry.it.weightedDemand, budget);
+      var ratio = entry.it.weightedDemand > 0 ? used / entry.it.weightedDemand : 0;
+      reductionByIndex[entry.index] = entry.it.reductionIfFull * ratio;
+      budget -= used;
+    });
+
+    return {
+      total: reductionByIndex.reduce(function (sum, r) {
+        return sum + r;
+      }, 0),
+      items: items.map(function (it, index) {
+        return { label: it.label, reduction: reductionByIndex[index] };
+      }),
+      prorated: true,
+    };
   }
 
   // 相続人構成から法定相続人数・法定相続分を判定（配偶者＋子〈第1順位〉のケースのみ対応）
@@ -136,6 +213,11 @@
     els.lotTypeRow.style.display = hasLot ? "" : "none";
     els.lotValueRow.style.display = hasLot ? "" : "none";
     els.lotAreaRow.style.display = hasLot ? "" : "none";
+    els.lot2Row.style.display = hasLot ? "" : "none";
+    var hasLot2 = hasLot && els.hasLot2.value === "yes";
+    els.lotType2Row.style.display = hasLot2 ? "" : "none";
+    els.lotValue2Row.style.display = hasLot2 ? "" : "none";
+    els.lotArea2Row.style.display = hasLot2 ? "" : "none";
 
     var heirs = legalHeirs(hasSpouse, childCount);
     els.spouseSharePctOut.textContent = els.spouseSharePct.value + " %";
@@ -200,12 +282,19 @@
     var lotType = LOT_TYPES.hasOwnProperty(els.lotType.value) ? els.lotType.value : "residential";
     var lotValueAmount = clampNonNegative(els.lotValue.value) * 10000;
     var lotArea = clampNonNegative(els.lotArea.value);
-    var lotReduction = 0;
+    var lotType2 = LOT_TYPES.hasOwnProperty(els.lotType2.value) ? els.lotType2.value : "residential";
+    var lotValueAmount2 = clampNonNegative(els.lotValue2.value) * 10000;
+    var lotArea2 = clampNonNegative(els.lotArea2.value);
+
+    var lots = [];
     if (hasLot && lotValueAmount > 0 && lotArea > 0) {
-      var lotLimit = LOT_TYPES[lotType];
-      var lotEligibleRatio = Math.min(1, lotLimit.area / lotArea);
-      lotReduction = Math.min(lotValueAmount, lotValueAmount * lotEligibleRatio * lotLimit.rate);
+      lots.push({ type: lotType, value: lotValueAmount, area: lotArea });
     }
+    if (hasLot2 && lotValueAmount2 > 0 && lotArea2 > 0) {
+      lots.push({ type: lotType2, value: lotValueAmount2, area: lotArea2 });
+    }
+    var lotCombined = lots.length > 0 ? combineLotReductions(lots) : { total: 0, items: [], prorated: false };
+    var lotReduction = lotCombined.total;
 
     var taxableEstate = Math.max(
       0,
@@ -313,11 +402,21 @@
     if (retirementBenefitAmount > 0) {
       rows.push(["死亡退職金の非課税枠（上限 " + manYen(insuranceCap) + "）", manYen(retirementBenefitExemption)]);
     }
-    if (lotReduction > 0) {
+    if (lotCombined.items.length === 1 && lotCombined.items[0].reduction > 0) {
       rows.push([
-        "小規模宅地等の特例による評価減（" + LOT_TYPES[lotType].label + "）",
-        manYen(lotReduction),
+        "小規模宅地等の特例による評価減（" + lotCombined.items[0].label + "）",
+        manYen(lotCombined.items[0].reduction),
       ]);
+    } else if (lotCombined.items.length > 1) {
+      lotCombined.items.forEach(function (item, index) {
+        if (item.reduction > 0) {
+          rows.push([
+            "小規模宅地等の特例による評価減（" + (index + 1) + "件目：" + item.label + "）" +
+              (lotCombined.prorated ? "※限度面積を按分" : ""),
+            manYen(item.reduction),
+          ]);
+        }
+      });
     }
     rows.push(["課税遺産総額", manYen(taxableEstate)]);
     rows.push(["相続税の総額（速算表ベース）", manYen(totalTax)]);
@@ -396,7 +495,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("souzokuzei-growthDataTable", chart);
   }
 
-  [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit, els.minorCount, els.minorAge, els.disabledCount, els.disabledType, els.disabledAge, els.hasLot, els.lotType, els.lotValue, els.lotArea].forEach(function (el) {
+  [els.estateTotal, els.hasSpouse, els.childCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit, els.minorCount, els.minorAge, els.disabledCount, els.disabledType, els.disabledAge, els.hasLot, els.lotType, els.lotValue, els.lotArea, els.hasLot2, els.lotType2, els.lotValue2, els.lotArea2].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
