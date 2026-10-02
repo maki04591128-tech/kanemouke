@@ -24,11 +24,13 @@
     spouseAgeOut: document.getElementById("hoshougaku-spouseAgeOut"),
     spouseIncome: document.getElementById("hoshougaku-spouseIncome"),
     savings: document.getElementById("hoshougaku-savings"),
+    existingCoverage: document.getElementById("hoshougaku-existingCoverage"),
     pension: document.getElementById("hoshougaku-pension"),
     pensionHint: document.getElementById("hoshougaku-pensionHint"),
     funeral: document.getElementById("hoshougaku-funeral"),
     verdict: document.getElementById("hoshougaku-verdict"),
     verdictSub: document.getElementById("hoshougaku-verdictSub"),
+    totalLabel: document.getElementById("hoshougaku-result-totalLabel"),
     total: document.getElementById("hoshougaku-result-total"),
     expense: document.getElementById("hoshougaku-result-expense"),
     resource: document.getElementById("hoshougaku-result-resource"),
@@ -53,7 +55,7 @@
     return 847300 + addition;
   }
 
-  function computeNeed(childAge, spouseAge, numChildren, eduTotalPerChild, monthlyLiving, spouseIncomeYearly, savings, pensionYearly, funeralCost) {
+  function computeNeed(childAge, spouseAge, numChildren, eduTotalPerChild, monthlyLiving, spouseIncomeYearly, savings, existingCoverage, pensionYearly, funeralCost) {
     var totalYears = Math.max(0, LIFE_END_AGE - spouseAge);
     var childDepYears = Math.min(Math.max(0, CHILD_INDEPENDENCE_AGE - childAge), totalYears);
     var spouseOnlyYears = totalYears - childDepYears;
@@ -72,7 +74,7 @@
     var incomeYears = Math.min(totalYears, Math.max(0, SPOUSE_RETIRE_AGE - spouseAge));
     var pensionTotal = pensionYearly * pensionYears;
     var spouseIncomeTotal = spouseIncomeYearly * incomeYears;
-    var resourceTotal = savings + pensionTotal + spouseIncomeTotal;
+    var resourceTotal = savings + existingCoverage + pensionTotal + spouseIncomeTotal;
 
     return {
       need: Math.max(0, expenseTotal - resourceTotal),
@@ -84,6 +86,7 @@
       eduFraction: eduFraction,
       funeralCost: funeralCost,
       savings: savings,
+      existingCoverage: existingCoverage,
       pensionTotal: pensionTotal,
       pensionYears: pensionYears,
       spouseIncomeTotal: spouseIncomeTotal,
@@ -122,6 +125,7 @@
     var spouseAge = Number(els.spouseAge.value);
     var spouseIncomeMan = Math.max(0, Number(els.spouseIncome.value) || 0);
     var savingsMan = Math.max(0, Number(els.savings.value) || 0);
+    var existingCoverageMan = Math.max(0, Number(els.existingCoverage.value) || 0);
     var pensionMan = Math.max(0, Number(els.pension.value) || 0);
     var funeralMan = Math.max(0, Number(els.funeral.value) || 0);
 
@@ -140,17 +144,25 @@
       monthlyLiving,
       spouseIncomeMan * 10000,
       savingsMan * 10000,
+      existingCoverageMan * 10000,
       pensionMan * 10000,
       funeralMan * 10000
     );
 
+    var hasExistingCoverage = existingCoverageMan > 0;
+    els.totalLabel.textContent = hasExistingCoverage ? "追加で検討したい保障額（目安）" : "必要保障額（目安）";
     els.total.textContent = manYen(result.need);
     els.expense.textContent = manYen(result.expenseTotal);
     els.resource.textContent = manYen(result.resourceTotal);
 
     if (result.need <= 0) {
       els.verdict.textContent = "現在の準備で不足額はほぼ生じない見込みです";
-      els.verdictSub.textContent = "預貯金・遺族年金・配偶者の収入だけで想定支出をカバーできる目安です。ライフイベントの変化に応じて見直しましょう。";
+      els.verdictSub.textContent = hasExistingCoverage
+        ? "すでに加入している保険の死亡保険金額も含め、預貯金・遺族年金・配偶者の収入だけで想定支出をカバーできる目安です。ライフイベントの変化に応じて見直しましょう。"
+        : "預貯金・遺族年金・配偶者の収入だけで想定支出をカバーできる目安です。ライフイベントの変化に応じて見直しましょう。";
+    } else if (hasExistingCoverage) {
+      els.verdict.textContent = "既加入の保険に加えて、目安として " + manYen(result.need) + " の追加の備えが必要です";
+      els.verdictSub.textContent = "すでに加入している保険の死亡保険金額（" + manYen(existingCoverageMan * 10000) + "）を差し引いた、追加で検討したい金額の目安です。";
     } else {
       els.verdict.textContent = "目安として " + manYen(result.need) + " の生命保険が必要です";
       els.verdictSub.textContent = "この金額を目安に、必要な期間だけ備える「定期保険」や「収入保障保険」を中心に検討すると、割安に備えやすい傾向があります。";
@@ -162,6 +174,7 @@
       addRow("教育費", numChildren + "人分・残り" + Math.round(result.eduFraction * 100) + "%相当", result.eduCostTotal),
       addRow("葬儀費用・整理資金", "一時的な費用の目安", result.funeralCost),
       addRow("現在の預貯金・資産", "準備できる資金", -result.savings),
+      addRow("既加入の生命保険（死亡保険金）", "すでに準備できている保障", -result.existingCoverage),
       addRow("遺族年金の見込み", "子が" + CHILD_INDEPENDENCE_AGE + "歳になるまで" + result.pensionYears + "年分", -result.pensionTotal),
       addRow("配偶者の収入の見込み", "65歳になるまで" + result.incomeYears + "年分", -result.spouseIncomeTotal)
     );
@@ -177,6 +190,7 @@
         monthlyLiving,
         spouseIncomeMan * 10000,
         savingsMan * 10000,
+        existingCoverageMan * 10000,
         pensionMan * 10000,
         funeralMan * 10000
       );
@@ -236,6 +250,7 @@
     els.spouseAge,
     els.spouseIncome,
     els.savings,
+    els.existingCoverage,
     els.pension,
     els.funeral,
   ].forEach(function (el) {

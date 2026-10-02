@@ -1314,6 +1314,11 @@
 <input id="hoshougaku-savings" inputmode="numeric" min="0" step="10" type="number" value="200"/>
 </div>
 <div class="field">
+<label for="hoshougaku-existingCoverage">すでに加入している生命保険の死亡保険金額 <span class="unit">万円</span></label>
+<input id="hoshougaku-existingCoverage" inputmode="numeric" min="0" step="10" type="number" value="0"/>
+<p class="field-hint">現在契約中の保険の死亡保険金額を入力すると、その分を差し引いた「追加で検討したい金額」を試算します。未加入または分からない場合は0のままで構いません。</p>
+</div>
+<div class="field">
 <label for="hoshougaku-pension">遺族年金の年額の見込み <span class="unit">万円</span></label>
 <input id="hoshougaku-pension" inputmode="numeric" min="0" step="1" type="number" value="107"/>
 <p class="field-hint" id="hoshougaku-pensionHint"></p>
@@ -1330,7 +1335,7 @@
 </div>
 <div class="result-summary">
 <div class="result-card accent">
-<div class="label">必要保障額（目安）</div>
+<div class="label" id="hoshougaku-result-totalLabel">必要保障額（目安）</div>
 <div class="value" id="hoshougaku-result-total">-</div>
 </div>
 <div class="result-card">
