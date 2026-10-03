@@ -42,6 +42,8 @@
     siblingDeceasedLines: document.getElementById("souzokuzei-siblingDeceasedLines"),
     nephewNieceRow: document.getElementById("souzokuzei-nephewNieceRow"),
     nephewNieceCount: document.getElementById("souzokuzei-nephewNieceCount"),
+    parentCountRow: document.getElementById("souzokuzei-parentCountRow"),
+    parentCount: document.getElementById("souzokuzei-parentCount"),
     spouseShareRow: document.getElementById("souzokuzei-spouseShareRow"),
     spouseSharePct: document.getElementById("souzokuzei-spouseSharePct"),
     spouseSharePctOut: document.getElementById("souzokuzei-spouseSharePctOut"),
@@ -225,21 +227,24 @@
     return { count: 0, spouseShare: 0, childShareEach: 0, adoptedCap: adoptedCap, countedAdoptedCount: 0, exemptAdoptedCount: 0 };
   }
 
-  function updateVisibility(hasSpouse, heirPattern, childCount, siblingTotalCount) {
+  function updateVisibility(hasSpouse, heirPattern, childCount, siblingTotalCount, parentCount) {
     var isSibling = heirPattern === "sibling";
-    els.childCountRow.style.display = isSibling ? "none" : "";
+    var isParent = heirPattern === "parent";
+    var isChild = !isSibling && !isParent;
+    els.childCountRow.style.display = isChild ? "" : "none";
     els.siblingAliveRow.style.display = isSibling ? "" : "none";
     els.siblingDeceasedRow.style.display = isSibling ? "" : "none";
     els.nephewNieceRow.style.display = isSibling ? "" : "none";
+    els.parentCountRow.style.display = isParent ? "" : "none";
 
-    var dividingCount = isSibling ? siblingTotalCount : childCount;
+    var dividingCount = isSibling ? siblingTotalCount : isParent ? parentCount : childCount;
     if (hasSpouse && dividingCount > 0) {
       els.spouseShareRow.style.display = "";
     } else {
       els.spouseShareRow.style.display = "none";
     }
 
-    if (!isSibling && childCount > 0) {
+    if (isChild && childCount > 0) {
       els.minorRow.style.display = "";
       els.minorCount.max = String(childCount);
       els.disabledRow.style.display = "";
@@ -296,17 +301,38 @@
     };
   }
 
+  // 父母・祖父母（直系尊属、第2順位）が相続人になるケースの法定相続分を判定する。
+  // 直系尊属は、最も近い世代の存命者だけが相続人になる（父母が1人でも存命なら祖父母は
+  // 相続人にならない）ため、入力された人数はその世代の存命人数として扱えばよく、
+  // 兄弟姉妹のような代襲相続（直系尊属には代襲相続の制度自体が存在しない）は考慮不要。
+  function parentLegalHeirs(hasSpouse, parentCount) {
+    if (parentCount <= 0) {
+      if (!hasSpouse) return { count: 0, spouseShare: 0, parentShareEach: 0 };
+      return { count: 1, spouseShare: 1, parentShareEach: 0 };
+    }
+    var spouseShare = hasSpouse ? 2 / 3 : 0;
+    var parentGroupShare = hasSpouse ? 1 / 3 : 1;
+    return {
+      count: (hasSpouse ? 1 : 0) + parentCount,
+      spouseShare: spouseShare,
+      parentShareEach: parentGroupShare / parentCount,
+    };
+  }
+
   function render() {
     var estateTotal = clampNonNegative(els.estateTotal.value) * 10000;
     var hasSpouse = els.hasSpouse.value === "yes";
-    var heirPattern = els.heirPattern.value === "sibling" ? "sibling" : "child";
+    var heirPatternRaw = els.heirPattern.value;
+    var heirPattern = heirPatternRaw === "sibling" ? "sibling" : heirPatternRaw === "parent" ? "parent" : "child";
     var childCount = Math.max(0, Math.round(Number(els.childCount.value) || 0));
     var siblingAliveCount = Math.max(0, Math.round(Number(els.siblingAliveCount.value) || 0));
     var siblingDeceasedLines = Math.max(0, Math.round(Number(els.siblingDeceasedLines.value) || 0));
     var nephewNieceCount = Math.max(0, Math.round(Number(els.nephewNieceCount.value) || 0));
     var siblingPreview = siblingLegalHeirs(hasSpouse, siblingAliveCount, siblingDeceasedLines, nephewNieceCount);
+    var parentCount = Math.max(0, Math.round(Number(els.parentCount.value) || 0));
+    var parentPreview = parentLegalHeirs(hasSpouse, parentCount);
 
-    updateVisibility(hasSpouse, heirPattern, childCount, siblingPreview.totalPeople);
+    updateVisibility(hasSpouse, heirPattern, childCount, siblingPreview.totalPeople, parentCount);
     var hasLot = els.hasLot.value === "yes";
     els.lotTypeRow.style.display = hasLot ? "" : "none";
     els.lotValueRow.style.display = hasLot ? "" : "none";
@@ -323,6 +349,10 @@
       renderSiblingPattern(estateTotal, hasSpouse, siblingPreview, siblingAliveCount, hasLot, hasLot2);
       return;
     }
+    if (heirPattern === "parent") {
+      renderParentPattern(estateTotal, hasSpouse, parentPreview, parentCount, hasLot, hasLot2);
+      return;
+    }
 
     var adoptedCount = Math.min(childCount, Math.max(0, Math.round(Number(els.adoptedCount.value) || 0)));
     var adoptedExemptCount = Math.min(
@@ -334,7 +364,7 @@
     if (heirs.count === 0) {
       els.verdict.textContent = "相続人の情報を入力してください";
       els.verdictSub.textContent =
-        "配偶者も子もいない場合は試算できません。子がおらず兄弟姉妹が相続人になる場合は、上の「相続人のパターン」から切り替えてください（父母・祖父母が相続人になる第2順位のケースは本ツールでは対応していません）。";
+        "配偶者も子もいない場合は試算できません。子がおらず父母・祖父母または兄弟姉妹が相続人になる場合は、上の「相続人のパターン」から切り替えてください。";
       els.totalTax.textContent = "－";
       els.basicDeduction.textContent = manYen(BASIC_DEDUCTION_FIXED);
       els.taxableEstate.textContent = "－";
@@ -682,7 +712,7 @@
     if (heirCount === 0) {
       els.verdict.textContent = "相続人の情報を入力してください";
       els.verdictSub.textContent =
-        "配偶者も兄弟姉妹（代襲相続人のおい・めいを含む）もいない場合は試算できません。子がいる場合は上の「相続人のパターン」から切り替えてください。";
+        "配偶者も兄弟姉妹（代襲相続人のおい・めいを含む）もいない場合は試算できません。子がいる場合、または父母・祖父母が相続人の場合は上の「相続人のパターン」から切り替えてください。";
       els.totalTax.textContent = "－";
       els.basicDeduction.textContent = manYen(BASIC_DEDUCTION_FIXED);
       els.taxableEstate.textContent = "－";
@@ -853,7 +883,165 @@
     if (window.renderChartDataTable) window.renderChartDataTable("souzokuzei-growthDataTable", chart);
   }
 
-  [els.estateTotal, els.hasSpouse, els.heirPattern, els.childCount, els.siblingAliveCount, els.siblingDeceasedLines, els.nephewNieceCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit, els.minorCount, els.minorAge, els.disabledCount, els.disabledType, els.disabledAge, els.adoptedCount, els.adoptedExemptCount, els.grandchildAdoptedCount, els.hasLot, els.lotType, els.lotValue, els.lotArea, els.hasLot2, els.lotType2, els.lotValue2, els.lotArea2].forEach(function (el) {
+  // 相続人が「父母・祖父母（直系尊属、第2順位）」のケース専用の試算。配偶者2/3・直系尊属側1/3という
+  // 兄弟姉妹（配偶者3/4・兄弟姉妹側1/4）とは異なる法定相続分の構造に加え、直系尊属は配偶者・子と同様に
+  // 2割加算の対象外という点が兄弟姉妹パターンと異なるため、専用の計算パスとして実装している。
+  // 代襲相続は直系尊属には存在しないため対象外。未成年者控除・障害者控除は対象外（兄弟姉妹パターンと
+  // 同様、次回以降の課題）。
+  function renderParentPattern(estateTotal, hasSpouse, parentInfo, parentCount, hasLot, hasLot2) {
+    var heirCount = parentInfo.count;
+
+    if (heirCount === 0) {
+      els.verdict.textContent = "相続人の情報を入力してください";
+      els.verdictSub.textContent =
+        "配偶者も父母・祖父母（直系尊属）もいない場合は試算できません。子がいる場合、または兄弟姉妹が相続人の場合は上の「相続人のパターン」から切り替えてください。";
+      els.totalTax.textContent = "－";
+      els.basicDeduction.textContent = manYen(BASIC_DEDUCTION_FIXED);
+      els.taxableEstate.textContent = "－";
+      els.familyPayable.textContent = "－";
+      els.tableBody.innerHTML = "";
+      if (chart) {
+        chart.destroy();
+        chart = null;
+      }
+      return;
+    }
+
+    var basicDeduction = BASIC_DEDUCTION_FIXED + BASIC_DEDUCTION_PER_HEIR * heirCount;
+    var insuranceCap = INSURANCE_EXEMPTION_PER_HEIR * heirCount;
+    var lifeInsuranceAmount = clampNonNegative(els.lifeInsurance.value) * 10000;
+    var retirementBenefitAmount = clampNonNegative(els.retirementBenefit.value) * 10000;
+    var lifeInsuranceExemption = Math.min(lifeInsuranceAmount, insuranceCap);
+    var retirementBenefitExemption = Math.min(retirementBenefitAmount, insuranceCap);
+
+    var lotType = LOT_TYPES.hasOwnProperty(els.lotType.value) ? els.lotType.value : "residential";
+    var lotValueAmount = clampNonNegative(els.lotValue.value) * 10000;
+    var lotArea = clampNonNegative(els.lotArea.value);
+    var lotType2 = LOT_TYPES.hasOwnProperty(els.lotType2.value) ? els.lotType2.value : "residential";
+    var lotValueAmount2 = clampNonNegative(els.lotValue2.value) * 10000;
+    var lotArea2 = clampNonNegative(els.lotArea2.value);
+    var lots = [];
+    if (hasLot && lotValueAmount > 0 && lotArea > 0) lots.push({ type: lotType, value: lotValueAmount, area: lotArea });
+    if (hasLot2 && lotValueAmount2 > 0 && lotArea2 > 0) lots.push({ type: lotType2, value: lotValueAmount2, area: lotArea2 });
+    var lotCombined = lots.length > 0 ? combineLotReductions(lots) : { total: 0, items: [], prorated: false };
+    var lotReduction = lotCombined.total;
+
+    var taxableEstate = Math.max(
+      0,
+      estateTotal - basicDeduction - lifeInsuranceExemption - retirementBenefitExemption - lotReduction
+    );
+
+    var spouseShare = parentInfo.spouseShare;
+    var parentShareEach = parentInfo.parentShareEach;
+
+    var totalTax = 0;
+    if (taxableEstate > 0) {
+      var spouseTaxableShare = taxableEstate * spouseShare;
+      totalTax = taxOnShare(spouseTaxableShare) + parentCount * taxOnShare(taxableEstate * parentShareEach);
+    }
+
+    var spouseActualSharePct = hasSpouse ? (parentCount > 0 ? Number(els.spouseSharePct.value) / 100 : 1) : 0;
+    var spouseActualAmount = estateTotal * spouseActualSharePct;
+    var parentsActualAmountTotal = estateTotal - spouseActualAmount;
+    var parentActualEach = parentCount > 0 ? parentsActualAmountTotal / parentCount : 0;
+
+    var spouseAllocatedTax = estateTotal > 0 ? totalTax * (spouseActualAmount / estateTotal) : 0;
+    var parentsAllocatedTaxTotal = totalTax - spouseAllocatedTax;
+
+    // 配偶者の税額軽減：取得額のうち「1.6億円」と「配偶者の法定相続分相当額」のいずれか多い金額までは非課税
+    var spouseLegalAmount = estateTotal * spouseShare;
+    var eligibleAmount = Math.max(SPOUSE_TAX_FREE_MIN, spouseLegalAmount);
+    var taxFreeBase = Math.min(spouseActualAmount, eligibleAmount);
+    var spouseReduction = estateTotal > 0 ? totalTax * (taxFreeBase / estateTotal) : 0;
+    var spouseFinalTax = Math.max(0, spouseAllocatedTax - spouseReduction);
+
+    // 父母・祖父母（直系尊属）は配偶者・一親等の血族の子と同様に2割加算の対象外のため、加算はない。
+    var parentEachFinalTax = parentCount > 0 ? parentsAllocatedTaxTotal / parentCount : 0;
+    var familyPayable = spouseFinalTax + parentsAllocatedTaxTotal;
+
+    els.totalTax.textContent = manYen(totalTax);
+    els.basicDeduction.textContent = manYen(basicDeduction);
+    els.taxableEstate.textContent = manYen(taxableEstate);
+    els.familyPayable.textContent = manYen(familyPayable);
+
+    if (taxableEstate <= 0) {
+      els.verdict.textContent = "相続税はかかりません（遺産総額が基礎控除の範囲内です）";
+      els.verdictSub.textContent =
+        "基礎控除額 " + manYen(basicDeduction) + " が遺産総額を上回っているため、相続税の申告・納税は原則不要です。";
+    } else {
+      els.verdict.textContent = "相続税の総額は " + manYen(totalTax) + " の見込みです";
+      els.verdictSub.textContent =
+        (hasSpouse ? "配偶者の納税額は " + manYen(spouseFinalTax) + "、" : "") +
+        "父母・祖父母（直系尊属）の納税額は合計 " + manYen(parentsAllocatedTaxTotal) + "、" +
+        "家族全体の納税額は " + manYen(familyPayable) + " になる見込みです（直系尊属には2割加算はかかりません）。";
+    }
+
+    var rows = [
+      ["遺産総額（課税価格の合計額）", manYen(estateTotal)],
+      ["法定相続人の数", heirCount + " 人"],
+      ["基礎控除額", manYen(basicDeduction)],
+    ];
+    renderLotAndInsuranceRows(rows, lifeInsuranceAmount, lifeInsuranceExemption, retirementBenefitAmount, retirementBenefitExemption, insuranceCap, lotCombined);
+    rows.push(["課税遺産総額", manYen(taxableEstate)]);
+    rows.push(["相続税の総額（速算表ベース）", manYen(totalTax)]);
+    if (hasSpouse) {
+      rows.push(["配偶者の取得額（実際）", manYen(spouseActualAmount)]);
+      rows.push(["配偶者の税額軽減額", manYen(spouseReduction)]);
+      rows.push(["配偶者の納税額（軽減後）", manYen(spouseFinalTax)]);
+    }
+    if (parentCount > 0) {
+      rows.push(["父母・祖父母1人あたりの取得額（実際）", manYen(parentActualEach)]);
+      rows.push(["父母・祖父母1人あたりの納税額（2割加算なし）", manYen(parentEachFinalTax)]);
+    }
+    rows.push(["家族全体の納税額合計", manYen(familyPayable)]);
+
+    els.tableBody.innerHTML = rows
+      .map(function (r) {
+        return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>";
+      })
+      .join("");
+
+    var ctx = document.getElementById("souzokuzei-growthChart").getContext("2d");
+    var exemptPortion = estateTotal - taxableEstate;
+    var data = {
+      labels: ["非課税部分（基礎控除・保険金等の非課税枠）", "課税遺産総額（税率が適用される部分）"],
+      datasets: [
+        {
+          data: [Math.round(exemptPortion), Math.round(taxableEstate)],
+          backgroundColor: ["#7fa998", "#c96b3f"],
+          borderColor: "#fff",
+          borderWidth: 2,
+        },
+      ],
+    };
+    var options = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: "bottom" },
+        tooltip: {
+          callbacks: {
+            label: function (ctx) {
+              var value = ctx.parsed;
+              var pct = estateTotal > 0 ? (value / estateTotal) * 100 : 0;
+              return ctx.label + "：" + yen(value) + "（" + pct.toFixed(1) + "%）";
+            },
+          },
+        },
+      },
+    };
+
+    if (chart) {
+      chart.data = data;
+      chart.options = options;
+      chart.update();
+    } else {
+      chart = new Chart(ctx, { type: "doughnut", data: data, options: options });
+    }
+    if (window.renderChartDataTable) window.renderChartDataTable("souzokuzei-growthDataTable", chart);
+  }
+
+  [els.estateTotal, els.hasSpouse, els.heirPattern, els.childCount, els.siblingAliveCount, els.siblingDeceasedLines, els.nephewNieceCount, els.parentCount, els.spouseSharePct, els.lifeInsurance, els.retirementBenefit, els.minorCount, els.minorAge, els.disabledCount, els.disabledType, els.disabledAge, els.adoptedCount, els.adoptedExemptCount, els.grandchildAdoptedCount, els.hasLot, els.lotType, els.lotValue, els.lotArea, els.hasLot2, els.lotType2, els.lotValue2, els.lotArea2].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
