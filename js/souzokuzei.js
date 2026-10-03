@@ -266,6 +266,17 @@
       els.adoptedRow.style.display = "none";
       els.adoptedExemptRow.style.display = "none";
       els.grandchildRow.style.display = "none";
+    } else if (isSibling && siblingTotalCount > 0) {
+      // 兄弟姉妹・おい・めい（代襲相続人）も未成年者控除・障害者控除の対象になり得るため、
+      // 子・父母パターンと同じ入力欄をそのまま再利用する。養子・孫養子・代襲相続の制度は
+      // 兄弟姉妹・おい・めい自身には適用されないため、それらの欄は表示しない。
+      els.minorRow.style.display = "";
+      els.minorCount.max = String(siblingTotalCount);
+      els.disabledRow.style.display = "";
+      els.disabledCount.max = String(siblingTotalCount);
+      els.adoptedRow.style.display = "none";
+      els.adoptedExemptRow.style.display = "none";
+      els.grandchildRow.style.display = "none";
     } else {
       els.minorRow.style.display = "none";
       els.minorAgeRow.style.display = "none";
@@ -714,7 +725,11 @@
   // 相続人が「兄弟姉妹（第3順位）」のケース専用の試算。配偶者＋子（第1順位）のケースとは
   // 法定相続分の構造が異なる（配偶者3/4・兄弟姉妹側1/4、兄弟姉妹の代襲相続人〈おい・めい〉は
   // 死亡した兄弟姉妹の系統の持分を均等に引き継ぐ）ため、既存の子パターンのロジックとは
-  // 独立した専用の計算パスとして実装している。未成年者控除・障害者控除は対象外（次回以降の課題）。
+  // 独立した専用の計算パスとして実装している。未成年者控除・障害者控除は、2割加算後の税額から
+  // 差し引く（2割加算は本人の税額を増やす処理のため、控除は加算後の金額に対して行うのが正しい
+  // 順序）。おい・めい（代襲相続人）は死亡した兄弟姉妹より若い世代で未成年になりやすいため、
+  // 入力された人数はまずおい・めいから優先的にカウントし、おい・めいの人数を超える分だけ
+  // 存命の兄弟姉妹側に割り当てる簡易モデル（障害者控除も同じ優先順位で扱う）。
   function renderSiblingPattern(estateTotal, hasSpouse, siblingInfo, siblingAliveCount, hasLot, hasLot2) {
     var heirCount = siblingInfo.count;
     var aliveCount = siblingAliveCount;
@@ -801,7 +816,67 @@
     var siblingSurchargeExtra =
       (aliveFinalTaxEach - aliveAllocatedTaxEach) * aliveCount + (nephewFinalTaxEach - nephewAllocatedTaxEach) * nephewCount;
 
-    var siblingsTaxTotal = aliveFinalTaxEach * aliveCount + nephewFinalTaxEach * nephewCount;
+    // 未成年者控除・障害者控除：入力された人数は、おい・めい（代襲相続人）から優先的にカウントし、
+    // おい・めいの人数を超える分だけ存命の兄弟姉妹側に割り当てる（上のコメント参照）。
+    var totalPeopleForDeduction = aliveCount + nephewCount;
+    var minorCount = Math.min(totalPeopleForDeduction, Math.max(0, Math.round(Number(els.minorCount.value) || 0)));
+    var minorAge = Math.min(MINOR_AGE_LIMIT - 1, Math.max(0, Math.round(Number(els.minorAge.value) || 0)));
+    els.minorAgeRow.style.display = minorCount > 0 ? "" : "none";
+    var minorDeductionEach = minorCount > 0 ? (MINOR_AGE_LIMIT - minorAge) * MINOR_DEDUCTION_PER_YEAR : 0;
+    var nephewMinorCount = Math.min(nephewCount, minorCount);
+    var aliveMinorCount = minorCount - nephewMinorCount;
+
+    var disabledCount = Math.min(
+      Math.max(0, totalPeopleForDeduction - minorCount),
+      Math.max(0, Math.round(Number(els.disabledCount.value) || 0))
+    );
+    var disabledType = els.disabledType.value === "special" ? "special" : "general";
+    var disabledAge = Math.min(DISABLED_AGE_LIMIT - 1, Math.max(0, Math.round(Number(els.disabledAge.value) || 0)));
+    els.disabledTypeRow.style.display = disabledCount > 0 ? "" : "none";
+    els.disabledAgeRow.style.display = disabledCount > 0 ? "" : "none";
+    var disabledPerYear = disabledType === "special" ? DISABLED_DEDUCTION_PER_YEAR_SPECIAL : DISABLED_DEDUCTION_PER_YEAR_GENERAL;
+    var disabilityDeductionEach = disabledCount > 0 ? (DISABLED_AGE_LIMIT - disabledAge) * disabledPerYear : 0;
+    var nephewDisabledCount = Math.min(nephewCount - nephewMinorCount, disabledCount);
+    var aliveDisabledCount = disabledCount - nephewDisabledCount;
+
+    var plainAliveCount = Math.max(0, aliveCount - aliveMinorCount - aliveDisabledCount);
+    var plainNephewCount = Math.max(0, nephewCount - nephewMinorCount - nephewDisabledCount);
+    var plainTaxTotal = plainAliveCount * aliveFinalTaxEach + plainNephewCount * nephewFinalTaxEach;
+
+    var aliveMinorRemaining = Math.max(0, aliveFinalTaxEach - minorDeductionEach) * aliveMinorCount;
+    var nephewMinorRemaining = Math.max(0, nephewFinalTaxEach - minorDeductionEach) * nephewMinorCount;
+    var minorExcessRemaining =
+      Math.max(0, minorDeductionEach - aliveFinalTaxEach) * aliveMinorCount +
+      Math.max(0, minorDeductionEach - nephewFinalTaxEach) * nephewMinorCount;
+    var minorCarryToPlain = Math.min(minorExcessRemaining, plainTaxTotal);
+    plainTaxTotal -= minorCarryToPlain;
+    minorExcessRemaining -= minorCarryToPlain;
+    var minorCarryToSpouse = Math.min(minorExcessRemaining, spouseFinalTax);
+    spouseFinalTax -= minorCarryToSpouse;
+    minorExcessRemaining -= minorCarryToSpouse;
+    var appliedMinorDeduction = minorDeductionEach * minorCount - minorExcessRemaining;
+
+    var aliveDisabledRemaining = Math.max(0, aliveFinalTaxEach - disabilityDeductionEach) * aliveDisabledCount;
+    var nephewDisabledRemaining = Math.max(0, nephewFinalTaxEach - disabilityDeductionEach) * nephewDisabledCount;
+    var disabledExcessRemaining =
+      Math.max(0, disabilityDeductionEach - aliveFinalTaxEach) * aliveDisabledCount +
+      Math.max(0, disabilityDeductionEach - nephewFinalTaxEach) * nephewDisabledCount;
+    var disabledCarryToPlain = Math.min(disabledExcessRemaining, plainTaxTotal);
+    plainTaxTotal -= disabledCarryToPlain;
+    disabledExcessRemaining -= disabledCarryToPlain;
+    var disabledCarryToSpouse = Math.min(disabledExcessRemaining, spouseFinalTax);
+    spouseFinalTax -= disabledCarryToSpouse;
+    disabledExcessRemaining -= disabledCarryToSpouse;
+    var appliedDisabilityDeduction = disabilityDeductionEach * disabledCount - disabledExcessRemaining;
+
+    var hasSpecialAliveGroups = aliveMinorCount > 0 || aliveDisabledCount > 0;
+    var hasSpecialNephewGroups = nephewMinorCount > 0 || nephewDisabledCount > 0;
+    var aliveMinorFinalEach = aliveMinorCount > 0 ? aliveMinorRemaining / aliveMinorCount : 0;
+    var nephewMinorFinalEach = nephewMinorCount > 0 ? nephewMinorRemaining / nephewMinorCount : 0;
+    var aliveDisabledFinalEach = aliveDisabledCount > 0 ? aliveDisabledRemaining / aliveDisabledCount : 0;
+    var nephewDisabledFinalEach = nephewDisabledCount > 0 ? nephewDisabledRemaining / nephewDisabledCount : 0;
+
+    var siblingsTaxTotal = aliveMinorRemaining + nephewMinorRemaining + aliveDisabledRemaining + nephewDisabledRemaining + plainTaxTotal;
     var familyPayable = spouseFinalTax + siblingsTaxTotal;
 
     els.totalTax.textContent = manYen(totalTax);
@@ -809,17 +884,24 @@
     els.taxableEstate.textContent = manYen(taxableEstate);
     els.familyPayable.textContent = manYen(familyPayable);
 
+    function deductionNote() {
+      var notes = [];
+      if (siblingSurchargeExtra > 0) notes.push("2割加算 +" + manYen(siblingSurchargeExtra));
+      if (appliedMinorDeduction > 0) notes.push("未成年者控除 " + manYen(appliedMinorDeduction));
+      if (appliedDisabilityDeduction > 0) notes.push("障害者控除 " + manYen(appliedDisabilityDeduction));
+      return notes.length > 0 ? "（" + notes.join("・") + "を反映済み）" : "";
+    }
+
     if (taxableEstate <= 0) {
       els.verdict.textContent = "相続税はかかりません（遺産総額が基礎控除の範囲内です）";
       els.verdictSub.textContent =
         "基礎控除額 " + manYen(basicDeduction) + " が遺産総額を上回っているため、相続税の申告・納税は原則不要です。";
     } else {
       els.verdict.textContent = "相続税の総額は " + manYen(totalTax) + " の見込みです";
-      var surchargeNote = siblingSurchargeExtra > 0 ? "（2割加算 +" + manYen(siblingSurchargeExtra) + "を反映済み）" : "";
       els.verdictSub.textContent =
         (hasSpouse ? "配偶者の納税額は " + manYen(spouseFinalTax) + "、" : "") +
         "兄弟姉妹・おい・めいの納税額は合計 " + manYen(siblingsTaxTotal) + "、" +
-        "家族全体の納税額は " + manYen(familyPayable) + " になる見込みです" + surchargeNote + "。";
+        "家族全体の納税額は " + manYen(familyPayable) + " になる見込みです" + deductionNote() + "。";
     }
 
     var rows = [
@@ -835,13 +917,46 @@
       rows.push(["配偶者の税額軽減額", manYen(spouseReduction)]);
       rows.push(["配偶者の納税額（軽減後）", manYen(spouseFinalTax)]);
     }
+    if (minorCount > 0) {
+      rows.push(["未成年者控除額（1人あたり、" + minorAge + "歳の場合）", manYen(minorDeductionEach)]);
+    }
+    if (disabledCount > 0) {
+      rows.push([
+        "障害者控除額（1人あたり、" + (disabledType === "special" ? "特別障害者" : "一般障害者") + "・" + disabledAge + "歳の場合）",
+        manYen(disabilityDeductionEach),
+      ]);
+    }
     if (aliveCount > 0) {
       rows.push(["兄弟姉妹1人あたりの取得額（実際）", manYen(aliveActualEach)]);
-      rows.push(["兄弟姉妹1人あたりの納税額（2割加算後）", manYen(aliveFinalTaxEach)]);
+      if (aliveMinorCount > 0) {
+        rows.push(["未成年の兄弟姉妹1人あたりの納税額（控除後）", manYen(aliveMinorFinalEach)]);
+      }
+      if (aliveDisabledCount > 0) {
+        rows.push(["障害のある兄弟姉妹1人あたりの納税額（控除後）", manYen(aliveDisabledFinalEach)]);
+      }
+      if (hasSpecialAliveGroups) {
+        if (plainAliveCount > 0) {
+          rows.push(["その他の兄弟姉妹1人あたりの納税額（2割加算後）", manYen(aliveFinalTaxEach)]);
+        }
+      } else {
+        rows.push(["兄弟姉妹1人あたりの納税額（2割加算後）", manYen(aliveFinalTaxEach)]);
+      }
     }
     if (nephewCount > 0) {
       rows.push(["おい・めい（代襲相続人）1人あたりの取得額（実際）", manYen(nephewActualEach)]);
-      rows.push(["おい・めい1人あたりの納税額（2割加算後）", manYen(nephewFinalTaxEach)]);
+      if (nephewMinorCount > 0) {
+        rows.push(["未成年のおい・めい1人あたりの納税額（控除後）", manYen(nephewMinorFinalEach)]);
+      }
+      if (nephewDisabledCount > 0) {
+        rows.push(["障害のあるおい・めい1人あたりの納税額（控除後）", manYen(nephewDisabledFinalEach)]);
+      }
+      if (hasSpecialNephewGroups) {
+        if (plainNephewCount > 0) {
+          rows.push(["その他のおい・めい1人あたりの納税額（2割加算後）", manYen(nephewFinalTaxEach)]);
+        }
+      } else {
+        rows.push(["おい・めい1人あたりの納税額（2割加算後）", manYen(nephewFinalTaxEach)]);
+      }
     }
     if (siblingSurchargeExtra > 0) {
       rows.push(["2割加算による増加額（合計）", manYen(siblingSurchargeExtra)]);
