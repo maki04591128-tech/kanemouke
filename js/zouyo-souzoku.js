@@ -174,7 +174,7 @@
    * 常に0円になる（js/souzokuzei.js のように取得割合を調整できるようになった場合に備えて
    * 同じ繰越処理を残している）。
    */
-  function applyHeirDeductions(totalTax, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge) {
+  function applyHeirDeductions(totalTax, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge, grandchildAdoptedCount) {
     var spouseFinalTax = 0;
     var childrenAllocatedTaxTotal = totalTax * (1 - heirs.spouseShare);
 
@@ -185,7 +185,15 @@
     var disabilityDeductionTotal = disabilityDeductionEach * disabledCount;
 
     var childTaxPerChildBase = childCount > 0 ? childrenAllocatedTaxTotal / childCount : 0;
-    var plainChildCount = Math.max(0, childCount - minorCount - disabledCount);
+
+    // 2割加算：子のうち「孫を養子にした人（代襲相続人を除く）」1人あたりの相続税額は
+    // 「本来の取得金額に対する税額×1.2」になる（js/souzokuzei.js と同じ考え方）。加算分（×0.2）は
+    // 配偶者の税額軽減や他の子の控除の繰越しとは無関係に、家族全体の納税額へ単純に上乗せされる。
+    var grandchildSurchargeEach = childTaxPerChildBase * 1.2;
+    var grandchildSurchargeTotal = grandchildSurchargeEach * grandchildAdoptedCount;
+    var grandchildSurchargeExtra = grandchildSurchargeTotal - childTaxPerChildBase * grandchildAdoptedCount;
+
+    var plainChildCount = Math.max(0, childCount - grandchildAdoptedCount - minorCount - disabledCount);
     var plainChildrenTaxTotal = childTaxPerChildBase * plainChildCount;
 
     var minorRemainingTotal = Math.max(0, childTaxPerChildBase - minorDeductionEach) * minorCount;
@@ -208,14 +216,16 @@
     disabledExcessRemaining -= disabledCarryToSpouse;
     var appliedDisabilityDeduction = disabilityDeductionTotal - disabledExcessRemaining;
 
-    childrenAllocatedTaxTotal = minorRemainingTotal + disabledRemainingTotal + plainChildrenTaxTotal;
+    childrenAllocatedTaxTotal = minorRemainingTotal + disabledRemainingTotal + plainChildrenTaxTotal + grandchildSurchargeTotal;
 
     return {
       familyPayable: spouseFinalTax + childrenAllocatedTaxTotal,
       appliedMinorDeduction: appliedMinorDeduction,
       appliedDisabilityDeduction: appliedDisabilityDeduction,
+      appliedGrandchildSurcharge: grandchildSurchargeExtra,
       minorDeductionEach: minorDeductionEach,
       disabilityDeductionEach: disabilityDeductionEach,
+      grandchildSurchargeEach: grandchildSurchargeEach,
     };
   }
 
@@ -305,9 +315,11 @@
    *   retirementBenefit: 死亡退職金の受取額（円、相続人が受け取った分。任意、既定0）
    *   minorCount: 未成年（18歳未満）の子の人数（任意、既定0。childCountを上限にクランプ）
    *   minorAge: 未成年の子の年齢・代表年齢（任意、既定0）
-   *   disabledCount: 障害のある子の人数（任意、既定0。childCount－minorCountを上限にクランプ）
+   *   disabledCount: 障害のある子の人数（任意、既定0。childCount－grandchildAdoptedCount－minorCountを上限にクランプ）
    *   disabledType: "general"（一般障害者）または"special"（特別障害者。既定general）
    *   disabledAge: 障害のある子の年齢・代表年齢（任意、既定0）
+   *   grandchildAdoptedCount: 子のうち「孫を養子にした人」（代襲相続人を除く）の人数（任意、既定0。childCountを
+   *     上限にクランプ。相続税額の2割加算の対象で、未成年者控除・障害者控除の対象の子とは重複しない前提の簡易モデル）
    *   hasLot: boolean（自宅などの土地に小規模宅地等の特例を適用するか。任意、既定false）
    *   lotType: "residential" | "business" | "rental"（土地の区分。任意、既定residential）
    *   lotValue: 特例適用前の土地の相続税評価額（円、相続財産総額に含む分。任意、既定0）
@@ -328,9 +340,14 @@
     var lookbackPeriod = Number(input.lookbackPeriod) === 3 ? 3 : 7;
     var lifeInsuranceAmount = clampNonNegative(input.lifeInsurance);
     var retirementBenefitAmount = clampNonNegative(input.retirementBenefit);
-    var minorCount = Math.min(childCount, clampNonNegativeInt(input.minorCount));
+    // 2割加算：子のうち「孫を養子にした人（代襲相続人を除く）」は、未成年者控除・障害者控除の対象の子とは
+    // 重複しない別の子を想定した簡易モデル（js/souzokuzei.js と同じ）のため、残りの子の人数
+    // （childCount－grandchildAdoptedCount）の範囲で未成年者控除・障害者控除の人数を数える。
+    var grandchildAdoptedCount = Math.min(childCount, clampNonNegativeInt(input.grandchildAdoptedCount));
+    var nonGrandchildChildCount = Math.max(0, childCount - grandchildAdoptedCount);
+    var minorCount = Math.min(nonGrandchildChildCount, clampNonNegativeInt(input.minorCount));
     var minorAge = Math.min(MINOR_AGE_LIMIT - 1, Math.max(0, clampNonNegativeInt(input.minorAge)));
-    var disabledCount = Math.min(Math.max(0, childCount - minorCount), clampNonNegativeInt(input.disabledCount));
+    var disabledCount = Math.min(Math.max(0, nonGrandchildChildCount - minorCount), clampNonNegativeInt(input.disabledCount));
     var disabledType = input.disabledType === "special" ? "special" : "general";
     var disabledAge = Math.min(DISABLED_AGE_LIMIT - 1, Math.max(0, clampNonNegativeInt(input.disabledAge)));
     var hasLot = !!input.hasLot;
@@ -376,7 +393,7 @@
     // 実際の遺産分割は法定相続分どおりに行われるものと仮定する（配偶者の税額軽減により配偶者の
     // 実質負担は常に0円になるため、家族全体の負担額は子（配偶者以外の相続人）の負担分と一致する）。
     // 未成年者控除・障害者控除がある場合は、その対象となる子の税額からの繰越しも反映する。
-    var deductionA = applyHeirDeductions(totalTaxA, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge);
+    var deductionA = applyHeirDeductions(totalTaxA, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge, grandchildAdoptedCount);
     var familyPayableA = deductionA.familyPayable;
     var scenarioATotal = familyPayableA;
 
@@ -393,7 +410,7 @@
     var taxableForInheritanceB = estateAfterGiftsB + totalAddbackNetB;
     var taxableEstateB = Math.max(0, taxableForInheritanceB - basicDeduction - insuranceExemptionTotal - lotReduction);
     var totalTaxB = inheritanceTaxTotal(taxableEstateB, heirs, childCount);
-    var deductionB = applyHeirDeductions(totalTaxB, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge);
+    var deductionB = applyHeirDeductions(totalTaxB, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge, grandchildAdoptedCount);
     var familyInheritanceTaxB = Math.max(0, deductionB.familyPayable - totalGiftTaxCreditB);
     var scenarioBTotal = totalGiftTaxB + familyInheritanceTaxB;
 
@@ -410,7 +427,7 @@
     var taxableForInheritanceC = estateAfterGiftsC + totalAddbackC;
     var taxableEstateC = Math.max(0, taxableForInheritanceC - basicDeduction - insuranceExemptionTotal - lotReduction);
     var totalTaxC = inheritanceTaxTotal(taxableEstateC, heirs, childCount);
-    var deductionC = applyHeirDeductions(totalTaxC, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge);
+    var deductionC = applyHeirDeductions(totalTaxC, heirs, childCount, minorCount, minorAge, disabledCount, disabledType, disabledAge, grandchildAdoptedCount);
     var familyInheritanceTaxC = Math.max(0, deductionC.familyPayable - totalGiftTaxCreditC);
     var scenarioCTotal = totalGiftTaxC + familyInheritanceTaxC;
 
@@ -440,6 +457,7 @@
       disabledCount: disabledCount,
       disabledType: disabledType,
       disabledAge: disabledAge,
+      grandchildAdoptedCount: grandchildAdoptedCount,
 
       scenarioA: {
         taxableEstate: taxableEstateA,
@@ -447,6 +465,8 @@
         familyPayable: familyPayableA,
         appliedMinorDeduction: deductionA.appliedMinorDeduction,
         appliedDisabilityDeduction: deductionA.appliedDisabilityDeduction,
+        appliedGrandchildSurcharge: deductionA.appliedGrandchildSurcharge,
+        grandchildSurchargeEach: deductionA.grandchildSurchargeEach,
         total: scenarioATotal,
       },
       scenarioB: {
@@ -460,6 +480,8 @@
         familyInheritanceTax: familyInheritanceTaxB,
         appliedMinorDeduction: deductionB.appliedMinorDeduction,
         appliedDisabilityDeduction: deductionB.appliedDisabilityDeduction,
+        appliedGrandchildSurcharge: deductionB.appliedGrandchildSurcharge,
+        grandchildSurchargeEach: deductionB.grandchildSurchargeEach,
         total: scenarioBTotal,
       },
       scenarioC: {
@@ -474,6 +496,8 @@
         familyInheritanceTax: familyInheritanceTaxC,
         appliedMinorDeduction: deductionC.appliedMinorDeduction,
         appliedDisabilityDeduction: deductionC.appliedDisabilityDeduction,
+        appliedGrandchildSurcharge: deductionC.appliedGrandchildSurcharge,
+        grandchildSurchargeEach: deductionC.grandchildSurchargeEach,
         total: scenarioCTotal,
       },
     };
@@ -504,6 +528,7 @@
       disabledCount: baseInput.disabledCount,
       disabledType: baseInput.disabledType,
       disabledAge: baseInput.disabledAge,
+      grandchildAdoptedCount: baseInput.grandchildAdoptedCount,
       hasLot: baseInput.hasLot,
       lotType: baseInput.lotType,
       lotValue: baseInput.lotValue,
@@ -567,6 +592,8 @@
     disabledRow: document.getElementById("zouyo-disabledRow"),
     disabledTypeRow: document.getElementById("zouyo-disabledTypeRow"),
     disabledAgeRow: document.getElementById("zouyo-disabledAgeRow"),
+    grandchildAdoptedCount: document.getElementById("zouyo-grandchildAdoptedCount"),
+    grandchildRow: document.getElementById("zouyo-grandchildRow"),
     hasLot: document.getElementById("zouyo-hasLot"),
     lotType: document.getElementById("zouyo-lotType"),
     lotValue: document.getElementById("zouyo-lotValue"),
@@ -620,17 +647,21 @@
       els.minorCount.max = String(childCount);
       els.disabledRow.style.display = "";
       els.disabledCount.max = String(childCount);
+      els.grandchildRow.style.display = "";
+      els.grandchildAdoptedCount.max = String(childCount);
     } else {
       els.minorRow.style.display = "none";
       els.minorAgeRow.style.display = "none";
       els.disabledRow.style.display = "none";
       els.disabledTypeRow.style.display = "none";
       els.disabledAgeRow.style.display = "none";
+      els.grandchildRow.style.display = "none";
     }
   }
 
   function deductionNote(scenario) {
     var notes = [];
+    if (scenario.appliedGrandchildSurcharge > 0) notes.push("孫養子の2割加算 +" + manYen(scenario.appliedGrandchildSurcharge));
     if (scenario.appliedMinorDeduction > 0) notes.push("未成年者控除 " + manYen(scenario.appliedMinorDeduction));
     if (scenario.appliedDisabilityDeduction > 0) notes.push("障害者控除 " + manYen(scenario.appliedDisabilityDeduction));
     return notes.length > 0 ? "（" + notes.join("・") + "を反映済み）" : "";
@@ -640,10 +671,12 @@
     var childCount = Math.max(0, Math.min(10, Math.round(Number(els.childCount.value) || 0)));
     updateVisibility(childCount);
 
-    var minorCount = Math.min(childCount, Math.max(0, Math.round(Number(els.minorCount.value) || 0)));
+    var grandchildAdoptedCount = Math.min(childCount, Math.max(0, Math.round(Number(els.grandchildAdoptedCount.value) || 0)));
+    var nonGrandchildChildCount = Math.max(0, childCount - grandchildAdoptedCount);
+    var minorCount = Math.min(nonGrandchildChildCount, Math.max(0, Math.round(Number(els.minorCount.value) || 0)));
     els.minorAgeRow.style.display = minorCount > 0 ? "" : "none";
     var disabledCount = Math.min(
-      Math.max(0, childCount - minorCount),
+      Math.max(0, nonGrandchildChildCount - minorCount),
       Math.max(0, Math.round(Number(els.disabledCount.value) || 0))
     );
     els.disabledTypeRow.style.display = disabledCount > 0 ? "" : "none";
@@ -675,6 +708,7 @@
       disabledCount: els.disabledCount.value,
       disabledType: els.disabledType.value,
       disabledAge: els.disabledAge.value,
+      grandchildAdoptedCount: els.grandchildAdoptedCount.value,
       hasLot: hasLot,
       lotType: els.lotType.value,
       lotValue: clampNonNegative(els.lotValue.value) * 10000,
@@ -759,6 +793,10 @@
       ["課税遺産総額", manYen(r.scenarioA.taxableEstate)],
       ["相続税の総額（速算表ベース）", manYen(r.scenarioA.totalTax)]
     );
+    if (r.grandchildAdoptedCount > 0) {
+      rows.push(["孫養子（2割加算対象、代襲相続人を除く）の人数", r.grandchildAdoptedCount + " 人"]);
+      rows.push(["2割加算による増加額", manYen(r.scenarioA.appliedGrandchildSurcharge)]);
+    }
     if (r.scenarioA.appliedMinorDeduction > 0) {
       rows.push(["未成年者控除の反映額", manYen(r.scenarioA.appliedMinorDeduction)]);
     }
@@ -775,6 +813,10 @@
       ["相続税の課税価格", manYen(r.scenarioB.taxableForInheritance)],
       ["課税遺産総額", manYen(r.scenarioB.taxableEstate)]
     );
+    if (r.grandchildAdoptedCount > 0) {
+      rows.push(["孫養子（2割加算対象、代襲相続人を除く）の人数", r.grandchildAdoptedCount + " 人"]);
+      rows.push(["2割加算による増加額", manYen(r.scenarioB.appliedGrandchildSurcharge)]);
+    }
     if (r.scenarioB.appliedMinorDeduction > 0) {
       rows.push(["未成年者控除の反映額", manYen(r.scenarioB.appliedMinorDeduction)]);
     }
@@ -793,6 +835,10 @@
       ["相続税の課税価格", manYen(r.scenarioC.taxableForInheritance)],
       ["課税遺産総額", manYen(r.scenarioC.taxableEstate)]
     );
+    if (r.grandchildAdoptedCount > 0) {
+      rows.push(["孫養子（2割加算対象、代襲相続人を除く）の人数", r.grandchildAdoptedCount + " 人"]);
+      rows.push(["2割加算による増加額", manYen(r.scenarioC.appliedGrandchildSurcharge)]);
+    }
     if (r.scenarioC.appliedMinorDeduction > 0) {
       rows.push(["未成年者控除の反映額", manYen(r.scenarioC.appliedMinorDeduction)]);
     }
@@ -895,6 +941,7 @@
     els.disabledCount,
     els.disabledType,
     els.disabledAge,
+    els.grandchildAdoptedCount,
     els.hasLot,
     els.lotType,
     els.lotValue,
