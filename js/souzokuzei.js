@@ -255,6 +255,17 @@
       els.adoptedExemptCount.max = String(childCount);
       els.grandchildRow.style.display = "";
       els.grandchildAdoptedCount.max = String(childCount);
+    } else if (isParent && parentCount > 0) {
+      // 父母・祖父母（直系尊属）も未成年者控除・障害者控除の対象になり得るため、
+      // 子パターンと同じ入力欄（人数・年齢・区分）をそのまま再利用する。
+      // 直系尊属には代襲相続・養子・2割加算の制度が無いため、それらの欄は表示しない。
+      els.minorRow.style.display = "";
+      els.minorCount.max = String(parentCount);
+      els.disabledRow.style.display = "";
+      els.disabledCount.max = String(parentCount);
+      els.adoptedRow.style.display = "none";
+      els.adoptedExemptRow.style.display = "none";
+      els.grandchildRow.style.display = "none";
     } else {
       els.minorRow.style.display = "none";
       els.minorAgeRow.style.display = "none";
@@ -886,8 +897,10 @@
   // 相続人が「父母・祖父母（直系尊属、第2順位）」のケース専用の試算。配偶者2/3・直系尊属側1/3という
   // 兄弟姉妹（配偶者3/4・兄弟姉妹側1/4）とは異なる法定相続分の構造に加え、直系尊属は配偶者・子と同様に
   // 2割加算の対象外という点が兄弟姉妹パターンと異なるため、専用の計算パスとして実装している。
-  // 代襲相続は直系尊属には存在しないため対象外。未成年者控除・障害者控除は対象外（兄弟姉妹パターンと
-  // 同様、次回以降の課題）。
+  // 代襲相続は直系尊属には存在しないため対象外。未成年者控除・障害者控除は、子パターンと同じ入力欄・
+  // 考え方（本人の税額から差し引き、引ききれない分は他の直系尊属→配偶者の順に繰り越す）で対応する
+  // （直系尊属は子と同じく2割加算の対象外のため、孫養子のような加算との組み合わせは発生しない）。
+  // 兄弟姉妹パターンへの展開は次回以降の課題として残す。
   function renderParentPattern(estateTotal, hasSpouse, parentInfo, parentCount, hasLot, hasLot2) {
     var heirCount = parentInfo.count;
 
@@ -955,14 +968,76 @@
     var spouseReduction = estateTotal > 0 ? totalTax * (taxFreeBase / estateTotal) : 0;
     var spouseFinalTax = Math.max(0, spouseAllocatedTax - spouseReduction);
 
+    // 未成年者控除：父母・祖父母（直系尊属）は決して未成年にはならないが、ごく稀に
+    // 被相続人が未成年で、その親（＝直系尊属）自身が未成年というケースが理論上あり得るため、
+    // 子パターンと同じ入力欄をそのまま使えるようにしておく。
+    var minorCount = Math.min(parentCount, Math.max(0, Math.round(Number(els.minorCount.value) || 0)));
+    var minorAge = Math.min(MINOR_AGE_LIMIT - 1, Math.max(0, Math.round(Number(els.minorAge.value) || 0)));
+    els.minorAgeRow.style.display = minorCount > 0 ? "" : "none";
+    var minorDeductionEach = minorCount > 0 ? (MINOR_AGE_LIMIT - minorAge) * MINOR_DEDUCTION_PER_YEAR : 0;
+    var minorDeductionTotal = minorDeductionEach * minorCount;
+
+    // 障害者控除：高齢の父母・祖父母が障害者控除の対象になるケースは実務上もよくあるため、
+    // 子パターンと同じ考え方（未成年者控除と重複しない人数の範囲）で対応する。
+    var disabledCount = Math.min(
+      Math.max(0, parentCount - minorCount),
+      Math.max(0, Math.round(Number(els.disabledCount.value) || 0))
+    );
+    var disabledType = els.disabledType.value === "special" ? "special" : "general";
+    var disabledAge = Math.min(DISABLED_AGE_LIMIT - 1, Math.max(0, Math.round(Number(els.disabledAge.value) || 0)));
+    els.disabledTypeRow.style.display = disabledCount > 0 ? "" : "none";
+    els.disabledAgeRow.style.display = disabledCount > 0 ? "" : "none";
+    var disabledPerYear = disabledType === "special" ? DISABLED_DEDUCTION_PER_YEAR_SPECIAL : DISABLED_DEDUCTION_PER_YEAR_GENERAL;
+    var disabilityDeductionEach = disabledCount > 0 ? (DISABLED_AGE_LIMIT - disabledAge) * disabledPerYear : 0;
+    var disabilityDeductionTotal = disabilityDeductionEach * disabledCount;
+
     // 父母・祖父母（直系尊属）は配偶者・一親等の血族の子と同様に2割加算の対象外のため、加算はない。
+    // そのため全員が同じ1人あたり税額（parentTaxEachBase）からスタートし、未成年者控除・障害者控除の
+    // 適用対象者だけがそこから差し引かれる（子パターンの孫養子のような2割加算との組み合わせは発生しない）。
+    var parentTaxEachBase = parentCount > 0 ? parentsAllocatedTaxTotal / parentCount : 0;
+    var plainParentCount = Math.max(0, parentCount - minorCount - disabledCount);
+    var plainParentsTaxTotal = parentTaxEachBase * plainParentCount;
+
+    var minorRemainingTotal = Math.max(0, parentTaxEachBase - minorDeductionEach) * minorCount;
+    var minorExcessRemaining = Math.max(0, minorDeductionEach - parentTaxEachBase) * minorCount;
+    var minorCarryToPlain = Math.min(minorExcessRemaining, plainParentsTaxTotal);
+    plainParentsTaxTotal -= minorCarryToPlain;
+    minorExcessRemaining -= minorCarryToPlain;
+    var minorCarryToSpouse = Math.min(minorExcessRemaining, spouseFinalTax);
+    spouseFinalTax -= minorCarryToSpouse;
+    minorExcessRemaining -= minorCarryToSpouse;
+    var appliedMinorDeduction = minorDeductionTotal - minorExcessRemaining;
+
+    var disabledRemainingTotal = Math.max(0, parentTaxEachBase - disabilityDeductionEach) * disabledCount;
+    var disabledExcessRemaining = Math.max(0, disabilityDeductionEach - parentTaxEachBase) * disabledCount;
+    var disabledCarryToPlain = Math.min(disabledExcessRemaining, plainParentsTaxTotal);
+    plainParentsTaxTotal -= disabledCarryToPlain;
+    disabledExcessRemaining -= disabledCarryToPlain;
+    var disabledCarryToSpouse = Math.min(disabledExcessRemaining, spouseFinalTax);
+    spouseFinalTax -= disabledCarryToSpouse;
+    disabledExcessRemaining -= disabledCarryToSpouse;
+    var appliedDisabilityDeduction = disabilityDeductionTotal - disabledExcessRemaining;
+
+    parentsAllocatedTaxTotal = minorRemainingTotal + disabledRemainingTotal + plainParentsTaxTotal;
+
+    var hasSpecialParentGroups = minorCount > 0 || disabledCount > 0;
     var parentEachFinalTax = parentCount > 0 ? parentsAllocatedTaxTotal / parentCount : 0;
+    var minorParentFinalTaxEach = minorCount > 0 ? minorRemainingTotal / minorCount : 0;
+    var disabledParentFinalTaxEach = disabledCount > 0 ? disabledRemainingTotal / disabledCount : 0;
+    var plainParentFinalTaxEach = plainParentCount > 0 ? plainParentsTaxTotal / plainParentCount : 0;
     var familyPayable = spouseFinalTax + parentsAllocatedTaxTotal;
 
     els.totalTax.textContent = manYen(totalTax);
     els.basicDeduction.textContent = manYen(basicDeduction);
     els.taxableEstate.textContent = manYen(taxableEstate);
     els.familyPayable.textContent = manYen(familyPayable);
+
+    function deductionNote() {
+      var notes = [];
+      if (appliedMinorDeduction > 0) notes.push("未成年者控除 " + manYen(appliedMinorDeduction));
+      if (appliedDisabilityDeduction > 0) notes.push("障害者控除 " + manYen(appliedDisabilityDeduction));
+      return notes.length > 0 ? "（" + notes.join("・") + "を反映済み）" : "";
+    }
 
     if (taxableEstate <= 0) {
       els.verdict.textContent = "相続税はかかりません（遺産総額が基礎控除の範囲内です）";
@@ -973,7 +1048,9 @@
       els.verdictSub.textContent =
         (hasSpouse ? "配偶者の納税額は " + manYen(spouseFinalTax) + "、" : "") +
         "父母・祖父母（直系尊属）の納税額は合計 " + manYen(parentsAllocatedTaxTotal) + "、" +
-        "家族全体の納税額は " + manYen(familyPayable) + " になる見込みです（直系尊属には2割加算はかかりません）。";
+        "家族全体の納税額は " + manYen(familyPayable) + " になる見込みです（直系尊属には2割加算はかかりません）" +
+        deductionNote() +
+        "。";
     }
 
     var rows = [
@@ -991,7 +1068,24 @@
     }
     if (parentCount > 0) {
       rows.push(["父母・祖父母1人あたりの取得額（実際）", manYen(parentActualEach)]);
-      rows.push(["父母・祖父母1人あたりの納税額（2割加算なし）", manYen(parentEachFinalTax)]);
+      if (minorCount > 0) {
+        rows.push(["未成年者控除額（1人あたり、" + minorAge + "歳の場合）", manYen(minorDeductionEach)]);
+        rows.push(["未成年の父母・祖父母1人あたりの納税額（控除後）", manYen(minorParentFinalTaxEach)]);
+      }
+      if (disabledCount > 0) {
+        rows.push([
+          "障害者控除額（1人あたり、" + (disabledType === "special" ? "特別障害者" : "一般障害者") + "・" + disabledAge + "歳の場合）",
+          manYen(disabilityDeductionEach),
+        ]);
+        rows.push(["障害のある父母・祖父母1人あたりの納税額（控除後）", manYen(disabledParentFinalTaxEach)]);
+      }
+      if (hasSpecialParentGroups) {
+        if (plainParentCount > 0) {
+          rows.push(["その他の父母・祖父母1人あたりの納税額", manYen(plainParentFinalTaxEach)]);
+        }
+      } else {
+        rows.push(["父母・祖父母1人あたりの納税額（2割加算なし）", manYen(parentEachFinalTax)]);
+      }
     }
     rows.push(["家族全体の納税額合計", manYen(familyPayable)]);
 
