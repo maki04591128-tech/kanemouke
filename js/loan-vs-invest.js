@@ -2,6 +2,7 @@
   "use strict";
 
   var CAPITAL_GAINS_TAX_RATE = 0.20315;
+  var KOUJO_CREDIT_RATE = 0.007;
 
   var els = {
     balance: document.getElementById("kurioage-balance"),
@@ -10,6 +11,12 @@
     lump: document.getElementById("kurioage-lump"),
     investRate: document.getElementById("kurioage-investRate"),
     delayYears: document.getElementById("kurioage-delayYears"),
+    koujo: document.getElementById("kurioage-koujo"),
+    koujoLimitRow: document.getElementById("kurioage-koujoLimitRow"),
+    koujoLimit: document.getElementById("kurioage-koujoLimit"),
+    koujoYearsRow: document.getElementById("kurioage-koujoYearsRow"),
+    koujoYears: document.getElementById("kurioage-koujoYears"),
+    koujoYearsOut: document.getElementById("kurioage-koujoYearsOut"),
     loanRateOut: document.getElementById("kurioage-loanRateOut"),
     termYearsOut: document.getElementById("kurioage-termYearsOut"),
     investRateOut: document.getElementById("kurioage-investRateOut"),
@@ -18,10 +25,14 @@
     interestSaved: document.getElementById("kurioage-result-interest-saved"),
     investProfit: document.getElementById("kurioage-result-invest-profit"),
     delayDiff: document.getElementById("kurioage-result-delay-diff"),
+    koujoLossCard: document.getElementById("kurioage-koujoLossCard"),
+    koujoLoss: document.getElementById("kurioage-result-koujo-loss"),
     detailInterestSaved: document.getElementById("kurioage-detail-interest-saved"),
     detailInvestProfit: document.getElementById("kurioage-detail-invest-profit"),
     detailInvestProfitAfterTax: document.getElementById("kurioage-detail-invest-profit-after-tax"),
     detailDelayDiff: document.getElementById("kurioage-detail-delay-diff"),
+    koujoLossDetailRow: document.getElementById("kurioage-koujoLossDetailRow"),
+    detailKoujoLoss: document.getElementById("kurioage-detail-koujo-loss"),
     conclusion: document.getElementById("kurioage-conclusion"),
   };
 
@@ -74,7 +85,7 @@
         }
       }
       if (m % 12 === 0) {
-        yearly.push({ month: m, cumInterest: cumInterest });
+        yearly.push({ month: m, cumInterest: cumInterest, balance: balance });
       }
     }
 
@@ -86,6 +97,18 @@
     };
   }
 
+  // 住宅ローン控除の概算：各年末残高（上限＝借入限度額）×0.7%をyears年分合計する。
+  // 所得税額・住民税所得割額による上限（控除しきれない額が生じるケース）は考慮しない簡易試算で、
+  // より詳しい金額は「住宅ローン控除シミュレーター」タブ（js/jutaku-loan-koujo.js）で確認する前提。
+  function creditTotalOverYears(getYearEndBalance, years, limit) {
+    var total = 0;
+    for (var y = 1; y <= years; y++) {
+      var balance = Math.max(0, getYearEndBalance(y));
+      total += Math.min(balance, limit) * KOUJO_CREDIT_RATE;
+    }
+    return total;
+  }
+
   function render() {
     var balance = Math.max(0, Number(els.balance.value) || 0);
     var loanRate = Number(els.loanRate.value);
@@ -93,11 +116,17 @@
     var lump = Math.min(Math.max(0, Number(els.lump.value) || 0), balance);
     var investRate = Number(els.investRate.value);
     var delayYears = Math.min(Math.max(0, Number(els.delayYears.value) || 0), Math.max(0, termYears - 1));
+    var koujoOn = els.koujo.value === "yes";
+    var koujoLimit = Math.max(0, Number(els.koujoLimit.value) || 0);
+    var koujoYears = Math.min(Math.max(0, Number(els.koujoYears.value) || 0), termYears);
 
     els.loanRateOut.textContent = loanRate.toFixed(2) + " %";
     els.termYearsOut.textContent = termYears + " 年";
     els.investRateOut.textContent = investRate.toFixed(1) + " %";
     els.delayYearsOut.textContent = delayYears + " 年";
+    els.koujoYearsOut.textContent = koujoYears + " 年";
+    els.koujoLimitRow.style.display = koujoOn ? "" : "none";
+    els.koujoYearsRow.style.display = koujoOn ? "" : "none";
 
     var termMonths = termYears * 12;
     var payment = monthlyPayment(balance, loanRate, termMonths);
@@ -131,6 +160,33 @@
     var investProfit = investFV - lump;
     var investProfitAfterTax = investProfit * (1 - CAPITAL_GAINS_TAX_RATE);
 
+    // 住宅ローン控除への影響（任意）：繰上返済しない場合の年末残高と、繰上返済した場合（先延ばしありなら
+    // phase1→phase2）の年末残高を、それぞれkoujoYears年分合計して控除額を概算し、その差を減少額とする。
+    var koujoLoss = 0;
+    if (koujoOn && koujoYears > 0) {
+      var getOriginalBalance = function (y) {
+        return originalYearly[y - 1] ? originalYearly[y - 1].balance : 0;
+      };
+      var getPrepaidBalance = function (y) {
+        if (y <= delayYears) {
+          return phase1.yearly[y - 1] ? phase1.yearly[y - 1].balance : 0;
+        }
+        var idx = y - delayYears - 1;
+        return phase2.yearly[idx] ? phase2.yearly[idx].balance : 0;
+      };
+      var creditOriginal = creditTotalOverYears(getOriginalBalance, koujoYears, koujoLimit);
+      var creditPrepaid = creditTotalOverYears(getPrepaidBalance, koujoYears, koujoLimit);
+      koujoLoss = Math.max(0, creditOriginal - creditPrepaid);
+    }
+    var netInterestSaved = interestSaved - koujoLoss;
+
+    els.koujoLossCard.style.display = koujoOn ? "" : "none";
+    els.koujoLossDetailRow.style.display = koujoOn ? "" : "none";
+    if (koujoOn) {
+      els.koujoLoss.textContent = manYen(koujoLoss);
+      els.detailKoujoLoss.textContent = yen(koujoLoss);
+    }
+
     els.monthsSaved.textContent = monthsSaved > 0 ? monthsToText(monthsSaved) : "-";
     els.interestSaved.textContent = manYen(interestSaved);
     els.investProfit.textContent = manYen(investProfit);
@@ -140,16 +196,20 @@
     els.detailInvestProfitAfterTax.textContent = yen(investProfitAfterTax);
     els.detailDelayDiff.textContent = (delayDiff > 0 ? "+" : delayDiff < 0 ? "-" : "±") + yen(Math.abs(delayDiff));
 
-    var diff = investProfit - interestSaved;
+    var compareInterestSaved = koujoOn ? netInterestSaved : interestSaved;
+    var diff = investProfit - compareInterestSaved;
     var conclusionText;
     if (lump <= 0) {
       conclusionText = "繰上返済 or 投資に回す資金を入力すると、比較結果がここに表示されます。";
     } else if (Math.abs(diff) < 1000) {
       conclusionText = "この条件では、繰上返済と投資はほぼ同程度の効果です。";
     } else if (diff > 0) {
-      conclusionText = "この条件では、投資に回した場合の運用益（税引前）の方が、繰上返済による利息軽減額より約 " + manYen(diff) + " 大きくなります。ただし運用益には税金や価格変動リスクがある一方、繰上返済の効果はほぼ確定している点にご留意ください。";
+      conclusionText = "この条件では、投資に回した場合の運用益（税引前）の方が、繰上返済による利息軽減額" + (koujoOn ? "（住宅ローン控除の減少額を差し引いた後）" : "") + "より約 " + manYen(diff) + " 大きくなります。ただし運用益には税金や価格変動リスクがある一方、繰上返済の効果はほぼ確定している点にご留意ください。";
     } else {
-      conclusionText = "この条件では、繰上返済による利息軽減額の方が、投資に回した場合の運用益（税引前）より約 " + manYen(-diff) + " 大きくなります。繰上返済はリスクなく確実に効果が得られる一方、手元資金の流動性は下がる点にご留意ください。";
+      conclusionText = "この条件では、繰上返済による利息軽減額" + (koujoOn ? "（住宅ローン控除の減少額を差し引いた後）" : "") + "の方が、投資に回した場合の運用益（税引前）より約 " + manYen(-diff) + " 大きくなります。繰上返済はリスクなく確実に効果が得られる一方、手元資金の流動性は下がる点にご留意ください。";
+    }
+    if (koujoOn && koujoLoss > 0) {
+      conclusionText += "住宅ローン控除への影響を考慮すると、繰上返済による利息軽減額 " + manYen(interestSaved) + " から、控除期間の残り" + koujoYears + "年間で目減りする控除額の概算 " + manYen(koujoLoss) + " を差し引いた、実質約 " + manYen(netInterestSaved) + " が繰上返済の正味の効果になります。";
     }
     if (delayYears > 0 && lump > 0) {
       conclusionText += "「繰上返済を実行するまでの年数」を" + delayYears + "年に設定しているため、それまでの" + delayYears + "年間は資金を運用に回し、その評価額（" + manYen(lumpGrown) + "）を" + delayYears + "年後の繰上返済に充てる前提で試算しています。今すぐ実行する場合と比べた利息軽減額の差は" + (delayDiff >= 0 ? "+" : "-") + manYen(Math.abs(delayDiff)) + "です。";
@@ -226,9 +286,10 @@
     if (window.renderChartDataTable) window.renderChartDataTable("kurioage-growthDataTable", chart);
   }
 
-  [els.balance, els.loanRate, els.termYears, els.lump, els.investRate, els.delayYears].forEach(function (el) {
+  [els.balance, els.loanRate, els.termYears, els.lump, els.investRate, els.delayYears, els.koujoLimit, els.koujoYears].forEach(function (el) {
     el.addEventListener("input", render);
   });
+  els.koujo.addEventListener("change", render);
 
   render();
 })();
