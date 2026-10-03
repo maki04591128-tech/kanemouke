@@ -6,15 +6,43 @@
   var RESIDENT_TAX_CREDIT_RATE_CAP = 0.05;
   var RESIDENT_TAX_CREDIT_YEN_CAP = 97500;
 
-  // 2024・2025年入居を前提とした現行制度の借入限度額（円）と控除期間
+  // 2024〜2028年入居を対象とした現行制度の借入限度額（円）と控除期間。
+  // 新築：認定住宅・ZEH水準省エネ住宅・その他の住宅（経過措置）・既存（中古）の各区分は、国税庁
+  // タックスアンサーNo.1211-1（令和8年4月1日現在法令等）の借入限度額一覧表で、2024〜2028年（令和6〜10年）
+  // 入居まで同一の金額・控除期間が示されているため、入居年によらない固定値として扱う。
   var CATEGORY_TABLE = {
     "new-nintei": { label: "新築：認定住宅（長期優良住宅・低炭素住宅）", limitNormal: 45000000, limitKosodate: 50000000, period: 13, kosodateApplicable: true },
     "new-zeh": { label: "新築：ZEH水準省エネ住宅", limitNormal: 35000000, limitKosodate: 45000000, period: 13, kosodateApplicable: true },
-    "new-shoene": { label: "新築：省エネ基準適合住宅", limitNormal: 30000000, limitKosodate: 40000000, period: 13, kosodateApplicable: true },
     "new-sonota": { label: "新築：その他の住宅（2023年末までに建築確認・経過措置）", limitNormal: 20000000, limitKosodate: 20000000, period: 10, kosodateApplicable: false },
     "used-nintei": { label: "既存（中古）：認定住宅等・ZEH水準省エネ住宅・省エネ基準適合住宅", limitNormal: 30000000, limitKosodate: 30000000, period: 10, kosodateApplicable: false },
     "used-sonota": { label: "既存（中古）：その他の住宅", limitNormal: 20000000, limitKosodate: 20000000, period: 10, kosodateApplicable: false },
   };
+
+  // 新築：省エネ基準適合住宅のみ、入居年（令和6〜10年）に応じて借入限度額・控除期間が段階的に
+  // 縮小する（同タックスアンサーの借入限度額一覧表より）。2024・2025年（令和6・7年）は3,000万円
+  // （特例対象個人4,000万円）、2026年（令和8年）は2,000万円（特例対象個人3,000万円）でともに13年間、
+  // 2027・2028年（令和9・10年）は特例対象個人の上乗せが無くなり2,000万円・10年間（建築確認等の期限
+  // 要件あり、経過措置の「その他の住宅」と同じ扱い）になる。
+  var SHOENE_BY_YEAR = {
+    "2024_2025": { limitNormal: 30000000, limitKosodate: 40000000, period: 13, kosodateApplicable: true },
+    "2026": { limitNormal: 20000000, limitKosodate: 30000000, period: 13, kosodateApplicable: true },
+    "2027_2028": { limitNormal: 20000000, limitKosodate: 20000000, period: 10, kosodateApplicable: false },
+  };
+  var SHOENE_LABEL = "新築：省エネ基準適合住宅";
+
+  function resolveCategory(categoryKey, yearBucket) {
+    if (categoryKey === "new-shoene") {
+      var byYear = SHOENE_BY_YEAR[yearBucket] || SHOENE_BY_YEAR["2026"];
+      return {
+        label: SHOENE_LABEL,
+        limitNormal: byYear.limitNormal,
+        limitKosodate: byYear.limitKosodate,
+        period: byYear.period,
+        kosodateApplicable: byYear.kosodateApplicable,
+      };
+    }
+    return CATEGORY_TABLE[categoryKey];
+  }
 
   // 所得税の速算表（令和2年分以降）
   var TAX_BRACKETS = [
@@ -57,6 +85,7 @@
     principal: document.getElementById("koujo-principal"),
     loanRate: document.getElementById("koujo-loanRate"),
     loanYears: document.getElementById("koujo-loanYears"),
+    moveInYear: document.getElementById("koujo-moveInYear"),
     category: document.getElementById("koujo-category"),
     kosodateRow: document.getElementById("koujo-kosodateRow"),
     kosodate: document.getElementById("koujo-kosodate"),
@@ -199,7 +228,8 @@
     var loanRate = Number(els.loanRate.value);
     var loanYears = Math.max(1, Number(els.loanYears.value) || 1);
     var categoryKey = els.category.value;
-    var category = CATEGORY_TABLE[categoryKey];
+    var yearBucket = els.moveInYear.value;
+    var category = resolveCategory(categoryKey, yearBucket);
     var kosodate = els.kosodate.value === "yes";
     var grossIncome = clampNonNegative(els.salaryIncome.value);
     var hasSpouse = els.hasSpouse.value === "yes";
@@ -364,6 +394,7 @@
     els.principal,
     els.loanRate,
     els.loanYears,
+    els.moveInYear,
     els.category,
     els.kosodate,
     els.salaryIncome,
