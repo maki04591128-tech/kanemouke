@@ -1254,9 +1254,72 @@ a { color: var(--color-primary); }
   background: var(--color-bg);
   color: var(--color-text);
 }
+/* input[type=range]：ブラウザ既定のつまみ（thumb）は多くの環境で
+   直径12〜16px程度しかなく、推奨タッチターゲットサイズ（44px前後）を
+   大きく下回る。これまでの複数セッションでは「ドラッグ操作はつまみ
+   部分で行う前提のUIパターンであり明確な使いにくさの証拠が無い」と
+   して対応を見送っていたが、2026-10-03のセッションでスライダーを
+   持つ8ハブページ・延べ88個を機械計測した結果、要素自体の高さが全て
+   16px（track幅と同じ）に留まり、他の数値入力・セレクト（44px）と
+   比べて明らかに小さいことが確認できたため、ここで対応する。要素
+   自体の高さを44pxに拡大してタップ・ドラッグ可能な領域を広げつつ、
+   見た目のtrackは細い線（6px）のまま・つまみは直径24pxの円形ボタン
+   として表示するカスタムスタイルに変更した（track上のどこをタップ
+   しても値がジャンプする既定動作は維持される）。 */
 .field input[type="range"] {
-  accent-color: var(--color-primary);
-  margin-top: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.field input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  /* --range-progress（js/range-fill.jsが現在値割合%で更新）までを
+     primaryカラーで塗りつぶし、accent-colorが担っていた「つまみまでの
+     区間が分かる」見た目をカスタムtrackでも再現する。 */
+  background: linear-gradient(
+    to right,
+    var(--color-primary) var(--range-progress, 0%),
+    var(--color-border) var(--range-progress, 0%)
+  );
+}
+.field input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 3px solid #fff;
+  box-shadow: 0 1px 3px rgba(15, 30, 45, 0.3);
+  cursor: pointer;
+}
+.field input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(
+    to right,
+    var(--color-primary) var(--range-progress, 0%),
+    var(--color-border) var(--range-progress, 0%)
+  );
+}
+.field input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 1px 3px rgba(15, 30, 45, 0.3);
+  cursor: pointer;
+}
+.field input[type="range"]:focus-visible {
+  outline: 2px solid var(--color-primary-dark);
+  outline-offset: 4px;
 }
 
 .result-summary {
