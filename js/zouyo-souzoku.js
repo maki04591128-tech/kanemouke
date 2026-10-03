@@ -81,18 +81,39 @@
     return taxByBrackets(taxable, KOYEN_GIFT_TAX_BRACKETS);
   }
 
-  // 相続人構成から法定相続人数・法定相続分を判定（配偶者＋子〈第1順位〉のケースのみ対応。js/souzokuzei.js と同じ）
-  function legalHeirs(hasSpouse, childCount) {
+  // 相続人構成から法定相続人数・法定相続分を判定（配偶者＋子〈第1順位〉のケースのみ対応。js/souzokuzei.js と同じ）。
+  // 基礎控除額・生命保険金等の非課税枠の計算に使う「法定相続人の数」(count)は、養子が
+  // いる場合に実子がいれば1人まで・実子がいなければ2人までしか数えられない制限があるため、
+  // その上限を適用した人数にする。一方、実際の遺産分割（spouseShare・childShareEach）は
+  // 養子も含めた実際の子の人数（childCount）どおりに均等按分する（この上限は基礎控除等の
+  // 計算上の人数カウントのみに影響し、養子が実際に相続できる財産を制限するものではない）。
+  function legalHeirs(hasSpouse, childCount, adoptedCount) {
+    var nonAdoptedChildCount = Math.max(0, childCount - adoptedCount);
+    var adoptedCap = nonAdoptedChildCount > 0 ? 1 : 2;
+    var countedAdoptedCount = Math.min(adoptedCount, adoptedCap);
+    var countedChildCount = nonAdoptedChildCount + countedAdoptedCount;
     if (hasSpouse) {
       if (childCount > 0) {
-        return { count: 1 + childCount, spouseShare: 0.5, childShareEach: 0.5 / childCount };
+        return {
+          count: 1 + countedChildCount,
+          spouseShare: 0.5,
+          childShareEach: 0.5 / childCount,
+          adoptedCap: adoptedCap,
+          countedAdoptedCount: countedAdoptedCount,
+        };
       }
-      return { count: 1, spouseShare: 1, childShareEach: 0 };
+      return { count: 1, spouseShare: 1, childShareEach: 0, adoptedCap: adoptedCap, countedAdoptedCount: 0 };
     }
     if (childCount > 0) {
-      return { count: childCount, spouseShare: 0, childShareEach: 1 / childCount };
+      return {
+        count: countedChildCount,
+        spouseShare: 0,
+        childShareEach: 1 / childCount,
+        adoptedCap: adoptedCap,
+        countedAdoptedCount: countedAdoptedCount,
+      };
     }
-    return { count: 0, spouseShare: 0, childShareEach: 0 };
+    return { count: 0, spouseShare: 0, childShareEach: 0, adoptedCap: adoptedCap, countedAdoptedCount: 0 };
   }
 
   /**
@@ -318,8 +339,12 @@
    *   disabledCount: 障害のある子の人数（任意、既定0。childCount－grandchildAdoptedCount－minorCountを上限にクランプ）
    *   disabledType: "general"（一般障害者）または"special"（特別障害者。既定general）
    *   disabledAge: 障害のある子の年齢・代表年齢（任意、既定0）
-   *   grandchildAdoptedCount: 子のうち「孫を養子にした人」（代襲相続人を除く）の人数（任意、既定0。childCountを
-   *     上限にクランプ。相続税額の2割加算の対象で、未成年者控除・障害者控除の対象の子とは重複しない前提の簡易モデル）
+   *   adoptedCount: 子のうち「養子」（孫を養子にした人を含む）の人数（任意、既定0。childCountを上限にクランプ。
+   *     基礎控除額・生命保険金等の非課税枠の計算に使う「法定相続人の数」に数える人数には、実子がいる場合は1人、
+   *     いない場合は2人までの上限がある。実際の遺産分割・相続税額の計算では養子も実子と同じ人数として扱う）
+   *   grandchildAdoptedCount: 子のうち「孫を養子にした人」（代襲相続人を除く）の人数（任意、既定0。childCountと
+   *     adoptedCountを上限にクランプ。相続税額の2割加算の対象で、未成年者控除・障害者控除の対象の子とは
+   *     重複しない前提の簡易モデル）
    *   hasLot: boolean（自宅などの土地に小規模宅地等の特例を適用するか。任意、既定false）
    *   lotType: "residential" | "business" | "rental"（土地の区分。任意、既定residential）
    *   lotValue: 特例適用前の土地の相続税評価額（円、相続財産総額に含む分。任意、既定0）
@@ -340,10 +365,12 @@
     var lookbackPeriod = Number(input.lookbackPeriod) === 3 ? 3 : 7;
     var lifeInsuranceAmount = clampNonNegative(input.lifeInsurance);
     var retirementBenefitAmount = clampNonNegative(input.retirementBenefit);
+    var adoptedCount = Math.min(childCount, clampNonNegativeInt(input.adoptedCount));
     // 2割加算：子のうち「孫を養子にした人（代襲相続人を除く）」は、未成年者控除・障害者控除の対象の子とは
     // 重複しない別の子を想定した簡易モデル（js/souzokuzei.js と同じ）のため、残りの子の人数
     // （childCount－grandchildAdoptedCount）の範囲で未成年者控除・障害者控除の人数を数える。
-    var grandchildAdoptedCount = Math.min(childCount, clampNonNegativeInt(input.grandchildAdoptedCount));
+    // 孫養子は養子の一種のため、人数はadoptedCountを上限にクランプする。
+    var grandchildAdoptedCount = Math.min(childCount, adoptedCount, clampNonNegativeInt(input.grandchildAdoptedCount));
     var nonGrandchildChildCount = Math.max(0, childCount - grandchildAdoptedCount);
     var minorCount = Math.min(nonGrandchildChildCount, clampNonNegativeInt(input.minorCount));
     var minorAge = Math.min(MINOR_AGE_LIMIT - 1, Math.max(0, clampNonNegativeInt(input.minorAge)));
@@ -359,7 +386,7 @@
     var lotValueAmount2 = clampNonNegative(input.lotValue2);
     var lotArea2 = clampNonNegative(input.lotArea2);
 
-    var heirs = legalHeirs(hasSpouse, childCount);
+    var heirs = legalHeirs(hasSpouse, childCount, adoptedCount);
     var basicDeduction = BASIC_DEDUCTION_FIXED + BASIC_DEDUCTION_PER_HEIR * heirs.count;
 
     // 生命保険金・死亡退職金の非課税枠（それぞれ別枠で「500万円×法定相続人の数」まで）。
@@ -457,6 +484,7 @@
       disabledCount: disabledCount,
       disabledType: disabledType,
       disabledAge: disabledAge,
+      adoptedCount: adoptedCount,
       grandchildAdoptedCount: grandchildAdoptedCount,
 
       scenarioA: {
@@ -528,6 +556,7 @@
       disabledCount: baseInput.disabledCount,
       disabledType: baseInput.disabledType,
       disabledAge: baseInput.disabledAge,
+      adoptedCount: baseInput.adoptedCount,
       grandchildAdoptedCount: baseInput.grandchildAdoptedCount,
       hasLot: baseInput.hasLot,
       lotType: baseInput.lotType,
@@ -592,6 +621,8 @@
     disabledRow: document.getElementById("zouyo-disabledRow"),
     disabledTypeRow: document.getElementById("zouyo-disabledTypeRow"),
     disabledAgeRow: document.getElementById("zouyo-disabledAgeRow"),
+    adoptedCount: document.getElementById("zouyo-adoptedCount"),
+    adoptedRow: document.getElementById("zouyo-adoptedRow"),
     grandchildAdoptedCount: document.getElementById("zouyo-grandchildAdoptedCount"),
     grandchildRow: document.getElementById("zouyo-grandchildRow"),
     hasLot: document.getElementById("zouyo-hasLot"),
@@ -647,6 +678,8 @@
       els.minorCount.max = String(childCount);
       els.disabledRow.style.display = "";
       els.disabledCount.max = String(childCount);
+      els.adoptedRow.style.display = "";
+      els.adoptedCount.max = String(childCount);
       els.grandchildRow.style.display = "";
       els.grandchildAdoptedCount.max = String(childCount);
     } else {
@@ -655,6 +688,7 @@
       els.disabledRow.style.display = "none";
       els.disabledTypeRow.style.display = "none";
       els.disabledAgeRow.style.display = "none";
+      els.adoptedRow.style.display = "none";
       els.grandchildRow.style.display = "none";
     }
   }
@@ -671,7 +705,12 @@
     var childCount = Math.max(0, Math.min(10, Math.round(Number(els.childCount.value) || 0)));
     updateVisibility(childCount);
 
-    var grandchildAdoptedCount = Math.min(childCount, Math.max(0, Math.round(Number(els.grandchildAdoptedCount.value) || 0)));
+    var adoptedCount = Math.min(childCount, Math.max(0, Math.round(Number(els.adoptedCount.value) || 0)));
+    var grandchildAdoptedCount = Math.min(
+      childCount,
+      adoptedCount,
+      Math.max(0, Math.round(Number(els.grandchildAdoptedCount.value) || 0))
+    );
     var nonGrandchildChildCount = Math.max(0, childCount - grandchildAdoptedCount);
     var minorCount = Math.min(nonGrandchildChildCount, Math.max(0, Math.round(Number(els.minorCount.value) || 0)));
     els.minorAgeRow.style.display = minorCount > 0 ? "" : "none";
@@ -708,6 +747,7 @@
       disabledCount: els.disabledCount.value,
       disabledType: els.disabledType.value,
       disabledAge: els.disabledAge.value,
+      adoptedCount: els.adoptedCount.value,
       grandchildAdoptedCount: els.grandchildAdoptedCount.value,
       hasLot: hasLot,
       lotType: els.lotType.value,
@@ -764,8 +804,15 @@
     var rows = [
       ["【シナリオA：生前贈与なし（相続のみ）】", ""],
       ["相続財産総額", manYen(r.estateTotal)],
+      ["法定相続人の数（全シナリオ共通）", r.heirs.count + " 人"],
       ["基礎控除額", manYen(r.basicDeduction)],
     ];
+    if (r.adoptedCount > 0) {
+      rows.push([
+        "うち法定相続人の数に数える養子の人数（上限" + r.heirs.adoptedCap + "人）",
+        r.heirs.countedAdoptedCount + " 人" + (r.adoptedCount > r.heirs.countedAdoptedCount ? "（入力は" + r.adoptedCount + "人）" : ""),
+      ]);
+    }
     if (r.lifeInsuranceAmount > 0) {
       rows.push(["生命保険金の非課税枠（上限 " + manYen(r.insuranceCap) + "、全シナリオ共通）", manYen(r.lifeInsuranceExemption)]);
     }
@@ -941,6 +988,7 @@
     els.disabledCount,
     els.disabledType,
     els.disabledAge,
+    els.adoptedCount,
     els.grandchildAdoptedCount,
     els.hasLot,
     els.lotType,
