@@ -52,7 +52,7 @@
   }
   var RESIDENT_BASIC_DEDUCTION = 430000; // 住民税の基礎控除
 
-  var INCOME_SPOUSE_DEDUCTION = 380000; // 所得税の配偶者控除（同一生計配偶者、年収103万円以下想定の簡易値）
+  var INCOME_SPOUSE_DEDUCTION = 380000; // 所得税の配偶者控除（同一生計配偶者、年収136万円以下〈令和8年分以降〉想定の簡易値）
   var RESIDENT_SPOUSE_DEDUCTION = 330000; // 住民税の配偶者控除
   var INCOME_DEPENDENT_DEDUCTION = 380000; // 所得税の扶養控除（一般の扶養親族、1人あたり）
   var RESIDENT_DEPENDENT_DEDUCTION = 330000; // 住民税の扶養控除（1人あたり）
