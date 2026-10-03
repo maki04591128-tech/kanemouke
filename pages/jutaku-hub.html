@@ -629,6 +629,15 @@
 <input id="koujo-loanYears" inputmode="numeric" max="50" min="1" step="1" type="number" value="35"/>
 </div>
 <div class="field">
+<label for="koujo-moveInYear">入居（予定）年</label>
+<select id="koujo-moveInYear">
+<option value="2024_2025">2024年・2025年</option>
+<option selected="" value="2026">2026年</option>
+<option value="2027_2028">2027年・2028年</option>
+</select>
+<p class="field-hint">新築：省エネ基準適合住宅は入居年によって借入限度額が下がります（認定住宅・ZEH水準省エネ住宅・その他の区分は2024〜2028年入居で共通）。2029年以降に入居予定の場合は、本ページ公開時点で国税庁の資料に金額の記載がないため、最新情報を国税庁のサイト等でご確認ください。</p>
+</div>
+<div class="field">
 <label for="koujo-category">住宅の区分</label>
 <select id="koujo-category">
 <option value="new-nintei">新築：認定住宅（長期優良住宅・低炭素住宅）</option>
@@ -638,7 +647,7 @@
 <option value="used-nintei">既存（中古）：認定住宅等・ZEH水準省エネ住宅・省エネ基準適合住宅</option>
 <option value="used-sonota">既存（中古）：その他の住宅</option>
 </select>
-<p class="field-hint">2024年・2025年に入居する場合の現行制度に基づく区分です。証明書の種類は住宅の売買契約書や建築確認の書類でご確認ください。</p>
+<p class="field-hint">証明書の種類は住宅の売買契約書や建築確認の書類でご確認ください。</p>
 </div>
 <div class="field" id="koujo-kosodateRow">
 <label for="koujo-kosodate">子育て世帯・若者夫婦世帯に該当</label>
