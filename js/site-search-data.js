@@ -185,6 +185,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "住宅ローン控除はいつまで？初年度の確定申告期限と年末調整に間に合わなかった場合の対処法 完全ガイド",
+    "desc": "入居年ごとの還付申告期限早見表、2年目以降の年末調整の書類提出期限と間に合わなかった場合の対処法をまとめました。",
+    "href": "pages/jutaku-loan-koujo-shimekiri-guide.html",
+    "category": "住宅ローン",
+    "type": "guide"
+  },
+  {
     "title": "賃貸vs購入どっちが得？｜「正味支出」で比較する住まい選びの考え方 完全ガイド",
     "desc": "家賃とローン返済額の単純比較では誤る理由、売却時の資産価値を差し引いた「正味支出」の考え方、条件別の試算例2件、結論を左右する要因を解説します。",
     "href": "pages/chintai-kounyu-guide.html",
