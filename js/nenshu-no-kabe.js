@@ -62,9 +62,20 @@
   var WALL_HAIGUSHA_MAX = 1690000; // 配偶者特別控除が満額(配偶者側38万円)から逓減し始める壁
   var WALL_HAIGUSHA_ZERO = 2070000; // 配偶者特別控除が消滅する壁（207万円以上）
 
+  // ひとり親控除・寡婦控除（いずれも本人の合計所得金額500万円以下が条件。本シミュレーターでは
+  // 簡易化のため所得制限の判定は行わず、入力された区分をそのまま適用する）。この欄で本人がひとり親控除・
+  // 寡婦控除の対象を選んだ場合、本人の所得税・住民税の壁（103万円の壁／178万円・住民税の壁）は
+  // この控除額の分だけ高いラインに移動する（js/nenshu-tedori.jsと同じ値。国税庁タックスアンサー
+  // No.1171・No.1170、総務省資料より）。
+  var INCOME_SINGLE_PARENT_DEDUCTION = 350000; // 所得税のひとり親控除
+  var RESIDENT_SINGLE_PARENT_DEDUCTION = 300000; // 住民税のひとり親控除
+  var INCOME_WIDOW_DEDUCTION = 270000; // 所得税の寡婦控除
+  var RESIDENT_WIDOW_DEDUCTION = 260000; // 住民税の寡婦控除
+
   var els = {
     income: document.getElementById("kabe-income"),
     insuranceApplies: document.getElementById("kabe-insuranceApplies"),
+    singleParentStatus: document.getElementById("kabe-singleParentStatus"),
     verdict: document.getElementById("kabe-verdict"),
     verdictSub: document.getElementById("kabe-verdictSub"),
     salaryIncome: document.getElementById("kabe-result-salary-income"),
@@ -115,14 +126,34 @@
     return 0;
   }
 
+  // ひとり親控除・寡婦控除の区分から、所得税・住民税それぞれの追加控除額を返す
+  function extraIncomeDeductionOf(singleParentStatus) {
+    if (singleParentStatus === "hitorioya") return INCOME_SINGLE_PARENT_DEDUCTION;
+    if (singleParentStatus === "kafu") return INCOME_WIDOW_DEDUCTION;
+    return 0;
+  }
+  function extraResidentDeductionOf(singleParentStatus) {
+    if (singleParentStatus === "hitorioya") return RESIDENT_SINGLE_PARENT_DEDUCTION;
+    if (singleParentStatus === "kafu") return RESIDENT_WIDOW_DEDUCTION;
+    return 0;
+  }
+
+  // 所得税・住民税それぞれの壁（103万円の壁）は、ひとり親控除・寡婦控除の分だけ高いラインに移動する
+  function incomeTaxWallOf(singleParentStatus) {
+    return WALL_INCOME_TAX + extraIncomeDeductionOf(singleParentStatus);
+  }
+  function residentTaxWallOf(singleParentStatus) {
+    return WALL_RESIDENT_TAX + extraResidentDeductionOf(singleParentStatus);
+  }
+
   // 年収から所得税・住民税・社会保険料（概算）を差し引いた手取り額を試算
-  function takeHomeOf(income, insuranceApplies) {
+  function takeHomeOf(income, insuranceApplies, singleParentStatus) {
     var salaryIncomeForIncomeTax = Math.max(0, income - salaryDeductionIncomeTax(income));
-    var taxableIncomeTax = Math.max(0, salaryIncomeForIncomeTax - incomeBasicDeduction(income));
+    var taxableIncomeTax = Math.max(0, salaryIncomeForIncomeTax - incomeBasicDeduction(income) - extraIncomeDeductionOf(singleParentStatus));
     var incomeTax = taxByBracket(taxableIncomeTax) * (1 + RECONSTRUCTION_TAX_RATE);
 
     var salaryIncomeForResidentTax = Math.max(0, income - salaryDeductionResidentTax(income));
-    var taxableResidentTax = Math.max(0, salaryIncomeForResidentTax - RESIDENT_BASIC_DEDUCTION);
+    var taxableResidentTax = Math.max(0, salaryIncomeForResidentTax - RESIDENT_BASIC_DEDUCTION - extraResidentDeductionOf(singleParentStatus));
     var residentTax = taxableResidentTax > 0 ? taxableResidentTax * RESIDENT_TAX_RATE + RESIDENT_PER_CAPITA : 0;
 
     // 加入条件に該当する場合は、2026年10月の賃金要件撤廃により年収に関わらず社会保険料が発生する
@@ -171,8 +202,12 @@
   function render() {
     var income = clampNonNegative(els.income.value);
     var insuranceApplies = els.insuranceApplies.value === "yes";
+    var singleParentStatus = els.singleParentStatus.value;
 
-    var r = takeHomeOf(income, insuranceApplies);
+    var r = takeHomeOf(income, insuranceApplies, singleParentStatus);
+    var incomeWall = incomeTaxWallOf(singleParentStatus);
+    var residentWall = residentTaxWallOf(singleParentStatus);
+    var hasSingleParentDeduction = singleParentStatus !== "none";
 
     els.salaryIncome.textContent = manYen(r.salaryIncome);
     els.incomeTax.textContent = yen(r.incomeTax);
@@ -192,15 +227,15 @@
       els.verdictSub.textContent =
         "年収 " + manYen(income) + " に対する手取りの目安は " + manYen(r.takeHome) +
         "。社会保険料の負担が始まることで、壁を超えた直後は手取りが一時的に伸び悩む・減ることがあります。";
-    } else if (income > WALL_INCOME_TAX) {
+    } else if (income > incomeWall) {
       els.verdict.textContent =
-        "所得税の壁（178万円）は超えていますが、社会保険の壁（" + manYen(WALL_130) + "）は手前です";
+        "所得税の壁（" + manYen(incomeWall) + "）は超えていますが、社会保険の壁（" + manYen(WALL_130) + "）は手前です";
       els.verdictSub.textContent =
         "あと " + manYen(WALL_130 - income) + " で社会保険の壁に到達します。手取りの目安は " + manYen(r.takeHome) + "。";
-    } else if (income > WALL_RESIDENT_TAX) {
+    } else if (income > residentWall) {
       els.verdict.textContent = "住民税はかかりますが、所得税・社会保険料の壁はまだ手前です";
       els.verdictSub.textContent =
-        "所得税の壁（178万円）まであと " + manYen(WALL_INCOME_TAX - income) + "。手取りの目安は " + manYen(r.takeHome) + "。";
+        "所得税の壁（" + manYen(incomeWall) + "）まであと " + manYen(incomeWall - income) + "。手取りの目安は " + manYen(r.takeHome) + "。";
     } else {
       els.verdict.textContent = "どの壁も超えていません。税金・社会保険料はほとんど発生しない範囲です";
       els.verdictSub.textContent = "手取りの目安は年収とほぼ同じ " + manYen(r.takeHome) + " です。";
@@ -214,8 +249,8 @@
       : wallRow("130万円の壁（社会保険）", WALL_130, income, "勤務先の加入条件（週20時間以上等）に該当しない場合の、配偶者等の扶養から外れるライン");
 
     var rows = [
-      wallRow("住民税（目安）", WALL_RESIDENT_TAX, income, "自治体により非課税ラインは異なります"),
-      wallRow("所得税（いわゆる103万円の壁）", WALL_INCOME_TAX, income, "令和8・9年分は時限特例で178万円（令和10年分以後は168万円に戻る予定）"),
+      wallRow("住民税（目安）", residentWall, income, hasSingleParentDeduction ? "ひとり親控除・寡婦控除の分、通常より高いラインになっています" : "自治体により非課税ラインは異なります"),
+      wallRow("所得税（いわゆる103万円の壁）", incomeWall, income, hasSingleParentDeduction ? "ひとり親控除・寡婦控除の分、通常（178万円）より高いラインになっています" : "令和8・9年分は時限特例で178万円（令和10年分以後は168万円に戻る予定）"),
       insuranceRow,
       wallRow("配偶者特別控除 満額の壁", WALL_HAIGUSHA_MAX, income, "配偶者側の控除（最大38万円）が満額を維持できるライン"),
       wallRow("配偶者特別控除 消滅の壁", WALL_HAIGUSHA_ZERO, income, "207万円以上で配偶者側の控除がゼロに"),
@@ -228,7 +263,7 @@
     var curve = [];
     var faceValue = [];
     for (var x = minX; x <= maxX; x += stepX) {
-      var res = takeHomeOf(x, insuranceApplies);
+      var res = takeHomeOf(x, insuranceApplies, singleParentStatus);
       curve.push({ x: x, y: Math.round(res.takeHome) });
       faceValue.push({ x: x, y: x });
     }
@@ -306,7 +341,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("kabe-growthDataTable", chart);
   }
 
-  [els.income, els.insuranceApplies].forEach(function (el) {
+  [els.income, els.insuranceApplies, els.singleParentStatus].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
