@@ -57,11 +57,20 @@
   var INCOME_DEPENDENT_DEDUCTION = 380000; // 所得税の扶養控除（一般の扶養親族、1人あたり）
   var RESIDENT_DEPENDENT_DEDUCTION = 330000; // 住民税の扶養控除（1人あたり）
 
+  // ひとり親控除・寡婦控除（いずれも本人の合計所得金額500万円以下が条件。本シミュレーターでは
+  // 簡易化のため所得制限の判定は行わず、入力された区分をそのまま適用する）。
+  // 国税庁タックスアンサーNo.1171・No.1170（所得税）、総務省資料（個人住民税、令和3年度分以降の金額）より。
+  var INCOME_SINGLE_PARENT_DEDUCTION = 350000; // 所得税のひとり親控除
+  var RESIDENT_SINGLE_PARENT_DEDUCTION = 300000; // 住民税のひとり親控除
+  var INCOME_WIDOW_DEDUCTION = 270000; // 所得税の寡婦控除
+  var RESIDENT_WIDOW_DEDUCTION = 260000; // 住民税の寡婦控除
+
   var els = {
     income: document.getElementById("tedori-income"),
     ageGroup: document.getElementById("tedori-ageGroup"),
     hasSpouse: document.getElementById("tedori-hasSpouse"),
     dependents: document.getElementById("tedori-dependents"),
+    singleParentStatus: document.getElementById("tedori-singleParentStatus"),
     verdict: document.getElementById("tedori-verdict"),
     verdictSub: document.getElementById("tedori-verdictSub"),
     takeHome: document.getElementById("tedori-result-take-home"),
@@ -104,8 +113,9 @@
     return 0;
   }
 
-  // 年収・年齢区分・配偶者控除の有無・扶養人数から、社会保険料・所得税・住民税・手取り額を試算する。
-  function calc(income, ageGroup, hasSpouse, dependents) {
+  // 年収・年齢区分・配偶者控除の有無・扶養人数・ひとり親控除/寡婦控除の区分から、
+  // 社会保険料・所得税・住民税・手取り額を試算する。
+  function calc(income, ageGroup, hasSpouse, dependents, singleParentStatus) {
     var socialInsuranceRate = HEALTH_INSURANCE_RATE + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
     if (ageGroup === "40to64") socialInsuranceRate += CARE_INSURANCE_RATE;
     var socialInsurance = income * socialInsuranceRate;
@@ -116,6 +126,8 @@
     var incomeDeductions = incomeBasicDeduction(income) + socialInsurance;
     if (hasSpouse) incomeDeductions += INCOME_SPOUSE_DEDUCTION;
     incomeDeductions += INCOME_DEPENDENT_DEDUCTION * dependents;
+    if (singleParentStatus === "hitorioya") incomeDeductions += INCOME_SINGLE_PARENT_DEDUCTION;
+    else if (singleParentStatus === "kafu") incomeDeductions += INCOME_WIDOW_DEDUCTION;
 
     var taxableIncomeTax = Math.max(0, salaryIncome - incomeDeductions);
     var incomeTax = taxByBracket(taxableIncomeTax) * (1 + RECONSTRUCTION_TAX_RATE);
@@ -123,6 +135,8 @@
     var residentDeductions = RESIDENT_BASIC_DEDUCTION + socialInsurance;
     if (hasSpouse) residentDeductions += RESIDENT_SPOUSE_DEDUCTION;
     residentDeductions += RESIDENT_DEPENDENT_DEDUCTION * dependents;
+    if (singleParentStatus === "hitorioya") residentDeductions += RESIDENT_SINGLE_PARENT_DEDUCTION;
+    else if (singleParentStatus === "kafu") residentDeductions += RESIDENT_WIDOW_DEDUCTION;
 
     var taxableResidentTax = Math.max(0, salaryIncomeForResident - residentDeductions);
     var residentTax = taxableResidentTax > 0 ? taxableResidentTax * RESIDENT_TAX_RATE + RESIDENT_PER_CAPITA : 0;
@@ -145,8 +159,9 @@
     var ageGroup = els.ageGroup.value;
     var hasSpouse = els.hasSpouse.value === "yes";
     var dependents = Math.max(0, Math.min(5, Math.round(Number(els.dependents.value) || 0)));
+    var singleParentStatus = els.singleParentStatus.value;
 
-    var r = calc(income, ageGroup, hasSpouse, dependents);
+    var r = calc(income, ageGroup, hasSpouse, dependents, singleParentStatus);
     var rate = income > 0 ? (r.takeHome / income) * 100 : 0;
 
     els.takeHome.textContent = manYen(r.takeHome);
@@ -172,7 +187,7 @@
 
     var refIncomes = [3000000, 4000000, 5000000, 6000000, 7000000, 8000000, 10000000, 12000000, 15000000];
     var rows = refIncomes.map(function (x) {
-      var res = calc(x, ageGroup, hasSpouse, dependents);
+      var res = calc(x, ageGroup, hasSpouse, dependents, singleParentStatus);
       var xRate = (res.takeHome / x) * 100;
       var isCurrent = Math.abs(x - income) < 1;
       return (
@@ -229,7 +244,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("tedori-growthDataTable", chart);
   }
 
-  [els.income, els.ageGroup, els.hasSpouse, els.dependents].forEach(function (el) {
+  [els.income, els.ageGroup, els.hasSpouse, els.dependents, els.singleParentStatus].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
