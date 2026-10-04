@@ -1836,9 +1836,22 @@
 <div class="panel">
 <h2>条件を入力</h2>
 <div class="field">
+<label for="kaigo-wageMethod">賃金日額の計算方法</label>
+<select id="kaigo-wageMethod">
+<option value="monthly">月給から近似する（かんたん）</option>
+<option value="sixmonth">休業開始前6か月間の賃金合計から計算する（より正確）</option>
+</select>
+<p class="field-hint">賃金日額は本来「休業開始前6か月間に支払われた賃金の合計÷180」で算定されます。6か月分の給与明細・賃金台帳が手元にある場合は「より正確」を選ぶと、本来の計算方法で試算できます。</p>
+</div>
+<div class="field" id="kaigo-salaryField">
 <label for="kaigo-salary">介護休業開始前の月給（額面） <span class="unit">円</span></label>
 <input id="kaigo-salary" inputmode="numeric" max="2000000" min="0" step="1000" type="number" value="300000"/>
 <p class="field-hint">本来は「休業開始前6か月間の賃金合計÷180」で計算する賃金日額を使いますが、本ツールでは月給（額面）÷30で近似します。賃金日額には上限・下限があり、この範囲外は自動的に調整されます。</p>
+</div>
+<div class="field" id="kaigo-sixMonthField" style="display:none">
+<label for="kaigo-sixMonthTotal">休業開始前6か月間の賃金合計（賞与を除く） <span class="unit">円</span></label>
+<input id="kaigo-sixMonthTotal" inputmode="numeric" max="12000000" min="0" step="1000" value="1800000"/>
+<p class="field-hint">介護休業開始前6か月間に実際に支払われた賃金（基本給＋諸手当、賞与は除く）の合計額を入力してください。180で割った金額が賃金日額になります。</p>
 </div>
 <div class="field">
 <label for="kaigo-days">介護休業の取得予定日数 <span class="unit" id="kaigo-daysOut">30 日</span></label>
@@ -1931,7 +1944,7 @@
 </dl>
 </section>
 <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際に支給される金額・受給資格と一致するものではありません。賃金日額は本来「休業開始前6か月間の賃金合計÷180」で計算しますが、本ツールでは月給（額面）÷30で近似しています。有期雇用労働者に対する追加の要件、休業中に事業主から賃金が支払われる場合の支給額調整、同一対象家族について4回目以降の休業を取得した場合の取り扱いなどは考慮していません。正確な金額・受給資格・支給日数は最寄りのハローワークにご確認ください。本サイトは労働・社会保険に関する助言を目的とするものではありません。
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際に支給される金額・受給資格と一致するものではありません。賃金日額は本来「休業開始前6か月間の賃金合計÷180」で計算します。本ツールでは既定では月給（額面）÷30で近似しますが、6か月間の賃金合計が分かる場合は「より正確」な計算方法に切り替えることもできます。有期雇用労働者に対する追加の要件、休業中に事業主から賃金が支払われる場合の支給額調整、同一対象家族について4回目以降の休業を取得した場合の取り扱いなどは考慮していません。正確な金額・受給資格・支給日数は最寄りのハローワークにご確認ください。本サイトは労働・社会保険に関する助言を目的とするものではありません。
   </div>
   </section>
 
