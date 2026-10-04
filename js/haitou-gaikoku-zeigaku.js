@@ -66,6 +66,7 @@
     dividend: document.getElementById("gaikoku-dividend"),
     foreignRate: document.getElementById("gaikoku-foreignRate"),
     foreignRateOut: document.getElementById("gaikoku-foreignRateOut"),
+    carryover: document.getElementById("gaikoku-carryover"),
     verdict: document.getElementById("gaikoku-verdict"),
     verdictSub: document.getElementById("gaikoku-verdictSub"),
     netNoFile: document.getElementById("gaikoku-result-net-nofile"),
@@ -110,7 +111,7 @@
   // 現地で源泉徴収された外国税額を、所得税額×（国外所得金額÷所得総額）を
   // 上限として所得税から控除（外国税額控除）でき、上限を超えた分はさらに
   // その30%を上限に住民税からも控除できる、という簡略化した実務の仕組みを試算する。
-  function calc(income, ageGroup, dividendGross, foreignRate) {
+  function calc(income, ageGroup, dividendGross, foreignRate, carryoverIn) {
     var socialInsuranceRate = HEALTH_INSURANCE_RATE + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
     if (ageGroup === "40to64") socialInsuranceRate += CARE_INSURANCE_RATE;
     var socialInsurance = income * socialInsuranceRate;
@@ -142,17 +143,26 @@
     var domesticWithholding = netAfterForeign * WITHHOLDING_RATE;
     var netNoFile = netAfterForeign - domesticWithholding;
 
-    // シナリオB: 確定申告して総合課税を選び、外国税額控除を適用する場合
+    // シナリオB: 確定申告して総合課税を選び、外国税額控除を適用する場合。
+    // 当年分の外国税額を限度額いっぱいまで控除した後、所得税・住民税それぞれの限度額に
+    // 余裕があれば、過去3年以内に繰り越されている未使用の外国税額（carryoverIn）を
+    // その余裕の範囲内で追加的に控除する（繰越控除）。
     var grossTotalIncome = salaryIncome + dividendGross;
     var limitIncomeTax = grossTotalIncome > 0 ? incomeTaxWithDividend * (dividendGross / grossTotalIncome) : 0;
     var creditedIncomeTax = Math.min(foreignTax, limitIncomeTax);
+    var roomIncomeTax = Math.max(0, limitIncomeTax - creditedIncomeTax);
+    var carryoverUsedIncome = Math.min(carryoverIn, roomIncomeTax);
     var remainingForeignTax = Math.max(0, foreignTax - creditedIncomeTax);
     var limitResidentTax = limitIncomeTax * RESIDENT_CREDIT_RATIO;
     var creditedResidentTax = Math.min(remainingForeignTax, limitResidentTax);
     var unusedForeignTax = Math.max(0, remainingForeignTax - creditedResidentTax);
+    var roomResidentTax = Math.max(0, limitResidentTax - creditedResidentTax);
+    var carryoverUsedResident = Math.min(carryoverIn - carryoverUsedIncome, roomResidentTax);
+    var carryoverUsed = carryoverUsedIncome + carryoverUsedResident;
+    var carryoverRemaining = Math.max(0, carryoverIn - carryoverUsed);
 
-    var incomeTaxAfterCredit = Math.max(0, incomeTaxWithDividend - creditedIncomeTax);
-    var residentTaxAfterCredit = Math.max(0, residentTaxWithDividend - creditedResidentTax);
+    var incomeTaxAfterCredit = Math.max(0, incomeTaxWithDividend - creditedIncomeTax - carryoverUsedIncome);
+    var residentTaxAfterCredit = Math.max(0, residentTaxWithDividend - creditedResidentTax - carryoverUsedResident);
     var japanTaxOnDividendAfterCredit =
       Math.max(0, incomeTaxAfterCredit - incomeTaxBase) + Math.max(0, residentTaxAfterCredit - residentTaxBase);
 
@@ -170,14 +180,20 @@
     var totalIncomeTaxSeparate = incomeTaxBase + dividendIncomeTaxSeparate;
     var limitIncomeTaxSeparate = grossTotalIncome > 0 ? totalIncomeTaxSeparate * (dividendGross / grossTotalIncome) : 0;
     var creditedIncomeTaxSeparate = Math.min(foreignTax, limitIncomeTaxSeparate);
+    var roomIncomeTaxSeparate = Math.max(0, limitIncomeTaxSeparate - creditedIncomeTaxSeparate);
+    var carryoverUsedIncomeSeparate = Math.min(carryoverIn, roomIncomeTaxSeparate);
     var remainingForeignTaxSeparate = Math.max(0, foreignTax - creditedIncomeTaxSeparate);
     var limitResidentTaxSeparate = limitIncomeTaxSeparate * RESIDENT_CREDIT_RATIO;
     var creditedResidentTaxSeparate = Math.min(remainingForeignTaxSeparate, limitResidentTaxSeparate);
     var unusedForeignTaxSeparate = Math.max(0, remainingForeignTaxSeparate - creditedResidentTaxSeparate);
+    var roomResidentTaxSeparate = Math.max(0, limitResidentTaxSeparate - creditedResidentTaxSeparate);
+    var carryoverUsedResidentSeparate = Math.min(carryoverIn - carryoverUsedIncomeSeparate, roomResidentTaxSeparate);
+    var carryoverUsedSeparate = carryoverUsedIncomeSeparate + carryoverUsedResidentSeparate;
+    var carryoverRemainingSeparate = Math.max(0, carryoverIn - carryoverUsedSeparate);
 
     var japanTaxOnDividendSeparateAfterCredit =
-      Math.max(0, dividendIncomeTaxSeparate - creditedIncomeTaxSeparate) +
-      Math.max(0, dividendResidentTaxSeparate - creditedResidentTaxSeparate);
+      Math.max(0, dividendIncomeTaxSeparate - creditedIncomeTaxSeparate - carryoverUsedIncomeSeparate) +
+      Math.max(0, dividendResidentTaxSeparate - creditedResidentTaxSeparate - carryoverUsedResidentSeparate);
 
     var netFileSeparate = dividendGross - foreignTax - japanTaxOnDividendSeparateAfterCredit;
 
@@ -188,10 +204,14 @@
       japanTaxOnDividendAfterCredit: japanTaxOnDividendAfterCredit,
       creditedTotal: creditedIncomeTax + creditedResidentTax,
       unusedForeignTax: unusedForeignTax,
+      carryoverUsed: carryoverUsed,
+      carryoverRemaining: carryoverRemaining,
       netFile: netFile,
       japanTaxOnDividendSeparateAfterCredit: japanTaxOnDividendSeparateAfterCredit,
       creditedTotalSeparate: creditedIncomeTaxSeparate + creditedResidentTaxSeparate,
       unusedForeignTaxSeparate: unusedForeignTaxSeparate,
+      carryoverUsedSeparate: carryoverUsedSeparate,
+      carryoverRemainingSeparate: carryoverRemainingSeparate,
       netFileSeparate: netFileSeparate,
     };
   }
@@ -202,13 +222,16 @@
     var dividendGross = clampNonNegative(els.dividend.value) * 10000;
     var foreignRate = clampNonNegative(els.foreignRate.value) / 100;
     els.foreignRateOut.textContent = Number(els.foreignRate.value).toFixed(1) + " %";
+    var carryoverIn = clampNonNegative(els.carryover.value);
 
-    var r = calc(income, ageGroup, dividendGross, foreignRate);
+    var r = calc(income, ageGroup, dividendGross, foreignRate, carryoverIn);
 
     var separateIsBetterFiling = r.netFileSeparate > r.netFile;
     var bestFileNet = separateIsBetterFiling ? r.netFileSeparate : r.netFile;
     var bestFileLabel = separateIsBetterFiling ? "申告分離課税" : "総合課税";
     var bestFileUnused = separateIsBetterFiling ? r.unusedForeignTaxSeparate : r.unusedForeignTax;
+    var bestCarryoverUsed = separateIsBetterFiling ? r.carryoverUsedSeparate : r.carryoverUsed;
+    var bestCarryoverRemaining = separateIsBetterFiling ? r.carryoverRemainingSeparate : r.carryoverRemaining;
     var diff = bestFileNet - r.netNoFile;
 
     els.netNoFile.textContent = yen(r.netNoFile);
@@ -227,7 +250,10 @@
       els.verdict.textContent = "確定申告して「" + bestFileLabel + "」で外国税額控除を使った方が有利です";
       els.verdictSub.textContent =
         "確定申告しない場合の手取りは " + yen(r.netNoFile) + " ですが、" + bestFileLabel + "を選んで外国税額控除を使うと手取りが " +
-        yen(bestFileNet) + "（" + yen(diff) + " 増）になる計算です。総合課税を選ぶと配当所得が合計所得金額に加算され、扶養控除の判定や国民健康保険料等に影響する場合がある一方、申告分離課税は配当所得を他の所得と合算しないため、そうした影響を避けられます。";
+        yen(bestFileNet) + "（" + yen(diff) + " 増）になる計算です。総合課税を選ぶと配当所得が合計所得金額に加算され、扶養控除の判定や国民健康保険料等に影響する場合がある一方、申告分離課税は配当所得を他の所得と合算しないため、そうした影響を避けられます。" +
+        (bestCarryoverUsed > 1
+          ? "なお入力した繰越外国税額のうち " + yen(bestCarryoverUsed) + " を今回の控除に追加で使えています。"
+          : "");
     } else {
       els.verdict.textContent = "この条件では確定申告しない方が有利です";
       els.verdictSub.textContent =
@@ -242,7 +268,9 @@
       { label: "確定申告（総合課税）した場合の国内での税額（控除後）", value: yen(r.japanTaxOnDividendAfterCredit), note: "総合課税で配当を合算した分の所得税・住民税、控除後" },
       { label: "確定申告（申告分離課税）した場合の外国税額控除で軽減した税額", value: yen(r.creditedTotalSeparate), note: "所得税・住民税から控除（限度額あり）" },
       { label: "確定申告（申告分離課税）した場合の国内での税額（控除後）", value: yen(r.japanTaxOnDividendSeparateAfterCredit), note: "配当に一律20.315%課税した分の所得税・住民税、控除後" },
-      { label: "使いきれず翌年以降に繰り越せる外国税額（有利な方法で申告した場合・参考）", value: bestFileUnused > 1 ? yen(bestFileUnused) : "なし", note: "限度額を超えた分は3年間繰越可能（本ツールでは繰越後の計算は含めていません）" },
+      { label: "入力した繰越外国税額のうち今回の控除に追加で使えた金額（有利な方法で申告した場合）", value: carryoverIn > 1 ? (bestCarryoverUsed > 1 ? yen(bestCarryoverUsed) : "なし（今年の限度額に余裕がありません）") : "-", note: "今年の限度額に余裕がある分だけ、過去3年以内の繰越額から追加で控除" },
+      { label: "繰越外国税額のうち今回使いきれず残る金額（有利な方法で申告した場合）", value: carryoverIn > 1 ? (bestCarryoverRemaining > 1 ? yen(bestCarryoverRemaining) : "なし（全額使用）") : "-", note: "3年間の繰越期限のうち残り年数の管理は含めていません" },
+      { label: "今回新たに生じ、翌年以降に繰り越せる外国税額（有利な方法で申告した場合・参考）", value: bestFileUnused > 1 ? yen(bestFileUnused) : "なし", note: "今年の限度額を超えた分。翌年以降3年間、上の「繰越外国税額」欄に入力して使える" },
     ];
     els.breakdownBody.innerHTML = rows
       .map(function (row) {
@@ -287,7 +315,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("gaikoku-growthDataTable", chart);
   }
 
-  [els.income, els.ageGroup, els.dividend, els.foreignRate].forEach(function (el) {
+  [els.income, els.ageGroup, els.dividend, els.foreignRate, els.carryover].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
