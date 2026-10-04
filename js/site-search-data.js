@@ -290,6 +290,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "医療費控除はいつまで？過去5年分の還付申告と申告忘れを取り戻す方法 完全ガイド",
+    "desc": "年ごとの申告期限早見表、まだ申告していない場合の「還付申告」とすでに提出済みの申告への「更正の請求」の違いをまとめました。",
+    "href": "pages/iryouhi-koujo-shimekiri-guide.html",
+    "category": "節税・控除・確定申告",
+    "type": "guide"
+  },
+  {
     "title": "確定申告のやり方 完全ガイド",
     "desc": "会社員でも確定申告が必要になる主なケースの見分け方から、必要書類の準備、申告方法の選び方、期限まで、関連シミュレーターへのリンク付きで解説します。",
     "href": "pages/kakutei-shinkoku-hajimekata-guide.html",
