@@ -26,7 +26,7 @@
   </url>
   <url>
     <loc>https://maki04591128-tech.github.io/kanemouke/pages/jutaku-hub.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -464,7 +464,13 @@
   </url>
   <url>
     <loc>https://maki04591128-tech.github.io/kanemouke/pages/jutaku-loan-koujo-guide.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maki04591128-tech.github.io/kanemouke/pages/jutaku-loan-koujo-shimekiri-guide.html</loc>
+    <lastmod>2026-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
