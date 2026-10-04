@@ -311,6 +311,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "ふるさと納税ワンストップ特例とは？使える条件・申請方法・無効になるケース 完全ガイド",
+    "desc": "利用できる3つの条件、申請書の提出方法、確定申告との違い、6自治体以上の寄付や医療費控除で無効になるケースをまとめました。",
+    "href": "pages/furusato-nozei-onestop-guide.html",
+    "category": "節税・控除・確定申告",
+    "type": "guide"
+  },
+  {
     "title": "医療費控除はいつまで？過去5年分の還付申告と申告忘れを取り戻す方法 完全ガイド",
     "desc": "年ごとの申告期限早見表、まだ申告していない場合の「還付申告」とすでに提出済みの申告への「更正の請求」の違いをまとめました。",
     "href": "pages/iryouhi-koujo-shimekiri-guide.html",
