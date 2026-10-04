@@ -24,7 +24,9 @@
   // この単純な判定で全ページに対応できる。詳細は該当プロジェクトログ参照）。
   var inPagesDir = /\/pages\//.test(location.pathname);
   function resolveHref(href) {
-    return inPagesDir ? href.replace(/^pages\//, "") : href;
+    if (!inPagesDir) return href;
+    if (href.indexOf("pages/") === 0) return href.replace(/^pages\//, "");
+    return "../" + href;
   }
 
   // tool-search.js と同じ表記ゆれ辞書。独立して読み込まれるページが異なる
@@ -90,7 +92,7 @@
     return query.split(/[\s　]+/).filter(function (t) { return t.length > 0; });
   }
 
-  var TYPE_LABEL = { hub: "まとめ", guide: "解説記事", tool: "ツール" };
+  var TYPE_LABEL = { hub: "まとめ", guide: "解説記事", tool: "ツール", page: "一覧" };
 
   function escapeHtml(text) {
     var div = document.createElement("div");
