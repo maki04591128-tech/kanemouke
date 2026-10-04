@@ -58,12 +58,14 @@
   var RESIDENT_DEPENDENT_DEDUCTION = 330000; // 住民税の扶養控除（1人あたり）
 
   // ひとり親控除・寡婦控除（いずれも本人の合計所得金額500万円以下が条件。本シミュレーターでは
-  // 簡易化のため所得制限の判定は行わず、入力された区分をそのまま適用する）。
+  // 給与所得（給与所得控除後、所得税基準）を合計所得金額とみなして500万円超かどうかを判定し、
+  // 超えている場合は入力された区分に関わらず控除を適用しない）。
   // 国税庁タックスアンサーNo.1171・No.1170（所得税）、総務省資料（個人住民税、令和3年度分以降の金額）より。
   var INCOME_SINGLE_PARENT_DEDUCTION = 350000; // 所得税のひとり親控除
   var RESIDENT_SINGLE_PARENT_DEDUCTION = 300000; // 住民税のひとり親控除
   var INCOME_WIDOW_DEDUCTION = 270000; // 所得税の寡婦控除
   var RESIDENT_WIDOW_DEDUCTION = 260000; // 住民税の寡婦控除
+  var SINGLE_PARENT_INCOME_LIMIT = 5000000; // ひとり親控除・寡婦控除の所得制限（合計所得金額500万円）
 
   var els = {
     income: document.getElementById("tedori-income"),
@@ -80,6 +82,13 @@
     breakdownBody: document.getElementById("tedori-breakdown-body"),
     tableBody: document.getElementById("tedori-table-body"),
   };
+
+  // 合計所得金額が500万円を超えてひとり親控除・寡婦控除が対象外になった場合に表示する注記
+  var singleParentField = els.singleParentStatus.closest(".field");
+  var singleParentNote = document.createElement("p");
+  singleParentNote.className = "field-note";
+  singleParentNote.setAttribute("aria-live", "polite");
+  els.singleParentStatus.insertAdjacentElement("afterend", singleParentNote);
 
   var chart = null;
 
@@ -123,11 +132,15 @@
     var salaryIncome = Math.max(0, income - salaryDeduction(income, SALARY_DEDUCTION_BRACKETS_INCOME_TAX));
     var salaryIncomeForResident = Math.max(0, income - salaryDeduction(income, SALARY_DEDUCTION_BRACKETS_RESIDENT_TAX));
 
+    // 合計所得金額（給与所得で近似）が500万円を超える場合、ひとり親控除・寡婦控除は対象外になる
+    var singleParentDeductionBlocked = singleParentStatus !== "none" && salaryIncome > SINGLE_PARENT_INCOME_LIMIT;
+    var singleParentApplies = singleParentStatus !== "none" && !singleParentDeductionBlocked;
+
     var incomeDeductions = incomeBasicDeduction(income) + socialInsurance;
     if (hasSpouse) incomeDeductions += INCOME_SPOUSE_DEDUCTION;
     incomeDeductions += INCOME_DEPENDENT_DEDUCTION * dependents;
-    if (singleParentStatus === "hitorioya") incomeDeductions += INCOME_SINGLE_PARENT_DEDUCTION;
-    else if (singleParentStatus === "kafu") incomeDeductions += INCOME_WIDOW_DEDUCTION;
+    if (singleParentApplies && singleParentStatus === "hitorioya") incomeDeductions += INCOME_SINGLE_PARENT_DEDUCTION;
+    else if (singleParentApplies && singleParentStatus === "kafu") incomeDeductions += INCOME_WIDOW_DEDUCTION;
 
     var taxableIncomeTax = Math.max(0, salaryIncome - incomeDeductions);
     var incomeTax = taxByBracket(taxableIncomeTax) * (1 + RECONSTRUCTION_TAX_RATE);
@@ -135,8 +148,8 @@
     var residentDeductions = RESIDENT_BASIC_DEDUCTION + socialInsurance;
     if (hasSpouse) residentDeductions += RESIDENT_SPOUSE_DEDUCTION;
     residentDeductions += RESIDENT_DEPENDENT_DEDUCTION * dependents;
-    if (singleParentStatus === "hitorioya") residentDeductions += RESIDENT_SINGLE_PARENT_DEDUCTION;
-    else if (singleParentStatus === "kafu") residentDeductions += RESIDENT_WIDOW_DEDUCTION;
+    if (singleParentApplies && singleParentStatus === "hitorioya") residentDeductions += RESIDENT_SINGLE_PARENT_DEDUCTION;
+    else if (singleParentApplies && singleParentStatus === "kafu") residentDeductions += RESIDENT_WIDOW_DEDUCTION;
 
     var taxableResidentTax = Math.max(0, salaryIncomeForResident - residentDeductions);
     var residentTax = taxableResidentTax > 0 ? taxableResidentTax * RESIDENT_TAX_RATE + RESIDENT_PER_CAPITA : 0;
@@ -151,6 +164,7 @@
       residentTax: residentTax,
       totalDeduction: totalDeduction,
       takeHome: takeHome,
+      singleParentDeductionBlocked: singleParentDeductionBlocked,
     };
   }
 
@@ -163,6 +177,15 @@
 
     var r = calc(income, ageGroup, hasSpouse, dependents, singleParentStatus);
     var rate = income > 0 ? (r.takeHome / income) * 100 : 0;
+
+    if (r.singleParentDeductionBlocked) {
+      singleParentField.classList.add("has-note");
+      singleParentNote.textContent =
+        "本人の合計所得金額（給与所得換算）が500万円を超えているため、ひとり親控除・寡婦控除の所得制限（国税庁タックスアンサーNo.1171・No.1170）により、この試算では控除を適用していません。";
+    } else {
+      singleParentField.classList.remove("has-note");
+      singleParentNote.textContent = "";
+    }
 
     els.takeHome.textContent = manYen(r.takeHome);
     els.takeHomeRate.textContent = rate.toFixed(1) + " %";
