@@ -1234,6 +1234,16 @@ a { color: var(--color-primary); }
   border-color: var(--color-error);
   background: var(--color-error-bg);
 }
+/* 所得制限等により入力した選択肢がそのまま適用されない場合の注記（js/nenshu-tedori.js 等が動的に生成） */
+.field-note {
+  display: none;
+  font-size: 0.78rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin: 6px 0 0;
+  line-height: 1.5;
+}
+.field.has-note .field-note { display: block; }
 .field.has-error input[type="number"]:focus {
   outline: 2px solid var(--color-error);
   outline-offset: 1px;
