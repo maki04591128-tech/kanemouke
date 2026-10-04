@@ -51,9 +51,25 @@
   }
   var RESIDENT_BASIC_DEDUCTION = 430000; // 住民税の基礎控除
 
+  var INCOME_SPOUSE_DEDUCTION = 380000; // 所得税の配偶者控除（同一生計配偶者、年収136万円以下〈令和8年分以降〉想定の簡易値）
+  var RESIDENT_SPOUSE_DEDUCTION = 330000; // 住民税の配偶者控除
+  var INCOME_DEPENDENT_DEDUCTION = 380000; // 所得税の扶養控除（一般の扶養親族、1人あたり）
+  var RESIDENT_DEPENDENT_DEDUCTION = 330000; // 住民税の扶養控除（1人あたり）
+
+  // ひとり親控除・寡婦控除（いずれも本人の合計所得金額500万円以下が条件。js/nenshu-tedori.jsと同じ考え方で、
+  // 主たる給与・従たる給与を合算した給与所得をもって合計所得金額の近似値とし、500万円超かどうかを判定する）。
+  var INCOME_SINGLE_PARENT_DEDUCTION = 350000; // 所得税のひとり親控除
+  var RESIDENT_SINGLE_PARENT_DEDUCTION = 300000; // 住民税のひとり親控除
+  var INCOME_WIDOW_DEDUCTION = 270000; // 所得税の寡婦控除
+  var RESIDENT_WIDOW_DEDUCTION = 260000; // 住民税の寡婦控除
+  var SINGLE_PARENT_INCOME_LIMIT = 5000000; // ひとり親控除・寡婦控除の所得制限（合計所得金額500万円）
+
   var els = {
     mainIncome: document.getElementById("kakemochi-mainIncome"),
     subIncome: document.getElementById("kakemochi-subIncome"),
+    hasSpouse: document.getElementById("kakemochi-hasSpouse"),
+    dependents: document.getElementById("kakemochi-dependents"),
+    singleParentStatus: document.getElementById("kakemochi-singleParentStatus"),
     verdict: document.getElementById("kakemochi-verdict"),
     verdictSub: document.getElementById("kakemochi-verdictSub"),
     noticeBox: document.getElementById("kakemochi-noticeBox"),
@@ -66,6 +82,13 @@
     compareBody: document.getElementById("kakemochi-compare-body"),
   };
   if (!els.verdict) return;
+
+  // 合計所得金額が500万円を超えてひとり親控除・寡婦控除が対象外になった場合に表示する注記
+  var singleParentField = els.singleParentStatus.closest(".field");
+  var singleParentNote = document.createElement("p");
+  singleParentNote.className = "field-note";
+  singleParentNote.setAttribute("aria-live", "polite");
+  els.singleParentStatus.insertAdjacentElement("afterend", singleParentNote);
 
   var chart = null;
 
@@ -103,15 +126,29 @@
 
   // 給与収入1本分の所得税額・住民税額を試算する。給与所得控除は「収入」に対して1回だけ適用されるため、
   // 掛け持ち先が複数あっても、この関数には合算後の給与収入を渡す（分けて2回呼び出して合計してはいけない）。
-  function calcSingle(income) {
+  // 配偶者控除・扶養控除・ひとり親控除・寡婦控除は、主たる勤務先が年末調整の時点で把握している家族構成に
+  // 基づくため、年末調整時（mainIncomeのみ）・確定申告後（合算後）のどちらでも同じ条件で適用する。
+  function calcSingle(income, hasSpouse, dependents, singleParentStatus, singleParentApplies) {
     var socialInsuranceRate = HEALTH_INSURANCE_RATE + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
     var socialInsurance = income * socialInsuranceRate;
 
     var salaryTaxable = Math.max(0, income - salaryDeduction(income, SALARY_DEDUCTION_BRACKETS_INCOME_TAX));
     var salaryTaxableResident = Math.max(0, income - salaryDeduction(income, SALARY_DEDUCTION_BRACKETS_RESIDENT_TAX));
 
-    var taxableBase = Math.max(0, salaryTaxable - incomeBasicDeduction(income) - socialInsurance);
-    var residentTaxableBase = Math.max(0, salaryTaxableResident - RESIDENT_BASIC_DEDUCTION - socialInsurance);
+    var incomeDeductions = incomeBasicDeduction(income) + socialInsurance;
+    if (hasSpouse) incomeDeductions += INCOME_SPOUSE_DEDUCTION;
+    incomeDeductions += INCOME_DEPENDENT_DEDUCTION * dependents;
+    if (singleParentApplies && singleParentStatus === "hitorioya") incomeDeductions += INCOME_SINGLE_PARENT_DEDUCTION;
+    else if (singleParentApplies && singleParentStatus === "kafu") incomeDeductions += INCOME_WIDOW_DEDUCTION;
+
+    var residentDeductions = RESIDENT_BASIC_DEDUCTION + socialInsurance;
+    if (hasSpouse) residentDeductions += RESIDENT_SPOUSE_DEDUCTION;
+    residentDeductions += RESIDENT_DEPENDENT_DEDUCTION * dependents;
+    if (singleParentApplies && singleParentStatus === "hitorioya") residentDeductions += RESIDENT_SINGLE_PARENT_DEDUCTION;
+    else if (singleParentApplies && singleParentStatus === "kafu") residentDeductions += RESIDENT_WIDOW_DEDUCTION;
+
+    var taxableBase = Math.max(0, salaryTaxable - incomeDeductions);
+    var residentTaxableBase = Math.max(0, salaryTaxableResident - residentDeductions);
 
     var incomeTax = taxByBracket(taxableBase) * (1 + RECONSTRUCTION_TAX_RATE);
     var residentTax = residentTaxableBase * RESIDENT_TAX_RATE;
@@ -128,14 +165,32 @@
     var mainIncome = clampNonNegative(els.mainIncome.value) * 10000;
     var subIncome = clampNonNegative(els.subIncome.value) * 10000;
     var totalIncome = mainIncome + subIncome;
+    var hasSpouse = els.hasSpouse.value === "yes";
+    var dependents = Math.max(0, Math.min(5, Math.round(Number(els.dependents.value) || 0)));
+    var singleParentStatus = els.singleParentStatus.value;
 
     var needsIncomeTaxFiling = subIncome > THRESHOLD;
     var needsResidentTaxFiling = subIncome > 0;
 
+    // 合計所得金額（すべての給与収入の合算を給与所得で近似）が500万円を超える場合、
+    // ひとり親控除・寡婦控除は対象外になる（js/nenshu-tedori.jsと同じ考え方）。
+    var totalSalaryIncome = Math.max(0, totalIncome - salaryDeduction(totalIncome, SALARY_DEDUCTION_BRACKETS_INCOME_TAX));
+    var singleParentDeductionBlocked = singleParentStatus !== "none" && totalSalaryIncome > SINGLE_PARENT_INCOME_LIMIT;
+    var singleParentApplies = singleParentStatus !== "none" && !singleParentDeductionBlocked;
+
+    if (singleParentDeductionBlocked) {
+      singleParentField.classList.add("has-note");
+      singleParentNote.textContent =
+        "本人の合計所得金額（給与所得換算）が500万円を超えているため、ひとり親控除・寡婦控除の所得制限（国税庁タックスアンサーNo.1171・No.1170）により、この試算では控除を適用していません。";
+    } else {
+      singleParentField.classList.remove("has-note");
+      singleParentNote.textContent = "";
+    }
+
     // 「年末調整のみ」＝主たる勤務先1社分の給与だけで年末調整が完了した場合に源泉徴収されている所得税額の目安。
-    var mainOnly = calcSingle(mainIncome);
+    var mainOnly = calcSingle(mainIncome, hasSpouse, dependents, singleParentStatus, singleParentApplies);
     // 「確定申告後」＝すべての勤務先の給与収入を合算し、給与所得控除・基礎控除を1回だけ適用して計算し直した、本来納めるべき所得税額・住民税額。
-    var combined = calcSingle(totalIncome);
+    var combined = calcSingle(totalIncome, hasSpouse, dependents, singleParentStatus, singleParentApplies);
 
     var taxGap = Math.max(0, combined.incomeTax - mainOnly.incomeTax);
 
@@ -236,7 +291,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("kakemochi-growthDataTable", chart);
   }
 
-  [els.mainIncome, els.subIncome].forEach(function (el) {
+  [els.mainIncome, els.subIncome, els.hasSpouse, els.dependents, els.singleParentStatus].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
