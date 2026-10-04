@@ -283,6 +283,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "ふるさと納税はいつまで？年末ギリギリでも間に合わせる方法と注意点 完全ガイド",
+    "desc": "決済方法ごとの実質的な締切、ワンストップ特例の1月10日必着ルール、6自治体以上寄付した場合の注意点をまとめました。",
+    "href": "pages/furusato-nozei-shimekiri-guide.html",
+    "category": "節税・控除・確定申告",
+    "type": "guide"
+  },
+  {
     "title": "確定申告のやり方 完全ガイド",
     "desc": "会社員でも確定申告が必要になる主なケースの見分け方から、必要書類の準備、申告方法の選び方、期限まで、関連シミュレーターへのリンク付きで解説します。",
     "href": "pages/kakutei-shinkoku-hajimekata-guide.html",
