@@ -339,6 +339,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "年末調整の書類提出はいつまで？会社ごとの締切と出し忘れた場合の対処法 完全ガイド",
+    "desc": "法律で一律には決まっていない提出期限の一般的な目安、間に合わなかった場合の社内での対応、確定申告（還付申告）で取り戻す方法を解説します。",
+    "href": "pages/nenmatsu-chosei-shimekiri-guide.html",
+    "category": "節税・控除・確定申告",
+    "type": "guide"
+  },
+  {
     "title": "医療費控除とセルフメディケーション税制の違いとは？どちらが得か 完全ガイド",
     "desc": "対象となる費用・医薬品の違い、控除額の計算方法の違い、どちらか一方しか選べない併用不可のルールと、どちらが有利かの目安を解説します。",
     "href": "pages/iryouhi-koujo-selfmedication-guide.html",
