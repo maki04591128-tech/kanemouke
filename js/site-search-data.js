@@ -66,6 +66,13 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "新NISAの年間投資枠はいつまで？使い切れない時の対処法と年末の注文期限 完全ガイド",
+    "desc": "年間投資枠（つみたて120万円＋成長240万円）は使い切れないと消滅する仕組みと、約定日基準の考え方、証券会社の年末注文締切の確認方法をまとめました。",
+    "href": "pages/nisa-nenkan-waku-shimekiri-guide.html",
+    "category": "積立・新NISA",
+    "type": "guide"
+  },
+  {
     "title": "NISA枠の復活とは？仕組みと注意点、いつ・いくら戻るか 完全ガイド",
     "desc": "売却で復活するのは時価ではなく取得価額（簿価）分だけという仕組みと、いつから使えるか、成長投資枠とつみたて投資枠の違い、売って買い直す戦略の注意点を解説します。",
     "href": "pages/nisa-fukkatsu-guide.html",
