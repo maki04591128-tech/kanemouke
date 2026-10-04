@@ -82,25 +82,45 @@
   var PREPAY_YEAR_SCENARIOS = [0, 1, 3, 5, 10];
 
   var els = {
+    loanMode: document.getElementById("koujo-loanMode"),
     principal: document.getElementById("koujo-principal"),
+    principalLabel: document.getElementById("koujo-principalLabel"),
+    principalBRow: document.getElementById("koujo-principalBRow"),
+    principalB: document.getElementById("koujo-principalB"),
+    shareARow: document.getElementById("koujo-shareARow"),
+    shareA: document.getElementById("koujo-shareA"),
     loanRate: document.getElementById("koujo-loanRate"),
     loanYears: document.getElementById("koujo-loanYears"),
     moveInYear: document.getElementById("koujo-moveInYear"),
     category: document.getElementById("koujo-category"),
     kosodateRow: document.getElementById("koujo-kosodateRow"),
     kosodate: document.getElementById("koujo-kosodate"),
+    salaryIncomeLabel: document.getElementById("koujo-salaryIncomeLabel"),
     salaryIncome: document.getElementById("koujo-salaryIncome"),
     hasSpouse: document.getElementById("koujo-hasSpouse"),
+    dependentsLabel: document.getElementById("koujo-dependentsLabel"),
     dependents: document.getElementById("koujo-dependents"),
+    salaryIncomeBRow: document.getElementById("koujo-salaryIncomeBRow"),
+    salaryIncomeB: document.getElementById("koujo-salaryIncomeB"),
+    dependentsBRow: document.getElementById("koujo-dependentsBRow"),
+    dependentsB: document.getElementById("koujo-dependentsB"),
     prepayAmount: document.getElementById("koujo-prepayAmount"),
+    prepayHint: document.getElementById("koujo-prepayHint"),
     verdict: document.getElementById("koujo-verdict"),
     verdictSub: document.getElementById("koujo-verdictSub"),
     resultLimit: document.getElementById("koujo-result-limit"),
     resultPeriod: document.getElementById("koujo-result-period"),
     resultFirstYear: document.getElementById("koujo-result-first-year"),
     resultTotal: document.getElementById("koujo-result-total"),
+    resultSplitNote: document.getElementById("koujo-result-split-note"),
+    resultIncomeTaxLabel: document.getElementById("koujo-result-income-tax-label"),
     resultIncomeTax: document.getElementById("koujo-result-income-tax"),
+    resultIncomeTaxBCard: document.getElementById("koujo-result-income-tax-b-card"),
+    resultIncomeTaxB: document.getElementById("koujo-result-income-tax-b"),
+    breakdownTh: document.getElementById("koujo-breakdown-th"),
     tableBody: document.getElementById("koujo-breakdown-body"),
+    breakdownBWrap: document.getElementById("koujo-breakdownBWrap"),
+    tableBodyB: document.getElementById("koujo-breakdown-body-b"),
     prepayTableWrap: document.getElementById("koujo-prepayTableWrap"),
     prepayNote: document.getElementById("koujo-prepayNote"),
     prepayBody: document.getElementById("koujo-prepay-body"),
@@ -223,7 +243,56 @@
     return { rows: rows, totalCredit: totalCredit, totalUnused: totalUnused, firstYearCredit: firstYearCredit };
   }
 
+  // ペアローン・連帯債務（balancesBがnullなら単独）の世帯合計を計算する。balancesA/balancesBは
+  // どちらも「年末残高の配列（本人・配偶者等それぞれが実際に負担する額ベース）」で、呼び出し側で
+  // ペアローン（別々の借入額）か連帯債務（1本の借入額を負担割合で按分）かに応じて作り分ける。
+  // 借入限度額（limit）は按分せず、本人・配偶者等ともに住宅の区分に応じた限度額をそのまま使う
+  // （国税庁の取り扱い上、ペアローン・連帯債務のいずれも1人あたりの借入限度額は按分されないため）。
+  function computeHouseholdCredit(
+    balancesA, creditPeriod, loanMonths, limit, overIncomeLimitA, taxAmountA, residentTaxCapA,
+    balancesB, overIncomeLimitB, taxAmountB, residentTaxCapB
+  ) {
+    var a = computeCreditSchedule(balancesA, creditPeriod, loanMonths, limit, overIncomeLimitA, taxAmountA, residentTaxCapA);
+    var b = balancesB ? computeCreditSchedule(balancesB, creditPeriod, loanMonths, limit, overIncomeLimitB, taxAmountB, residentTaxCapB) : null;
+    return {
+      a: a,
+      b: b,
+      totalCredit: a.totalCredit + (b ? b.totalCredit : 0),
+      totalUnused: a.totalUnused + (b ? b.totalUnused : 0),
+      firstYearCredit: a.firstYearCredit + (b ? b.firstYearCredit : 0),
+    };
+  }
+
+  // 年末残高（balances、本人分の負担ベース）に対する所得税額・住民税所得割上限・合計所得金額
+  // 要件判定を、本人・配偶者等どちらにも使い回せる形でまとめて計算する。
+  function personTaxContext(grossIncome, extraDeductions) {
+    var salaryIncome = salaryIncomeAfterDeduction(grossIncome);
+    var incomeDeductions = incomeBasicDeduction(grossIncome) + extraDeductions;
+    var taxableForIncomeTax = Math.max(0, salaryIncome - incomeDeductions);
+    return {
+      taxAmount: incomeTaxAmount(taxableForIncomeTax),
+      residentTaxCap: Math.min(taxableForIncomeTax * RESIDENT_TAX_CREDIT_RATE_CAP, RESIDENT_TAX_CREDIT_YEN_CAP),
+      overIncomeLimit: salaryIncome > INCOME_LIMIT_FOR_ELIGIBILITY,
+    };
+  }
+
   function render() {
+    var loanMode = els.loanMode.value; // "single" | "pair" | "joint"
+    var isPair = loanMode === "pair";
+    var isJoint = loanMode === "joint";
+    var isShared = isPair || isJoint;
+
+    els.principalBRow.style.display = isPair ? "" : "none";
+    els.shareARow.style.display = isJoint ? "" : "none";
+    els.salaryIncomeBRow.style.display = isShared ? "" : "none";
+    els.dependentsBRow.style.display = isShared ? "" : "none";
+    els.principalLabel.innerHTML = (isPair ? "本人の借入額（当初）" : isJoint ? "借入額（当初・世帯合計）" : "借入額（当初）") + ' <span class="unit">円</span>';
+    els.salaryIncomeLabel.innerHTML = (isShared ? "給与収入（本人・年収・額面）" : "給与収入（年収・額面）") + ' <span class="unit">円</span>';
+    els.dependentsLabel.innerHTML = (isShared ? "本人の扶養親族の人数（配偶者を除く）" : "扶養親族の人数（配偶者を除く）") + ' <span class="unit">人</span>';
+    els.prepayHint.textContent = isPair
+      ? "0のまま（初期値）なら繰上返済なしで試算します。ペアローンでは本人の借入分にのみ繰上返済を適用します（配偶者等の借入は変更しません）。"
+      : "0のまま（初期値）なら繰上返済なしで試算します。金額を入力すると、下に「繰上返済すると控除額はどう変わる？」の比較表が表示されます。";
+
     var principal = clampNonNegative(els.principal.value);
     var loanRate = Number(els.loanRate.value);
     var loanYears = Math.max(1, Number(els.loanYears.value) || 1);
@@ -240,31 +309,71 @@
     var limit = category.kosodateApplicable && kosodate ? category.limitKosodate : category.limitNormal;
     var creditPeriod = category.period;
 
-    var salaryIncome = salaryIncomeAfterDeduction(grossIncome);
-    var incomeDeductions =
-      incomeBasicDeduction(grossIncome) + (hasSpouse ? INCOME_SPOUSE_DEDUCTION : 0) + dependents * INCOME_DEPENDENT_DEDUCTION;
-    var taxableForIncomeTax = Math.max(0, salaryIncome - incomeDeductions);
-    var taxAmount = incomeTaxAmount(taxableForIncomeTax);
-    var residentTaxCap = Math.min(taxableForIncomeTax * RESIDENT_TAX_CREDIT_RATE_CAP, RESIDENT_TAX_CREDIT_YEN_CAP);
-
-    var overIncomeLimit = salaryIncome > INCOME_LIMIT_FOR_ELIGIBILITY;
+    var ctxA = personTaxContext(grossIncome, (hasSpouse ? INCOME_SPOUSE_DEDUCTION : 0) + dependents * INCOME_DEPENDENT_DEDUCTION);
+    var taxAmount = ctxA.taxAmount;
+    var residentTaxCap = ctxA.residentTaxCap;
+    var overIncomeLimit = ctxA.overIncomeLimit;
 
     var loanMonths = Math.round(loanYears * 12);
-    var balances = simulateLoan(principal, loanRate, loanMonths);
 
-    var schedule = computeCreditSchedule(balances, creditPeriod, loanMonths, limit, overIncomeLimit, taxAmount, residentTaxCap);
-    var rows = schedule.rows;
-    var totalCredit = schedule.totalCredit;
-    var totalUnused = schedule.totalUnused;
-    var firstYearCredit = schedule.firstYearCredit;
+    var principalB = 0;
+    var shareA = 1;
+    var balances; // 本人の負担ベースの年末残高（繰上返済なし）
+    var balancesB = null; // 配偶者等の負担ベースの年末残高（単独モードではnull）
+    var totalBalances; // 利息計算・繰上返済の基準となる「ローン全体」の残高
+
+    if (isPair) {
+      principalB = clampNonNegative(els.principalB.value);
+      balances = simulateLoan(principal, loanRate, loanMonths);
+      balancesB = simulateLoan(principalB, loanRate, loanMonths);
+      totalBalances = balances; // 繰上返済は本人分の借入にのみ適用する
+    } else if (isJoint) {
+      shareA = Math.min(99, Math.max(1, Number(els.shareA.value) || 50)) / 100;
+      totalBalances = simulateLoan(principal, loanRate, loanMonths);
+      balances = totalBalances.map(function (b) { return b * shareA; });
+      balancesB = totalBalances.map(function (b) { return b * (1 - shareA); });
+    } else {
+      balances = simulateLoan(principal, loanRate, loanMonths);
+      totalBalances = balances;
+    }
+
+    var taxAmountB = 0, residentTaxCapB = 0, overIncomeLimitB = false;
+    if (isShared) {
+      var grossIncomeB = clampNonNegative(els.salaryIncomeB.value);
+      var dependentsB = Math.max(0, Math.round(Number(els.dependentsB.value) || 0));
+      var ctxB = personTaxContext(grossIncomeB, dependentsB * INCOME_DEPENDENT_DEDUCTION);
+      taxAmountB = ctxB.taxAmount;
+      residentTaxCapB = ctxB.residentTaxCap;
+      overIncomeLimitB = ctxB.overIncomeLimit;
+    }
+
+    var household = computeHouseholdCredit(
+      balances, creditPeriod, loanMonths, limit, overIncomeLimit, taxAmount, residentTaxCap,
+      balancesB, overIncomeLimitB, taxAmountB, residentTaxCapB
+    );
+    var rows = household.a.rows;
+    var rowsB = household.b ? household.b.rows : null;
+    var totalCredit = household.totalCredit;
+    var totalUnused = household.totalUnused;
+    var firstYearCredit = household.firstYearCredit;
 
     els.resultLimit.textContent = manYen(limit);
     els.resultPeriod.textContent = creditPeriod + " 年";
     els.resultFirstYear.textContent = yen(firstYearCredit);
     els.resultTotal.textContent = manYen(totalCredit);
+    els.resultIncomeTaxLabel.textContent = isShared ? "本人の所得税額（概算・年間）" : "所得税額（概算・年間）";
     els.resultIncomeTax.textContent = yen(taxAmount);
+    els.resultIncomeTaxBCard.style.display = isShared ? "" : "none";
+    if (isShared) els.resultIncomeTaxB.textContent = yen(taxAmountB);
 
-    if (overIncomeLimit) {
+    els.resultSplitNote.style.display = isShared ? "" : "none";
+    if (isShared) {
+      var modeLabel = isPair ? "ペアローン" : "連帯債務（本人負担割合" + Math.round(shareA * 100) + "%）";
+      els.resultSplitNote.textContent =
+        "世帯合計（" + modeLabel + "）の内訳：本人 " + manYen(household.a.totalCredit) + " ／ 配偶者等 " + manYen(household.b.totalCredit) + "。";
+    }
+
+    if (overIncomeLimit && (!isShared || overIncomeLimitB)) {
       els.verdict.textContent = "合計所得金額が2000万円を超えるため、この年は控除の対象外です";
       els.verdictSub.textContent = "住宅ローン控除には各年の合計所得金額が2,000万円以下という要件があります。年によって所得が変動する場合は、その年ごとに判定されます。";
     } else if (totalUnused > 0) {
@@ -277,6 +386,7 @@
       els.verdictSub.textContent = "この条件では、年末残高に基づく控除枠を所得税・住民税でちょうど（または余裕を持って）引ききれる見込みです。";
     }
 
+    els.breakdownTh.textContent = isShared ? "経過年（本人）" : "経過年";
     els.tableBody.innerHTML = rows
       .map(function (r) {
         return (
@@ -287,22 +397,52 @@
       })
       .join("");
 
+    els.breakdownBWrap.style.display = isShared ? "" : "none";
+    if (isShared) {
+      els.tableBodyB.innerHTML = rowsB
+        .map(function (r) {
+          return (
+            "<tr><td>" + r.year + "年目</td><td>" + yen(r.balance) + "</td><td>" + yen(r.rawCredit) +
+            "</td><td>" + yen(r.incomeTaxUsed) + "</td><td>" + yen(r.residentTaxUsed) +
+            "</td><td>" + (r.unused > 0 ? yen(r.unused) : "-") + "</td></tr>"
+          );
+        })
+        .join("");
+    }
+
     // ---- 繰上返済（期間短縮型）を実行すると控除額・利息はどう変わる？ ----
     // 繰上返済額が0（初期値）の間は比較表を表示せず、既存の試算結果に一切影響しない。
+    // ペアローンでは本人の借入分のみ、連帯債務ではローン全体（按分前）に繰上返済を適用する。
     var prepayAmount = clampNonNegative(els.prepayAmount.value);
     if (prepayAmount > 0) {
       els.prepayTableWrap.style.display = "";
-      var baseInterest = totalInterestFromBalances(balances, loanRate);
+      var baseInterest = totalInterestFromBalances(totalBalances, loanRate) + (isPair ? totalInterestFromBalances(balancesB, loanRate) : 0);
       var prepayRows = PREPAY_YEAR_SCENARIOS.filter(function (y) {
         return y === 0 || y * 12 <= loanMonths;
       }).map(function (y) {
-        var yearBalances = y === 0 ? balances : simulateLoan(principal, loanRate, loanMonths, y * 12, prepayAmount);
-        var yearSchedule = computeCreditSchedule(yearBalances, creditPeriod, loanMonths, limit, overIncomeLimit, taxAmount, residentTaxCap);
-        var interest = totalInterestFromBalances(yearBalances, loanRate);
+        var yearTotalBalances = y === 0 ? totalBalances : simulateLoan(principal, loanRate, loanMonths, y * 12, prepayAmount);
+        var yearBalancesA, yearBalancesB, interest;
+        if (isJoint) {
+          yearBalancesA = yearTotalBalances.map(function (b) { return b * shareA; });
+          yearBalancesB = yearTotalBalances.map(function (b) { return b * (1 - shareA); });
+          interest = totalInterestFromBalances(yearTotalBalances, loanRate);
+        } else if (isPair) {
+          yearBalancesA = yearTotalBalances;
+          yearBalancesB = balancesB;
+          interest = totalInterestFromBalances(yearTotalBalances, loanRate) + totalInterestFromBalances(balancesB, loanRate);
+        } else {
+          yearBalancesA = yearTotalBalances;
+          yearBalancesB = null;
+          interest = totalInterestFromBalances(yearTotalBalances, loanRate);
+        }
+        var yearHousehold = computeHouseholdCredit(
+          yearBalancesA, creditPeriod, loanMonths, limit, overIncomeLimit, taxAmount, residentTaxCap,
+          yearBalancesB, overIncomeLimitB, taxAmountB, residentTaxCapB
+        );
         return {
           year: y,
-          totalCredit: yearSchedule.totalCredit,
-          creditDiff: yearSchedule.totalCredit - totalCredit,
+          totalCredit: yearHousehold.totalCredit,
+          creditDiff: yearHousehold.totalCredit - totalCredit,
           interestSaved: baseInterest - interest,
         };
       });
@@ -324,7 +464,7 @@
       if (referenceRow && referenceRow.year > 0) {
         els.prepayNote.textContent =
           manYen(prepayAmount) + "の繰上返済（期間短縮型）を" + referenceRow.year + "年目の年末に実行すると、" + creditPeriod +
-          "年間の住宅ローン控除額は繰上返済しない場合より約 " + manYen(Math.abs(referenceRow.creditDiff)) +
+          "年間の住宅ローン控除額（世帯合計）は繰上返済しない場合より約 " + manYen(Math.abs(referenceRow.creditDiff)) +
           " 少なくなる一方、完済までの利息は約 " + manYen(Math.max(0, referenceRow.interestSaved)) +
           " 軽減される見込みです。実行するタイミングが早いほど利息軽減効果は大きくなりやすい一方、年末残高が借入限度額を下回る年ほど控除額への影響も大きくなる傾向があります。";
       } else {
@@ -336,24 +476,27 @@
     }
 
     var labels = rows.map(function (r) { return r.year + "年目"; });
+    var incomeTaxUsedByYear = rows.map(function (r, idx) { return r.incomeTaxUsed + (rowsB ? rowsB[idx].incomeTaxUsed : 0); });
+    var residentTaxUsedByYear = rows.map(function (r, idx) { return r.residentTaxUsed + (rowsB ? rowsB[idx].residentTaxUsed : 0); });
+    var unusedByYear = rows.map(function (r, idx) { return r.unused + (rowsB ? rowsB[idx].unused : 0); });
     var data = {
       labels: labels,
       datasets: [
         {
           label: "所得税から控除",
-          data: rows.map(function (r) { return Math.round(r.incomeTaxUsed); }),
+          data: incomeTaxUsedByYear.map(function (v) { return Math.round(v); }),
           backgroundColor: "#0f5f4c",
           stack: "credit",
         },
         {
           label: "住民税から控除",
-          data: rows.map(function (r) { return Math.round(r.residentTaxUsed); }),
+          data: residentTaxUsedByYear.map(function (v) { return Math.round(v); }),
           backgroundColor: "#4f9d84",
           stack: "credit",
         },
         {
           label: "控除しきれない額",
-          data: rows.map(function (r) { return Math.round(r.unused); }),
+          data: unusedByYear.map(function (v) { return Math.round(v); }),
           backgroundColor: "#d98e04",
           stack: "credit",
         },
@@ -391,7 +534,10 @@
   }
 
   [
+    els.loanMode,
     els.principal,
+    els.principalB,
+    els.shareA,
     els.loanRate,
     els.loanYears,
     els.moveInYear,
@@ -400,6 +546,8 @@
     els.salaryIncome,
     els.hasSpouse,
     els.dependents,
+    els.salaryIncomeB,
+    els.dependentsB,
     els.prepayAmount,
   ].forEach(function (el) {
     el.addEventListener("input", render);
