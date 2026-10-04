@@ -4,17 +4,26 @@
   // 雇用保険 基本手当（失業給付）シミュレーター。
   // 令和8年8月1日改定の賃金日額・基本手当日額の上限額・下限額と、
   // 基本手当日額の計算式（厚生労働省「基本手当日額の計算方法」）に基づき、
-  // 離職前の月給（額面）を賃金日額（本来は離職前6か月の賃金合計÷180）の
-  // 近似値として使用し、年齢区分ごとに基本手当日額を算出する。
+  // 年齢区分ごとに基本手当日額を算出する。
   // 所定給付日数は、離職理由（自己都合／特定受給資格者・特定理由離職者／
   // 就職困難者）と年齢区分・被保険者であった期間から、ハローワーク
   // インターネットサービス「基本手当の所定給付日数」の表に基づき判定する。
   // 給付制限期間は、令和7年4月1日以降の離職に適用される「自己都合退職は
   // 原則1か月」のルールを前提とし、重責解雇・過去5年以内の複数回の自己都合
   // 退職に該当する場合の3か月にも対応する。
+  //
+  // 賃金日額は本来「離職前6か月間に支払われた賃金の合計÷180」で算定される。
+  // 本ツールは既定では入力を簡略化した「離職前の月給（額面）÷30」の近似を
+  // 使うが、離職前6か月間の賃金合計が分かる場合は、そちらを入力することで
+  // 本来の計算方法（合計÷180）に切り替えてより正確な賃金日額を試算できる
+  // ようにしている（js/kaigo-kyugyo.jsの賃金日額精緻化と同じ方式）。
 
   var els = {
+    wageMethod: document.getElementById("kihon-wageMethod"),
+    salaryField: document.getElementById("kihon-salaryField"),
     salary: document.getElementById("kihon-salary"),
+    sixMonthField: document.getElementById("kihon-sixMonthField"),
+    sixMonthTotal: document.getElementById("kihon-sixMonthTotal"),
     age: document.getElementById("kihon-age"),
     reason: document.getElementById("kihon-reason"),
     insured: document.getElementById("kihon-insured"),
@@ -139,7 +148,15 @@
   }
 
   function render() {
+    var useSixMonth = els.wageMethod && els.wageMethod.value === "sixmonth";
+
+    if (els.salaryField) els.salaryField.style.display = useSixMonth ? "none" : "";
+    if (els.sixMonthField) els.sixMonthField.style.display = useSixMonth ? "" : "none";
+    if (els.salary) els.salary.disabled = useSixMonth;
+    if (els.sixMonthTotal) els.sixMonthTotal.disabled = !useSixMonth;
+
     var salary = clampNonNegative(els.salary.value) * 10000;
+    var sixMonthTotal = els.sixMonthTotal ? clampNonNegative(els.sixMonthTotal.value) : 0;
     var age = els.age.value;
     var reason = els.reason ? els.reason.value : "self";
     var insured = els.insured ? els.insured.value : "1to5";
@@ -148,7 +165,7 @@
     if (els.restrictionField) els.restrictionField.hidden = reason !== "self";
 
     var wageBracket = AGE_TO_WAGE_BRACKET[age];
-    var wageDaily = Math.floor(salary / 30);
+    var wageDaily = useSixMonth ? Math.floor(sixMonthTotal / 180) : Math.floor(salary / 30);
     var wageDailyClamped = Math.min(WAGE_MAX[wageBracket], Math.max(WAGE_MIN, wageDaily));
     var dailyBenefit = dailyBenefitOf(wageDaily, wageBracket);
 
@@ -176,7 +193,9 @@
           "倒産・解雇等のやむを得ない事情がある場合は「離職理由」を特定理由離職者・特定受給資格者に変更すると、通算6か月以上で対象になる場合があります。";
       } else {
         sub =
-          "基本手当日額は " + yen(dailyBenefit) + "（月給" + manYen(salary) + "を賃金日額" + wageDaily.toLocaleString("ja-JP") + "円/日の近似値として使用、年齢区分の上限・下限で調整）。" +
+          "基本手当日額は " + yen(dailyBenefit) + "（" +
+          (useSixMonth ? "離職前6か月間の賃金合計" + manYen(sixMonthTotal) : "月給" + manYen(salary)) +
+          "を賃金日額" + wageDaily.toLocaleString("ja-JP") + "円/日の" + (useSixMonth ? "算定基礎" : "近似値") + "として使用、年齢区分の上限・下限で調整）。" +
           "待期期間7日間" +
           (restrictionDays > 0 ? "＋給付制限" + restrictionDays / 30 + "か月" : "") +
           "の後、" + startAfterDays + "日後から支給が始まる見込みです。";
@@ -184,11 +203,18 @@
       els.verdictSub.textContent = sub;
     }
 
+    var wageRowLabel = useSixMonth
+      ? "賃金日額（6か月間の賃金合計÷180、上限" + WAGE_MAX[wageBracket].toLocaleString("ja-JP") + "円・下限" + WAGE_MIN.toLocaleString("ja-JP") + "円で調整）"
+      : "賃金日額の近似（月給÷30、上限" + WAGE_MAX[wageBracket].toLocaleString("ja-JP") + "円・下限" + WAGE_MIN.toLocaleString("ja-JP") + "円で調整）";
+
     els.breakdownBody.innerHTML =
       "<tr><td>離職理由</td><td>" + REASON_LABELS[reason] + "</td></tr>" +
       "<tr><td>離職時の年齢</td><td>" + AGE_LABELS[age] + "</td></tr>" +
       "<tr><td>被保険者であった期間</td><td>" + INSURED_LABELS[insured] + "</td></tr>" +
-      "<tr><td>賃金日額の近似（月給÷30、上限" + WAGE_MAX[wageBracket].toLocaleString("ja-JP") + "円・下限" + WAGE_MIN.toLocaleString("ja-JP") + "円で調整）</td><td>" + wageDailyClamped.toLocaleString("ja-JP") + " 円/日</td></tr>" +
+      (useSixMonth
+        ? "<tr><td>離職前6か月間の賃金合計</td><td>" + yen(sixMonthTotal) + "</td></tr>"
+        : "<tr><td>離職前の月給（額面）</td><td>" + yen(salary) + "</td></tr>") +
+      "<tr><td>" + wageRowLabel + "</td><td>" + wageDailyClamped.toLocaleString("ja-JP") + " 円/日</td></tr>" +
       "<tr><td>基本手当日額（給付率45%〜80%のスライド式）</td><td>" + (elig.ineligible ? "-" : yen(dailyBenefit) + " /日") + "</td></tr>" +
       "<tr><td>待期期間（7日間、対象外）</td><td>" + WAIT_DAYS + " 日</td></tr>" +
       (restrictionDays > 0
@@ -273,12 +299,12 @@
     }
   }
 
-  [els.salary].forEach(function (el) {
+  [els.salary, els.sixMonthTotal].forEach(function (el) {
     if (!el) return;
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
-  [els.age, els.reason, els.insured, els.restriction].forEach(function (el) {
+  [els.age, els.reason, els.insured, els.restriction, els.wageMethod].forEach(function (el) {
     if (!el) return;
     el.addEventListener("change", render);
   });
