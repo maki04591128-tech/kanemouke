@@ -15,13 +15,17 @@
   // 近づく制度）の対象にするかどうかを選べるようにしている。
   //
   // 賃金日額は本来「休業開始前6か月間に支払われた賃金の合計÷180」で
-  // 算定されるが、本ツールは入力を簡略化するため「育休開始前の月給
-  // （額面）÷30」で近似している。ボーナス等の賞与は本来の算定基礎からも
-  // 除外されるため、月給（基本給＋諸手当、賞与を除く）を入力してもらう
-  // 前提であれば大きくは乖離しない設計とした。
+  // 算定される。本ツールは既定では入力を簡略化した「育休開始前の月給
+  // （額面）÷30」の近似を使うが、休業開始前6か月間の賃金合計が分かる
+  // 場合は、そちらを入力することで本来の計算方法（合計÷180）に切り替えて
+  // より正確な賃金日額を試算できるようにしている。
 
   var els = {
+    wageMethod: document.getElementById("ikuji-wageMethod"),
+    salaryField: document.getElementById("ikuji-salaryField"),
     salary: document.getElementById("ikuji-salary"),
+    sixMonthField: document.getElementById("ikuji-sixMonthField"),
+    sixMonthTotal: document.getElementById("ikuji-sixMonthTotal"),
     months: document.getElementById("ikuji-months"),
     monthsOut: document.getElementById("ikuji-monthsOut"),
     support: document.getElementById("ikuji-support"),
@@ -53,19 +57,34 @@
     return Math.min(18, Math.max(1, Math.round(Number(n) || 0)));
   }
 
-  function dailyWageOf(monthlySalary) {
-    var raw = Math.max(0, Number(monthlySalary) || 0) / 30;
+  function clampDailyWage(raw) {
     return Math.min(DAILY_WAGE_UPPER, Math.max(DAILY_WAGE_LOWER, raw));
   }
 
+  function dailyWageOf(monthlySalary) {
+    return clampDailyWage(Math.max(0, Number(monthlySalary) || 0) / 30);
+  }
+
+  function dailyWageOfSixMonthTotal(sixMonthTotal) {
+    return clampDailyWage(Math.max(0, Number(sixMonthTotal) || 0) / 180);
+  }
+
   function render() {
+    var useSixMonth = els.wageMethod && els.wageMethod.value === "sixmonth";
+
+    if (els.salaryField) els.salaryField.style.display = useSixMonth ? "none" : "";
+    if (els.sixMonthField) els.sixMonthField.style.display = useSixMonth ? "" : "none";
+    if (els.salary) els.salary.disabled = useSixMonth;
+    if (els.sixMonthTotal) els.sixMonthTotal.disabled = !useSixMonth;
+
     var salary = Math.max(0, Number(els.salary.value) || 0);
+    var sixMonthTotal = els.sixMonthTotal ? Math.max(0, Number(els.sixMonthTotal.value) || 0) : 0;
     var months = clampMonths(els.months.value);
     var supportOn = els.support.value === "yes";
 
     if (els.monthsOut) els.monthsOut.textContent = months + " か月";
 
-    var dailyWage = dailyWageOf(salary);
+    var dailyWage = useSixMonth ? dailyWageOfSixMonthTotal(sixMonthTotal) : dailyWageOf(salary);
     var monthlyHigh = dailyWage * 30 * RATE_HIGH;
     var monthlyLow = dailyWage * 30 * RATE_LOW;
 
@@ -96,7 +115,10 @@
 
     if (els.tableBody) {
       var rows = [];
-      rows.push(["賃金日額（月給÷30、上限16,540円・下限3,203円で調整後）", "", yen(dailyWage) + " /日"]);
+      var dailyWageLabel = useSixMonth
+        ? "賃金日額（6か月間の賃金合計÷180、上限16,540円・下限3,203円で調整後）"
+        : "賃金日額（月給÷30、上限16,540円・下限3,203円で調整後）";
+      rows.push([dailyWageLabel, "", yen(dailyWage) + " /日"]);
       rows.push(["支給率67%期間（1〜" + HIGH_RATE_MONTHS + "か月目）", highMonths + " か月 × " + yen(monthlyHigh), yen(totalHigh)]);
       if (lowMonths > 0) {
         rows.push(["支給率50%期間（" + (HIGH_RATE_MONTHS + 1) + "か月目以降）", lowMonths + " か月 × " + yen(monthlyLow), yen(totalLow)]);
@@ -164,11 +186,13 @@
     }
   }
 
-  [els.salary, els.months].forEach(function (el) {
+  [els.salary, els.months, els.sixMonthTotal].forEach(function (el) {
+    if (!el) return;
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
   els.support.addEventListener("change", render);
+  if (els.wageMethod) els.wageMethod.addEventListener("change", render);
 
   render();
 })();
