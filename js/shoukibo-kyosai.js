@@ -34,9 +34,15 @@
     taxableIncome: document.getElementById("kyosai-taxableIncome"),
     rate: document.getElementById("kyosai-rate"),
     rateOut: document.getElementById("kyosai-rateOut"),
+    payoutReason: document.getElementById("kyosai-payoutReason"),
+    payoutMethodRow: document.getElementById("kyosai-payoutMethodRow"),
     payoutMethod: document.getElementById("kyosai-payoutMethod"),
+    kaiyakuNote: document.getElementById("kyosai-kaiyakuNote"),
     ageGroupRow: document.getElementById("kyosai-ageGroupRow"),
     ageGroup: document.getElementById("kyosai-ageGroup"),
+    ageGroupHint: document.getElementById("kyosai-ageGroupHint"),
+    kyosaikinLabel: document.getElementById("kyosai-result-kyosaikin-label"),
+    chartLegendBalance: document.getElementById("kyosai-chart-legend-balance"),
     verdict: document.getElementById("kyosai-verdict"),
     verdictSub: document.getElementById("kyosai-verdictSub"),
     annualSaving: document.getElementById("kyosai-result-annual-saving"),
@@ -114,6 +120,24 @@
     return Math.max(0, v);
   }
 
+  // 解約手当金の支給率（小規模企業共済法施行令別表第二、平成16年4月以降の掛金分）。
+  // 任意解約（自己都合でやめる場合）にのみ適用され、予定利率での複利運用ではなく
+  // 掛金納付月数に応じた一律の支給率を掛金合計額に乗じて決まる。
+  function cancellationPayoutRatio(months) {
+    var m = Math.max(0, Math.round(months));
+    if (m < 12) return 0;
+    if (m <= 83) return 0.80;
+    if (m <= 245) {
+      var band = Math.floor((m - 84) / 6);
+      return 0.805 + 0.0075 * band;
+    }
+    if (m < 720) {
+      var band2 = Math.floor((m - 246) / 6);
+      return 1.0025 + 0.0025 * band2;
+    }
+    return 1.20;
+  }
+
   // 元本を年利rでN年かけて均等に取り崩す場合の毎年の受取額（年金現価方式）
   function annualAnnuityPayment(principal, rate, years) {
     if (rate === 0) return principal / years;
@@ -146,7 +170,13 @@
   }
 
   function updateAgeGroupVisibility() {
-    els.ageGroupRow.style.display = els.payoutMethod.value === "lump" ? "none" : "";
+    var isKaiyaku = els.payoutReason.value === "kaiyaku";
+    els.payoutMethodRow.style.display = isKaiyaku ? "none" : "";
+    els.kaiyakuNote.hidden = !isKaiyaku;
+    els.ageGroupRow.style.display = isKaiyaku || els.payoutMethod.value !== "lump" ? "" : "none";
+    els.ageGroupHint.textContent = isKaiyaku
+      ? "65歳以上での請求は「退職所得」、65歳未満での請求は「一時所得」として課税されます。"
+      : "分割受取を選んだ場合の公的年金等控除額の計算に使用します。";
   }
 
   function render() {
@@ -154,7 +184,9 @@
     var years = Number(els.years.value);
     var taxableIncome = clampNonNegative(els.taxableIncome.value);
     var ratePct = Number(els.rate.value);
-    var payoutMethod = els.payoutMethod.value;
+    var payoutReason = els.payoutReason.value;
+    var isKaiyaku = payoutReason === "kaiyaku";
+    var payoutMethod = isKaiyaku ? "lump" : els.payoutMethod.value;
     var isOver65 = els.ageGroup.value === "65";
 
     els.monthlyOut.textContent = yen(monthly);
@@ -169,16 +201,30 @@
 
     var growth = simulateGrowth(monthly, ratePct, years);
     var principal = growth.principal;
-    var kyosaikin = growth.balance;
     var netCost = principal - totalSaving;
+
+    var months = Math.round(years * 12);
+    var payoutRatio = isKaiyaku ? cancellationPayoutRatio(months) : 1;
+    var kyosaikin = isKaiyaku ? principal * payoutRatio : growth.balance;
+    var shortfall = principal - kyosaikin;
 
     var payoutYears = payoutMethod === "lump" ? 0 : (payoutMethod === "installment10" ? 10 : 15);
     var deduction = 0;
     var payoutTax = 0;
     var netPayout = 0;
     var paymentPerYear = 0;
+    var oneTimeIncome = 0;
 
-    if (payoutMethod === "lump") {
+    if (isKaiyaku && isOver65) {
+      deduction = retirementDeduction(years);
+      var kaiyakuRetirementIncome = Math.max(0, kyosaikin - deduction) / 2;
+      payoutTax = incomeTaxWithReconstruction(kaiyakuRetirementIncome) + kaiyakuRetirementIncome * RESIDENT_TAX_RATE;
+      netPayout = kyosaikin - payoutTax;
+    } else if (isKaiyaku) {
+      oneTimeIncome = Math.max(0, kyosaikin - 500000) / 2;
+      payoutTax = incomeTaxWithReconstruction(oneTimeIncome) + oneTimeIncome * RESIDENT_TAX_RATE;
+      netPayout = kyosaikin - payoutTax;
+    } else if (payoutMethod === "lump") {
       deduction = retirementDeduction(years);
       var retirementIncome = Math.max(0, kyosaikin - deduction) / 2;
       payoutTax = incomeTaxWithReconstruction(retirementIncome) + retirementIncome * RESIDENT_TAX_RATE;
@@ -196,11 +242,24 @@
     els.annualSaving.textContent = yen(annualSaving);
     els.totalSaving.textContent = manYen(totalSaving);
     els.principal.textContent = manYen(principal);
+    els.kyosaikinLabel.textContent = isKaiyaku ? "解約手当金の目安" : "共済金の目安";
     els.kyosaikin.textContent = manYen(kyosaikin);
     els.netCost.textContent = manYen(netCost);
     els.netPayout.textContent = manYen(netPayout);
+    els.chartLegendBalance.textContent = isKaiyaku ? "解約手当金の目安（支給率適用後）" : "共済金の目安（掛金＋運用益）";
 
-    if (payoutMethod === "lump" && kyosaikin <= deduction) {
+    if (isKaiyaku && months < 12) {
+      els.verdict.textContent = "掛金納付月数が12カ月未満のため、解約手当金は支給されません（掛け捨てです）";
+      els.verdictSub.textContent = "小規模企業共済は加入から12カ月以上掛金を納付しないと、任意解約時に一切受け取れません。";
+    } else if (isKaiyaku && shortfall > 0) {
+      els.verdict.textContent =
+        "任意解約（解約手当金）の受取額は " + manYen(kyosaikin) + " で、掛金合計より " + manYen(shortfall) + " 少なくなります（元本割れ）";
+      els.verdictSub.textContent =
+        "掛金納付月数" + months + "カ月での支給率は " + (payoutRatio * 100).toFixed(2) + "% です。240カ月（20年）以上納付すると元本割れが解消されます。";
+    } else if (isKaiyaku) {
+      els.verdict.textContent = "任意解約（解約手当金）の受取額は " + manYen(kyosaikin) + " で、掛金合計を上回ります";
+      els.verdictSub.textContent = "掛金納付月数" + months + "カ月での支給率は " + (payoutRatio * 100).toFixed(2) + "% です。";
+    } else if (payoutMethod === "lump" && kyosaikin <= deduction) {
       els.verdict.textContent = "共済金（一括）は退職所得控除の範囲内のため、受取時の税額はゼロです";
       els.verdictSub.textContent =
         "掛金累計 " + manYen(principal) + " に加え、拠出中の累計節税額 " + manYen(totalSaving) + " が実質的な上乗せ効果になります。";
@@ -217,24 +276,39 @@
 
     var rows = [
       ["掛金月額", yen(monthly)],
-      ["加入年数（掛金拠出年数）", years + " 年"],
+      ["加入年数（掛金拠出年数）", years + " 年（" + months + " カ月）"],
       ["入力した年間課税所得の目安", yen(taxableIncome)],
       ["所得税率（速算表）", (marginalRate * 100).toFixed(0) + " %"],
       ["年間節税額（所得税＋住民税）", yen(annualSaving)],
       ["加入期間中の累計節税額", manYen(totalSaving)],
       ["掛金累計額（元本）", manYen(principal)],
-      ["共済金の目安（想定利率 " + ratePct.toFixed(1) + "%で試算）", manYen(kyosaikin)],
-      ["実質負担額（掛金累計－累計節税額）", manYen(netCost)],
     ];
-    if (payoutMethod === "lump") {
-      rows.push(["退職所得控除額（加入年数ベース）", manYen(deduction)]);
-      rows.push(["受取時の税額（一括・退職所得扱い）", manYen(payoutTax)]);
-      rows.push(["受取時の手取り額（一括）", manYen(netPayout)]);
+    if (isKaiyaku) {
+      rows.push(["受け取り事由", "任意解約（解約手当金）"]);
+      rows.push(["解約手当金の支給率", (payoutRatio * 100).toFixed(2) + " %"]);
+      rows.push(["解約手当金の額（支給率適用後）", manYen(kyosaikin)]);
+      rows.push(
+        shortfall > 0
+          ? ["元本割れ額（掛金累計－解約手当金）", manYen(shortfall)]
+          : ["掛金超過分（解約手当金－掛金累計）", manYen(Math.abs(shortfall))]
+      );
+      rows.push(["実質負担額（掛金累計－累計節税額）", manYen(netCost)]);
+      rows.push(["受取時の税区分", isOver65 ? "退職所得" : "一時所得"]);
+      rows.push(["受取時の税額", manYen(payoutTax)]);
+      rows.push(["受取時の手取り額", manYen(netPayout)]);
     } else {
-      rows.push(["分割受取の年数", payoutYears + " 年"]);
-      rows.push(["毎年の受取額（税引前）", manYen(paymentPerYear)]);
-      rows.push([payoutYears + "年間の合計税額（公的年金等の雑所得扱い）", manYen(payoutTax)]);
-      rows.push(["受取時の手取り総額（分割）", manYen(netPayout)]);
+      rows.push(["共済金の目安（想定利率 " + ratePct.toFixed(1) + "%で試算）", manYen(kyosaikin)]);
+      rows.push(["実質負担額（掛金累計－累計節税額）", manYen(netCost)]);
+      if (payoutMethod === "lump") {
+        rows.push(["退職所得控除額（加入年数ベース）", manYen(deduction)]);
+        rows.push(["受取時の税額（一括・退職所得扱い）", manYen(payoutTax)]);
+        rows.push(["受取時の手取り額（一括）", manYen(netPayout)]);
+      } else {
+        rows.push(["分割受取の年数", payoutYears + " 年"]);
+        rows.push(["毎年の受取額（税引前）", manYen(paymentPerYear)]);
+        rows.push([payoutYears + "年間の合計税額（公的年金等の雑所得扱い）", manYen(payoutTax)]);
+        rows.push(["受取時の手取り総額（分割）", manYen(netPayout)]);
+      }
     }
 
     els.tableBody.innerHTML = rows
@@ -245,14 +319,18 @@
 
     var labels = growth.yearly.map(function (d) { return d.year + "年"; });
     var principalData = growth.yearly.map(function (d) { return Math.round(d.principal); });
-    var balanceData = growth.yearly.map(function (d) { return Math.round(d.balance); });
+    var balanceData = growth.yearly.map(function (d) {
+      return isKaiyaku
+        ? Math.round(d.principal * cancellationPayoutRatio(d.year * 12))
+        : Math.round(d.balance);
+    });
 
     var ctx = document.getElementById("kyosai-growthChart").getContext("2d");
     var data = {
       labels: labels,
       datasets: [
         {
-          label: "共済金の目安（掛金＋運用益）",
+          label: els.chartLegendBalance.textContent,
           data: balanceData,
           borderColor: "#0f5f4c",
           backgroundColor: "rgba(15, 95, 76, 0.12)",
@@ -298,6 +376,10 @@
     if (window.renderChartDataTable) window.renderChartDataTable("kyosai-growthDataTable", chart);
   }
 
+  els.payoutReason.addEventListener("change", function () {
+    updateAgeGroupVisibility();
+    render();
+  });
   els.payoutMethod.addEventListener("change", function () {
     updateAgeGroupVisibility();
     render();
