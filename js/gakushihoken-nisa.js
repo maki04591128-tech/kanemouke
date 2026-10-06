@@ -9,6 +9,9 @@
     returnRateOut: document.getElementById("gakushi-returnRateOut"),
     nisaRate: document.getElementById("gakushi-nisaRate"),
     nisaRateOut: document.getElementById("gakushi-nisaRateOut"),
+    costPct: document.getElementById("gakushi-costPct"),
+    costPctOut: document.getElementById("gakushi-costPctOut"),
+    costNote: document.getElementById("gakushi-costNote"),
     lifeDeductionEnable: document.getElementById("gakushi-lifeDeductionEnable"),
     lifeDeductionFields: document.getElementById("gakushi-lifeDeductionFields"),
     lifeTaxRate: document.getElementById("gakushi-lifeTaxRate"),
@@ -84,10 +87,17 @@
     var years = Number(els.years.value);
     var returnRatePct = Number(els.returnRate.value);
     var nisaRatePct = Number(els.nisaRate.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netNisaRatePct = nisaRatePct - costPct;
 
     els.yearsOut.textContent = years + " 年";
     els.returnRateOut.textContent = returnRatePct.toFixed(1) + " %";
     els.nisaRateOut.textContent = nisaRatePct.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
+
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト" + costPct.toFixed(1) + "%を差し引いた年率" + netNisaRatePct.toFixed(1) + "%で運用する前提で試算しています。"
+      : "";
 
     var lifeDeductionEnabled = els.lifeDeductionEnable.value === "yes";
     els.lifeDeductionFields.hidden = !lifeDeductionEnabled;
@@ -105,7 +115,7 @@
     var totalTaxBenefit = annualTaxBenefit * years;
     var hokenEffective = hokenPayout + totalTaxBenefit;
 
-    var nisa = simulateNisa(monthly, nisaRatePct, years);
+    var nisa = simulateNisa(monthly, netNisaRatePct, years);
     var nisaFinal = nisa.balance;
 
     els.resultPrincipal.textContent = yen(principal);
@@ -143,7 +153,7 @@
       "<tr><td>毎月の払込・積立額</td><td colspan=\"2\">" + manYen(monthly) + "</td></tr>" +
       "<tr><td>払込・積立期間</td><td colspan=\"2\">" + years + " 年（" + (years * 12) + " 回）</td></tr>" +
       "<tr><td>払込・積立累計額（元本）</td><td>" + yen(principal) + "</td><td>" + yen(principal) + "</td></tr>" +
-      "<tr><td>適用する率</td><td>返戻率 " + returnRatePct.toFixed(1) + " %</td><td>想定利回り 年 " + nisaRatePct.toFixed(1) + " %（複利）</td></tr>" +
+      "<tr><td>適用する率</td><td>返戻率 " + returnRatePct.toFixed(1) + " %</td><td>想定利回り 年 " + nisaRatePct.toFixed(1) + " %" + (costPct > 0 ? "－運用コスト " + costPct.toFixed(1) + " % ＝ 実効 " + netNisaRatePct.toFixed(1) + " %" : "") + "（複利）</td></tr>" +
       "<tr><td><strong>満期・運用終了時点の受取額</strong></td><td><strong>" + yen(hokenPayout) + "</strong></td><td><strong>" + yen(nisaFinal) + "</strong></td></tr>" +
       (lifeDeductionEnabled
         ? "<tr><td>生命保険料控除による軽減額（年間、所得税＋住民税の概算）</td><td colspan=\"2\">" + yen(annualTaxBenefit) + "</td></tr>" +
@@ -220,7 +230,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("gakushi-growthDataTable", chart);
   }
 
-  [els.monthly, els.years, els.returnRate, els.nisaRate, els.lifeDeductionEnable, els.lifeTaxRate].forEach(function (el) {
+  [els.monthly, els.years, els.returnRate, els.nisaRate, els.costPct, els.lifeDeductionEnable, els.lifeTaxRate].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });

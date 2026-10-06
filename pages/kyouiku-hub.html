@@ -100,6 +100,14 @@
     },
     {
       "@type": "Question",
+      "name": "信託報酬などの運用コストは考慮できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「運用コスト（信託報酬等、年率）」欄に、投資信託の信託報酬など保有中にかかる年率コストを入力すると、積立NISAの想定利回りから差し引いた実効利回りで試算します（既定値0%）。学資保険の返戻率はコストの影響を受けない独立した入力のままです。売買手数料や運用益への課税は引き続き考慮していません。"
+      }
+    },
+    {
+      "@type": "Question",
       "name": "2011年以前に契約した「旧制度」の保険はどうなりますか？",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -643,6 +651,11 @@
 <p class="field-hint">つみたて投資枠の運用益は非課税のため、税金は考慮していません。将来の運用成果を保証するものではない点にご留意ください。</p>
 </div>
 <div class="field">
+<label for="gakushi-costPct">運用コスト（信託報酬等、年率） <span class="unit" id="gakushi-costPctOut">0.0 %</span></label>
+<input id="gakushi-costPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint">投資信託の信託報酬など保有中にかかる年率コストを、上の想定利回りから差し引いて試算します。0%なら従来どおりコストを考慮しない試算になります（運用益への課税や売買手数料は含みません）。</p>
+</div>
+<div class="field">
 <label for="gakushi-lifeDeductionEnable">生命保険料控除による軽減額を考慮する</label>
 <select id="gakushi-lifeDeductionEnable">
 <option selected value="no">考慮しない（払込保険料と返戻金のみで比較）</option>
@@ -702,6 +715,7 @@
 <span><span class="legend-dot" style="background:#d98e04"></span>学資保険 満期受取額（参考）</span>
 <span><span class="legend-dot" style="background:#7a8899"></span>払込・積立累計額（元本）</span>
 </div>
+<p class="field-hint" id="gakushi-costNote"></p>
 </div>
 <details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="gakushi-growthDataTable"></table></div></details>
 <div class="table-wrap">
@@ -732,10 +746,14 @@
 <dt>払込期間の途中で解約したらどうなりますか？</dt>
 <dd>学資保険を途中解約すると、解約返戻金が払込保険料の総額を下回ることが多く、大きく元本割れするのが一般的です。本シミュレーターは満期まで契約を継続した場合の試算のみを対象としています。積立NISAはいつでも時価で売却できる点が対照的です。</dd>
 </div>
+<div class="faq-item">
+<dt>信託報酬などの運用コストは考慮できますか？</dt>
+<dd>「運用コスト（信託報酬等、年率）」欄に、投資信託の信託報酬など保有中にかかる年率コストを入力すると、積立NISAの想定利回りから差し引いた実効利回りで試算します（既定値0%）。学資保険の返戻率はコストの影響を受けない独立した入力のままです。売買手数料や運用益への課税は引き続き考慮していません。</dd>
+</div>
 </dl>
 </section>
 <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・保険会社の商品内容・元本を保証するものではありません。学資保険の返戻率は入力値をそのまま満期時に確定するものとして計算し、途中解約・保障内容・生命保険料控除・満期保険金の課税は考慮していません。積立NISAは運用益非課税として月次複利で計算した税引前の試算値です。実際の商品選び・税額については保険会社・税理士等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・保険会社の商品内容・元本を保証するものではありません。学資保険の返戻率は入力値をそのまま満期時に確定するものとして計算し、途中解約・保障内容・生命保険料控除・満期保険金の課税は考慮していません。積立NISAは運用益非課税として月次複利で計算した税引前の試算値で、信託報酬等の運用コストは「運用コスト（信託報酬等、年率）」欄で想定利回りから差し引く形で試算に反映できます（既定値0%）が、売買手数料は考慮していません。実際の商品選び・税額については保険会社・税理士等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
   </div>
   </section>
   <section class="tab-panel" id="tabpanel-hoken" role="tabpanel" aria-labelledby="tab-btn-hoken" data-tool="hoken" hidden>
