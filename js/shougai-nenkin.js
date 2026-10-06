@@ -25,6 +25,16 @@
   // 加算は区分により異なり、老人控除対象配偶者・老人扶養親族は1人48万円、
   // 特定扶養親族・19歳未満の控除対象扶養親族は1人63万円、その他の扶養親
   // 族は1人38万円を加算する。国民年金のみ加入時のみ対象。
+  //
+  // 労災保険の障害（補償）年金との調整：同一の病気・けがについて労災保険
+  // の障害（補償）年金（1〜7級）と障害年金（障害基礎年金・障害厚生年金）
+  // を同時に受け取る場合、二重填補を避けるため労災保険側に調整率がかかり
+  // 減額される。障害年金側はそのまま全額支給される（厚生労働省発表）。
+  // 調整率は併給される年金の組み合わせで決まり、障害基礎年金＋障害厚生年
+  // 金の場合0.73、障害厚生年金のみ0.83、障害基礎年金のみ0.88。さらに
+  // 「調整後の労災年金＋障害年金の合計が、調整前の労災年金の額を下回らな
+  // い」という下限保護がある。障害手当金（一時金）は労災の障害（補償）一
+  // 時金（8〜14級）と同様に一時金のため、この調整の対象外（簡略化）。
 
   var els = {
     pensionType: document.getElementById("shougai-pensionType"),
@@ -35,6 +45,9 @@
     childCount: document.getElementById("shougai-childCount"),
     hasSpouse: document.getElementById("shougai-hasSpouse"),
     spouseAge: document.getElementById("shougai-spouseAge"),
+    rousaiMode: document.getElementById("shougai-rousaiMode"),
+    rousaiFields: document.getElementById("shougai-rousaiFields"),
+    rousaiAmount: document.getElementById("shougai-rousaiAmount"),
     is20mae: document.getElementById("shougai-is20mae"),
     is20maeField: document.getElementById("shougai-is20mae-field"),
     zennenShotoku: document.getElementById("shougai-zennenShotoku"),
@@ -76,6 +89,9 @@
   var DEPENDENT_ADD_ROUJIN = 480000; // 老人控除対象配偶者・老人扶養親族1人あたりの加算
   var DEPENDENT_ADD_TOKUTEI = 630000; // 特定扶養親族・19歳未満の控除対象扶養親族1人あたりの加算
   var DEPENDENT_ADD_SONOTA = 380000; // その他の扶養親族1人あたりの加算（一般区分）
+  var ROUSAI_RATIO_BOTH = 0.73; // 障害基礎年金＋障害厚生年金と併給時の労災調整率
+  var ROUSAI_RATIO_KOUSEI_ONLY = 0.83; // 障害厚生年金のみと併給時の労災調整率
+  var ROUSAI_RATIO_KISO_ONLY = 0.88; // 障害基礎年金のみと併給時の労災調整率
 
   function yen(n) {
     return Math.round(n).toLocaleString("ja-JP") + " 円";
@@ -85,7 +101,7 @@
     return Math.max(0, Number(n) || 0);
   }
 
-  function calc(pensionType, grade, kouseiYears, avgIncomeYen, childCount, hasSpouse, spouseAge, is20mae, zennenShotokuYen, fuyouRoujin, fuyouTokutei, fuyouSonota) {
+  function calc(pensionType, grade, kouseiYears, avgIncomeYen, childCount, hasSpouse, spouseAge, is20mae, zennenShotokuYen, fuyouRoujin, fuyouTokutei, fuyouSonota, rousaiReceiving, rousaiAmountYen) {
     var isKousei = pensionType === "kousei";
     var isTeate = grade === "teate";
     var kouseiMonths = isKousei ? kouseiYears * 12 : 0;
@@ -109,6 +125,7 @@
         total: teateAmount,
         ineligibleGrade3Kokumin: false,
         ineligibleTeateKokumin: !isKousei,
+        rousaiApplicable: false,
       };
     }
 
@@ -159,6 +176,24 @@
     var kakyu = spouseEligible ? SPOUSE_ADDITION_YEARLY : 0;
 
     var ineligibleGrade3Kokumin = !isKousei && grade === "3";
+    var total = kiso + kousei + kakyu;
+
+    var rousaiApplicable = rousaiReceiving && total > 0;
+    var rousaiRatio = 0;
+    var rousaiAmountAdjusted = 0;
+    var rousaiFloorApplied = false;
+    if (rousaiApplicable) {
+      if (kiso > 0 && kousei > 0) rousaiRatio = ROUSAI_RATIO_BOTH;
+      else if (kousei > 0) rousaiRatio = ROUSAI_RATIO_KOUSEI_ONLY;
+      else rousaiRatio = ROUSAI_RATIO_KISO_ONLY;
+      rousaiAmountAdjusted = Math.floor(rousaiAmountYen * rousaiRatio);
+      // 下限保護：調整後の労災年金＋障害年金の合計が、調整前の労災年金の額を下回らないようにする。
+      var floorNeeded = rousaiAmountYen - total;
+      if (rousaiAmountAdjusted < floorNeeded) {
+        rousaiAmountAdjusted = Math.min(rousaiAmountYen, Math.max(0, floorNeeded));
+        rousaiFloorApplied = true;
+      }
+    }
 
     return {
       isTeate: false,
@@ -168,7 +203,7 @@
       childAddition: childAddition,
       kousei: kousei,
       kakyu: kakyu,
-      total: kiso + kousei + kakyu,
+      total: total,
       ineligibleGrade3Kokumin: ineligibleGrade3Kokumin,
       ineligibleTeateKokumin: false,
       incomeStop: incomeStop,
@@ -176,6 +211,12 @@
       dependentAdd: dependentAdd,
       limitFull: limitFull,
       limitHalf: limitHalf,
+      rousaiApplicable: rousaiApplicable,
+      rousaiRatio: rousaiRatio,
+      rousaiAmountOriginal: rousaiAmountYen,
+      rousaiAmountAdjusted: rousaiAmountAdjusted,
+      rousaiFloorApplied: rousaiFloorApplied,
+      householdTotal: total + rousaiAmountAdjusted,
     };
   }
 
@@ -197,6 +238,8 @@
     var fuyouRoujin = Math.min(5, clampNonNegative(els.fuyouRoujin ? els.fuyouRoujin.value : 0));
     var fuyouTokutei = Math.min(5, clampNonNegative(els.fuyouTokutei ? els.fuyouTokutei.value : 0));
     var fuyouSonota = Math.min(5, clampNonNegative(els.fuyouSonota ? els.fuyouSonota.value : 0));
+    var rousaiReceiving = !isTeateGrade && els.rousaiMode && els.rousaiMode.value === "received";
+    var rousaiAmount = clampNonNegative(els.rousaiAmount ? els.rousaiAmount.value : 0) * 10000;
 
     if (els.kouseiYearsOut) els.kouseiYearsOut.textContent = kouseiYears + " 年";
     if (els.kouseiYears) els.kouseiYears.disabled = pensionType === "kokumin";
@@ -210,6 +253,9 @@
     if (els.fuyouRoujin) els.fuyouRoujin.disabled = !is20mae;
     if (els.fuyouTokutei) els.fuyouTokutei.disabled = !is20mae;
     if (els.fuyouSonota) els.fuyouSonota.disabled = !is20mae;
+    if (els.rousaiMode) els.rousaiMode.disabled = isTeateGrade;
+    if (els.rousaiFields) els.rousaiFields.style.display = rousaiReceiving ? "" : "none";
+    if (els.rousaiAmount) els.rousaiAmount.disabled = !rousaiReceiving;
 
     var r = calc(
       pensionType,
@@ -223,7 +269,9 @@
       zennenShotoku,
       fuyouRoujin,
       fuyouTokutei,
-      fuyouSonota
+      fuyouSonota,
+      rousaiReceiving,
+      rousaiAmount
     );
     var monthly = r.total / 12;
 
@@ -246,7 +294,8 @@
       if (r.ineligibleGrade3Kokumin) {
         els.notice.style.display = "block";
         els.notice.innerHTML =
-          "<p><strong>3級には障害基礎年金が存在しません：</strong>障害厚生年金3級は厚生年金加入者のみの等級のため、初診日時点で国民年金のみに加入していた場合、3級相当の障害の状態では障害年金（障害基礎年金・障害厚生年金のいずれも）は支給されません。2級以上に該当する場合は障害基礎年金が支給されます。</p>";
+          "<p><strong>3級には障害基礎年金が存在しません：</strong>障害厚生年金3級は厚生年金加入者のみの等級のため、初診日時点で国民年金のみに加入していた場合、3級相当の障害の状態では障害年金（障害基礎年金・障害厚生年金のいずれも）は支給されません。2級以上に該当する場合は障害基礎年金が支給されます。</p>" +
+          (rousaiReceiving ? "<p>障害年金が0円のため、労災保険の障害（補償）年金との調整は発生せず、労災保険から調整前の全額が支給される見込みです。</p>" : "");
       } else if (r.ineligibleTeateKokumin) {
         els.notice.style.display = "block";
         els.notice.innerHTML =
@@ -254,7 +303,8 @@
       } else if (r.incomeStop === "full") {
         els.notice.style.display = "block";
         els.notice.innerHTML =
-          "<p><strong>所得制限により障害基礎年金は全額支給停止の見込みです：</strong>20歳前の傷病による障害基礎年金は保険料を納めていない期間の障害のため、前年の所得が一定額を超えると支給停止になります。入力した前年所得・扶養親族の人数（区分別の加算額込み）では、全額停止の基準額（" + yen(r.limitFull) + "）を超えているため、障害基礎年金・子の加算は0円として試算しています。</p>";
+          "<p><strong>所得制限により障害基礎年金は全額支給停止の見込みです：</strong>20歳前の傷病による障害基礎年金は保険料を納めていない期間の障害のため、前年の所得が一定額を超えると支給停止になります。入力した前年所得・扶養親族の人数（区分別の加算額込み）では、全額停止の基準額（" + yen(r.limitFull) + "）を超えているため、障害基礎年金・子の加算は0円として試算しています。</p>" +
+          (rousaiReceiving ? "<p>障害年金が0円のため、労災保険の障害（補償）年金との調整は発生せず、労災保険から調整前の全額が支給される見込みです。</p>" : "");
       } else if (r.incomeStop === "half") {
         els.notice.style.display = "block";
         els.notice.innerHTML =
@@ -296,7 +346,10 @@
         if (r.kakyu > 0) parts.push("配偶者加給年金額 " + yen(r.kakyu));
         els.verdictSub.textContent =
           parts.join("＋") + "（いずれも年額）の合計です。実際の受給には保険料納付要件・障害認定日に一定の障害等級へ該当していることなどの要件を満たす必要があります。" +
-          (r.incomeStop === "half" ? "20歳前傷病による所得制限で障害基礎年金が2分の1停止になる条件のため、停止後の金額です。" : "");
+          (r.incomeStop === "half" ? "20歳前傷病による所得制限で障害基礎年金が2分の1停止になる条件のため、停止後の金額です。" : "") +
+          (r.rousaiApplicable
+            ? "労災保険の障害（補償）年金（調整前" + yen(r.rousaiAmountOriginal) + "）も受け取るため、労災保険側が調整率" + r.rousaiRatio + "で減額され、世帯の合計受取額は" + yen(r.householdTotal) + "（年額）になります。"
+            : "");
       } else if (r.incomeStop === "full") {
         els.verdictSub.textContent =
           "20歳前の傷病による障害基礎年金は、前年所得が所得制限の基準額を超えると全額支給停止になります。入力した条件では基準額を超えているため、試算結果は0円です。";
@@ -319,7 +372,13 @@
         "<tr><td>障害厚生年金（" + grade + "級・300月みなし）</td><td>" + yen(r.kousei) + " /年</td></tr>" +
         "<tr><td>配偶者加給年金額</td><td>" + yen(r.kakyu) + " /年</td></tr>" +
         "<tr><td><strong>合計（年額）</strong></td><td><strong>" + yen(r.total) + "</strong></td></tr>" +
-        "<tr><td><strong>合計（月額）</strong></td><td><strong>" + yen(monthly) + "</strong></td></tr>";
+        "<tr><td><strong>合計（月額）</strong></td><td><strong>" + yen(monthly) + "</strong></td></tr>" +
+        (r.rousaiApplicable
+          ? "<tr><td>労災保険の障害（補償）年金（調整前・年額）</td><td>" + yen(r.rousaiAmountOriginal) + "</td></tr>" +
+            "<tr><td>労災保険との調整率</td><td>" + r.rousaiRatio + (r.rousaiFloorApplied ? "（下限保護により調整後）" : "") + "</td></tr>" +
+            "<tr><td>労災保険の障害（補償）年金（調整後・年額）</td><td>" + yen(r.rousaiAmountAdjusted) + "</td></tr>" +
+            "<tr><td><strong>世帯の合計受取額（年額・障害年金＋調整後の労災年金）</strong></td><td><strong>" + yen(r.householdTotal) + "</strong></td></tr>"
+          : "");
     }
 
     var canvas = document.getElementById("shougai-breakdownChart");
@@ -370,7 +429,7 @@
     }
   }
 
-  [els.kouseiYears, els.avgIncome, els.childCount, els.spouseAge, els.zennenShotoku, els.fuyouRoujin, els.fuyouTokutei, els.fuyouSonota].forEach(function (el) {
+  [els.kouseiYears, els.avgIncome, els.childCount, els.spouseAge, els.zennenShotoku, els.fuyouRoujin, els.fuyouTokutei, els.fuyouSonota, els.rousaiAmount].forEach(function (el) {
     if (!el) return;
     el.addEventListener("input", render);
     el.addEventListener("change", render);
@@ -379,6 +438,7 @@
   if (els.grade) els.grade.addEventListener("change", render);
   if (els.hasSpouse) els.hasSpouse.addEventListener("change", render);
   if (els.is20mae) els.is20mae.addEventListener("change", render);
+  if (els.rousaiMode) els.rousaiMode.addEventListener("change", render);
 
   render();
 })();
