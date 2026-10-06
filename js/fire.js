@@ -10,12 +10,16 @@
     monthly: document.getElementById("fire-monthly"),
     returnPct: document.getElementById("fire-returnPct"),
     returnPctOut: document.getElementById("fire-returnPctOut"),
+    accCostPct: document.getElementById("fire-accCostPct"),
+    accCostPctOut: document.getElementById("fire-accCostPctOut"),
     annualExpense: document.getElementById("fire-annualExpense"),
     sideIncome: document.getElementById("fire-sideIncome"),
     withdrawalPct: document.getElementById("fire-withdrawalPct"),
     withdrawalPctOut: document.getElementById("fire-withdrawalPctOut"),
     postReturnPct: document.getElementById("fire-postReturnPct"),
     postReturnPctOut: document.getElementById("fire-postReturnPctOut"),
+    postCostPct: document.getElementById("fire-postCostPct"),
+    postCostPctOut: document.getElementById("fire-postCostPctOut"),
     inflationPct: document.getElementById("fire-inflationPct"),
     inflationPctOut: document.getElementById("fire-inflationPctOut"),
     verdict: document.getElementById("fire-verdict"),
@@ -25,6 +29,7 @@
     reachAssets: document.getElementById("fire-result-reach-assets"),
     sustain: document.getElementById("fire-result-sustain"),
     breakdownBody: document.getElementById("fire-breakdown-body"),
+    costNote: document.getElementById("fire-costNote"),
   };
 
   var chart = null;
@@ -101,21 +106,27 @@
     var currentAssetsYen = Math.max(0, Number(els.currentAssets.value) || 0) * 10000;
     var monthlyYen = Math.max(0, Number(els.monthly.value) || 0) * 10000;
     var returnPct = Number(els.returnPct.value);
+    var accCostPct = Math.max(0, Number(els.accCostPct.value) || 0);
+    var netReturnPct = returnPct - accCostPct;
     var annualExpenseYen = Math.max(0, Number(els.annualExpense.value) || 0) * 10000;
     var sideIncomeYen = Math.max(0, Number(els.sideIncome.value) || 0) * 10000;
     var netExpenseYen = Math.max(0, annualExpenseYen - sideIncomeYen);
     var withdrawalPct = Number(els.withdrawalPct.value);
     var postReturnPct = Number(els.postReturnPct.value);
+    var postCostPct = Math.max(0, Number(els.postCostPct.value) || 0);
+    var netPostReturnPct = postReturnPct - postCostPct;
     var inflationPct = Number(els.inflationPct.value);
 
     els.returnPctOut.textContent = returnPct.toFixed(1) + " %";
+    els.accCostPctOut.textContent = accCostPct.toFixed(1) + " %";
     els.withdrawalPctOut.textContent = withdrawalPct.toFixed(1) + " %";
     els.postReturnPctOut.textContent = postReturnPct.toFixed(1) + " %";
+    els.postCostPctOut.textContent = postCostPct.toFixed(1) + " %";
     els.inflationPctOut.textContent = inflationPct.toFixed(1) + " %";
 
     var targetYen = withdrawalPct > 0 ? netExpenseYen / (withdrawalPct / 100) : Infinity;
 
-    var acc = accumulate(currentAssetsYen, monthlyYen, returnPct, targetYen, MAX_ACCUMULATE_YEARS);
+    var acc = accumulate(currentAssetsYen, monthlyYen, netReturnPct, targetYen, MAX_ACCUMULATE_YEARS);
 
     els.target.textContent = manYen(targetYen);
 
@@ -138,7 +149,7 @@
       els.reach.textContent = formatYearsMonths(acc.reachMonth) + "後（" + reachAge.toFixed(1) + "歳）";
       els.reachAssets.textContent = manYen(reachAssetsYen);
 
-      sus = sustain(reachAssetsYen, netExpenseYen, postReturnPct, inflationPct, MAX_SUSTAIN_YEARS);
+      sus = sustain(reachAssetsYen, netExpenseYen, netPostReturnPct, inflationPct, MAX_SUSTAIN_YEARS);
 
       if (sus.depletedYear === null) {
         els.sustain.textContent = MAX_SUSTAIN_YEARS + "年以上（枯渇しない見込み）";
@@ -163,6 +174,17 @@
         "<tr><td>資産の取り崩しでまかなう年間生活費</td><td>" + manYen(netExpenseYen) + "</td></tr>"
       : "";
 
+    var costNoteParts = [];
+    if (accCostPct > 0) {
+      costNoteParts.push("積立期間中は運用コスト" + accCostPct.toFixed(1) + "%を差し引いた年率" + netReturnPct.toFixed(1) + "%");
+    }
+    if (postCostPct > 0) {
+      costNoteParts.push("リタイア後は運用コスト" + postCostPct.toFixed(1) + "%を差し引いた年率" + netPostReturnPct.toFixed(1) + "%");
+    }
+    els.costNote.textContent = costNoteParts.length > 0
+      ? costNoteParts.join("、") + "で運用する前提で試算しています。"
+      : "";
+
     els.breakdownBody.innerHTML =
       "<tr><td>年間生活費</td><td>" + manYen(annualExpenseYen) + "</td></tr>" +
       sideIncomeRow +
@@ -172,7 +194,7 @@
       "<tr><td>到達時点の資産額</td><td>" + els.reachAssets.textContent + "</td></tr>" +
       "<tr><td>リタイア後に資産が持つ期間の目安</td><td>" + els.sustain.textContent + "</td></tr>" +
       "<tr><td>想定引き出し率</td><td>" + withdrawalPct.toFixed(1) + " %</td></tr>" +
-      "<tr><td>想定利回り（積立期間中 / リタイア後）</td><td>" + returnPct.toFixed(1) + " % / " + postReturnPct.toFixed(1) + " %</td></tr>" +
+      "<tr><td>想定利回り（積立期間中 / リタイア後）</td><td>" + netReturnPct.toFixed(1) + " % / " + netPostReturnPct.toFixed(1) + " %</td></tr>" +
       "<tr><td>生活費の上昇率（インフレ率）</td><td>" + inflationPct.toFixed(1) + " %</td></tr>";
 
     // グラフ用に積立期間を1年刻みでダウンサンプリングし、達成後は
@@ -255,7 +277,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("fire-growthDataTable", chart);
   }
 
-  [els.currentAge, els.currentAssets, els.monthly, els.returnPct, els.annualExpense, els.sideIncome, els.withdrawalPct, els.postReturnPct, els.inflationPct].forEach(function (el) {
+  [els.currentAge, els.currentAssets, els.monthly, els.returnPct, els.accCostPct, els.annualExpense, els.sideIncome, els.withdrawalPct, els.postReturnPct, els.postCostPct, els.inflationPct].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
