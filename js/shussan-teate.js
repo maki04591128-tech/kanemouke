@@ -4,17 +4,23 @@
   // 出産手当金シミュレーター。
   // 出産のために会社を休む「産前産後休業」期間中に健康保険から支給される
   // 「出産手当金」の支給見込み額を試算する。支給額は「支給開始日以前12か月間の
-  // 標準報酬月額の平均÷30×2/3」（傷病手当金と同じ計算式）で、本ツールも
-  // js/shobyou-teate.jsと同じく標準報酬月額の代わりに直近の月給（額面）を
-  // 近似値として使用し、健康保険の等級の範囲（58,000円〜1,390,000円）で
-  // クランプする。産前休業は出産予定日を含む42日前（多胎妊娠は98日前）から、
-  // 産後休業は出産日後56日固定（本人の希望では短縮できない）で、対象日数は
-  // 「産前の実際の取得日数＋産後56日」。休業中に会社から給与が一部支給される
-  // 場合は、その日額が出産手当金の日額より少なければ差額のみが支給される
-  // ルールにも対応する（傷病手当金の待期期間3日間のような対象外期間はない）。
+  // 標準報酬月額の平均÷30×2/3」（傷病手当金と同じ計算式）で、本ツールは
+  // 既定では標準報酬月額の代わりに直近の月給（額面）を近似値として使用するが、
+  // 「標準報酬月額の計算方法」で切り替えると12か月間の標準報酬月額の平均額を
+  // 直接入力できる（js/shobyou-teate.jsと同じUIパターン。どちらの方式でも
+  // 健康保険の等級の範囲58,000円〜1,390,000円でクランプする）。産前休業は
+  // 出産予定日を含む42日前（多胎妊娠は98日前）から、産後休業は出産日後56日固定
+  // （本人の希望では短縮できない）で、対象日数は「産前の実際の取得日数＋産後56日」。
+  // 休業中に会社から給与が一部支給される場合は、その日額が出産手当金の日額より
+  // 少なければ差額のみが支給されるルールにも対応する
+  // （傷病手当金の待期期間3日間のような対象外期間はない）。
 
   var els = {
+    standardMethod: document.getElementById("shussan-standardMethod"),
+    salaryField: document.getElementById("shussan-salaryField"),
     salary: document.getElementById("shussan-salary"),
+    standardField: document.getElementById("shussan-standardField"),
+    standardAverage: document.getElementById("shussan-standardAverage"),
     multiple: document.getElementById("shussan-multiple"),
     prenatalDays: document.getElementById("shussan-prenatalDays"),
     prenatalDaysOut: document.getElementById("shussan-prenatalDaysOut"),
@@ -79,7 +85,15 @@
   }
 
   function render() {
+    var useAverage = els.standardMethod && els.standardMethod.value === "average12";
+    if (els.salaryField) els.salaryField.style.display = useAverage ? "none" : "";
+    if (els.standardField) els.standardField.style.display = useAverage ? "" : "none";
+    if (els.salary) els.salary.disabled = useAverage;
+    if (els.standardAverage) els.standardAverage.disabled = !useAverage;
+
     var salary = clampNonNegative(els.salary.value) * 10000;
+    var standardAverage = els.standardAverage ? clampNonNegative(els.standardAverage.value) * 10000 : 0;
+    var standardInput = useAverage ? standardAverage : salary;
     var multiple = els.multiple.value === "multiple" ? "multiple" : "single";
     var prenatalMax = prenatalMaxOf(multiple);
 
@@ -94,7 +108,7 @@
     var payDaily = payDuring === "partial" ? clampNonNegative(els.payDaily.value) : 0;
     if (els.payFields) els.payFields.hidden = payDuring !== "partial";
 
-    var r = calc(salary, prenatalDays, payDaily);
+    var r = calc(standardInput, prenatalDays, payDaily);
 
     if (els.total) els.total.textContent = yen(r.total);
     if (els.daily) els.daily.textContent = yen(r.dailyNet) + " /日";
@@ -105,8 +119,10 @@
       els.verdict.textContent = "支給見込み総額は " + yen(r.total) + " です（産前" + prenatalDays + "日＋産後" + POSTNATAL_DAYS + "日）";
     }
     if (els.verdictSub) {
-      var sub =
-        "出産手当金の日額は " + yen(r.dailyFull) + "（標準報酬月額の代わりに月給" + (salary / 10000).toLocaleString("ja-JP") + "万円を使用）。";
+      var sourceNote = useAverage
+        ? "入力された12か月間の標準報酬月額の平均" + (standardAverage / 10000).toLocaleString("ja-JP") + "万円を使用）。"
+        : "標準報酬月額の代わりに月給" + (salary / 10000).toLocaleString("ja-JP") + "万円を使用）。";
+      var sub = "出産手当金の日額は " + yen(r.dailyFull) + "（" + sourceNote;
       if (payDuring === "partial" && payDaily > 0) {
         sub +=
           payDaily >= r.dailyFull
@@ -118,7 +134,9 @@
     }
 
     els.breakdownBody.innerHTML =
-      "<tr><td>標準報酬月額の近似（月給額面、5.8万円〜139万円で調整）</td><td>" + yen(r.standard) + " /月</td></tr>" +
+      "<tr><td>" +
+      (useAverage ? "標準報酬月額の平均（入力値、5.8万円〜139万円で調整）" : "標準報酬月額の近似（月給額面、5.8万円〜139万円で調整）") +
+      "</td><td>" + yen(r.standard) + " /月</td></tr>" +
       "<tr><td>出産手当金の日額（標準報酬月額の平均÷30×2/3）</td><td>" + yen(r.dailyFull) + " /日</td></tr>" +
       (payDuring === "partial"
         ? "<tr><td>会社からの給与支給（日額）</td><td>" + yen(payDaily) + " /日</td></tr>" +
@@ -172,12 +190,12 @@
     }
   }
 
-  [els.salary, els.prenatalDays, els.payDaily].forEach(function (el) {
+  [els.salary, els.standardAverage, els.prenatalDays, els.payDaily].forEach(function (el) {
     if (!el) return;
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
-  [els.multiple, els.payDuring].forEach(function (el) {
+  [els.multiple, els.payDuring, els.standardMethod].forEach(function (el) {
     if (!el) return;
     el.addEventListener("change", render);
   });
