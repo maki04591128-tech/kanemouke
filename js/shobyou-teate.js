@@ -4,16 +4,22 @@
   // 傷病手当金シミュレーター。
   // 病気・けがで会社を休む際に健康保険から支給される「傷病手当金」の
   // 支給見込み額を試算する。支給額は「支給開始日以前12か月間の標準報酬月額の
-  // 平均÷30×2/3」（全国健康保険協会の定めによる）で、本ツールは標準報酬月額の
-  // 代わりに直近の月給（額面）を近似値として使用し、健康保険の等級の範囲
-  // （58,000円〜1,390,000円）でクランプする。休業開始から連続する3日間は
-  // 「待期期間」として対象外、4日目から支給が始まり、支給期間は支給開始日から
-  // 通算して1年6か月（最大18か月）が上限。休業中に会社から給与が一部支給される
-  // 場合は、その日額が傷病手当金の日額より少なければ差額のみが支給される
+  // 平均÷30×2/3」（全国健康保険協会の定めによる）で、本ツールは既定では
+  // 標準報酬月額の代わりに直近の月給（額面）を近似値として使用するが、
+  // 「標準報酬月額の計算方法」で切り替えると12か月間の標準報酬月額の平均額を
+  // 直接入力できる（どちらの方式でも健康保険の等級の範囲58,000円〜1,390,000円で
+  // クランプする）。休業開始から連続する3日間は「待期期間」として対象外、
+  // 4日目から支給が始まり、支給期間は支給開始日から通算して1年6か月
+  // （最大18か月）が上限。休業中に会社から給与が一部支給される場合は、
+  // その日額が傷病手当金の日額より少なければ差額のみが支給される
   // ルールにも対応する。
 
   var els = {
+    standardMethod: document.getElementById("shobyou-standardMethod"),
+    salaryField: document.getElementById("shobyou-salaryField"),
     salary: document.getElementById("shobyou-salary"),
+    standardField: document.getElementById("shobyou-standardField"),
+    standardAverage: document.getElementById("shobyou-standardAverage"),
     months: document.getElementById("shobyou-months"),
     monthsOut: document.getElementById("shobyou-monthsOut"),
     payDuring: document.getElementById("shobyou-payDuring"),
@@ -81,7 +87,15 @@
   }
 
   function render() {
+    var useAverage = els.standardMethod && els.standardMethod.value === "average12";
+    if (els.salaryField) els.salaryField.style.display = useAverage ? "none" : "";
+    if (els.standardField) els.standardField.style.display = useAverage ? "" : "none";
+    if (els.salary) els.salary.disabled = useAverage;
+    if (els.standardAverage) els.standardAverage.disabled = !useAverage;
+
     var salary = clampNonNegative(els.salary.value) * 10000;
+    var standardAverage = els.standardAverage ? clampNonNegative(els.standardAverage.value) * 10000 : 0;
+    var standardInput = useAverage ? standardAverage : salary;
     var months = clampMonths(els.months.value);
     var payDuring = els.payDuring ? els.payDuring.value : "none";
     var payDaily = payDuring === "partial" ? clampNonNegative(els.payDaily.value) : 0;
@@ -89,7 +103,7 @@
     if (els.monthsOut) els.monthsOut.textContent = months + " か月（約" + months * DAYS_PER_MONTH + "日）";
     if (els.payFields) els.payFields.hidden = payDuring !== "partial";
 
-    var r = calc(salary, months, payDaily);
+    var r = calc(standardInput, months, payDaily);
 
     if (els.total) els.total.textContent = yen(r.total);
     if (els.daily) els.daily.textContent = yen(r.dailyNet) + " /日";
@@ -100,8 +114,11 @@
       els.verdict.textContent = "支給見込み総額は " + yen(r.total) + " です（支給対象 " + r.eligibleDays + " 日分）";
     }
     if (els.verdictSub) {
+      var sourceNote = useAverage
+        ? "入力された12か月間の標準報酬月額の平均" + manYen(standardAverage) + "を使用）。"
+        : "標準報酬月額の代わりに月給" + manYen(salary) + "を使用）。";
       var sub =
-        "傷病手当金の日額は " + yen(r.dailyFull) + "（標準報酬月額の代わりに月給" + manYen(salary) + "を使用）。" +
+        "傷病手当金の日額は " + yen(r.dailyFull) + "（" + sourceNote +
         "休業開始から連続する3日間は待期期間として対象外のため、4日目から支給が始まります。";
       if (payDuring === "partial" && payDaily > 0) {
         sub +=
@@ -114,7 +131,9 @@
     }
 
     els.breakdownBody.innerHTML =
-      "<tr><td>標準報酬月額の近似（月給額面、5.8万円〜139万円で調整）</td><td>" + yen(r.standard) + " /月</td></tr>" +
+      "<tr><td>" +
+      (useAverage ? "標準報酬月額の平均（入力値、5.8万円〜139万円で調整）" : "標準報酬月額の近似（月給額面、5.8万円〜139万円で調整）") +
+      "</td><td>" + yen(r.standard) + " /月</td></tr>" +
       "<tr><td>傷病手当金の日額（標準報酬月額の平均÷30×2/3）</td><td>" + yen(r.dailyFull) + " /日</td></tr>" +
       "<tr><td>待期期間（休業開始から3日間、対象外）</td><td>" + WAIT_DAYS + " 日 / 0 円</td></tr>" +
       (payDuring === "partial"
@@ -127,7 +146,7 @@
     if (els.tableBody) {
       var refSalaries = [200000, 250000, 300000, 350000, 400000, 500000, 600000];
       var closest = refSalaries.reduce(function (best, x) {
-        return Math.abs(x - salary) < Math.abs(best - salary) ? x : best;
+        return Math.abs(x - standardInput) < Math.abs(best - standardInput) ? x : best;
       }, refSalaries[0]);
       var rows = refSalaries.map(function (x) {
         var daily = dailyBenefitOf(x);
@@ -194,12 +213,13 @@
     }
   }
 
-  [els.salary, els.months, els.payDaily].forEach(function (el) {
+  [els.salary, els.standardAverage, els.months, els.payDaily].forEach(function (el) {
     if (!el) return;
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
   if (els.payDuring) els.payDuring.addEventListener("change", render);
+  if (els.standardMethod) els.standardMethod.addEventListener("change", render);
 
   render();
 })();
