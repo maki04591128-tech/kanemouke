@@ -167,7 +167,7 @@
       "name": "ペアローン・連帯債務で借りた場合も試算できますか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "「ローンの組み方」で「ペアローン」を選ぶと、本人・配偶者等がそれぞれ別の借入額で契約したものとして2人分の控除額を試算し、合算した世帯合計を表示します。「連帯債務」を選ぶと、1本の借入額を入力した「本人の負担割合（持分）」で按分し、それぞれの持分に応じた控除額を試算します。どちらの方式でも、借入限度額（枠）は按分せず、本人・配偶者等それぞれが住宅の区分に応じた限度額まで適用できる前提で計算しています。持分割合と実際の負担割合が異なると贈与とみなされる場合があるため、実際の登記内容に合わせて入力してください。"
+        "text": "「ローンの組み方」で「ペアローン」を選ぶと、本人・配偶者等がそれぞれ別の借入額で契約したものとして2人分の控除額を試算し、合算した世帯合計を表示します。ペアローンは別々の契約のため、借入金利・返済期間も本人・配偶者等でそれぞれ異なる値を入力できます。「連帯債務」を選ぶと、1本の借入額を入力した「本人の負担割合（持分）」で按分し、それぞれの持分に応じた控除額を試算します（連帯債務は1本の借入のため、借入金利・返済期間は本人・配偶者等で共通です）。どちらの方式でも、借入限度額（枠）は按分せず、本人・配偶者等それぞれが住宅の区分に応じた限度額まで適用できる前提で計算しています。持分割合と実際の負担割合が異なると贈与とみなされる場合があるため、実際の登記内容に合わせて入力してください。"
       }
     },
     {
@@ -650,7 +650,7 @@
 <div class="field" id="koujo-principalBRow" style="display:none">
 <label for="koujo-principalB">配偶者等の借入額（当初） <span class="unit">円</span></label>
 <input id="koujo-principalB" inputmode="numeric" min="0" step="100000" type="number" value="15000000"/>
-<p class="field-hint">ペアローンは2本の契約を前提とするため、借入金利・返済期間は本人分の入力値を共通で使って試算します。</p>
+<p class="field-hint">ペアローンは本人・配偶者等それぞれ別の契約のため、借入金利・返済期間も個別に入力できます（下の「配偶者等の借入金利」「配偶者等の返済期間」欄）。</p>
 </div>
 <div class="field" id="koujo-shareARow" style="display:none">
 <label for="koujo-shareA">本人の負担割合（持分） <span class="unit">%</span></label>
@@ -658,12 +658,21 @@
 <p class="field-hint">連帯債務は1本の借入額を、登記上の持分割合と一致させた負担割合で按分します。残りの割合（100%－本人の負担割合）が配偶者等に割り当てられます。持分割合と負担割合が異なると贈与とみなされる場合があるため、実際の登記内容に合わせて入力してください。</p>
 </div>
 <div class="field">
-<label for="koujo-loanRate">借入金利（年率） <span class="unit">%</span></label>
+<label for="koujo-loanRate" id="koujo-loanRateLabel">借入金利（年率） <span class="unit">%</span></label>
 <input id="koujo-loanRate" inputmode="decimal" max="10" min="0" step="0.01" type="number" value="1.0"/>
 </div>
+<div class="field" id="koujo-loanRateBRow" style="display:none">
+<label for="koujo-loanRateB">配偶者等の借入金利（年率） <span class="unit">%</span></label>
+<input id="koujo-loanRateB" inputmode="decimal" max="10" min="0" step="0.01" type="number" value="1.0"/>
+</div>
 <div class="field">
-<label for="koujo-loanYears">返済期間 <span class="unit">年</span></label>
+<label for="koujo-loanYears" id="koujo-loanYearsLabel">返済期間 <span class="unit">年</span></label>
 <input id="koujo-loanYears" inputmode="numeric" max="50" min="1" step="1" type="number" value="35"/>
+</div>
+<div class="field" id="koujo-loanYearsBRow" style="display:none">
+<label for="koujo-loanYearsB">配偶者等の返済期間 <span class="unit">年</span></label>
+<input id="koujo-loanYearsB" inputmode="numeric" max="50" min="1" step="1" type="number" value="35"/>
+<p class="field-hint">配偶者等の返済期間が控除期間より短い場合、完済後の年は配偶者等の年末残高を0として試算します（本人の控除額には影響しません）。</p>
 </div>
 <div class="field">
 <label for="koujo-moveInYear">入居（予定）年</label>
@@ -819,7 +828,7 @@
 </div>
 <div class="faq-item">
 <dt>ペアローン・連帯債務で借りた場合も試算できますか？</dt>
-<dd>「ローンの組み方」で「ペアローン」を選ぶと、本人・配偶者等がそれぞれ別の借入額で契約したものとして2人分の控除額を試算し、合算した世帯合計を表示します。「連帯債務」を選ぶと、1本の借入額を入力した「本人の負担割合（持分）」で按分し、それぞれの持分に応じた控除額を試算します。どちらの方式でも、借入限度額（枠）は按分せず、本人・配偶者等それぞれが住宅の区分に応じた限度額まで適用できる前提で計算しています。持分割合と実際の負担割合が異なると贈与とみなされる場合があるため、実際の登記内容に合わせて入力してください。</dd>
+<dd>「ローンの組み方」で「ペアローン」を選ぶと、本人・配偶者等がそれぞれ別の借入額で契約したものとして2人分の控除額を試算し、合算した世帯合計を表示します。ペアローンは別々の契約のため、借入金利・返済期間も本人・配偶者等でそれぞれ異なる値を入力できます。「連帯債務」を選ぶと、1本の借入額を入力した「本人の負担割合（持分）」で按分し、それぞれの持分に応じた控除額を試算します（連帯債務は1本の借入のため、借入金利・返済期間は本人・配偶者等で共通です）。どちらの方式でも、借入限度額（枠）は按分せず、本人・配偶者等それぞれが住宅の区分に応じた限度額まで適用できる前提で計算しています。持分割合と実際の負担割合が異なると贈与とみなされる場合があるため、実際の登記内容に合わせて入力してください。</dd>
 </div>
 <div class="faq-item">
 <dt>この試算は正確ですか？</dt>
