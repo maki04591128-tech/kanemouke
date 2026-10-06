@@ -4,16 +4,23 @@
   // 傷病手当金シミュレーター。
   // 病気・けがで会社を休む際に健康保険から支給される「傷病手当金」の
   // 支給見込み額を試算する。支給額は「支給開始日以前12か月間の標準報酬月額の
-  // 平均÷30×2/3」（全国健康保険協会の定めによる）で、本ツールは標準報酬月額の
-  // 代わりに直近の月給（額面）を近似値として使用し、健康保険の等級の範囲
-  // （58,000円〜1,390,000円）でクランプする。休業開始から連続する3日間は
-  // 「待期期間」として対象外、4日目から支給が始まり、支給期間は支給開始日から
-  // 通算して1年6か月（最大18か月）が上限。休業中に会社から給与が一部支給される
-  // 場合は、その日額が傷病手当金の日額より少なければ差額のみが支給される
-  // ルールにも対応する。
+  // 平均÷30×2/3」（全国健康保険協会の定めによる）。
+  // 標準報酬月額は既定では入力を簡略化した「直近の月給（額面）」で近似するが、
+  // 直近12か月間の給与合計が分かる場合は、そちらを入力することで
+  // 「合計÷12」という本来に近い平均値に切り替えて試算できる
+  // （js/kihon-teate.jsの賃金日額精緻化と同じ方式）。いずれの方式でも
+  // 健康保険の等級の範囲（58,000円〜1,390,000円）でクランプする。休業開始から
+  // 連続する3日間は「待期期間」として対象外、4日目から支給が始まり、支給期間は
+  // 支給開始日から通算して1年6か月（最大18か月）が上限。休業中に会社から給与が
+  // 一部支給される場合は、その日額が傷病手当金の日額より少なければ差額のみが
+  // 支給されるルールにも対応する。
 
   var els = {
+    wageMethod: document.getElementById("shobyou-wageMethod"),
+    salaryField: document.getElementById("shobyou-salaryField"),
     salary: document.getElementById("shobyou-salary"),
+    twelveMonthField: document.getElementById("shobyou-twelveMonthField"),
+    twelveMonthTotal: document.getElementById("shobyou-twelveMonthTotal"),
     months: document.getElementById("shobyou-months"),
     monthsOut: document.getElementById("shobyou-monthsOut"),
     payDuring: document.getElementById("shobyou-payDuring"),
@@ -59,19 +66,19 @@
     return Math.min(MAX_STANDARD_REMUNERATION, Math.max(MIN_STANDARD_REMUNERATION, monthlySalary));
   }
 
-  function dailyBenefitOf(monthlySalary) {
-    return (standardRemunerationOf(monthlySalary) / DAYS_PER_MONTH) * BENEFIT_RATE;
+  function dailyBenefitOf(monthlyBase) {
+    return (standardRemunerationOf(monthlyBase) / DAYS_PER_MONTH) * BENEFIT_RATE;
   }
 
-  // 月給・休業中の会社からの給与支給（日額）から、傷病手当金の日額・支給対象日数・支給見込み総額を算出する。
-  function calc(salary, months, payDaily) {
-    var dailyFull = dailyBenefitOf(salary);
+  // 標準報酬月額相当額・休業中の会社からの給与支給（日額）から、傷病手当金の日額・支給対象日数・支給見込み総額を算出する。
+  function calc(monthlyBase, months, payDaily) {
+    var dailyFull = dailyBenefitOf(monthlyBase);
     var dailyNet = payDaily >= dailyFull ? 0 : dailyFull - payDaily;
     var totalDays = months * DAYS_PER_MONTH;
     var eligibleDays = Math.max(0, totalDays - WAIT_DAYS);
     var total = eligibleDays * dailyNet;
     return {
-      standard: standardRemunerationOf(salary),
+      standard: standardRemunerationOf(monthlyBase),
       dailyFull: dailyFull,
       dailyNet: dailyNet,
       totalDays: totalDays,
@@ -81,7 +88,16 @@
   }
 
   function render() {
+    var useTwelveMonth = els.wageMethod && els.wageMethod.value === "twelvemonth";
+
+    if (els.salaryField) els.salaryField.style.display = useTwelveMonth ? "none" : "";
+    if (els.twelveMonthField) els.twelveMonthField.style.display = useTwelveMonth ? "" : "none";
+    if (els.salary) els.salary.disabled = useTwelveMonth;
+    if (els.twelveMonthTotal) els.twelveMonthTotal.disabled = !useTwelveMonth;
+
     var salary = clampNonNegative(els.salary.value) * 10000;
+    var twelveMonthTotal = els.twelveMonthTotal ? clampNonNegative(els.twelveMonthTotal.value) : 0;
+    var monthlyBase = useTwelveMonth ? twelveMonthTotal / 12 : salary;
     var months = clampMonths(els.months.value);
     var payDuring = els.payDuring ? els.payDuring.value : "none";
     var payDaily = payDuring === "partial" ? clampNonNegative(els.payDaily.value) : 0;
@@ -89,7 +105,7 @@
     if (els.monthsOut) els.monthsOut.textContent = months + " か月（約" + months * DAYS_PER_MONTH + "日）";
     if (els.payFields) els.payFields.hidden = payDuring !== "partial";
 
-    var r = calc(salary, months, payDaily);
+    var r = calc(monthlyBase, months, payDaily);
 
     if (els.total) els.total.textContent = yen(r.total);
     if (els.daily) els.daily.textContent = yen(r.dailyNet) + " /日";
@@ -100,8 +116,11 @@
       els.verdict.textContent = "支給見込み総額は " + yen(r.total) + " です（支給対象 " + r.eligibleDays + " 日分）";
     }
     if (els.verdictSub) {
+      var baseLabel = useTwelveMonth
+        ? "直近12か月間の給与合計" + manYen(twelveMonthTotal) + "÷12（" + manYen(monthlyBase) + "/月）"
+        : "月給" + manYen(salary);
       var sub =
-        "傷病手当金の日額は " + yen(r.dailyFull) + "（標準報酬月額の代わりに月給" + manYen(salary) + "を使用）。" +
+        "傷病手当金の日額は " + yen(r.dailyFull) + "（標準報酬月額の代わりに" + baseLabel + "を使用）。" +
         "休業開始から連続する3日間は待期期間として対象外のため、4日目から支給が始まります。";
       if (payDuring === "partial" && payDaily > 0) {
         sub +=
@@ -113,8 +132,12 @@
       els.verdictSub.textContent = sub;
     }
 
+    var standardRowLabel = useTwelveMonth
+      ? "標準報酬月額の近似（直近12か月間の給与合計÷12、5.8万円〜139万円で調整）"
+      : "標準報酬月額の近似（月給額面、5.8万円〜139万円で調整）";
+
     els.breakdownBody.innerHTML =
-      "<tr><td>標準報酬月額の近似（月給額面、5.8万円〜139万円で調整）</td><td>" + yen(r.standard) + " /月</td></tr>" +
+      "<tr><td>" + standardRowLabel + "</td><td>" + yen(r.standard) + " /月</td></tr>" +
       "<tr><td>傷病手当金の日額（標準報酬月額の平均÷30×2/3）</td><td>" + yen(r.dailyFull) + " /日</td></tr>" +
       "<tr><td>待期期間（休業開始から3日間、対象外）</td><td>" + WAIT_DAYS + " 日 / 0 円</td></tr>" +
       (payDuring === "partial"
@@ -194,12 +217,15 @@
     }
   }
 
-  [els.salary, els.months, els.payDaily].forEach(function (el) {
+  [els.salary, els.twelveMonthTotal, els.months, els.payDaily].forEach(function (el) {
     if (!el) return;
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
-  if (els.payDuring) els.payDuring.addEventListener("change", render);
+  [els.payDuring, els.wageMethod].forEach(function (el) {
+    if (!el) return;
+    el.addEventListener("change", render);
+  });
 
   render();
 })();

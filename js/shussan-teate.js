@@ -4,17 +4,24 @@
   // 出産手当金シミュレーター。
   // 出産のために会社を休む「産前産後休業」期間中に健康保険から支給される
   // 「出産手当金」の支給見込み額を試算する。支給額は「支給開始日以前12か月間の
-  // 標準報酬月額の平均÷30×2/3」（傷病手当金と同じ計算式）で、本ツールも
-  // js/shobyou-teate.jsと同じく標準報酬月額の代わりに直近の月給（額面）を
-  // 近似値として使用し、健康保険の等級の範囲（58,000円〜1,390,000円）で
-  // クランプする。産前休業は出産予定日を含む42日前（多胎妊娠は98日前）から、
+  // 標準報酬月額の平均÷30×2/3」（傷病手当金と同じ計算式）。
+  // 標準報酬月額は既定では入力を簡略化した「直近の月給（額面）」で近似するが、
+  // 直近12か月間の給与合計が分かる場合は、そちらを入力することで
+  // 「合計÷12」という本来に近い平均値に切り替えて試算できる
+  // （js/shobyou-teate.js・js/kihon-teate.jsの精緻化と同じ方式）。いずれの方式でも
+  // 健康保険の等級の範囲（58,000円〜1,390,000円）でクランプする。産前休業は
+  // 出産予定日を含む42日前（多胎妊娠は98日前）から、
   // 産後休業は出産日後56日固定（本人の希望では短縮できない）で、対象日数は
   // 「産前の実際の取得日数＋産後56日」。休業中に会社から給与が一部支給される
   // 場合は、その日額が出産手当金の日額より少なければ差額のみが支給される
   // ルールにも対応する（傷病手当金の待期期間3日間のような対象外期間はない）。
 
   var els = {
+    wageMethod: document.getElementById("shussan-wageMethod"),
+    salaryField: document.getElementById("shussan-salaryField"),
     salary: document.getElementById("shussan-salary"),
+    twelveMonthField: document.getElementById("shussan-twelveMonthField"),
+    twelveMonthTotal: document.getElementById("shussan-twelveMonthTotal"),
     multiple: document.getElementById("shussan-multiple"),
     prenatalDays: document.getElementById("shussan-prenatalDays"),
     prenatalDaysOut: document.getElementById("shussan-prenatalDaysOut"),
@@ -57,19 +64,19 @@
     return Math.min(MAX_STANDARD_REMUNERATION, Math.max(MIN_STANDARD_REMUNERATION, monthlySalary));
   }
 
-  function dailyBenefitOf(monthlySalary) {
-    return (standardRemunerationOf(monthlySalary) / DAYS_PER_MONTH) * BENEFIT_RATE;
+  function dailyBenefitOf(monthlyBase) {
+    return (standardRemunerationOf(monthlyBase) / DAYS_PER_MONTH) * BENEFIT_RATE;
   }
 
-  // 月給・産前休業日数・休業中の会社からの給与支給（日額）から、
+  // 標準報酬月額相当額・産前休業日数・休業中の会社からの給与支給（日額）から、
   // 出産手当金の日額・産前産後それぞれの支給見込み額を算出する。
-  function calc(salary, prenatalDays, payDaily) {
-    var dailyFull = dailyBenefitOf(salary);
+  function calc(monthlyBase, prenatalDays, payDaily) {
+    var dailyFull = dailyBenefitOf(monthlyBase);
     var dailyNet = payDaily >= dailyFull ? 0 : dailyFull - payDaily;
     var prenatalAmount = prenatalDays * dailyNet;
     var postnatalAmount = POSTNATAL_DAYS * dailyNet;
     return {
-      standard: standardRemunerationOf(salary),
+      standard: standardRemunerationOf(monthlyBase),
       dailyFull: dailyFull,
       dailyNet: dailyNet,
       prenatalAmount: prenatalAmount,
@@ -79,7 +86,16 @@
   }
 
   function render() {
+    var useTwelveMonth = els.wageMethod && els.wageMethod.value === "twelvemonth";
+
+    if (els.salaryField) els.salaryField.style.display = useTwelveMonth ? "none" : "";
+    if (els.twelveMonthField) els.twelveMonthField.style.display = useTwelveMonth ? "" : "none";
+    if (els.salary) els.salary.disabled = useTwelveMonth;
+    if (els.twelveMonthTotal) els.twelveMonthTotal.disabled = !useTwelveMonth;
+
     var salary = clampNonNegative(els.salary.value) * 10000;
+    var twelveMonthTotal = els.twelveMonthTotal ? clampNonNegative(els.twelveMonthTotal.value) : 0;
+    var monthlyBase = useTwelveMonth ? twelveMonthTotal / 12 : salary;
     var multiple = els.multiple.value === "multiple" ? "multiple" : "single";
     var prenatalMax = prenatalMaxOf(multiple);
 
@@ -94,7 +110,7 @@
     var payDaily = payDuring === "partial" ? clampNonNegative(els.payDaily.value) : 0;
     if (els.payFields) els.payFields.hidden = payDuring !== "partial";
 
-    var r = calc(salary, prenatalDays, payDaily);
+    var r = calc(monthlyBase, prenatalDays, payDaily);
 
     if (els.total) els.total.textContent = yen(r.total);
     if (els.daily) els.daily.textContent = yen(r.dailyNet) + " /日";
@@ -105,8 +121,11 @@
       els.verdict.textContent = "支給見込み総額は " + yen(r.total) + " です（産前" + prenatalDays + "日＋産後" + POSTNATAL_DAYS + "日）";
     }
     if (els.verdictSub) {
+      var baseLabel = useTwelveMonth
+        ? "直近12か月間の給与合計" + (twelveMonthTotal / 10000).toLocaleString("ja-JP") + "万円÷12（" + (monthlyBase / 10000).toLocaleString("ja-JP", { maximumFractionDigits: 1 }) + "万円/月）"
+        : "月給" + (salary / 10000).toLocaleString("ja-JP") + "万円";
       var sub =
-        "出産手当金の日額は " + yen(r.dailyFull) + "（標準報酬月額の代わりに月給" + (salary / 10000).toLocaleString("ja-JP") + "万円を使用）。";
+        "出産手当金の日額は " + yen(r.dailyFull) + "（標準報酬月額の代わりに" + baseLabel + "を使用）。";
       if (payDuring === "partial" && payDaily > 0) {
         sub +=
           payDaily >= r.dailyFull
@@ -117,8 +136,12 @@
       els.verdictSub.textContent = sub;
     }
 
+    var standardRowLabel = useTwelveMonth
+      ? "標準報酬月額の近似（直近12か月間の給与合計÷12、5.8万円〜139万円で調整）"
+      : "標準報酬月額の近似（月給額面、5.8万円〜139万円で調整）";
+
     els.breakdownBody.innerHTML =
-      "<tr><td>標準報酬月額の近似（月給額面、5.8万円〜139万円で調整）</td><td>" + yen(r.standard) + " /月</td></tr>" +
+      "<tr><td>" + standardRowLabel + "</td><td>" + yen(r.standard) + " /月</td></tr>" +
       "<tr><td>出産手当金の日額（標準報酬月額の平均÷30×2/3）</td><td>" + yen(r.dailyFull) + " /日</td></tr>" +
       (payDuring === "partial"
         ? "<tr><td>会社からの給与支給（日額）</td><td>" + yen(payDaily) + " /日</td></tr>" +
@@ -172,12 +195,12 @@
     }
   }
 
-  [els.salary, els.prenatalDays, els.payDaily].forEach(function (el) {
+  [els.salary, els.twelveMonthTotal, els.prenatalDays, els.payDaily].forEach(function (el) {
     if (!el) return;
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
-  [els.multiple, els.payDuring].forEach(function (el) {
+  [els.multiple, els.payDuring, els.wageMethod].forEach(function (el) {
     if (!el) return;
     el.addEventListener("change", render);
   });
