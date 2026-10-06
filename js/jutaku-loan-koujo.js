@@ -89,8 +89,14 @@
     principalB: document.getElementById("koujo-principalB"),
     shareARow: document.getElementById("koujo-shareARow"),
     shareA: document.getElementById("koujo-shareA"),
+    loanRateLabel: document.getElementById("koujo-loanRateLabel"),
     loanRate: document.getElementById("koujo-loanRate"),
+    loanRateBRow: document.getElementById("koujo-loanRateBRow"),
+    loanRateB: document.getElementById("koujo-loanRateB"),
+    loanYearsLabel: document.getElementById("koujo-loanYearsLabel"),
     loanYears: document.getElementById("koujo-loanYears"),
+    loanYearsBRow: document.getElementById("koujo-loanYearsBRow"),
+    loanYearsB: document.getElementById("koujo-loanYearsB"),
     moveInYear: document.getElementById("koujo-moveInYear"),
     category: document.getElementById("koujo-category"),
     kosodateRow: document.getElementById("koujo-kosodateRow"),
@@ -245,15 +251,17 @@
 
   // ペアローン・連帯債務（balancesBがnullなら単独）の世帯合計を計算する。balancesA/balancesBは
   // どちらも「年末残高の配列（本人・配偶者等それぞれが実際に負担する額ベース）」で、呼び出し側で
-  // ペアローン（別々の借入額）か連帯債務（1本の借入額を負担割合で按分）かに応じて作り分ける。
+  // ペアローン（別々の借入額・別々の金利・返済期間）か連帯債務（1本の借入額を負担割合で按分、
+  // 金利・返済期間は共通）かに応じて作り分ける。loanMonthsBは配偶者等の返済期間（連帯債務・単独
+  // ではloanMonthsと同じ値）で、返済期間が異なると完済後の年末残高が0になるタイミングもずれる。
   // 借入限度額（limit）は按分せず、本人・配偶者等ともに住宅の区分に応じた限度額をそのまま使う
   // （国税庁の取り扱い上、ペアローン・連帯債務のいずれも1人あたりの借入限度額は按分されないため）。
   function computeHouseholdCredit(
     balancesA, creditPeriod, loanMonths, limit, overIncomeLimitA, taxAmountA, residentTaxCapA,
-    balancesB, overIncomeLimitB, taxAmountB, residentTaxCapB
+    balancesB, loanMonthsB, overIncomeLimitB, taxAmountB, residentTaxCapB
   ) {
     var a = computeCreditSchedule(balancesA, creditPeriod, loanMonths, limit, overIncomeLimitA, taxAmountA, residentTaxCapA);
-    var b = balancesB ? computeCreditSchedule(balancesB, creditPeriod, loanMonths, limit, overIncomeLimitB, taxAmountB, residentTaxCapB) : null;
+    var b = balancesB ? computeCreditSchedule(balancesB, creditPeriod, loanMonthsB, limit, overIncomeLimitB, taxAmountB, residentTaxCapB) : null;
     return {
       a: a,
       b: b,
@@ -283,10 +291,14 @@
     var isShared = isPair || isJoint;
 
     els.principalBRow.style.display = isPair ? "" : "none";
+    els.loanRateBRow.style.display = isPair ? "" : "none";
+    els.loanYearsBRow.style.display = isPair ? "" : "none";
     els.shareARow.style.display = isJoint ? "" : "none";
     els.salaryIncomeBRow.style.display = isShared ? "" : "none";
     els.dependentsBRow.style.display = isShared ? "" : "none";
     els.principalLabel.innerHTML = (isPair ? "本人の借入額（当初）" : isJoint ? "借入額（当初・世帯合計）" : "借入額（当初）") + ' <span class="unit">円</span>';
+    els.loanRateLabel.innerHTML = (isPair ? "本人の借入金利（年率）" : "借入金利（年率）") + ' <span class="unit">%</span>';
+    els.loanYearsLabel.innerHTML = (isPair ? "本人の返済期間" : "返済期間") + ' <span class="unit">年</span>';
     els.salaryIncomeLabel.innerHTML = (isShared ? "給与収入（本人・年収・額面）" : "給与収入（年収・額面）") + ' <span class="unit">円</span>';
     els.dependentsLabel.innerHTML = (isShared ? "本人の扶養親族の人数（配偶者を除く）" : "扶養親族の人数（配偶者を除く）") + ' <span class="unit">人</span>';
     els.prepayHint.textContent = isPair
@@ -315,6 +327,9 @@
     var overIncomeLimit = ctxA.overIncomeLimit;
 
     var loanMonths = Math.round(loanYears * 12);
+    var loanRateB = Number(els.loanRateB.value);
+    var loanYearsB = Math.max(1, Number(els.loanYearsB.value) || 1);
+    var loanMonthsB = loanMonths; // 連帯債務・単独は本人と同じ1本の借入のため同じ返済期間を使う
 
     var principalB = 0;
     var shareA = 1;
@@ -324,8 +339,9 @@
 
     if (isPair) {
       principalB = clampNonNegative(els.principalB.value);
+      loanMonthsB = Math.round(loanYearsB * 12);
       balances = simulateLoan(principal, loanRate, loanMonths);
-      balancesB = simulateLoan(principalB, loanRate, loanMonths);
+      balancesB = simulateLoan(principalB, loanRateB, loanMonthsB);
       totalBalances = balances; // 繰上返済は本人分の借入にのみ適用する
     } else if (isJoint) {
       shareA = Math.min(99, Math.max(1, Number(els.shareA.value) || 50)) / 100;
@@ -349,7 +365,7 @@
 
     var household = computeHouseholdCredit(
       balances, creditPeriod, loanMonths, limit, overIncomeLimit, taxAmount, residentTaxCap,
-      balancesB, overIncomeLimitB, taxAmountB, residentTaxCapB
+      balancesB, loanMonthsB, overIncomeLimitB, taxAmountB, residentTaxCapB
     );
     var rows = household.a.rows;
     var rowsB = household.b ? household.b.rows : null;
@@ -416,7 +432,7 @@
     var prepayAmount = clampNonNegative(els.prepayAmount.value);
     if (prepayAmount > 0) {
       els.prepayTableWrap.style.display = "";
-      var baseInterest = totalInterestFromBalances(totalBalances, loanRate) + (isPair ? totalInterestFromBalances(balancesB, loanRate) : 0);
+      var baseInterest = totalInterestFromBalances(totalBalances, loanRate) + (isPair ? totalInterestFromBalances(balancesB, loanRateB) : 0);
       var prepayRows = PREPAY_YEAR_SCENARIOS.filter(function (y) {
         return y === 0 || y * 12 <= loanMonths;
       }).map(function (y) {
@@ -429,7 +445,7 @@
         } else if (isPair) {
           yearBalancesA = yearTotalBalances;
           yearBalancesB = balancesB;
-          interest = totalInterestFromBalances(yearTotalBalances, loanRate) + totalInterestFromBalances(balancesB, loanRate);
+          interest = totalInterestFromBalances(yearTotalBalances, loanRate) + totalInterestFromBalances(balancesB, loanRateB);
         } else {
           yearBalancesA = yearTotalBalances;
           yearBalancesB = null;
@@ -437,7 +453,7 @@
         }
         var yearHousehold = computeHouseholdCredit(
           yearBalancesA, creditPeriod, loanMonths, limit, overIncomeLimit, taxAmount, residentTaxCap,
-          yearBalancesB, overIncomeLimitB, taxAmountB, residentTaxCapB
+          yearBalancesB, loanMonthsB, overIncomeLimitB, taxAmountB, residentTaxCapB
         );
         return {
           year: y,
@@ -539,7 +555,9 @@
     els.principalB,
     els.shareA,
     els.loanRate,
+    els.loanRateB,
     els.loanYears,
+    els.loanYearsB,
     els.moveInYear,
     els.category,
     els.kosodate,
