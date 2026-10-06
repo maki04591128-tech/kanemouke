@@ -284,6 +284,11 @@
 <input id="setsuzei-rate" max="12" min="0" step="0.1" type="range" value="4"/>
 </div>
 <div class="field">
+<label for="setsuzei-costPct">運用コスト（信託報酬等、年率） <span class="unit" id="setsuzei-costPctOut">0.0 %</span></label>
+<input id="setsuzei-costPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint">投資信託の信託報酬など保有中にかかる年率コストを、上の想定利回りから差し引いて試算します。0%なら従来どおりコストを考慮しない試算になります（iDeCoの口座管理費用や運用益への課税は含みません）。</p>
+</div>
+<div class="field">
 <label for="setsuzei-years">積立期間 <span class="unit" id="setsuzei-yearsOut">20 年</span></label>
 <input id="setsuzei-years" max="40" min="1" step="1" type="range" value="20"/>
 </div>
@@ -311,6 +316,7 @@
 <span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
 <span><span class="legend-dot" style="background:#7a8899"></span>掛金累計</span>
 </div>
+<p class="field-hint" id="setsuzei-costNote"></p>
 </div>
 <details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="setsuzei-growthDataTable"></table></div></details>
 </div>
@@ -335,10 +341,10 @@
 </section>
 <section class="article-section">
 <h2>iDeCoを使う上での注意点</h2>
-<p>iDeCoは原則60歳まで資産を引き出せない制度です。掛金の上限額は加入区分（会社員・公務員・自営業者など）によって異なり、本シミュレーターでは上限チェックは行っていません。ご自身の職業区分に応じた上限額の範囲内で入力してください。また、受け取り時（老齢給付金）には退職所得控除や公的年金等控除の対象となりますが、本シミュレーターでは受取時の税金は考慮していません。</p>
+<p>iDeCoは原則60歳まで資産を引き出せない制度です。掛金の上限額は加入区分（会社員・公務員・自営業者など）によって異なり、本シミュレーターでは上限チェックは行っていません。ご自身の職業区分に応じた上限額の範囲内で入力してください。また、受け取り時（老齢給付金）には退職所得控除や公的年金等控除の対象となりますが、本シミュレーターでは受取時の税金は考慮していません。投資信託で運用する場合は信託報酬等の運用コストがかかるため、「運用コスト」欄に入力すると想定利回りから差し引いて試算できます（iDeCo特有の口座管理費用〈国民年金基金連合会・事務委託金融機関への毎月の手数料〉は含まれないため、別途ご自身で確認してください）。</p>
 </section>
 <div class="disclaimer">
-    本シミュレーターの結果は入力条件に基づく参考値であり、実際の税額・将来の運用成果・元本を保証するものではありません。税制は改正される場合があり、実際の節税額は個人の所得状況・控除の適用状況によって異なります。正確な税額については税務署・税理士等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+    本シミュレーターの結果は入力条件に基づく参考値であり、実際の税額・将来の運用成果・元本を保証するものではありません。税制は改正される場合があり、実際の節税額は個人の所得状況・控除の適用状況によって異なります。運用コストは信託報酬等の年率コストのみを反映したものであり、iDeCoの口座管理費用や運用益への課税・売買手数料は考慮していません。正確な税額については税務署・税理士等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
   </div>
   </section>
   <section class="tab-panel" id="tabpanel-gendogaku" role="tabpanel" aria-labelledby="tab-btn-gendogaku" data-tool="gendogaku" hidden>
