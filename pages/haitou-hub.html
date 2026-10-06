@@ -55,7 +55,7 @@
       "name": "NISA口座なら分配型を選んでも問題ないですか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "NISA口座内では分配金にも売却益にも税金がかからないため、本シミュレーターの計算上、分配型と無分配型の最終資産額に理論上の差はありません。ただし、信託報酬など商品ごとのコストは本シミュレーターでは考慮していないため、実際の商品選びでは費用面も比較することをおすすめします。"
+        "text": "NISA口座内では分配金にも売却益にも税金がかからないため、本シミュレーターの計算上、分配型と無分配型の最終資産額に理論上の差はありません。信託報酬など商品ごとのコストは「運用コスト（信託報酬等、年率）」欄で想定利回りから差し引く形で試算に反映できます（既定値0%）。"
       }
     },
     {
@@ -254,6 +254,11 @@
 <input id="saitoushi-totalReturn" max="10" min="0" step="0.1" type="range" value="5.0"/>
 </div>
 <div class="field">
+<label for="saitoushi-costPct">運用コスト（信託報酬等、年率） <span class="unit" id="saitoushi-costPctOut">0.0 %</span></label>
+<input id="saitoushi-costPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint">投資信託の信託報酬など保有中にかかる年率コストを、上の想定利回りから差し引いて試算します。0%なら従来どおりコストを考慮しない試算になります（運用益への課税や売買手数料は含みません）。</p>
+</div>
+<div class="field">
 <label for="saitoushi-distYield">分配金利回り（基準価額に対する年率） <span class="unit" id="saitoushi-distYieldOut">4.0 %</span></label>
 <input id="saitoushi-distYield" max="10" min="0" step="0.1" type="range" value="4.0"/>
 <p class="field-hint">分配金利回りが想定利回りを上回ると、運用益を超えて元本の一部を取り崩して分配する「タコ足配当」の状態になります。</p>
@@ -297,6 +302,7 @@
 <span><span class="legend-dot" style="background:#d98e04"></span>A：分配型（受取・再投資）</span>
 <span><span class="legend-dot" style="background:#0f5f4c"></span>B：無分配型（自動再投資）</span>
 </div>
+<p class="field-hint" id="saitoushi-costNote"></p>
 </div>
 <details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="saitoushi-growthDataTable"></table></div></details>
 <div class="table-wrap">
@@ -324,12 +330,12 @@
 </div>
 <div class="faq-item">
 <dt>NISA口座なら分配型を選んでも問題ないですか？</dt>
-<dd>NISA口座内では分配金にも売却益にも税金がかからないため、本シミュレーターの計算上、分配型と無分配型の最終資産額に理論上の差はありません。ただし、信託報酬など商品ごとのコストは本シミュレーターでは考慮していないため、実際の商品選びでは費用面も比較することをおすすめします。</dd>
+<dd>NISA口座内では分配金にも売却益にも税金がかからないため、本シミュレーターの計算上、分配型と無分配型の最終資産額に理論上の差はありません。信託報酬など商品ごとのコストは「運用コスト（信託報酬等、年率）」欄で想定利回りから差し引く形で試算に反映できます（既定値0%）。</dd>
 </div>
 </dl>
 </section>
 <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・分配金の継続・元本を保証するものではありません。分配金はすべて課税対象の普通分配金として計算し、信託報酬等の運用コストは考慮していません。月次の利回りは年率を単純に12で割った概算値を使用しています。実際の税額・商品選びについては税理士・金融機関等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・分配金の継続・元本を保証するものではありません。分配金はすべて課税対象の普通分配金として計算しています。信託報酬等の運用コストは「運用コスト（信託報酬等、年率）」欄で想定利回りから差し引く形で試算に反映できますが（既定値0%）、売買手数料は考慮していません。月次の利回りは年率を単純に12で割った概算値を使用しています。実際の税額・商品選びについては税理士・金融機関等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
   </div>
   </section>
   <section class="tab-panel" id="tabpanel-portfolio" role="tabpanel" aria-labelledby="tab-btn-portfolio" data-tool="portfolio" hidden>

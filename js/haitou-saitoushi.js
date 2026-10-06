@@ -11,6 +11,9 @@
     yearsOut: document.getElementById("saitoushi-yearsOut"),
     totalReturn: document.getElementById("saitoushi-totalReturn"),
     totalReturnOut: document.getElementById("saitoushi-totalReturnOut"),
+    costPct: document.getElementById("saitoushi-costPct"),
+    costPctOut: document.getElementById("saitoushi-costPctOut"),
+    costNote: document.getElementById("saitoushi-costNote"),
     distYield: document.getElementById("saitoushi-distYield"),
     distYieldOut: document.getElementById("saitoushi-distYieldOut"),
     accountType: document.getElementById("saitoushi-accountType"),
@@ -95,15 +98,22 @@
     var months = Math.round(years * 12);
 
     var totalReturnPct = Number(els.totalReturn.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netTotalReturnPct = totalReturnPct - costPct;
     var distYieldPct = Number(els.distYield.value);
     var accountType = els.accountType.value;
     var taxRate = accountType === "nisa" ? 0 : TAX_RATE;
 
     els.yearsOut.textContent = years + " 年";
     els.totalReturnOut.textContent = totalReturnPct.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
     els.distYieldOut.textContent = distYieldPct.toFixed(1) + " %";
 
-    var totalMonthlyRate = totalReturnPct / 100 / 12;
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト" + costPct.toFixed(1) + "%を差し引いた年率" + netTotalReturnPct.toFixed(1) + "%で運用する前提で試算しています。"
+      : "";
+
+    var totalMonthlyRate = netTotalReturnPct / 100 / 12;
     var distMonthlyRate = distYieldPct / 100 / 12;
 
     var scenarioA = simulate(initialYen, monthlyYen, months, totalMonthlyRate, distMonthlyRate, taxRate, true);
@@ -194,7 +204,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("saitoushi-growthDataTable", chart);
   }
 
-  [els.initial, els.monthly, els.years, els.totalReturn, els.distYield, els.accountType].forEach(function (el) {
+  [els.initial, els.monthly, els.years, els.totalReturn, els.costPct, els.distYield, els.accountType].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
