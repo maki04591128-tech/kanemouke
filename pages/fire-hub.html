@@ -181,6 +181,11 @@
 <input id="fire-returnPct" max="10" min="1" step="0.5" type="range" value="5.0"/>
 </div>
 <div class="field">
+<label for="fire-accCostPct">積立期間中の運用コスト（信託報酬等、年率） <span class="unit" id="fire-accCostPctOut">0.0 %</span></label>
+<input id="fire-accCostPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint">投資信託の信託報酬など保有中にかかる年率コストを、上の想定利回りから差し引いて試算します。0%なら従来どおりコストを考慮しない試算になります（運用益への課税や売買手数料は含みません）。</p>
+</div>
+<div class="field">
 <label for="fire-annualExpense">リタイア後の年間生活費 <span class="unit">万円</span></label>
 <input id="fire-annualExpense" inputmode="numeric" min="0" step="10" type="number" value="300"/>
 <p class="field-hint">月あたりの生活費の目安は、この金額の12分の1です。</p>
@@ -199,6 +204,11 @@
 <label for="fire-postReturnPct">リタイア後の運用利回り（取り崩し期間中・年率） <span class="unit" id="fire-postReturnPctOut">3.0 %</span></label>
 <input id="fire-postReturnPct" max="8" min="0" step="0.5" type="range" value="3.0"/>
 <p class="field-hint">リタイア後もある程度リスクを取って運用を続ける前提です。0%にすると、運用せず資産を取り崩すだけの場合を試算できます。</p>
+</div>
+<div class="field">
+<label for="fire-postCostPct">リタイア後の運用コスト（信託報酬等、年率） <span class="unit" id="fire-postCostPctOut">0.0 %</span></label>
+<input id="fire-postCostPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint">取り崩し期間中も保有を続ける投資信託等の年率コストを、上の運用利回りから差し引いて試算します。0%なら従来どおりコストを考慮しない試算になります。</p>
 </div>
 <div class="field">
 <label for="fire-inflationPct">生活費の上昇率（インフレ率・年率） <span class="unit" id="fire-inflationPctOut">1.0 %</span></label>
@@ -236,6 +246,7 @@
 <span><span class="legend-dot" style="background:#0f5f4c"></span>資産額の推移（積立期間 → リタイア後の取り崩し期間）</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>FIRE達成ライン（目標資産額）</span>
 </div>
+<p class="field-hint" id="fire-costNote"></p>
 </div>
 <details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="fire-growthDataTable"></table></div></details>
 <div class="table-wrap">
@@ -268,7 +279,7 @@
 </dl>
 </section>
 <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果や資産の持続期間を保証するものではありません。想定利回り・引き出し率・インフレ率はいずれも毎年一定という単純化した仮定に基づいており、実際の相場は変動します。運用益への課税や売買手数料・信託報酬等のコストは考慮していません。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果や資産の持続期間を保証するものではありません。想定利回り・引き出し率・インフレ率はいずれも毎年一定という単純化した仮定に基づいており、実際の相場は変動します。信託報酬等の運用コストは「運用コスト（信託報酬等、年率）」欄で各期間の想定利回りから差し引く形で試算に反映できますが（既定値0%）、運用益への課税や売買手数料は考慮していません。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
   </div>
   </section>
   <section class="tab-panel" id="tabpanel-torikuzushi" role="tabpanel" aria-labelledby="tab-btn-torikuzushi" data-tool="torikuzushi" hidden>
