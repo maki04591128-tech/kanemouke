@@ -15,6 +15,9 @@
     divGrowthOut: document.getElementById("portfolio-divGrowthOut"),
     priceGrowth: document.getElementById("portfolio-priceGrowth"),
     priceGrowthOut: document.getElementById("portfolio-priceGrowthOut"),
+    costPct: document.getElementById("portfolio-costPct"),
+    costPctOut: document.getElementById("portfolio-costPctOut"),
+    costNote: document.getElementById("portfolio-costNote"),
     accountType: document.getElementById("portfolio-accountType"),
     targetMonthly: document.getElementById("portfolio-targetMonthly"),
     verdict: document.getElementById("portfolio-verdict"),
@@ -100,6 +103,8 @@
     var yieldPct = Number(els.yieldPct.value);
     var divGrowthPct = Number(els.divGrowth.value);
     var priceGrowthPct = Number(els.priceGrowth.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netPriceGrowthPct = priceGrowthPct - costPct;
     var accountType = els.accountType.value;
     var taxRate = accountType === "nisa" ? 0 : TAX_RATE;
     var targetMonthlyYen = Math.max(0, Number(els.targetMonthly.value) || 0) * 10000;
@@ -108,8 +113,13 @@
     els.yieldPctOut.textContent = yieldPct.toFixed(1) + " %";
     els.divGrowthOut.textContent = divGrowthPct.toFixed(1) + " %";
     els.priceGrowthOut.textContent = priceGrowthPct.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
 
-    var priceGrowthMonthlyRate = priceGrowthPct / 100 / 12;
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト" + costPct.toFixed(1) + "%を差し引いた株価の値上がり率年率" + netPriceGrowthPct.toFixed(1) + "%で運用する前提で試算しています。"
+      : "";
+
+    var priceGrowthMonthlyRate = netPriceGrowthPct / 100 / 12;
 
     var scenarioA = simulate(initialYen, monthlyYen, years, yieldPct, divGrowthPct, priceGrowthMonthlyRate, taxRate, true);
     var scenarioB = simulate(initialYen, monthlyYen, years, yieldPct, divGrowthPct, priceGrowthMonthlyRate, taxRate, false);
@@ -204,7 +214,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("portfolio-growthDataTable", chart);
   }
 
-  [els.initial, els.monthly, els.years, els.yieldPct, els.divGrowth, els.priceGrowth, els.accountType, els.targetMonthly].forEach(function (el) {
+  [els.initial, els.monthly, els.years, els.yieldPct, els.divGrowth, els.priceGrowth, els.costPct, els.accountType, els.targetMonthly].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
