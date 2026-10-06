@@ -21,9 +21,13 @@
   // 有期給付：子の加算の対象となる子がおらず、死亡時点で30歳未満の妻の
   // 遺族厚生年金は、5年間の有期給付となる（6年目以降は遺族厚生年金・
   // 中高齢寡婦加算のいずれも支給されない）。この条件に該当する場合は
-  // 結果欄に注記を表示する。夫が遺族厚生年金を受け取る場合に適用される
-  // 年齢要件（原則55歳以上、60歳まで支給停止となる場合がある等）は、
-  // 本シミュレーターでは考慮していない。
+  // 結果欄に注記を表示する。
+  // 夫が受け取る場合の年齢要件：妻の死亡時点で55歳未満の夫には遺族厚生
+  // 年金の受給権自体が発生しない（対象となる子がいればその子が受け取る）。
+  // 55歳以上60歳未満の夫は受給権は発生するが原則60歳まで支給停止となる。
+  // ただし遺族基礎年金の対象となる子がいる場合はこの支給停止の例外となり、
+  // 55歳以上であれば60歳前でも全額を受け取れる。経過的寡婦加算（昭和31年
+  // 4月1日以前生まれの妻が対象）は、本シミュレーターでは考慮していない。
 
   var els = {
     kouseiYears: document.getElementById("izoku-kouseiYears"),
@@ -56,6 +60,8 @@
   var CHUKOUREI_MAX_AGE = 65; // 65歳未満が対象
   var YOUNG_WIFE_AGE_LIMIT = 30; // 子のない30歳未満の妻は有期給付の対象
   var YOUNG_WIFE_LIMITED_YEARS = 5; // 有期給付の支給期間
+  var HUSBAND_MIN_AGE = 55; // 夫が遺族厚生年金の受給権を得るための年齢要件
+  var HUSBAND_SUSPENSION_UNTIL_AGE = 60; // 55〜59歳の夫は原則この年齢まで支給停止
 
   function yen(n) {
     return Math.round(n).toLocaleString("ja-JP") + " 円";
@@ -83,6 +89,22 @@
       kousei = avgMonthlyRemuneration * KOSEI_RATE * guaranteedMonths * IZOKU_KOSEI_RATIO;
     }
 
+    // 妻の死亡時点で55歳未満の夫には遺族厚生年金の受給権が発生しない
+    // （対象となる子がいればその子が受け取るため、この試算では0円とする）。
+    var husbandIneligible =
+      kousei > 0 && spouseGender === "husband" && spouseAge > 0 && spouseAge < HUSBAND_MIN_AGE;
+    if (husbandIneligible) kousei = 0;
+
+    // 55歳以上60歳未満の夫は、遺族基礎年金の対象となる子がいない限り、
+    // 60歳まで遺族厚生年金が支給停止となる（金額自体は60歳から変わらず
+    // 受け取れるため、ここでは0円にせず結果欄へ注記のみ表示する）。
+    var husbandSuspended =
+      kousei > 0 &&
+      spouseGender === "husband" &&
+      spouseAge >= HUSBAND_MIN_AGE &&
+      spouseAge < HUSBAND_SUSPENSION_UNTIL_AGE &&
+      childCount === 0;
+
     var chukoureiEligible =
       kouseiMonths > 0 &&
       spouseGender === "wife" &&
@@ -107,6 +129,8 @@
       chukourei: chukourei,
       total: kiso + kousei + chukourei,
       youngWifeLimited: youngWifeLimited,
+      husbandIneligible: husbandIneligible,
+      husbandSuspended: husbandSuspended,
     };
   }
 
@@ -140,6 +164,14 @@
           "年間の有期給付となります。上記の年額・月額は、この" +
           YOUNG_WIFE_LIMITED_YEARS +
           "年間に受け取れる金額の目安であり、6年目以降は遺族厚生年金・中高齢寡婦加算のいずれも支給されません（新たに対象となる子が生まれた場合などを除く）。</p>";
+      } else if (r.husbandIneligible) {
+        els.limitedNotice.style.display = "block";
+        els.limitedNotice.innerHTML =
+          "<p><strong>夫は遺族厚生年金を受け取れません：</strong>妻の死亡時点で55歳未満の夫には、遺族厚生年金の受給権自体が発生しません。上記の遺族厚生年金は0円として試算しています。対象となる子がいる場合は、その子が遺族厚生年金を受け取れる可能性があります（本シミュレーターでは試算していません）。</p>";
+      } else if (r.husbandSuspended) {
+        els.limitedNotice.style.display = "block";
+        els.limitedNotice.innerHTML =
+          "<p><strong>60歳まで支給停止の対象です：</strong>妻の死亡時点で55歳以上60歳未満の夫は、遺族基礎年金の対象となる子がいない場合、遺族厚生年金が60歳になるまで支給停止となります。上記の遺族厚生年金の金額は60歳から受け取れる見込み額であり、60歳になるまでは受け取れません。</p>";
       } else {
         els.limitedNotice.style.display = "none";
         els.limitedNotice.innerHTML = "";
