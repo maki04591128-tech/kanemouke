@@ -7,6 +7,8 @@
     startAssets: document.getElementById("torikuzushi-startAssets"),
     returnPct: document.getElementById("torikuzushi-returnPct"),
     returnPctOut: document.getElementById("torikuzushi-returnPctOut"),
+    costPct: document.getElementById("torikuzushi-costPct"),
+    costPctOut: document.getElementById("torikuzushi-costPctOut"),
     maxYears: document.getElementById("torikuzushi-maxYears"),
     fixedAmount: document.getElementById("torikuzushi-fixedAmount"),
     applyInflation: document.getElementById("torikuzushi-applyInflation"),
@@ -91,6 +93,8 @@
   function render() {
     var startAssetsYen = Math.max(0, Number(els.startAssets.value) || 0) * 10000;
     var returnPct = Number(els.returnPct.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netReturnPct = returnPct - costPct;
     var maxYears = Math.min(MAX_YEARS_CAP, Math.max(1, Math.round(Number(els.maxYears.value) || 1)));
     var fixedAmountYen = Math.max(0, Number(els.fixedAmount.value) || 0) * 10000;
     var applyInflation = els.applyInflation.value === "yes";
@@ -102,6 +106,7 @@
     var incomeSlidePct = Math.max(0, Number(els.incomeSlidePct.value) || 0);
 
     els.returnPctOut.textContent = returnPct.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
     els.inflationPctOut.textContent = inflationPct.toFixed(1) + " %";
     els.fixedRatePctOut.textContent = fixedRatePct.toFixed(1) + " %";
     els.incomeSlidePctOut.textContent = incomeSlidePct.toFixed(1) + " %";
@@ -112,16 +117,16 @@
       return incomeAmountYen * factor;
     }
 
-    var fixed = simulate(startAssetsYen, returnPct, maxYears, function (y) {
+    var fixed = simulate(startAssetsYen, netReturnPct, maxYears, function (y) {
       var factor = applyInflation ? Math.pow(1 + inflationPct / 100, y - 1) : 1;
       return fixedAmountYen * factor;
     }, income);
 
-    var percent = simulate(startAssetsYen, returnPct, maxYears, function (y, balance) {
+    var percent = simulate(startAssetsYen, netReturnPct, maxYears, function (y, balance) {
       return balance * (fixedRatePct / 100);
     }, income);
 
-    var floorMethod = simulate(startAssetsYen, returnPct, maxYears, function (y, balance) {
+    var floorMethod = simulate(startAssetsYen, netReturnPct, maxYears, function (y, balance) {
       return Math.max(balance * (fixedRatePct / 100), floorAmountYen);
     }, income);
 
@@ -178,10 +183,13 @@
         (incomeSlidePct > 0 ? "（年率" + incomeSlidePct.toFixed(1) + "%で増額）" : "") +
         " 分を生活費から差し引いて試算しています）"
       : "";
+    var costNote = costPct > 0
+      ? "（運用コスト " + costPct.toFixed(1) + "% を差し引いた年率 " + netReturnPct.toFixed(1) + "% で運用する前提で試算しています）"
+      : "";
 
     if (survivedAll) {
       els.verdict.textContent = "この条件では、3つの方式とも " + maxYears + " 年間資産が尽きない計算です";
-      els.verdictSub.textContent = "取り崩し額・取り崩し率をさらに引き上げた場合にどう変わるかも試算してみてください。" + incomeNote;
+      els.verdictSub.textContent = "取り崩し額・取り崩し率をさらに引き上げた場合にどう変わるかも試算してみてください。" + incomeNote + costNote;
     } else if (depletedOnly.length === methods.length) {
       var slowest = depletedOnly.reduce(function (best, cur) {
         return cur.result.depletedYear > best.result.depletedYear ? cur : best;
@@ -191,13 +199,13 @@
       }, depletedOnly[0]);
       els.verdict.textContent =
         "この条件では、3方式とも " + maxYears + " 年以内に資産が尽きる計算です（最短は「" + fastest.label + "」で約" + fastest.result.depletedYear + "年、最長は「" + slowest.label + "」で約" + slowest.result.depletedYear + "年）";
-      els.verdictSub.textContent = "取り崩し額・取り崩し率を下げる、想定利回りの前提を見直すなどで持続年数がどう変わるか比較してみてください。" + incomeNote;
+      els.verdictSub.textContent = "取り崩し額・取り崩し率を下げる、想定利回りの前提を見直すなどで持続年数がどう変わるか比較してみてください。" + incomeNote + costNote;
     } else {
       var survived = methods.filter(function (item) { return item.result.depletedYear === null; });
       els.verdict.textContent =
         "この条件では、" + survived.map(function (i) { return "「" + i.label + "」"; }).join("と") + "は " + maxYears + " 年間資産が持続し、" +
         depletedOnly.map(function (i) { return "「" + i.label + "」は約" + i.result.depletedYear + "年で尽きる"; }).join("、") + " 計算です";
-      els.verdictSub.textContent = "同じ初期資産・利回りでも、取り崩し方式によって資産の持続年数が大きく変わることが分かります。" + incomeNote;
+      els.verdictSub.textContent = "同じ初期資産・利回りでも、取り崩し方式によって資産の持続年数が大きく変わることが分かります。" + incomeNote + costNote;
     }
 
     var chartLabels = [];
@@ -252,6 +260,7 @@
   [
     els.startAssets,
     els.returnPct,
+    els.costPct,
     els.maxYears,
     els.fixedAmount,
     els.applyInflation,
