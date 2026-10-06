@@ -17,6 +17,12 @@
   // 配偶者加給年金額：1級・2級の障害厚生年金に、生計を維持されている65歳
   // 未満の配偶者がいる場合に加算される243,800円（令和8年度）。老齢厚生
   // 年金の配偶者加給年金額と異なり、受給者の生年月日による特別加算は無い。
+  //
+  // 20歳前の傷病による障害基礎年金の所得制限：保険料を納付していない期間
+  // の障害のため、本人の前年所得に応じて年金額の一部・全部が支給停止され
+  // る（令和8年10月以降：前年所得3,858,000円超で2分の1停止、4,918,000円
+  // 超で全部停止。扶養親族1人につき所得制限額を38万円加算。対象期間は10
+  // 月分〜翌年9月分）。国民年金のみ加入時のみ対象。
 
   var els = {
     pensionType: document.getElementById("shougai-pensionType"),
@@ -27,6 +33,11 @@
     childCount: document.getElementById("shougai-childCount"),
     hasSpouse: document.getElementById("shougai-hasSpouse"),
     spouseAge: document.getElementById("shougai-spouseAge"),
+    is20mae: document.getElementById("shougai-is20mae"),
+    is20maeField: document.getElementById("shougai-is20mae-field"),
+    zennenShotoku: document.getElementById("shougai-zennenShotoku"),
+    fuyouCount: document.getElementById("shougai-fuyouCount"),
+    incomeLimitFields: document.getElementById("shougai-incomeLimit-fields"),
     verdict: document.getElementById("shougai-verdict"),
     verdictSub: document.getElementById("shougai-verdictSub"),
     notice: document.getElementById("shougai-notice"),
@@ -56,6 +67,9 @@
   var TEATE_MIN = 1271000; // 障害手当金の最低保障（報酬比例部分の2倍相当、令和8年度）
   var SPOUSE_ADDITION_YEARLY = 243800; // 配偶者加給年金額（令和8年度、特別加算なし）
   var SPOUSE_MAX_AGE = 65; // 65歳未満が対象
+  var INCOME_LIMIT_HALF = 3858000; // 20歳前傷病：2分の1停止の所得基準（令和8年10月以降）
+  var INCOME_LIMIT_FULL = 4918000; // 20歳前傷病：全部停止の所得基準（令和8年10月以降）
+  var DEPENDENT_ADD = 380000; // 扶養親族1人あたりの所得制限額の加算（通常区分）
 
   function yen(n) {
     return Math.round(n).toLocaleString("ja-JP") + " 円";
@@ -65,7 +79,7 @@
     return Math.max(0, Number(n) || 0);
   }
 
-  function calc(pensionType, grade, kouseiYears, avgIncomeYen, childCount, hasSpouse, spouseAge) {
+  function calc(pensionType, grade, kouseiYears, avgIncomeYen, childCount, hasSpouse, spouseAge, is20mae, zennenShotokuYen, fuyouCount) {
     var isKousei = pensionType === "kousei";
     var isTeate = grade === "teate";
     var kouseiMonths = isKousei ? kouseiYears * 12 : 0;
@@ -102,7 +116,24 @@
       childAddition += Math.min(childCount, 2) * CHILD_ADD_FIRST_SECOND;
       if (childCount > 2) childAddition += (childCount - 2) * CHILD_ADD_THIRD_PLUS;
     }
-    var kiso = kisoBase > 0 ? kisoBase + childAddition : 0;
+    var kisoFull = kisoBase > 0 ? kisoBase + childAddition : 0;
+    var incomeStop = "none";
+    var incomeStoppedAmount = 0;
+    var stopFactor = 1;
+    if (kisoFull > 0 && is20mae && !isKousei) {
+      var limitFull = INCOME_LIMIT_FULL + fuyouCount * DEPENDENT_ADD;
+      var limitHalf = INCOME_LIMIT_HALF + fuyouCount * DEPENDENT_ADD;
+      if (zennenShotokuYen > limitFull) {
+        incomeStop = "full";
+        stopFactor = 0;
+      } else if (zennenShotokuYen > limitHalf) {
+        incomeStop = "half";
+        stopFactor = 0.5;
+      }
+    }
+    var kiso = kisoFull * stopFactor;
+    childAddition = childAddition * stopFactor;
+    incomeStoppedAmount = kisoFull - kiso;
 
     var kousei = 0;
     if (hoshuHireiBubun > 0) {
@@ -125,12 +156,15 @@
       isTeate: false,
       teateAmount: 0,
       kiso: kiso,
+      kisoFull: kisoFull,
       childAddition: childAddition,
       kousei: kousei,
       kakyu: kakyu,
       total: kiso + kousei + kakyu,
       ineligibleGrade3Kokumin: ineligibleGrade3Kokumin,
       ineligibleTeateKokumin: false,
+      incomeStop: incomeStop,
+      incomeStoppedAmount: incomeStoppedAmount,
     };
   }
 
@@ -146,14 +180,23 @@
     var childCount = Math.min(5, clampNonNegative(els.childCount ? els.childCount.value : 0));
     var hasSpouse = els.hasSpouse && els.hasSpouse.value === "yes" ? "yes" : "none";
     var spouseAge = clampNonNegative(els.spouseAge ? els.spouseAge.value : 0);
+    var is20maeAvailable = pensionType === "kokumin" && (grade === "1" || grade === "2");
+    var is20mae = is20maeAvailable && els.is20mae && els.is20mae.value === "yes";
+    var zennenShotoku = clampNonNegative(els.zennenShotoku ? els.zennenShotoku.value : 0) * 10000;
+    var fuyouCount = Math.min(5, clampNonNegative(els.fuyouCount ? els.fuyouCount.value : 0));
 
     if (els.kouseiYearsOut) els.kouseiYearsOut.textContent = kouseiYears + " 年";
     if (els.kouseiYears) els.kouseiYears.disabled = pensionType === "kokumin";
     if (els.childCount) els.childCount.disabled = isTeateGrade;
     if (els.hasSpouse) els.hasSpouse.disabled = isTeateGrade;
     if (els.spouseAge) els.spouseAge.disabled = isTeateGrade;
+    if (els.is20maeField) els.is20maeField.style.display = is20maeAvailable ? "" : "none";
+    if (els.is20mae) els.is20mae.disabled = !is20maeAvailable;
+    if (els.incomeLimitFields) els.incomeLimitFields.style.display = is20mae ? "" : "none";
+    if (els.zennenShotoku) els.zennenShotoku.disabled = !is20mae;
+    if (els.fuyouCount) els.fuyouCount.disabled = !is20mae;
 
-    var r = calc(pensionType, grade, kouseiYears, avgIncome, childCount, hasSpouse, spouseAge);
+    var r = calc(pensionType, grade, kouseiYears, avgIncome, childCount, hasSpouse, spouseAge, is20mae, zennenShotoku, fuyouCount);
     var monthly = r.total / 12;
 
     if (els.cardTeate) els.cardTeate.hidden = !r.isTeate;
@@ -180,6 +223,14 @@
         els.notice.style.display = "block";
         els.notice.innerHTML =
           "<p><strong>国民年金のみでは障害手当金は対象外です：</strong>障害手当金は厚生年金に加入中の初診日であることが条件のため、初診日時点で国民年金のみに加入していた場合は支給されません。</p>";
+      } else if (r.incomeStop === "full") {
+        els.notice.style.display = "block";
+        els.notice.innerHTML =
+          "<p><strong>所得制限により障害基礎年金は全額支給停止の見込みです：</strong>20歳前の傷病による障害基礎年金は保険料を納めていない期間の障害のため、前年の所得が一定額を超えると支給停止になります。入力した前年所得・扶養親族の人数では、全額停止の基準額（" + yen(INCOME_LIMIT_FULL + fuyouCount * DEPENDENT_ADD) + "）を超えているため、障害基礎年金・子の加算は0円として試算しています。</p>";
+      } else if (r.incomeStop === "half") {
+        els.notice.style.display = "block";
+        els.notice.innerHTML =
+          "<p><strong>所得制限により障害基礎年金は2分の1停止の見込みです：</strong>入力した前年所得・扶養親族の人数では、2分の1停止の基準額（" + yen(INCOME_LIMIT_HALF + fuyouCount * DEPENDENT_ADD) + "）を超え、全額停止の基準額（" + yen(INCOME_LIMIT_FULL + fuyouCount * DEPENDENT_ADD) + "）以下のため、障害基礎年金（子の加算含む）を2分の1（" + yen(r.incomeStoppedAmount) + "停止）として試算しています。</p>";
       } else {
         els.notice.style.display = "none";
         els.notice.innerHTML = "";
@@ -195,6 +246,8 @@
         }
       } else if (r.total > 0) {
         els.verdict.textContent = "障害年金は年額 " + yen(r.total) + "（月額 " + yen(monthly) + "）の見込みです";
+      } else if (r.incomeStop === "full") {
+        els.verdict.textContent = "所得制限により障害基礎年金は全額支給停止（0円）の見込みです";
       } else {
         els.verdict.textContent = "この条件では障害年金の対象外です";
       }
@@ -214,7 +267,11 @@
         if (r.kousei > 0) parts.push("障害厚生年金 " + yen(r.kousei));
         if (r.kakyu > 0) parts.push("配偶者加給年金額 " + yen(r.kakyu));
         els.verdictSub.textContent =
-          parts.join("＋") + "（いずれも年額）の合計です。実際の受給には保険料納付要件・障害認定日に一定の障害等級へ該当していることなどの要件を満たす必要があります。";
+          parts.join("＋") + "（いずれも年額）の合計です。実際の受給には保険料納付要件・障害認定日に一定の障害等級へ該当していることなどの要件を満たす必要があります。" +
+          (r.incomeStop === "half" ? "20歳前傷病による所得制限で障害基礎年金が2分の1停止になる条件のため、停止後の金額です。" : "");
+      } else if (r.incomeStop === "full") {
+        els.verdictSub.textContent =
+          "20歳前の傷病による障害基礎年金は、前年所得が所得制限の基準額を超えると全額支給停止になります。入力した条件では基準額を超えているため、試算結果は0円です。";
       } else {
         els.verdictSub.textContent =
           "障害基礎年金は1級・2級のみに存在し、障害厚生年金は初診日時点で厚生年金に加入していた場合のみ支給されます。いずれにも該当しない条件のため、試算結果は0円です。";
@@ -228,6 +285,9 @@
       els.breakdownBody.innerHTML =
         "<tr><td>障害基礎年金（本人分）</td><td>" + yen(r.kiso > 0 ? r.kiso - r.childAddition : 0) + " /年</td></tr>" +
         "<tr><td>子の加算（" + childCount + "人）</td><td>" + yen(r.childAddition) + " /年</td></tr>" +
+        (r.incomeStop !== "none"
+          ? "<tr><td>所得制限による停止額（" + (r.incomeStop === "full" ? "全部" : "2分の1") + "）</td><td>-" + yen(r.incomeStoppedAmount) + " /年</td></tr>"
+          : "") +
         "<tr><td>障害厚生年金（" + grade + "級・300月みなし）</td><td>" + yen(r.kousei) + " /年</td></tr>" +
         "<tr><td>配偶者加給年金額</td><td>" + yen(r.kakyu) + " /年</td></tr>" +
         "<tr><td><strong>合計（年額）</strong></td><td><strong>" + yen(r.total) + "</strong></td></tr>" +
@@ -282,7 +342,7 @@
     }
   }
 
-  [els.kouseiYears, els.avgIncome, els.childCount, els.spouseAge].forEach(function (el) {
+  [els.kouseiYears, els.avgIncome, els.childCount, els.spouseAge, els.zennenShotoku, els.fuyouCount].forEach(function (el) {
     if (!el) return;
     el.addEventListener("input", render);
     el.addEventListener("change", render);
@@ -290,6 +350,7 @@
   if (els.pensionType) els.pensionType.addEventListener("change", render);
   if (els.grade) els.grade.addEventListener("change", render);
   if (els.hasSpouse) els.hasSpouse.addEventListener("change", render);
+  if (els.is20mae) els.is20mae.addEventListener("change", render);
 
   render();
 })();
