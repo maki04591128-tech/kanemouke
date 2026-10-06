@@ -8,6 +8,8 @@
     monthly: document.getElementById("setsuzei-monthly"),
     taxRate: document.getElementById("setsuzei-taxRate"),
     rate: document.getElementById("setsuzei-rate"),
+    costPct: document.getElementById("setsuzei-costPct"),
+    costPctOut: document.getElementById("setsuzei-costPctOut"),
     years: document.getElementById("setsuzei-years"),
     rateOut: document.getElementById("setsuzei-rateOut"),
     yearsOut: document.getElementById("setsuzei-yearsOut"),
@@ -17,6 +19,7 @@
     taxSavingYearly: document.getElementById("setsuzei-tax-saving-yearly"),
     taxSavingTotal: document.getElementById("setsuzei-tax-saving-total"),
     benefitTotal: document.getElementById("setsuzei-benefit-total"),
+    costNote: document.getElementById("setsuzei-costNote"),
   };
 
   var chart = null;
@@ -63,9 +66,12 @@
     els.monthly.value = monthly;
     var incomeTaxRate = Number(els.taxRate.value) / 100;
     var rate = Number(els.rate.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netRate = rate - costPct;
     var years = Number(els.years.value);
 
     els.rateOut.textContent = rate.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
     els.yearsOut.textContent = years + " 年";
 
     // Simplified assumption: contributions, income, and tax bracket stay
@@ -76,7 +82,7 @@
     var annualTaxSaving = annualContribution * combinedTaxRate;
     var totalTaxSaving = annualTaxSaving * years;
 
-    var growth = simulateGrowth(monthly, rate, years);
+    var growth = simulateGrowth(monthly, netRate, years);
     var investProfit = growth.balance - growth.principal;
     var totalBenefit = investProfit + totalTaxSaving;
 
@@ -86,6 +92,9 @@
     els.taxSavingYearly.textContent = yen(annualTaxSaving);
     els.taxSavingTotal.textContent = yen(totalTaxSaving);
     els.benefitTotal.textContent = yen(totalBenefit);
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト " + costPct.toFixed(1) + "% を差し引いた年率 " + netRate.toFixed(1) + "% で運用する前提で試算しています。"
+      : "";
 
     var labels = growth.yearly.map(function (d) { return d.year + "年"; });
     var principalData = growth.yearly.map(function (d) { return Math.round(d.principal); });
@@ -145,7 +154,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("setsuzei-growthDataTable", chart);
   }
 
-  [els.monthly, els.taxRate, els.rate, els.years].forEach(function (el) {
+  [els.monthly, els.taxRate, els.rate, els.costPct, els.years].forEach(function (el) {
     el.addEventListener("input", render);
   });
 
