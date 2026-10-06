@@ -976,6 +976,13 @@ window.SITE_SEARCH_DATA = [
     "type": "tool"
   },
   {
+    "title": "国民健康保険料シミュレーター",
+    "desc": "自営業・フリーランス・早期リタイア後などに加入する国民健康保険料を、世帯の人数・年齢構成・所得から試算します。所得割率・均等割額はお住まいの市区町村の値に書き換えて使えます。",
+    "href": "pages/setsuzei-hub.html?tool=kokuho",
+    "category": "節税・控除・確定申告",
+    "type": "tool"
+  },
+  {
     "title": "確定申告 要否チェック",
     "desc": "副業・医療費控除・住宅ローン控除・ふるさと納税など8項目をチェックするだけで、確定申告が必要か（義務・任意・不要）を判定します。",
     "href": "pages/setsuzei-hub.html?tool=kakutei",
