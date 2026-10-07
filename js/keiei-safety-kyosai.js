@@ -5,6 +5,10 @@
   var RECONSTRUCTION_TAX_RATE = 0.021;
   var CONTRIBUTION_CAP = 8000000; // 経営セーフティ共済の掛金積立限度額（800万円）
   var BUSINESS_TAX_DEDUCTION = 2900000; // 個人事業税の事業主控除（年290万円）
+  var SME_CAPITAL_THRESHOLD = 100000000; // 中小法人向け軽減税率の対象となる資本金の上限（1億円）
+  var CORP_RATE_TIER1 = 0.2137; // 資本金1億円以下・課税所得400万円以下の法定実効税率の目安（東京都特別区・標準税率）
+  var CORP_RATE_TIER2 = 0.2317; // 資本金1億円以下・課税所得400万円超800万円以下の法定実効税率の目安
+  var CORP_RATE_STANDARD = 0.3358; // 課税所得800万円超（または資本金1億円超）の法定実効税率の目安
 
   // 所得税の速算表（令和2年分以降）
   var TAX_BRACKETS = [
@@ -43,6 +47,11 @@
     incomeExit: document.getElementById("safety-incomeExit"),
     bizTaxRate: document.getElementById("safety-bizTaxRate"),
     rateRow: document.getElementById("safety-rateRow"),
+    corpRateMode: document.getElementById("safety-corpRateMode"),
+    corpAutoRow: document.getElementById("safety-corpAutoRow"),
+    capital: document.getElementById("safety-capital"),
+    corpIncomeEntry: document.getElementById("safety-corpIncomeEntry"),
+    corpIncomeExit: document.getElementById("safety-corpIncomeExit"),
     rateEntry: document.getElementById("safety-rateEntry"),
     rateEntryOut: document.getElementById("safety-rateEntryOut"),
     rateExit: document.getElementById("safety-rateExit"),
@@ -101,6 +110,16 @@
     return rate * (1 + RECONSTRUCTION_TAX_RATE) + RESIDENT_TAX_RATE + businessTaxRate(taxable, bizRatePct);
   }
 
+  // 資本金と年間課税所得から、法人税・地方法人税・法人事業税等を合計した法定実効税率の目安（%）を算出する。
+  // 資本金1億円以下の中小法人は年800万円以下の所得部分に軽減税率が適用され、東京都特別区・標準税率を前提にすると
+  // 課税所得400万円以下は約21.37%、400万円超800万円以下は約23.17%、800万円超（または資本金1億円超）は約33.58%となる。
+  function corpEffectiveRatePct(capital, taxable) {
+    var isSme = capital <= SME_CAPITAL_THRESHOLD;
+    if (isSme && taxable <= 4000000) return CORP_RATE_TIER1 * 100;
+    if (isSme && taxable <= 8000000) return CORP_RATE_TIER2 * 100;
+    return CORP_RATE_STANDARD * 100;
+  }
+
   function cancellationPayoutRatio(months, cancelType) {
     var m = Math.max(0, Math.round(months));
     if (m <= 11) return 0;
@@ -152,6 +171,14 @@
     var isCorp = els.entityType.value === "corp";
     els.incomeRow.style.display = isCorp ? "none" : "";
     els.rateRow.style.display = isCorp ? "" : "none";
+    updateCorpRateModeVisibility();
+  }
+
+  function updateCorpRateModeVisibility() {
+    var isAuto = els.corpRateMode.value === "auto";
+    els.corpAutoRow.style.display = isAuto ? "" : "none";
+    els.rateEntry.disabled = isAuto;
+    els.rateExit.disabled = isAuto;
   }
 
   function render() {
@@ -165,10 +192,25 @@
 
     var entryRate, exitRate;
     if (entityType === "corp") {
-      var rateEntryPct = Number(els.rateEntry.value);
-      var rateExitPct = Number(els.rateExit.value);
-      els.rateEntryOut.textContent = rateEntryPct.toFixed(1) + " %";
-      els.rateExitOut.textContent = rateExitPct.toFixed(1) + " %";
+      var isAutoCorpRate = els.corpRateMode.value === "auto";
+      var rateEntryPct, rateExitPct;
+      if (isAutoCorpRate) {
+        var capital = clampNonNegative(els.capital.value);
+        var corpIncomeEntry = clampNonNegative(els.corpIncomeEntry.value);
+        var corpIncomeExit = clampNonNegative(els.corpIncomeExit.value);
+        rateEntryPct = corpEffectiveRatePct(capital, corpIncomeEntry);
+        rateExitPct = corpEffectiveRatePct(capital, corpIncomeExit);
+        // スライダーの目盛りはstep幅（0.5）に合わせて最も近い値へスナップされるため見た目用のみに使い、
+        // 実際の節税額等の計算・表示には上記のスナップ前の値（rateEntryPct/rateExitPct）を使う。
+        els.rateEntry.value = rateEntryPct;
+        els.rateExit.value = rateExitPct;
+      } else {
+        rateEntryPct = Number(els.rateEntry.value);
+        rateExitPct = Number(els.rateExit.value);
+      }
+      var corpRateSuffix = isAutoCorpRate ? " %（自動算出）" : " %";
+      els.rateEntryOut.textContent = rateEntryPct.toFixed(isAutoCorpRate ? 2 : 1) + corpRateSuffix;
+      els.rateExitOut.textContent = rateExitPct.toFixed(isAutoCorpRate ? 2 : 1) + corpRateSuffix;
       entryRate = rateEntryPct / 100;
       exitRate = rateExitPct / 100;
     } else {
@@ -228,8 +270,18 @@
 
     var rows = [["事業形態", entityType === "corp" ? "法人" : "個人事業主"]];
     if (entityType === "corp") {
-      rows.push(["加入時の実効税率（想定）", Number(els.rateEntry.value).toFixed(1) + " %"]);
-      rows.push(["解約時の実効税率（想定）", Number(els.rateExit.value).toFixed(1) + " %"]);
+      if (isAutoCorpRate) {
+        var capitalForRows = clampNonNegative(els.capital.value);
+        rows.push(["資本金", yen(capitalForRows)]);
+        rows.push(["中小法人向け軽減税率の適用", capitalForRows <= SME_CAPITAL_THRESHOLD ? "あり（資本金1億円以下）" : "なし（資本金1億円超のため標準税率のみ）"]);
+        rows.push(["加入時の年間課税所得の目安", yen(clampNonNegative(els.corpIncomeEntry.value))]);
+        rows.push(["加入時の実効税率（自動算出）", rateEntryPct.toFixed(2) + " %"]);
+        rows.push(["解約する年度の年間課税所得の目安", yen(clampNonNegative(els.corpIncomeExit.value))]);
+        rows.push(["解約時の実効税率（自動算出）", rateExitPct.toFixed(2) + " %"]);
+      } else {
+        rows.push(["加入時の実効税率（想定）", Number(els.rateEntry.value).toFixed(1) + " %"]);
+        rows.push(["解約時の実効税率（想定）", Number(els.rateExit.value).toFixed(1) + " %"]);
+      }
     } else {
       var bizRatePctForRows = Number(els.bizTaxRate.value) || 0;
       rows.push(["加入時の事業の課税所得の目安", yen(clampNonNegative(els.incomeEntry.value))]);
@@ -318,7 +370,11 @@
     updateEntityVisibility();
     render();
   });
-  [els.monthly, els.years, els.incomeEntry, els.incomeExit, els.bizTaxRate, els.rateEntry, els.rateExit, els.cancelType].forEach(function (el) {
+  els.corpRateMode.addEventListener("change", function () {
+    updateCorpRateModeVisibility();
+    render();
+  });
+  [els.monthly, els.years, els.incomeEntry, els.incomeExit, els.bizTaxRate, els.capital, els.corpIncomeEntry, els.corpIncomeExit, els.rateEntry, els.rateExit, els.cancelType].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });

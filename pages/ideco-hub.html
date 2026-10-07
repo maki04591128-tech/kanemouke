@@ -917,13 +917,36 @@
 </div>
 <div id="safety-rateRow">
 <div class="field">
+<label for="safety-corpRateMode">実効税率の設定方法</label>
+<select id="safety-corpRateMode">
+<option selected="" value="manual">手動でスライダーを操作する</option>
+<option value="auto">資本金と課税所得から自動算出する</option>
+</select>
+<p class="field-hint">中小法人は年800万円以下の所得部分に軽減税率が適用されるため、損失が出た年度や所得の少ない年度は実効税率が下がります。「自動算出する」を選ぶと、資本金と年間課税所得からこの軽減税率を踏まえた実効税率の目安を算出し、下のスライダーに反映します。</p>
+</div>
+<div id="safety-corpAutoRow">
+<div class="field">
+<label for="safety-capital">資本金 <span class="unit">円</span></label>
+<input id="safety-capital" inputmode="numeric" min="0" step="1000000" type="number" value="10000000"/>
+<p class="field-hint">資本金1億円以下であれば中小法人向けの軽減税率の対象になります（1億円超の場合は軽減税率の対象外で、所得にかかわらず標準税率のみが適用されます）。</p>
+</div>
+<div class="field">
+<label for="safety-corpIncomeEntry">加入時の年間課税所得の目安 <span class="unit">円</span></label>
+<input id="safety-corpIncomeEntry" inputmode="numeric" min="0" step="100000" type="number" value="5000000"/>
+</div>
+<div class="field">
+<label for="safety-corpIncomeExit">解約する年度の年間課税所得の目安 <span class="unit">円</span></label>
+<input id="safety-corpIncomeExit" inputmode="numeric" min="0" step="100000" type="number" value="5000000"/>
+<p class="field-hint">自動算出する実効税率は、東京都特別区・標準税率を前提にした法定実効税率の目安です（資本金1億円以下の場合、課税所得400万円以下は約21.37%、400万円超800万円以下は約23.17%、800万円超は約33.58%。資本金1億円超は所得にかかわらず約33.58%）。実際の税率は自治体や外形標準課税の適用関係等により異なるため、詳細は税理士・自治体にご確認ください。</p>
+</div>
+</div>
+<div class="field">
 <label for="safety-rateEntry">加入時の実効税率の目安（法人税・地方法人税・法人事業税等の合計） <span class="unit" id="safety-rateEntryOut">25.0 %</span></label>
 <input id="safety-rateEntry" max="40" min="10" step="0.5" type="range" value="25"/>
 </div>
 <div class="field">
 <label for="safety-rateExit">解約する年度の実効税率の目安 <span class="unit" id="safety-rateExitOut">25.0 %</span></label>
 <input id="safety-rateExit" max="40" min="10" step="0.5" type="range" value="25"/>
-<p class="field-hint">中小法人は年800万円以下の所得部分に軽減税率が適用されるため、損失が出た年度や所得の少ない年度は実効税率が下がります。</p>
 </div>
 </div>
 <div class="field">
