@@ -84,6 +84,14 @@
     },
     {
       "@type": "Question",
+      "name": "投資信託の信託報酬などの運用コストは考慮できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「運用コスト（信託報酬等、年率）」欄に入力すると、想定運用利回りからその分を差し引いた実質利回りで運用益を試算します（既定値は0%で、入力しない場合は従来どおり運用利回りそのままで試算します）。売買手数料や税金（上記参照）は含まれていません。"
+      }
+    },
+    {
+      "@type": "Question",
       "name": "どちらを選べばいいですか？",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -511,6 +519,11 @@
 <input id="kurioage-investRate" max="10" min="0" step="0.1" type="range" value="5"/>
 </div>
 <div class="field">
+<label for="kurioage-costPct">運用コスト（信託報酬等、年率） <span class="unit" id="kurioage-costPctOut">0.0 %</span></label>
+<input id="kurioage-costPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint" id="kurioage-costNote"></p>
+</div>
+<div class="field">
 <label for="kurioage-delayYears">繰上返済を実行するまでの年数（それまでは運用に回す） <span class="unit" id="kurioage-delayYearsOut">0 年</span></label>
 <input id="kurioage-delayYears" max="20" min="0" step="1" type="range" value="0"/>
 </div>
@@ -602,6 +615,10 @@
 <div class="faq-item">
 <dt>投資の運用益には税金がかかりますか？</dt>
 <dd>新NISA口座での運用益は非課税ですが、非課税投資枠には上限があります。課税口座（特定口座など）の場合、運用益に対して約20.315%の税金がかかる点にご留意ください。本シミュレーターの「税引前」の値はこの税金を考慮していません。</dd>
+</div>
+<div class="faq-item">
+<dt>投資信託の信託報酬などの運用コストは考慮できますか？</dt>
+<dd>「運用コスト（信託報酬等、年率）」欄に入力すると、想定運用利回りからその分を差し引いた実質利回りで運用益を試算します（既定値は0%で、入力しない場合は従来どおり運用利回りそのままで試算します）。売買手数料や税金（上記参照）は含まれていません。</dd>
 </div>
 <div class="faq-item">
 <dt>どちらを選べばいいですか？</dt>

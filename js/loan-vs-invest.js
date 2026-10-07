@@ -10,6 +10,7 @@
     termYears: document.getElementById("kurioage-termYears"),
     lump: document.getElementById("kurioage-lump"),
     investRate: document.getElementById("kurioage-investRate"),
+    costPct: document.getElementById("kurioage-costPct"),
     delayYears: document.getElementById("kurioage-delayYears"),
     koujo: document.getElementById("kurioage-koujo"),
     koujoLimitRow: document.getElementById("kurioage-koujoLimitRow"),
@@ -20,6 +21,8 @@
     loanRateOut: document.getElementById("kurioage-loanRateOut"),
     termYearsOut: document.getElementById("kurioage-termYearsOut"),
     investRateOut: document.getElementById("kurioage-investRateOut"),
+    costPctOut: document.getElementById("kurioage-costPctOut"),
+    costNote: document.getElementById("kurioage-costNote"),
     delayYearsOut: document.getElementById("kurioage-delayYearsOut"),
     monthsSaved: document.getElementById("kurioage-result-months-saved"),
     interestSaved: document.getElementById("kurioage-result-interest-saved"),
@@ -115,6 +118,8 @@
     var termYears = Number(els.termYears.value);
     var lump = Math.min(Math.max(0, Number(els.lump.value) || 0), balance);
     var investRate = Number(els.investRate.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netInvestRate = investRate - costPct;
     var delayYears = Math.min(Math.max(0, Number(els.delayYears.value) || 0), Math.max(0, termYears - 1));
     var koujoOn = els.koujo.value === "yes";
     var koujoLimit = Math.max(0, Number(els.koujoLimit.value) || 0);
@@ -123,6 +128,10 @@
     els.loanRateOut.textContent = loanRate.toFixed(2) + " %";
     els.termYearsOut.textContent = termYears + " 年";
     els.investRateOut.textContent = investRate.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト " + costPct.toFixed(1) + "% を差し引いた年率 " + netInvestRate.toFixed(1) + "% で運用する前提で試算しています。"
+      : "";
     els.delayYearsOut.textContent = delayYears + " 年";
     els.koujoYearsOut.textContent = koujoYears + " 年";
     els.koujoLimitRow.style.display = koujoOn ? "" : "none";
@@ -130,7 +139,7 @@
 
     var termMonths = termYears * 12;
     var payment = monthlyPayment(balance, loanRate, termMonths);
-    var investMonthlyRate = investRate / 100 / 12;
+    var investMonthlyRate = netInvestRate / 100 / 12;
 
     var original = simulate(balance, loanRate, payment, termMonths);
     var originalYearly = original.yearly;
@@ -286,7 +295,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("kurioage-growthDataTable", chart);
   }
 
-  [els.balance, els.loanRate, els.termYears, els.lump, els.investRate, els.delayYears, els.koujoLimit, els.koujoYears].forEach(function (el) {
+  [els.balance, els.loanRate, els.termYears, els.lump, els.investRate, els.costPct, els.delayYears, els.koujoLimit, els.koujoYears].forEach(function (el) {
     el.addEventListener("input", render);
   });
   els.koujo.addEventListener("change", render);
