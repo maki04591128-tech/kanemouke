@@ -870,6 +870,32 @@ a { color: var(--color-primary); }
   margin-top: 32px;
 }
 
+/* 「もっと見る」トグル（js/category-fold.jsが動的に生成）。
+   トップページのカテゴリーは1つで15件前後のカードを含むことがあり、
+   特にモバイル（1カラム表示）では折り畳んで先頭の数件だけを見せる。 */
+.is-card-folded {
+  display: none;
+}
+.category-fold-toggle {
+  display: block;
+  width: 100%;
+  margin: -16px 0 48px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  cursor: pointer;
+  text-align: center;
+}
+.category-fold-toggle:hover,
+.category-fold-toggle:focus-visible {
+  border-color: var(--color-primary);
+  background: #f6fbf9;
+}
+
 /* Tool cards */
 .tool-grid {
   display: grid;
