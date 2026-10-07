@@ -5,15 +5,18 @@
     target: document.getElementById("hitsuyou-target"),
     initial: document.getElementById("hitsuyou-initial"),
     rate: document.getElementById("hitsuyou-rate"),
+    costPct: document.getElementById("hitsuyou-costPct"),
     years: document.getElementById("hitsuyou-years"),
     inflation: document.getElementById("hitsuyou-inflation"),
     rateOut: document.getElementById("hitsuyou-rateOut"),
+    costPctOut: document.getElementById("hitsuyou-costPctOut"),
     yearsOut: document.getElementById("hitsuyou-yearsOut"),
     inflationOut: document.getElementById("hitsuyou-inflationOut"),
     monthly: document.getElementById("hitsuyou-result-monthly"),
     principal: document.getElementById("hitsuyou-result-principal"),
     profit: document.getElementById("hitsuyou-result-profit"),
     nominalTarget: document.getElementById("hitsuyou-result-nominalTarget"),
+    costNote: document.getElementById("hitsuyou-costNote"),
   };
 
   var chart = null;
@@ -66,17 +69,20 @@
     var target = Math.max(0, Number(els.target.value) || 0);
     var initial = Math.max(0, Number(els.initial.value) || 0);
     var rate = Number(els.rate.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netRate = rate - costPct;
     var years = Number(els.years.value);
     var inflation = Number(els.inflation.value) || 0;
 
     els.rateOut.textContent = rate.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
     els.yearsOut.textContent = years + " 年";
     els.inflationOut.textContent = inflation.toFixed(1) + " %";
 
     var nominalTarget = target * Math.pow(1 + inflation / 100, years);
 
-    var monthly = requiredMonthly(nominalTarget, initial, rate, years);
-    var yearly = simulateSeries(initial, monthly, rate, years);
+    var monthly = requiredMonthly(nominalTarget, initial, netRate, years);
+    var yearly = simulateSeries(initial, monthly, netRate, years);
     var finalPoint = yearly[yearly.length - 1];
     var profit = finalPoint.balance - finalPoint.principal;
 
@@ -84,6 +90,9 @@
     els.principal.textContent = yen(finalPoint.principal);
     els.profit.textContent = (profit >= 0 ? "+" : "") + manYen(profit);
     els.nominalTarget.textContent = yen(nominalTarget);
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト " + costPct.toFixed(1) + "% を差し引いた年率 " + netRate.toFixed(1) + "% で運用する前提で試算しています。"
+      : "";
 
     var labels = yearly.map(function (d) { return d.year + "年"; });
     var principalData = yearly.map(function (d) { return Math.round(d.principal); });
@@ -140,7 +149,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("hitsuyou-growthDataTable", chart);
   }
 
-  [els.target, els.initial, els.rate, els.years, els.inflation].forEach(function (el) {
+  [els.target, els.initial, els.rate, els.costPct, els.years, els.inflation].forEach(function (el) {
     el.addEventListener("input", render);
   });
 
