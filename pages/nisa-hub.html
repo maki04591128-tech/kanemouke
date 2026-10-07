@@ -892,6 +892,11 @@
 <input id="waku-rate" max="8" min="0" step="0.1" type="range" value="5"/>
 </div>
 <div class="field">
+<label for="waku-costPct">運用コスト（信託報酬等、年率） <span class="unit" id="waku-costPctOut">0.0 %</span></label>
+<input id="waku-costPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint" id="waku-costHint">投資信託の信託報酬など保有中にかかる年率コストを、上の想定利回りから差し引いて試算します。「実際の投資信託から選ぶ」でファンドを選択すると、信託報酬はすでに想定利回りに反映されるためこのコストは自動的に0%に戻ります（別途かかるコストがある場合のみ入力してください）。</p>
+</div>
+<div class="field">
 <label for="waku-years">シミュレーション期間 <span class="unit" id="waku-yearsOut">30 年</span></label>
 <input id="waku-years" max="40" min="1" step="1" type="range" value="30"/>
 </div>
@@ -927,6 +932,7 @@
 <span><span class="legend-dot" style="background:#0f5f4c"></span>NISA口座（非課税）評価額</span>
 <span><span class="legend-dot" style="background:#d98e04"></span>課税口座（枠超過分・税引後）評価額</span>
 </div>
+<p class="field-hint" id="waku-costNote"></p>
 </div>
 <details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="waku-growthDataTable"></table></div></details>
 </div>
@@ -955,7 +961,7 @@
 </dl>
 </section>
 <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・税制の変更・元本を保証するものではありません。課税口座の税額は運用益に一律20.315%課税されるものとして簡略化して計算しており、損益通算や年間の取引タイミングによる影響は考慮していません。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、将来の運用成果・税制の変更・元本を保証するものではありません。課税口座の税額は運用益に一律20.315%課税されるものとして簡略化して計算しており、損益通算や年間の取引タイミングによる影響は考慮していません。信託報酬等の運用コストは「運用コスト（信託報酬等、年率）」欄で想定利回りから差し引く形で試算に反映できます（既定値0%）が、売買手数料は考慮していません。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
   </div>
   </section>
   <section class="tab-panel" id="tabpanel-fukkatsu" role="tabpanel" aria-labelledby="tab-btn-fukkatsu" data-tool="fukkatsu" hidden>
