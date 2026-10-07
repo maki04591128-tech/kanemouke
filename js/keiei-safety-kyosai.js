@@ -4,6 +4,7 @@
   var RESIDENT_TAX_RATE = 0.10;
   var RECONSTRUCTION_TAX_RATE = 0.021;
   var CONTRIBUTION_CAP = 8000000; // 経営セーフティ共済の掛金積立限度額（800万円）
+  var BUSINESS_TAX_DEDUCTION = 2900000; // 個人事業税の事業主控除（年290万円）
 
   // 所得税の速算表（令和2年分以降）
   var TAX_BRACKETS = [
@@ -40,6 +41,7 @@
     incomeRow: document.getElementById("safety-incomeRow"),
     incomeEntry: document.getElementById("safety-incomeEntry"),
     incomeExit: document.getElementById("safety-incomeExit"),
+    bizTaxRate: document.getElementById("safety-bizTaxRate"),
     rateRow: document.getElementById("safety-rateRow"),
     rateEntry: document.getElementById("safety-rateEntry"),
     rateEntryOut: document.getElementById("safety-rateEntryOut"),
@@ -87,10 +89,16 @@
     return TAX_BRACKETS[TAX_BRACKETS.length - 1].rate;
   }
 
-  // 所得税の限界税率（復興特別所得税2.1%を加味）＋住民税率10%を合わせた、個人事業主の実効税率の近似値
-  function combinedMarginalRate(taxable) {
+  // 事業所得が事業主控除（290万円）を超える場合のみ課される個人事業税。超えた部分に税率を掛ける近似。
+  function businessTaxRate(taxable, bizRatePct) {
+    if (taxable <= BUSINESS_TAX_DEDUCTION || bizRatePct <= 0) return 0;
+    return bizRatePct / 100;
+  }
+
+  // 所得税の限界税率（復興特別所得税2.1%を加味）＋住民税率10%＋個人事業税率（対象業種・290万円超の場合）を合わせた、個人事業主の実効税率の近似値
+  function combinedMarginalRate(taxable, bizRatePct) {
     var rate = marginalIncomeTaxRate(taxable);
-    return rate * (1 + RECONSTRUCTION_TAX_RATE) + RESIDENT_TAX_RATE;
+    return rate * (1 + RECONSTRUCTION_TAX_RATE) + RESIDENT_TAX_RATE + businessTaxRate(taxable, bizRatePct);
   }
 
   function cancellationPayoutRatio(months, cancelType) {
@@ -166,8 +174,9 @@
     } else {
       var incomeEntry = clampNonNegative(els.incomeEntry.value);
       var incomeExit = clampNonNegative(els.incomeExit.value);
-      entryRate = combinedMarginalRate(incomeEntry);
-      exitRate = combinedMarginalRate(incomeExit);
+      var bizRatePct = Number(els.bizTaxRate.value) || 0;
+      entryRate = combinedMarginalRate(incomeEntry, bizRatePct);
+      exitRate = combinedMarginalRate(incomeExit, bizRatePct);
     }
 
     var requestedMonths = Math.round(years * 12);
@@ -222,10 +231,12 @@
       rows.push(["加入時の実効税率（想定）", Number(els.rateEntry.value).toFixed(1) + " %"]);
       rows.push(["解約時の実効税率（想定）", Number(els.rateExit.value).toFixed(1) + " %"]);
     } else {
+      var bizRatePctForRows = Number(els.bizTaxRate.value) || 0;
       rows.push(["加入時の事業の課税所得の目安", yen(clampNonNegative(els.incomeEntry.value))]);
-      rows.push(["加入時の実効税率（所得税＋住民税）", (entryRate * 100).toFixed(1) + " %"]);
+      rows.push(["加入時の実効税率（所得税＋住民税＋個人事業税）", (entryRate * 100).toFixed(1) + " %"]);
       rows.push(["解約する年の事業の課税所得の目安", yen(clampNonNegative(els.incomeExit.value))]);
-      rows.push(["解約時の実効税率（所得税＋住民税）", (exitRate * 100).toFixed(1) + " %"]);
+      rows.push(["解約時の実効税率（所得税＋住民税＋個人事業税）", (exitRate * 100).toFixed(1) + " %"]);
+      rows.push(["個人事業税率の設定", bizRatePctForRows > 0 ? bizRatePctForRows.toFixed(0) + "%（事業所得290万円超の部分に適用）" : "考慮しない"]);
     }
     rows.push(["掛金月額", yen(monthly)]);
     rows.push(["加入年数（設定値）", years + " 年"]);
@@ -307,7 +318,7 @@
     updateEntityVisibility();
     render();
   });
-  [els.monthly, els.years, els.incomeEntry, els.incomeExit, els.rateEntry, els.rateExit, els.cancelType].forEach(function (el) {
+  [els.monthly, els.years, els.incomeEntry, els.incomeExit, els.bizTaxRate, els.rateEntry, els.rateExit, els.cancelType].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });

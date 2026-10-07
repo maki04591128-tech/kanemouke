@@ -904,6 +904,16 @@
 <input id="safety-incomeExit" inputmode="numeric" min="0" step="10000" type="number" value="5000000"/>
 <p class="field-hint">解約手当金を受け取る年の、他の所得と合算したあとの課税所得の目安です。業績が落ち込んだ年に解約するほど、この値は加入時より低くなります。</p>
 </div>
+<div class="field">
+<label for="safety-bizTaxRate">個人事業税の税率の目安</label>
+<select id="safety-bizTaxRate">
+<option selected="" value="0">考慮しない（非課税業種・事業所得290万円以下など）</option>
+<option value="3">3%（はり・きゅう・柔道整復など一部の第三種事業）</option>
+<option value="4">4%（畜産業・水産業など第二種事業）</option>
+<option value="5">5%（物品販売業・請負業・デザイン業など第一種事業ほか、多くの業種で標準）</option>
+</select>
+<p class="field-hint">個人事業税は地方税法の別表にある70の業種のみが対象で、原稿執筆業など対象外の業種もあります。課税対象の場合、事業所得から事業主控除（年290万円）を差し引いた金額に税率を掛けて算出します（(課税所得－290万円)×税率、290万円以下の年は発生しません）。経営セーフティ共済の掛金は個人事業税の計算上も必要経費として所得から差し引けるため、ここで選んだ税率は加入時・解約時の実効税率にそのまま加算して試算します。正確な業種区分・税率は都道府県税事務所の公表資料でご確認ください。</p>
+</div>
 </div>
 <div id="safety-rateRow">
 <div class="field">
