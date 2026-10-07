@@ -545,6 +545,11 @@
 <label for="kyouiku-rate">想定利回り（年率） <span class="unit" id="kyouiku-rateOut">1.0 %</span></label>
 <input id="kyouiku-rate" max="8" min="0" step="0.1" type="range" value="1"/>
 </div>
+<div class="field">
+<label for="kyouiku-costPct">運用コスト（信託報酬等、年率） <span class="unit" id="kyouiku-costPctOut">0.0 %</span></label>
+<input id="kyouiku-costPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint">投資信託の信託報酬など保有中にかかる年率コストを、上の想定利回りから差し引いて試算します。0%なら従来どおりコストを考慮しない試算になります（運用益への課税や売買手数料は含みません）。</p>
+</div>
 </div>
 <div>
 <div class="result-summary">
@@ -573,6 +578,7 @@
 <span><span class="legend-dot" style="background:#0f5f4c"></span>資産評価額</span>
 <span><span class="legend-dot" style="background:#7a8899"></span>積立元本</span>
 </div>
+<p class="field-hint" id="kyouiku-costNote"></p>
 </div>
 <details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="kyouiku-growthDataTable"></table></div></details>
 </div>
