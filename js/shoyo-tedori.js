@@ -7,6 +7,27 @@
   var PENSION_RATE = 0.0915;
   var EMPLOYMENT_INSURANCE_RATE = 0.006;
 
+  // 協会けんぽの都道府県単位保険料率（令和8年度3月分〜、全体の料率。本人負担分はその半分）。
+  // js/nenshu-tedori.jsと同一のデータ（出典：全国健康保険協会「都道府県単位の保険料率」）。
+  var PREFECTURE_HEALTH_INSURANCE_RATES = {
+    "北海道": 0.1028, "青森県": 0.0985, "岩手県": 0.0951, "宮城県": 0.1010, "秋田県": 0.1001,
+    "山形県": 0.0975, "福島県": 0.0950, "茨城県": 0.0952, "栃木県": 0.0982, "群馬県": 0.0968,
+    "埼玉県": 0.0967, "千葉県": 0.0973, "東京都": 0.0985, "神奈川県": 0.0992, "新潟県": 0.0921,
+    "富山県": 0.0959, "石川県": 0.0970, "福井県": 0.0971, "山梨県": 0.0955, "長野県": 0.0963,
+    "岐阜県": 0.0980, "静岡県": 0.0961, "愛知県": 0.0993, "三重県": 0.0977, "滋賀県": 0.0988,
+    "京都府": 0.0989, "大阪府": 0.1013, "兵庫県": 0.1012, "奈良県": 0.0991, "和歌山県": 0.1006,
+    "鳥取県": 0.0986, "島根県": 0.0994, "岡山県": 0.1005, "広島県": 0.0978, "山口県": 0.1015,
+    "徳島県": 0.1024, "香川県": 0.1002, "愛媛県": 0.0998, "高知県": 0.1005, "福岡県": 0.1011,
+    "佐賀県": 0.1055, "長崎県": 0.1006, "熊本県": 0.1008, "大分県": 0.1008, "宮崎県": 0.0977,
+    "鹿児島県": 0.1013, "沖縄県": 0.0944
+  };
+
+  function healthInsuranceRate(prefecture) {
+    var totalRate = PREFECTURE_HEALTH_INSURANCE_RATES[prefecture];
+    if (totalRate === undefined) return HEALTH_INSURANCE_RATE; // 全国平均（既定）
+    return totalRate / 2; // 本人負担分（半分）
+  }
+
   // 賞与に対する源泉徴収税額の算出率の表（令和8年分、甲欄）
   // 出典：国税庁「源泉徴収税額表」（財務省告示第115号別表第三、令和7年4月30日財務省告示第122号改正）
   // 各行 = [賞与の金額に乗ずべき率(%), [扶養親族等0人の金額帯, 1人, 2人, 3人, 4人, 5人, 6人, 7人以上]]
@@ -51,6 +72,7 @@
     bonus: document.getElementById("shoyo-bonus"),
     prevSalary: document.getElementById("shoyo-prevSalary"),
     ageGroup: document.getElementById("shoyo-ageGroup"),
+    prefecture: document.getElementById("shoyo-prefecture"),
     taxColumn: document.getElementById("shoyo-taxColumn"),
     dependentsField: document.getElementById("shoyo-dependents-field"),
     dependents: document.getElementById("shoyo-dependents"),
@@ -80,8 +102,8 @@
     return Math.max(0, Number(n) || 0);
   }
 
-  function socialInsuranceRateFor(ageGroup) {
-    var rate = HEALTH_INSURANCE_RATE + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
+  function socialInsuranceRateFor(ageGroup, prefecture) {
+    var rate = healthInsuranceRate(prefecture) + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
     if (ageGroup === "40to64") rate += CARE_INSURANCE_RATE;
     return rate;
   }
@@ -111,8 +133,8 @@
   }
 
   // 賞与額面・前月給与額面・年齢区分・扶養親族等の数・甲欄or乙欄区分から、賞与にかかる社会保険料・所得税・手取り額を試算する。
-  function calc(bonus, prevSalary, ageGroup, dependents, taxColumn) {
-    var rate = socialInsuranceRateFor(ageGroup);
+  function calc(bonus, prevSalary, ageGroup, prefecture, dependents, taxColumn) {
+    var rate = socialInsuranceRateFor(ageGroup, prefecture);
     var prevSocialInsurance = prevSalary * rate;
     var prevNet = Math.max(0, prevSalary - prevSocialInsurance);
 
@@ -142,6 +164,7 @@
       takeHome: takeHome,
       overLimit: overLimit,
       prevNet: prevNet,
+      healthInsuranceRate: healthInsuranceRate(prefecture),
     };
   }
 
@@ -149,6 +172,7 @@
     var bonus = clampNonNegative(els.bonus.value) * 10000;
     var prevSalary = clampNonNegative(els.prevSalary.value) * 10000;
     var ageGroup = els.ageGroup.value;
+    var prefecture = els.prefecture ? els.prefecture.value : "";
     var taxColumn = els.taxColumn ? els.taxColumn.value : "kou";
     var dependents = Math.max(0, Math.min(7, Math.round(Number(els.dependents.value) || 0)));
 
@@ -156,7 +180,7 @@
       els.dependentsField.style.display = taxColumn === "otsu" ? "none" : "";
     }
 
-    var r = calc(bonus, prevSalary, ageGroup, dependents, taxColumn);
+    var r = calc(bonus, prevSalary, ageGroup, prefecture, dependents, taxColumn);
     var rate = bonus > 0 ? (r.takeHome / bonus) * 100 : 0;
 
     els.takeHome.textContent = manYen(r.takeHome);
@@ -178,7 +202,7 @@
       "<tr><td>適用する税額表</td><td>" + (taxColumn === "otsu" ? "乙欄（扶養控除等申告書の提出なし）" : "甲欄（扶養控除等申告書の提出あり）") + "</td></tr>" +
       "<tr><td>前月の社会保険料等控除後の給与等の金額（目安）</td><td>" + manYen(r.prevNet) + "</td></tr>" +
       "<tr><td>賞与の金額に乗ずべき率</td><td>" + r.bonusRate.toFixed(3) + " %</td></tr>" +
-      "<tr><td>賞与にかかる社会保険料（健康保険・厚生年金・雇用保険" + (ageGroup === "40to64" ? "・介護保険" : "") + "）</td><td>" + manYen(r.bonusSocialInsurance) + "</td></tr>" +
+      "<tr><td>賞与にかかる社会保険料（健康保険" + (prefecture ? "：" + prefecture + "・本人負担" + (r.healthInsuranceRate * 100).toFixed(2) + "%" : "：全国平均") + "・厚生年金・雇用保険" + (ageGroup === "40to64" ? "・介護保険" : "") + "）</td><td>" + manYen(r.bonusSocialInsurance) + "</td></tr>" +
       "<tr><td>社会保険料控除後の賞与額</td><td>" + manYen(r.bonusAfterSocial) + "</td></tr>" +
       "<tr><td>所得税・復興特別所得税（源泉徴収）</td><td>" + manYen(r.incomeTax) + "</td></tr>" +
       "<tr><td>住民税</td><td>0 円（賞与からは天引きされません）</td></tr>" +
@@ -187,7 +211,7 @@
 
     var refBonuses = [100000, 300000, 500000, 700000, 1000000, 1500000, 2000000, 3000000];
     var rows = refBonuses.map(function (x) {
-      var res = calc(x, prevSalary, ageGroup, dependents, taxColumn);
+      var res = calc(x, prevSalary, ageGroup, prefecture, dependents, taxColumn);
       var xRate = x > 0 ? (res.takeHome / x) * 100 : 0;
       var isCurrent = Math.abs(x - bonus) < 1;
       return (
@@ -239,7 +263,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("shoyo-growthDataTable", chart);
   }
 
-  [els.bonus, els.prevSalary, els.ageGroup, els.taxColumn, els.dependents].forEach(function (el) {
+  [els.bonus, els.prevSalary, els.ageGroup, els.prefecture, els.taxColumn, els.dependents].forEach(function (el) {
     if (!el) return;
     el.addEventListener("input", render);
     el.addEventListener("change", render);

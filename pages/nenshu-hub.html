@@ -188,6 +188,14 @@
     },
     {
       "@type": "Question",
+      "name": "賞与の社会保険料率が実際と違う気がします",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "健康保険料率は加入している健康保険組合や都道府県によって異なります。「健康保険料率（勤務先の都道府県）」欄で都道府県を選ぶと、協会けんぽの都道府県単位保険料率（令和8年度3月分〜）に基づく概算に切り替わります。ただし健康保険組合に加入している場合や、令和8年4月分以降に加算される「子ども・子育て支援金」は反映していないため、実際の給与明細の金額とは差が生じます。"
+      }
+    },
+    {
+      "@type": "Question",
       "name": "傷病手当金はいくらもらえますか？",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -1122,6 +1130,60 @@
 </select>
 </div>
 <div class="field">
+<label for="shoyo-prefecture">健康保険料率（勤務先の都道府県）</label>
+<select id="shoyo-prefecture">
+<option value="">全国平均（目安）</option>
+<option value="北海道">北海道</option>
+<option value="青森県">青森県</option>
+<option value="岩手県">岩手県</option>
+<option value="宮城県">宮城県</option>
+<option value="秋田県">秋田県</option>
+<option value="山形県">山形県</option>
+<option value="福島県">福島県</option>
+<option value="茨城県">茨城県</option>
+<option value="栃木県">栃木県</option>
+<option value="群馬県">群馬県</option>
+<option value="埼玉県">埼玉県</option>
+<option value="千葉県">千葉県</option>
+<option value="東京都">東京都</option>
+<option value="神奈川県">神奈川県</option>
+<option value="新潟県">新潟県</option>
+<option value="富山県">富山県</option>
+<option value="石川県">石川県</option>
+<option value="福井県">福井県</option>
+<option value="山梨県">山梨県</option>
+<option value="長野県">長野県</option>
+<option value="岐阜県">岐阜県</option>
+<option value="静岡県">静岡県</option>
+<option value="愛知県">愛知県</option>
+<option value="三重県">三重県</option>
+<option value="滋賀県">滋賀県</option>
+<option value="京都府">京都府</option>
+<option value="大阪府">大阪府</option>
+<option value="兵庫県">兵庫県</option>
+<option value="奈良県">奈良県</option>
+<option value="和歌山県">和歌山県</option>
+<option value="鳥取県">鳥取県</option>
+<option value="島根県">島根県</option>
+<option value="岡山県">岡山県</option>
+<option value="広島県">広島県</option>
+<option value="山口県">山口県</option>
+<option value="徳島県">徳島県</option>
+<option value="香川県">香川県</option>
+<option value="愛媛県">愛媛県</option>
+<option value="高知県">高知県</option>
+<option value="福岡県">福岡県</option>
+<option value="佐賀県">佐賀県</option>
+<option value="長崎県">長崎県</option>
+<option value="熊本県">熊本県</option>
+<option value="大分県">大分県</option>
+<option value="宮崎県">宮崎県</option>
+<option value="鹿児島県">鹿児島県</option>
+<option value="沖縄県">沖縄県</option>
+</select>
+<p class="field-hint">協会けんぽの都道府県単位保険料率（令和8年度3月分〜）に基づく概算です。健康保険組合に加入している場合や、令和8年4月分以降に加算される「子ども・子育て支援金」は反映していません。</p>
+</div>
+<div class="field">
 <label for="shoyo-taxColumn">「給与所得者の扶養控除等申告書」の提出</label>
 <select id="shoyo-taxColumn">
 <option value="kou">提出している（甲欄）</option>
@@ -1221,10 +1283,14 @@
 <dt>副業先の賞与（乙欄）にも対応していますか？</dt>
 <dd>はい。「給与所得者の扶養控除等申告書」を提出していない場合（副業先や掛け持ち2社目以降の勤務先など、乙欄が適用される場合）を選べます。乙欄は甲欄と異なり扶養親族等の人数を考慮せず、前月の給与から社会保険料を差し引いた金額のみで税率が決まり、同じ賞与額でも甲欄より税率が高くなります。</dd>
 </div>
+<div class="faq-item">
+<dt>社会保険料率が実際と違う気がします</dt>
+<dd>健康保険料率は加入している健康保険組合や都道府県によって異なります。「健康保険料率（勤務先の都道府県）」欄で都道府県を選ぶと、協会けんぽの都道府県単位保険料率（令和8年度3月分〜）に基づく概算に切り替わります。ただし健康保険組合に加入している場合や、令和8年4月分以降に加算される「子ども・子育て支援金」は反映していないため、実際の給与明細の金額とは差が生じます。</dd>
+</div>
 </dl>
 </section>
 <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の給与明細・賞与明細の金額と一致するものではありません。社会保険料率は協会けんぽの全国平均目安による概算であり、厚生年金・健康保険には標準報酬月額・標準賞与額に基づく上限があるなど、実際の計算はより複雑です。前月給与がない場合・賞与が前月給与の10倍を超える場合（月額表を使う場合）には対応していません。正確な金額は勤務先の給与担当者・税理士にご確認ください。本サイトは税務・社会保険に関する助言を目的とするものではありません。
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の給与明細・賞与明細の金額と一致するものではありません。健康保険料率は、都道府県を選択すると協会けんぽの都道府県単位保険料率（令和8年度3月分〜）による概算、未選択の場合は全国平均目安による概算です。いずれも健康保険組合に加入している場合や、令和8年4月分以降に加算される「子ども・子育て支援金」は反映していません。厚生年金・健康保険には標準報酬月額・標準賞与額に基づく上限があるなど、実際の計算はより複雑です。前月給与がない場合・賞与が前月給与の10倍を超える場合（月額表を使う場合）には対応していません。正確な金額は勤務先の給与担当者・税理士にご確認ください。本サイトは税務・社会保険に関する助言を目的とするものではありません。
   </div>
   </section>
 
