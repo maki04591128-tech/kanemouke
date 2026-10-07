@@ -30,6 +30,36 @@
     kodomo: 30000,
   };
 
+  // 退職後の健康保険比較（任意継続 vs 国民健康保険）用の定数。
+  // 任意継続は健康保険のみの制度（厚生年金・雇用保険は対象外）で、在職中と異なり
+  // 会社との折半が無く、保険料率全体（事業主負担分を含む）を全額自己負担する。
+  var NINI_KEIZOKU_REMUNERATION_CAP = 320000; // 標準報酬月額の上限（協会けんぽ、令和8年度）
+  var NATIONWIDE_AVERAGE_HEALTH_INSURANCE_RATE = 0.0998; // 全国平均（協会けんぽ、事業主負担分を含む全体の料率）
+  var NATIONWIDE_KAIGO_INSURANCE_RATE = 0.0162; // 介護保険料率（全国一律、令和8年度、事業主負担分を含む）
+  // 健康保険（任意継続）の子ども・子育て支援金率（令和8年4月分〜、全国一律）。
+  // 下の国保側「子ども・子育て支援納付金分」（kodomoRate等、所得割・均等割方式で市区町村ごとに異なる）とは別の制度・別の金額。
+  var NINI_KEIZOKU_CHILDCARE_SUPPORT_LEVY_RATE = 0.0023;
+
+  // 協会けんぽの都道府県単位保険料率（令和8年度3月分〜、全体の料率）。
+  // js/nenshu-no-kabe.js等と同一のデータ（出典：全国健康保険協会「都道府県単位の保険料率」）。
+  var PREFECTURE_HEALTH_INSURANCE_RATES = {
+    "北海道": 0.1028, "青森県": 0.0985, "岩手県": 0.0951, "宮城県": 0.1010, "秋田県": 0.1001,
+    "山形県": 0.0975, "福島県": 0.0950, "茨城県": 0.0952, "栃木県": 0.0982, "群馬県": 0.0968,
+    "埼玉県": 0.0967, "千葉県": 0.0973, "東京都": 0.0985, "神奈川県": 0.0992, "新潟県": 0.0921,
+    "富山県": 0.0959, "石川県": 0.0970, "福井県": 0.0971, "山梨県": 0.0955, "長野県": 0.0963,
+    "岐阜県": 0.0980, "静岡県": 0.0961, "愛知県": 0.0993, "三重県": 0.0977, "滋賀県": 0.0988,
+    "京都府": 0.0989, "大阪府": 0.1013, "兵庫県": 0.1012, "奈良県": 0.0991, "和歌山県": 0.1006,
+    "鳥取県": 0.0986, "島根県": 0.0994, "岡山県": 0.1005, "広島県": 0.0978, "山口県": 0.1015,
+    "徳島県": 0.1024, "香川県": 0.1002, "愛媛県": 0.0998, "高知県": 0.1005, "福岡県": 0.1011,
+    "佐賀県": 0.1055, "長崎県": 0.1006, "熊本県": 0.1008, "大分県": 0.1008, "宮崎県": 0.0977,
+    "鹿児島県": 0.1013, "沖縄県": 0.0944
+  };
+
+  function niniKeizokuHealthRate(prefecture) {
+    var totalRate = PREFECTURE_HEALTH_INSURANCE_RATES[prefecture];
+    return totalRate === undefined ? NATIONWIDE_AVERAGE_HEALTH_INSURANCE_RATE : totalRate;
+  }
+
   var els = {
     members: document.getElementById("kokuho-members"),
     kaigoMembers: document.getElementById("kokuho-kaigoMembers"),
@@ -50,6 +80,14 @@
     kodomoRate: document.getElementById("kokuho-kodomoRate"),
     kodomoPerCapita: document.getElementById("kokuho-kodomoPerCapita"),
     kodomoHousehold: document.getElementById("kokuho-kodomoHousehold"),
+
+    niniSalary: document.getElementById("kokuho-nini-salary"),
+    niniPrefecture: document.getElementById("kokuho-nini-prefecture"),
+    niniAge: document.getElementById("kokuho-nini-age"),
+    niniVerdict: document.getElementById("kokuho-nini-verdict"),
+    niniVerdictSub: document.getElementById("kokuho-nini-verdictSub"),
+    niniResultTotal: document.getElementById("kokuho-nini-result-total"),
+    niniResultMonthly: document.getElementById("kokuho-nini-result-monthly"),
 
     verdict: document.getElementById("kokuho-verdict"),
     verdictSub: document.getElementById("kokuho-verdictSub"),
@@ -164,6 +202,32 @@
       "＋子ども・子育て支援金分 " + manYen(kodomo) +
       "の合計です。入力した所得割率・均等割額・平等割額はお住まいの市区町村の公表値に置き換えて使ってください。";
 
+    var niniSalary = clampNonNegative(els.niniSalary.value);
+    var niniPrefecture = els.niniPrefecture.value;
+    var niniIsAge4064 = els.niniAge.value === "yes";
+    var niniStandardRemuneration = Math.min(NINI_KEIZOKU_REMUNERATION_CAP, niniSalary);
+    var niniRate = niniKeizokuHealthRate(niniPrefecture) + NINI_KEIZOKU_CHILDCARE_SUPPORT_LEVY_RATE +
+      (niniIsAge4064 ? NATIONWIDE_KAIGO_INSURANCE_RATE : 0);
+    var niniMonthly = niniStandardRemuneration * niniRate;
+    var niniTotal = niniMonthly * 12;
+
+    els.niniResultTotal.textContent = yen(niniTotal);
+    els.niniResultMonthly.textContent = yen(niniMonthly) + "／月（目安）";
+
+    var niniDiff = Math.abs(total - niniTotal);
+    if (total < niniTotal) {
+      els.niniVerdict.textContent = "国民健康保険の方が年間 " + yen(niniDiff) + " 安い計算です（目安）";
+    } else if (niniTotal < total) {
+      els.niniVerdict.textContent = "任意継続の方が年間 " + yen(niniDiff) + " 安い計算です（目安）";
+    } else {
+      els.niniVerdict.textContent = "どちらもほぼ同額の計算です（目安）";
+    }
+    els.niniVerdictSub.textContent =
+      "任意継続：標準報酬月額 " + yen(niniStandardRemuneration) + "（上限32万円）に、健康保険料率" +
+      (niniIsAge4064 ? "＋介護保険料率1.62%" : "") +
+      "を全額自己負担で掛けた概算です。国民健康保険：上の年間 " + yen(total) + "（目安）との比較です。" +
+      "扶養家族の有無や実際の標準報酬月額の等級によって変わるため、両方の正式な見積もり額も確認してください。";
+
     var rows = [
       ["世帯の国保加入者数", members + " 人（うち40〜64歳 " + kaigoMembers + " 人、18歳未満 " + childMembers + " 人、うち未就学児 " + preschoolMembers + " 人）"],
       ["世帯の合計所得金額（前年）", yen(totalIncome)],
@@ -243,6 +307,9 @@
     els.kodomoRate,
     els.kodomoPerCapita,
     els.kodomoHousehold,
+    els.niniSalary,
+    els.niniPrefecture,
+    els.niniAge,
   ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
