@@ -11,6 +11,27 @@
   var PENSION_RATE = 0.0915;
   var EMPLOYMENT_INSURANCE_RATE = 0.006;
 
+  // 協会けんぽの都道府県単位保険料率（令和8年度3月分〜、全体の料率。本人負担分はその半分）。
+  // js/nenshu-tedori.jsと同一のデータ（出典：全国健康保険協会「都道府県単位の保険料率」）。
+  var PREFECTURE_HEALTH_INSURANCE_RATES = {
+    "北海道": 0.1028, "青森県": 0.0985, "岩手県": 0.0951, "宮城県": 0.1010, "秋田県": 0.1001,
+    "山形県": 0.0975, "福島県": 0.0950, "茨城県": 0.0952, "栃木県": 0.0982, "群馬県": 0.0968,
+    "埼玉県": 0.0967, "千葉県": 0.0973, "東京都": 0.0985, "神奈川県": 0.0992, "新潟県": 0.0921,
+    "富山県": 0.0959, "石川県": 0.0970, "福井県": 0.0971, "山梨県": 0.0955, "長野県": 0.0963,
+    "岐阜県": 0.0980, "静岡県": 0.0961, "愛知県": 0.0993, "三重県": 0.0977, "滋賀県": 0.0988,
+    "京都府": 0.0989, "大阪府": 0.1013, "兵庫県": 0.1012, "奈良県": 0.0991, "和歌山県": 0.1006,
+    "鳥取県": 0.0986, "島根県": 0.0994, "岡山県": 0.1005, "広島県": 0.0978, "山口県": 0.1015,
+    "徳島県": 0.1024, "香川県": 0.1002, "愛媛県": 0.0998, "高知県": 0.1005, "福岡県": 0.1011,
+    "佐賀県": 0.1055, "長崎県": 0.1006, "熊本県": 0.1008, "大分県": 0.1008, "宮崎県": 0.0977,
+    "鹿児島県": 0.1013, "沖縄県": 0.0944
+  };
+
+  function healthInsuranceRate(prefecture) {
+    var totalRate = PREFECTURE_HEALTH_INSURANCE_RATES[prefecture];
+    if (totalRate === undefined) return HEALTH_INSURANCE_RATE; // 全国平均（既定）
+    return totalRate / 2; // 本人負担分（半分）
+  }
+
   // 所得税の速算表（令和2年分以降）
   var TAX_BRACKETS = [
     { limit: 1950000, rate: 0.05, deduct: 0 },
@@ -68,6 +89,7 @@
   var els = {
     salaryIncome: document.getElementById("ango-salaryIncome"),
     cryptoGain: document.getElementById("ango-cryptoGain"),
+    prefecture: document.getElementById("ango-prefecture"),
     verdict: document.getElementById("ango-verdict"),
     verdictSub: document.getElementById("ango-verdictSub"),
     noticeBox: document.getElementById("ango-noticeBox"),
@@ -118,8 +140,8 @@
   // 給与年収に、暗号資産の利益（雑所得として総合課税で合算した場合）を上乗せしたときに
   // 増える所得税額・住民税額を試算する。暗号資産は上場株式等と異なり申告分離課税・確定申告
   // 不要制度を選べず、総合課税のみが適用される点が既存の配当課税シミュレーターとの違い。
-  function calc(salaryIncome, cryptoGain) {
-    var socialInsuranceRate = HEALTH_INSURANCE_RATE + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
+  function calc(salaryIncome, cryptoGain, prefecture) {
+    var socialInsuranceRate = healthInsuranceRate(prefecture) + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
     var socialInsurance = salaryIncome * socialInsuranceRate;
 
     var salaryTaxableIncome = Math.max(0, salaryIncome - salaryDeduction(salaryIncome, SALARY_DEDUCTION_BRACKETS_INCOME_TAX));
@@ -154,11 +176,12 @@
   function render() {
     var salaryIncome = clampNonNegative(els.salaryIncome.value) * 10000;
     var cryptoGain = clampNonNegative(els.cryptoGain.value) * 10000;
+    var prefecture = els.prefecture ? els.prefecture.value : "";
 
     var needsIncomeTaxFiling = cryptoGain > THRESHOLD;
     var needsResidentTaxFiling = cryptoGain > 0;
 
-    var r = calc(salaryIncome, cryptoGain);
+    var r = calc(salaryIncome, cryptoGain, prefecture);
     var taxIfFiled = r.incomeTaxMarginal + r.residentTaxMarginal;
     var incomeTaxOwed = needsIncomeTaxFiling ? r.incomeTaxMarginal : 0;
     var residentTaxOwed = needsResidentTaxFiling ? r.residentTaxMarginal : 0;
@@ -264,7 +287,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("ango-growthDataTable", chart);
   }
 
-  [els.salaryIncome, els.cryptoGain].forEach(function (el) {
+  [els.salaryIncome, els.cryptoGain, els.prefecture].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
