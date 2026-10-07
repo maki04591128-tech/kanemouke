@@ -6,10 +6,31 @@
   var RECONSTRUCTION_TAX_RATE = 0.021;
 
   // 社会保険料率（本人負担分の目安。協会けんぽ全国平均・2025年度水準を想定した概算）
-  var HEALTH_INSURANCE_RATE = 0.0499; // 健康保険（本人負担分）
+  var HEALTH_INSURANCE_RATE = 0.0499; // 健康保険（本人負担分、全国平均）
   var CARE_INSURANCE_RATE = 0.0080; // 介護保険（40〜64歳、本人負担分）
   var PENSION_RATE = 0.0915; // 厚生年金保険（本人負担分）
   var EMPLOYMENT_INSURANCE_RATE = 0.006; // 雇用保険（本人負担分・一般の事業）
+
+  // 協会けんぽの都道府県単位保険料率（令和8年度3月分〜、全体の料率。本人負担分はその半分）。
+  // 出典：全国健康保険協会「都道府県単位の保険料率」。健康保険組合に加入している場合はこれと異なる。
+  var PREFECTURE_HEALTH_INSURANCE_RATES = {
+    "北海道": 0.1028, "青森県": 0.0985, "岩手県": 0.0951, "宮城県": 0.1010, "秋田県": 0.1001,
+    "山形県": 0.0975, "福島県": 0.0950, "茨城県": 0.0952, "栃木県": 0.0982, "群馬県": 0.0968,
+    "埼玉県": 0.0967, "千葉県": 0.0973, "東京都": 0.0985, "神奈川県": 0.0992, "新潟県": 0.0921,
+    "富山県": 0.0959, "石川県": 0.0970, "福井県": 0.0971, "山梨県": 0.0955, "長野県": 0.0963,
+    "岐阜県": 0.0980, "静岡県": 0.0961, "愛知県": 0.0993, "三重県": 0.0977, "滋賀県": 0.0988,
+    "京都府": 0.0989, "大阪府": 0.1013, "兵庫県": 0.1012, "奈良県": 0.0991, "和歌山県": 0.1006,
+    "鳥取県": 0.0986, "島根県": 0.0994, "岡山県": 0.1005, "広島県": 0.0978, "山口県": 0.1015,
+    "徳島県": 0.1024, "香川県": 0.1002, "愛媛県": 0.0998, "高知県": 0.1005, "福岡県": 0.1011,
+    "佐賀県": 0.1055, "長崎県": 0.1006, "熊本県": 0.1008, "大分県": 0.1008, "宮崎県": 0.0977,
+    "鹿児島県": 0.1013, "沖縄県": 0.0944
+  };
+
+  function healthInsuranceRate(prefecture) {
+    var totalRate = PREFECTURE_HEALTH_INSURANCE_RATES[prefecture];
+    if (totalRate === undefined) return HEALTH_INSURANCE_RATE; // 全国平均（既定）
+    return totalRate / 2; // 本人負担分（半分）
+  }
 
   // 所得税の速算表（令和2年分以降）
   var TAX_BRACKETS = [
@@ -70,6 +91,7 @@
   var els = {
     income: document.getElementById("tedori-income"),
     ageGroup: document.getElementById("tedori-ageGroup"),
+    prefecture: document.getElementById("tedori-prefecture"),
     hasSpouse: document.getElementById("tedori-hasSpouse"),
     dependents: document.getElementById("tedori-dependents"),
     singleParentStatus: document.getElementById("tedori-singleParentStatus"),
@@ -124,8 +146,8 @@
 
   // 年収・年齢区分・配偶者控除の有無・扶養人数・ひとり親控除/寡婦控除の区分から、
   // 社会保険料・所得税・住民税・手取り額を試算する。
-  function calc(income, ageGroup, hasSpouse, dependents, singleParentStatus) {
-    var socialInsuranceRate = HEALTH_INSURANCE_RATE + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
+  function calc(income, ageGroup, prefecture, hasSpouse, dependents, singleParentStatus) {
+    var socialInsuranceRate = healthInsuranceRate(prefecture) + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
     if (ageGroup === "40to64") socialInsuranceRate += CARE_INSURANCE_RATE;
     var socialInsurance = income * socialInsuranceRate;
 
@@ -159,6 +181,7 @@
 
     return {
       salaryIncome: salaryIncome,
+      healthInsuranceRate: healthInsuranceRate(prefecture),
       socialInsurance: socialInsurance,
       incomeTax: incomeTax,
       residentTax: residentTax,
@@ -171,11 +194,12 @@
   function render() {
     var income = clampNonNegative(els.income.value) * 10000;
     var ageGroup = els.ageGroup.value;
+    var prefecture = els.prefecture.value;
     var hasSpouse = els.hasSpouse.value === "yes";
     var dependents = Math.max(0, Math.min(5, Math.round(Number(els.dependents.value) || 0)));
     var singleParentStatus = els.singleParentStatus.value;
 
-    var r = calc(income, ageGroup, hasSpouse, dependents, singleParentStatus);
+    var r = calc(income, ageGroup, prefecture, hasSpouse, dependents, singleParentStatus);
     var rate = income > 0 ? (r.takeHome / income) * 100 : 0;
 
     if (r.singleParentDeductionBlocked) {
@@ -200,7 +224,7 @@
 
     els.breakdownBody.innerHTML =
       "<tr><td>給与所得控除後の給与所得</td><td>" + manYen(r.salaryIncome) + "</td></tr>" +
-      "<tr><td>社会保険料（健康保険・厚生年金・雇用保険" + (ageGroup === "40to64" ? "・介護保険" : "") + "）</td><td>" + manYen(r.socialInsurance) + "</td></tr>" +
+      "<tr><td>社会保険料（健康保険" + (prefecture ? "：" + prefecture + "・本人負担" + (r.healthInsuranceRate * 100).toFixed(2) + "%" : "：全国平均") + "・厚生年金・雇用保険" + (ageGroup === "40to64" ? "・介護保険" : "") + "）</td><td>" + manYen(r.socialInsurance) + "</td></tr>" +
       "<tr><td>所得税（復興特別所得税込み）</td><td>" + manYen(r.incomeTax) + "</td></tr>" +
       "<tr><td>住民税（均等割込み）</td><td>" + manYen(r.residentTax) + "</td></tr>" +
       "<tr><td><strong>額面と手取りの差額（合計）</strong></td><td><strong>" + manYen(r.totalDeduction) + "</strong></td></tr>" +
@@ -210,7 +234,7 @@
 
     var refIncomes = [3000000, 4000000, 5000000, 6000000, 7000000, 8000000, 10000000, 12000000, 15000000];
     var rows = refIncomes.map(function (x) {
-      var res = calc(x, ageGroup, hasSpouse, dependents, singleParentStatus);
+      var res = calc(x, ageGroup, prefecture, hasSpouse, dependents, singleParentStatus);
       var xRate = (res.takeHome / x) * 100;
       var isCurrent = Math.abs(x - income) < 1;
       return (
@@ -267,7 +291,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("tedori-growthDataTable", chart);
   }
 
-  [els.income, els.ageGroup, els.hasSpouse, els.dependents, els.singleParentStatus].forEach(function (el) {
+  [els.income, els.ageGroup, els.prefecture, els.hasSpouse, els.dependents, els.singleParentStatus].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
