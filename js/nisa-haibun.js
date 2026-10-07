@@ -69,6 +69,8 @@
     total: document.getElementById("haibun-total"),
     rate: document.getElementById("haibun-rate"),
     rateOut: document.getElementById("haibun-rateOut"),
+    costPct: document.getElementById("haibun-costPct"),
+    costPctOut: document.getElementById("haibun-costPctOut"),
     fundSelect: document.getElementById("haibun-fundSelect"),
     fundHint: document.getElementById("haibun-fundHint"),
     verdict: document.getElementById("haibun-verdict"),
@@ -77,6 +79,7 @@
     compareBody: document.getElementById("haibun-compare-body"),
     delayNote: document.getElementById("haibun-delay-note"),
     delayBody: document.getElementById("haibun-delay-body"),
+    costNote: document.getElementById("haibun-costNote"),
   };
 
   var chart = null;
@@ -209,13 +212,19 @@
   function render() {
     var total = Math.max(0, Number(els.total.value) || 0);
     var ratePct = Number(els.rate.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netRatePct = ratePct - costPct;
 
     els.rateOut.textContent = ratePct.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト " + costPct.toFixed(1) + "% を差し引いた年率 " + netRatePct.toFixed(1) + "% で運用する前提で試算しています。"
+      : "";
 
     var results = STRATEGIES.map(function (s) {
       var split = s.split(total);
       var extra = Math.max(0, total - split.tsumitate - split.growth);
-      var r = simulate(split.tsumitate, split.growth, ratePct, extra);
+      var r = simulate(split.tsumitate, split.growth, netRatePct, extra);
       return {
         strategy: s,
         split: split,
@@ -291,7 +300,7 @@
       var activeMonths = Math.max(0, delayHorizonMonths - delayYears * 12);
       var finalAsset =
         activeMonths > 0
-          ? simulate(delaySplit.tsumitate, delaySplit.growth, ratePct, delayExtra, activeMonths).finalAsset
+          ? simulate(delaySplit.tsumitate, delaySplit.growth, netRatePct, delayExtra, activeMonths).finalAsset
           : 0;
       return { delayYears: delayYears, finalAsset: finalAsset };
     });
@@ -357,12 +366,17 @@
     if (window.renderChartDataTable) window.renderChartDataTable("haibun-growthDataTable", chart);
   }
 
-  [els.total, els.rate].forEach(function (el) {
+  [els.total, els.rate, els.costPct].forEach(function (el) {
     el.addEventListener("input", render);
   });
 
   if (window.setupFundSelect) {
-    window.setupFundSelect(els.fundSelect, els.rate, els.fundHint, render);
+    // ファンドを選択すると想定利回りに信託報酬が反映済みになるため、
+    // 運用コストを二重に差し引かないよう自動的に0%へ戻す。
+    window.setupFundSelect(els.fundSelect, els.rate, els.fundHint, function () {
+      els.costPct.value = 0;
+      render();
+    });
   }
 
   render();
