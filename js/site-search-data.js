@@ -1004,6 +1004,20 @@ window.SITE_SEARCH_DATA = [
     "type": "guide"
   },
   {
+    "title": "高額療養費制度シミュレーター",
+    "desc": "1か月の医療費が高額になった場合の自己負担限度額と、高額療養費として戻る金額を所得区分・年齢から試算します。民間の医療保険の必要性を考える際の出発点にも使えます。",
+    "href": "pages/setsuzei-hub.html?tool=kougaku",
+    "category": "節税・控除・確定申告",
+    "type": "tool"
+  },
+  {
+    "title": "高額療養費制度とは？自己負担限度額の仕組みと医療保険の必要性 完全ガイド",
+    "desc": "所得区分ごとの自己負担限度額、多数回該当・限度額適用認定証の使い方、高額療養費制度だけでは備えられない費用と医療保険の必要性の考え方まで解説します。",
+    "href": "pages/kougaku-ryouyouhi-guide.html",
+    "category": "節税・控除・確定申告",
+    "type": "guide"
+  },
+  {
     "title": "確定申告 要否チェック",
     "desc": "副業・医療費控除・住宅ローン控除・ふるさと納税など8項目をチェックするだけで、確定申告が必要か（義務・任意・不要）を判定します。",
     "href": "pages/setsuzei-hub.html?tool=kakutei",
