@@ -369,6 +369,14 @@
         "@type": "Answer",
         "text": "所得割率・均等割額・平等割額を利用者が自由に入力できる仕様のため、正しい値を入力すればご自身の自治体に近い金額を試算できますが、賦課方式（2方式・3方式・4方式の違い）や資産割の有無、独自の追加軽減制度などは自治体によって異なり、本ツールでは反映していません。正確な保険料額はお住まいの市区町村の国民健康保険担当窓口にご確認ください。本サイトは特定の自治体・制度の勧誘を目的とするものではありません。"
       }
+    },
+    {
+      "@type": "Question",
+      "name": "退職後は任意継続と国民健康保険、どちらを選べばいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「料率を自分の市区町村に合わせて調整する」の下にある「退職後の健康保険を比較する：任意継続 vs 国民健康保険」に、退職時の給与・都道府県・年齢区分を入力すると、任意継続の保険料の目安を試算し、上の国民健康保険料と比較できます。任意継続は退職時の標準報酬月額（上限32万円、令和8年度）を基準に、在職中に会社が負担していた分も含めて全額自己負担で計算されるため、在職時の約2倍の金額になるのが一般的です。扶養家族が多い人や退職時の給与が高かった人は任意継続が有利になりやすく、単身で前年所得がそれほど高くない人は国民健康保険が有利になりやすい傾向がありますが、実際の金額は世帯構成やお住まいの市区町村の料率によって変わるため、この試算結果を目安に、協会けんぽ・健康保険組合から取得する任意継続の正式な見積もり額とも比較することをおすすめします。任意継続は資格喪失日から20日以内に申出書の提出が必要で、一度選ぶと原則2年間は変更できない点にも注意してください。詳しくは「国民健康保険とは？完全ガイド」でも解説しています。"
+      }
     }
   ]
 }
@@ -1403,6 +1411,76 @@
 <input id="kokuho-kodomoHousehold" inputmode="numeric" min="0" step="10" type="number" value="0"/>
 </div>
 </details>
+<details class="chart-data-details">
+<summary class="chart-data-summary">退職後の健康保険を比較する：任意継続 vs 国民健康保険（任意）</summary>
+<p class="field-hint">会社を退職すると、退職時の健康保険にそのまま最長2年間加入し続ける「任意継続」と、この国民健康保険のどちらかを選ぶことになります。以下を入力すると、任意継続の保険料の目安も試算し、上の国民健康保険料と比較できます。</p>
+<div class="field">
+<label for="kokuho-nini-salary">退職時の給与（標準報酬月額の目安） <span class="unit">円</span></label>
+<input id="kokuho-nini-salary" inputmode="numeric" min="0" step="10000" type="number" value="300000"/>
+<p class="field-hint">退職直前の月給（額面）の目安です。実際の標準報酬月額は原則、退職時に決まっている等級（28万円・30万円などの区切り）で決まります。</p>
+</div>
+<div class="field">
+<label for="kokuho-nini-prefecture">任意継続の加入先（協会けんぽの都道府県単位保険料率）</label>
+<select id="kokuho-nini-prefecture">
+<option value="">全国平均（目安）</option>
+<option value="北海道">北海道</option>
+<option value="青森県">青森県</option>
+<option value="岩手県">岩手県</option>
+<option value="宮城県">宮城県</option>
+<option value="秋田県">秋田県</option>
+<option value="山形県">山形県</option>
+<option value="福島県">福島県</option>
+<option value="茨城県">茨城県</option>
+<option value="栃木県">栃木県</option>
+<option value="群馬県">群馬県</option>
+<option value="埼玉県">埼玉県</option>
+<option value="千葉県">千葉県</option>
+<option value="東京都">東京都</option>
+<option value="神奈川県">神奈川県</option>
+<option value="新潟県">新潟県</option>
+<option value="富山県">富山県</option>
+<option value="石川県">石川県</option>
+<option value="福井県">福井県</option>
+<option value="山梨県">山梨県</option>
+<option value="長野県">長野県</option>
+<option value="岐阜県">岐阜県</option>
+<option value="静岡県">静岡県</option>
+<option value="愛知県">愛知県</option>
+<option value="三重県">三重県</option>
+<option value="滋賀県">滋賀県</option>
+<option value="京都府">京都府</option>
+<option value="大阪府">大阪府</option>
+<option value="兵庫県">兵庫県</option>
+<option value="奈良県">奈良県</option>
+<option value="和歌山県">和歌山県</option>
+<option value="鳥取県">鳥取県</option>
+<option value="島根県">島根県</option>
+<option value="岡山県">岡山県</option>
+<option value="広島県">広島県</option>
+<option value="山口県">山口県</option>
+<option value="徳島県">徳島県</option>
+<option value="香川県">香川県</option>
+<option value="愛媛県">愛媛県</option>
+<option value="高知県">高知県</option>
+<option value="福岡県">福岡県</option>
+<option value="佐賀県">佐賀県</option>
+<option value="長崎県">長崎県</option>
+<option value="熊本県">熊本県</option>
+<option value="大分県">大分県</option>
+<option value="宮崎県">宮崎県</option>
+<option value="鹿児島県">鹿児島県</option>
+<option value="沖縄県">沖縄県</option>
+</select>
+<p class="field-hint">協会けんぽの都道府県単位保険料率（令和8年度3月分〜）を使って試算します。在職中と異なり、任意継続は会社との折半が無く全額自己負担になるため、保険料は本来の保険料率（事業主負担分を含む全体の料率）で計算されます。健康保険組合に加入していた場合は料率が異なります。</p>
+</div>
+<div class="field">
+<label for="kokuho-nini-age">ご自身の年齢区分（任意継続の介護保険料の対象か）</label>
+<select id="kokuho-nini-age">
+<option value="no">40歳未満・65歳以上</option>
+<option value="yes">40〜64歳（介護保険第2号被保険者）</option>
+</select>
+</div>
+</details>
 </div>
 <div>
 <div class="verdict-banner">
@@ -1453,6 +1531,21 @@
 <tbody id="kokuho-breakdown-body"></tbody>
 </table>
 </div>
+<h3>退職後の健康保険を比較する：任意継続 vs 国民健康保険</h3>
+<div class="verdict-banner">
+<span id="kokuho-nini-verdict">-</span>
+<span class="sub" id="kokuho-nini-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card">
+<div class="label">任意継続の年間保険料（目安）</div>
+<div class="value" id="kokuho-nini-result-total">-</div>
+</div>
+<div class="result-card">
+<div class="label">任意継続の月額（目安）</div>
+<div class="value" id="kokuho-nini-result-monthly">-</div>
+</div>
+</div>
 </div>
 </div>
 <section class="article-section">
@@ -1495,10 +1588,14 @@
 <dt>この試算は正確ですか？</dt>
 <dd>所得割率・均等割額・平等割額を利用者が自由に入力できる仕様のため、正しい値を入力すればご自身の自治体に近い金額を試算できますが、賦課方式（2方式・3方式・4方式の違い）や資産割の有無、独自の追加軽減制度などは自治体によって異なり、本ツールでは反映していません。正確な保険料額はお住まいの市区町村の国民健康保険担当窓口にご確認ください。本サイトは特定の自治体・制度の勧誘を目的とするものではありません。</dd>
 </div>
+<div class="faq-item">
+<dt>退職後は任意継続と国民健康保険、どちらを選べばいいですか？</dt>
+<dd>「料率を自分の市区町村に合わせて調整する」の下にある「退職後の健康保険を比較する：任意継続 vs 国民健康保険」に、退職時の給与・都道府県・年齢区分を入力すると、任意継続の保険料の目安を試算し、上の国民健康保険料と比較できます。任意継続は退職時の標準報酬月額（上限32万円、令和8年度）を基準に、在職中に会社が負担していた分も含めて全額自己負担で計算されるため、在職時の約2倍の金額になるのが一般的です。扶養家族が多い人や退職時の給与が高かった人は任意継続が有利になりやすく、単身で前年所得がそれほど高くない人は国民健康保険が有利になりやすい傾向がありますが、実際の金額は世帯構成やお住まいの市区町村の料率によって変わるため、この試算結果を目安に、協会けんぽ・健康保険組合から取得する任意継続の正式な見積もり額とも比較することをおすすめします。任意継続は資格喪失日から20日以内に申出書の提出が必要で、一度選ぶと原則2年間は変更できない点にも注意してください。詳しくは「<a href="kokuho-guide.html">国民健康保険とは？完全ガイド</a>」でも解説しています。</dd>
+</div>
 </dl>
 </section>
 <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値です。所得割率・均等割額・平等割額の初期値は東京都世田谷区の令和8年度の公表値であり、お住まいの市区町村の実際の料率とは異なります。低所得世帯の軽減基準・各区分の年間上限額は全国一律の値を用いていますが、賦課方式の違いや自治体独自の追加軽減制度などは反映していません。正確な保険料額はお住まいの市区町村の国民健康保険担当窓口にご確認ください。
+    本シミュレーターの試算結果は入力条件に基づく参考値です。所得割率・均等割額・平等割額の初期値は東京都世田谷区の令和8年度の公表値であり、お住まいの市区町村の実際の料率とは異なります。低所得世帯の軽減基準・各区分の年間上限額は全国一律の値を用いていますが、賦課方式の違いや自治体独自の追加軽減制度などは反映していません。正確な保険料額はお住まいの市区町村の国民健康保険担当窓口にご確認ください。「退職後の健康保険を比較する」の任意継続の試算額は、入力した給与（標準報酬月額の目安）と協会けんぽの都道府県単位保険料率に基づく概算であり、実際の標準報酬月額は退職時に決まっている等級で決まるため一致しない場合があります。健康保険組合に加入していた場合の料率とも異なります。正確な金額は加入先の協会けんぽ・健康保険組合にご確認ください。
   </div>
   </section>
 
