@@ -1121,19 +1121,24 @@ a { color: var(--color-primary); }
        欠けた状態で左右の端に表示されることがある（184回目以前の
        検証で確認）。左右の端にフェードをかけることで、途切れた
        タブが「壊れて見える」のではなく「まだ続きがある」という
-       自然な見た目・手がかりになるようにする。 */
+       自然な見た目・手がかりになるようにする。
+       --hub-tabs-fade-left/rightはjs/tabs.jsがスクロール位置に応じて
+       0pxまで減らす（118回目のブラッシュアップ）。その端まで実際に
+       スクロールし切ったらフェードを消し、「まだ隠れたタブがある」
+       という誤った手がかりにならないようにする。JS未実行時は
+       フォールバックの20pxのまま、従来どおり両端にフェードがかかる。 */
     -webkit-mask-image: linear-gradient(
       to right,
       transparent,
-      #000 20px,
-      #000 calc(100% - 20px),
+      #000 var(--hub-tabs-fade-left, 20px),
+      #000 calc(100% - var(--hub-tabs-fade-right, 20px)),
       transparent
     );
     mask-image: linear-gradient(
       to right,
       transparent,
-      #000 20px,
-      #000 calc(100% - 20px),
+      #000 var(--hub-tabs-fade-left, 20px),
+      #000 calc(100% - var(--hub-tabs-fade-right, 20px)),
       transparent
     );
   }
