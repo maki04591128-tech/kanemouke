@@ -23,7 +23,10 @@
   // （令和7年4月以降に60歳到達等）・6%（経過措置）となる計算式と
   // 数学的に同値（公式の省令定める率の式を代入して検証済み）。本ツールは
   // 標準報酬月額を高年齢雇用継続給付の算定上の賃金とみなして簡略計算する
-  // （標準報酬月額と実際の賃金が異なる場合は目安）。
+  // （標準報酬月額と実際の賃金が異なる場合は目安）。高年齢雇用継続給付
+  // 自体の主な受給要件である「60歳到達時点で被保険者であった期間が
+  // 通算5年以上」（js/kourei-koyou.js と同じ判定）も反映し、5年未満の
+  // 場合は年金への追加調整を発生させない。
 
   var els = {
     kihongaku: document.getElementById("zaishoku-kihongaku"),
@@ -34,6 +37,7 @@
     koureiFields: document.getElementById("zaishoku-koureiFields"),
     koureiWagebase: document.getElementById("zaishoku-kourei-wagebase"),
     koureiRule: document.getElementById("zaishoku-kourei-rule"),
+    koureiInsured: document.getElementById("zaishoku-kourei-insured"),
     tableNote: document.getElementById("zaishoku-table-note"),
     verdict: document.getElementById("zaishoku-verdict"),
     verdictSub: document.getElementById("zaishoku-verdictSub"),
@@ -110,6 +114,8 @@
 
     var koureiReceived = els.koureiMode && els.koureiMode.value === "received";
     if (els.koureiFields) els.koureiFields.style.display = koureiReceived ? "" : "none";
+    var koureiInsuredOk = !els.koureiInsured || els.koureiInsured.value !== "under5";
+    var koureiEligible = koureiReceived && koureiInsuredOk;
 
     var soho = calcSoho(hyoujunInput, shoyoInput);
     var goukei = kihongaku + soho;
@@ -119,7 +125,7 @@
     var koureiBenefit = 0;
     var koureiAdjust = 0;
     var koureiRuleLabel = "";
-    if (koureiReceived) {
+    if (koureiEligible) {
       var koureiWageBase = clampKoureiWageBase(els.koureiWagebase ? els.koureiWagebase.value : 0);
       var koureiIsNewRule = !els.koureiRule || els.koureiRule.value !== "old";
       koureiBenefit = calcKoureiBenefit(hyoujunInput, koureiWageBase, koureiIsNewRule);
@@ -151,7 +157,9 @@
         "。支給停止調整額（基準額" + thresholdLabel + "）を" +
         (goukei <= threshold ? "超えていないため、在職による支給停止は発生しません。" : "超えた額の1/2が在職による支給停止となります。") +
         (koureiReceived
-          ? "高年齢雇用継続給付（支給見込み額" + yen(koureiBenefit) + "）を同時に受給しているため、さらに月額" + yen(koureiAdjust) + "の追加調整が加わります。"
+          ? (koureiInsuredOk
+              ? "高年齢雇用継続給付（支給見込み額" + yen(koureiBenefit) + "）を同時に受給しているため、さらに月額" + yen(koureiAdjust) + "の追加調整が加わります。"
+              : "被保険者であった期間が5年未満の場合、高年齢雇用継続給付自体が原則受け取れないため、年金への追加調整は発生しません。")
           : "") +
         "（老齢基礎年金は在職老齢年金の対象外のため、この調整に関わらず全額支給されます）";
     }
@@ -166,8 +174,10 @@
         "<tr><td>適用する支給停止調整額（基準額）</td><td>" + thresholdLabel + "</td></tr>" +
         "<tr><td>在職による支給停止額</td><td>" + yen(teishi) + "</td></tr>" +
         (koureiReceived
-          ? "<tr><td>高年齢雇用継続給付の支給見込み額（参考・" + koureiRuleLabel + "）</td><td>" + yen(koureiBenefit) + "</td></tr>" +
-            "<tr><td>高年齢雇用継続給付受給による追加の支給停止額</td><td>" + yen(koureiAdjust) + "</td></tr>"
+          ? (koureiInsuredOk
+              ? "<tr><td>高年齢雇用継続給付の支給見込み額（参考・" + koureiRuleLabel + "）</td><td>" + yen(koureiBenefit) + "</td></tr>" +
+                "<tr><td>高年齢雇用継続給付受給による追加の支給停止額</td><td>" + yen(koureiAdjust) + "</td></tr>"
+              : "<tr><td>高年齢雇用継続給付受給による追加の支給停止額</td><td>対象外（被保険者であった期間5年未満のため）</td></tr>")
           : "") +
         "<tr><td>支給停止額の合計</td><td>" + yen(totalTeishi) + "</td></tr>" +
         "<tr><td><strong>実際の年金支給月額（老齢厚生年金）</strong></td><td><strong>" + yen(jissai) + "</strong></td></tr>";
@@ -259,6 +269,7 @@
     els.koureiWagebase.addEventListener("change", render);
   }
   if (els.koureiRule) els.koureiRule.addEventListener("change", render);
+  if (els.koureiInsured) els.koureiInsured.addEventListener("change", render);
 
   render();
 })();
