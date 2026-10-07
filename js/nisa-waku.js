@@ -13,11 +13,14 @@
     tsumitate: document.getElementById("waku-tsumitate"),
     growth: document.getElementById("waku-growth"),
     rate: document.getElementById("waku-rate"),
+    costPct: document.getElementById("waku-costPct"),
     years: document.getElementById("waku-years"),
     rateOut: document.getElementById("waku-rateOut"),
+    costPctOut: document.getElementById("waku-costPctOut"),
     yearsOut: document.getElementById("waku-yearsOut"),
     fundSelect: document.getElementById("waku-fundSelect"),
     fundHint: document.getElementById("waku-fundHint"),
+    costNote: document.getElementById("waku-costNote"),
     verdict: document.getElementById("waku-verdict"),
     verdictSub: document.getElementById("waku-verdictSub"),
     fillPeriod: document.getElementById("waku-result-fill-period"),
@@ -170,15 +173,21 @@
     var tsumitateMonthly = Math.min(TSUMITATE_MONTHLY_CAP, Math.max(0, Number(els.tsumitate.value) || 0));
     var growthMonthly = Math.min(GROWTH_MONTHLY_CAP, Math.max(0, Number(els.growth.value) || 0));
     var ratePct = Number(els.rate.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netRatePct = ratePct - costPct;
     var years = Number(els.years.value);
 
     els.tsumitate.value = tsumitateMonthly;
     els.growth.value = growthMonthly;
 
     els.rateOut.textContent = ratePct.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
     els.yearsOut.textContent = years + " 年";
 
-    var result = simulate(tsumitateMonthly, growthMonthly, ratePct, years);
+    var result = simulate(tsumitateMonthly, growthMonthly, netRatePct, years);
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト " + costPct.toFixed(1) + "% を差し引いた年率 " + netRatePct.toFixed(1) + "% で運用する前提で試算しています。"
+      : "";
 
     if (result.fillMonth) {
       els.fillPeriod.textContent = formatFillPeriod(result.fillMonth);
@@ -256,12 +265,17 @@
     if (window.renderChartDataTable) window.renderChartDataTable("waku-growthDataTable", chart);
   }
 
-  [els.tsumitate, els.growth, els.rate, els.years].forEach(function (el) {
+  [els.tsumitate, els.growth, els.rate, els.costPct, els.years].forEach(function (el) {
     el.addEventListener("input", render);
   });
 
   if (window.setupFundSelect) {
-    window.setupFundSelect(els.fundSelect, els.rate, els.fundHint, render);
+    // ファンドを選択すると想定利回りに信託報酬が反映済みになるため、
+    // 運用コストを二重に差し引かないよう自動的に0%へ戻す。
+    window.setupFundSelect(els.fundSelect, els.rate, els.fundHint, function () {
+      els.costPct.value = 0;
+      render();
+    });
   }
 
   render();
