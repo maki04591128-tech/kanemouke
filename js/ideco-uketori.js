@@ -37,6 +37,9 @@
     annuityRateOut: document.getElementById("uketori-annuityRateOut"),
     investRate: document.getElementById("uketori-investRate"),
     investRateOut: document.getElementById("uketori-investRateOut"),
+    costPct: document.getElementById("uketori-costPct"),
+    costPctOut: document.getElementById("uketori-costPctOut"),
+    costNote: document.getElementById("uketori-costNote"),
     lumpRatio: document.getElementById("uketori-lumpRatio"),
     lumpRatioOut: document.getElementById("uketori-lumpRatioOut"),
     overlapEnable: document.getElementById("uketori-overlapEnable"),
@@ -215,17 +218,25 @@
     var isOver65 = els.ageGroup.value === "65";
     var annuityRatePct = Number(els.annuityRate.value);
     var investRatePct = Number(els.investRate.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
     var lumpRatioPct = Number(els.lumpRatio.value);
 
     els.contribYearsOut.textContent = contribYears + " 年";
     els.payoutYearsOut.textContent = payoutYears + " 年";
     els.annuityRateOut.textContent = annuityRatePct.toFixed(1) + " %";
     els.investRateOut.textContent = investRatePct.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
     els.lumpRatioOut.textContent = lumpRatioPct + " %";
 
-    var annuityRate = annuityRatePct / 100;
-    var investRate = investRatePct / 100;
+    var netAnnuityRatePct = annuityRatePct - costPct;
+    var netInvestRatePct = investRatePct - costPct;
+    var annuityRate = netAnnuityRatePct / 100;
+    var investRate = netInvestRatePct / 100;
     var lumpRatio = lumpRatioPct / 100;
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト " + costPct.toFixed(1) + "% を差し引いた年率（年金原資の運用利率 " + netAnnuityRatePct.toFixed(1) +
+        "%、自分で運用する場合の利回り " + netInvestRatePct.toFixed(1) + "%）で試算しています。"
+      : "";
 
     var overlapEnabled = els.overlapEnable.value === "yes";
     els.overlapFields.hidden = !overlapEnabled;
@@ -359,6 +370,7 @@
     els.ageGroup,
     els.annuityRate,
     els.investRate,
+    els.costPct,
     els.lumpRatio,
     els.overlapEnable,
     els.overlapType,

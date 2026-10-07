@@ -514,6 +514,11 @@
 <input id="uketori-investRate" max="8" min="0" step="0.1" type="range" value="3.0"/>
 </div>
 <div class="field">
+<label for="uketori-costPct">運用コスト（信託報酬等、年率） <span class="unit" id="uketori-costPctOut">0.0 %</span></label>
+<input id="uketori-costPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint" id="uketori-costHint">投資信託の信託報酬など保有中にかかる年率コストを、上の「年金原資の運用利率」「自分で運用する場合の利回り」の両方から差し引いて試算します。</p>
+</div>
+<div class="field">
 <label for="uketori-lumpRatio">併用パターンの一時金割合 <span class="unit" id="uketori-lumpRatioOut">50 %</span></label>
 <input id="uketori-lumpRatio" max="100" min="0" step="5" type="range" value="50"/>
 </div>
@@ -578,6 +583,7 @@
 <span><span class="legend-dot" style="background:#2563eb"></span>C：併用</span>
 </div>
 </div>
+<p class="field-hint" id="uketori-costNote"></p>
 <details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="uketori-growthDataTable"></table></div></details>
 </div>
 </div>
@@ -609,7 +615,7 @@
 <p class="field-hint" id="uketori-overlap-note"></p>
 </section>
 <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の税額・将来の運用成果・元本を保証するものではありません。「他の退職一時金の受け取りとの重複調整」は、重複期間を双方の勤続（拠出）年数のうち短い方（先に受け取った一時金の受取額が少額な場合は施行令第70条第2項の考え方に沿って受取額から逆算した年数）とみなして簡易計算しており、実際の重複期間の算定（同施行令第69条・第70条が定める勤続期間等の起算日等に基づく厳密な計算）までは反映していません。また、iDeCoの一時金を先に受け取り、後から会社の退職金や他の確定拠出年金の一時金を受け取る場合の、その後の一時金側の調整には対応していません（その場合は「<a href="nenshu-hub.html?tool=taishokukin">退職金の受け取り方</a>」タブの「他の退職一時金の受け取りとの重複調整」をご利用ください）。住民税は一律10%、所得税には復興特別所得税を含み、公的年金等・退職所得以外の所得はないものと仮定するなど簡略化した試算のため、正確な税額については税務署・税理士等の専門家にご確認ください。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の税額・将来の運用成果・元本を保証するものではありません。「他の退職一時金の受け取りとの重複調整」は、重複期間を双方の勤続（拠出）年数のうち短い方（先に受け取った一時金の受取額が少額な場合は施行令第70条第2項の考え方に沿って受取額から逆算した年数）とみなして簡易計算しており、実際の重複期間の算定（同施行令第69条・第70条が定める勤続期間等の起算日等に基づく厳密な計算）までは反映していません。また、iDeCoの一時金を先に受け取り、後から会社の退職金や他の確定拠出年金の一時金を受け取る場合の、その後の一時金側の調整には対応していません（その場合は「<a href="nenshu-hub.html?tool=taishokukin">退職金の受け取り方</a>」タブの「他の退職一時金の受け取りとの重複調整」をご利用ください）。住民税は一律10%、所得税には復興特別所得税を含み、公的年金等・退職所得以外の所得はないものと仮定するなど簡略化した試算のため、正確な税額については税務署・税理士等の専門家にご確認ください。信託報酬等の運用コストは「運用コスト（信託報酬等、年率）」欄で年金原資の運用利率・自分で運用する場合の利回りの両方から差し引く形で試算に反映できます（既定値0%）が、売買手数料は考慮していません。本サイトは特定の金融商品の勧誘・投資助言を目的とするものではありません。
   </div>
   </section>
   <section class="tab-panel" id="tabpanel-yuusen" role="tabpanel" aria-labelledby="tab-btn-yuusen" data-tool="yuusen" hidden>
