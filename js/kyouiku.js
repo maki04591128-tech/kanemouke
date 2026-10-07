@@ -8,12 +8,15 @@
     initial: document.getElementById("kyouiku-initial"),
     offset: document.getElementById("kyouiku-offset"),
     rate: document.getElementById("kyouiku-rate"),
+    costPct: document.getElementById("kyouiku-costPct"),
     childAgeOut: document.getElementById("kyouiku-childAgeOut"),
     rateOut: document.getElementById("kyouiku-rateOut"),
+    costPctOut: document.getElementById("kyouiku-costPctOut"),
     monthly: document.getElementById("kyouiku-result-monthly"),
     principal: document.getElementById("kyouiku-result-principal"),
     profit: document.getElementById("kyouiku-result-profit"),
     netTarget: document.getElementById("kyouiku-result-netTarget"),
+    costNote: document.getElementById("kyouiku-costNote"),
   };
 
   var GOAL_AGE = 18;
@@ -80,12 +83,15 @@
     var offset = offsetMan * 10000;
     var netTarget = Math.max(0, target - offset);
     var rate = Number(els.rate.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netRate = rate - costPct;
 
     els.childAgeOut.textContent = childAge + " 歳";
     els.rateOut.textContent = rate.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
 
-    var monthly = requiredMonthly(netTarget, initial, rate, years);
-    var yearly = simulateSeries(initial, monthly, rate, years);
+    var monthly = requiredMonthly(netTarget, initial, netRate, years);
+    var yearly = simulateSeries(initial, monthly, netRate, years);
     var finalPoint = yearly[yearly.length - 1];
     var profit = finalPoint.balance - finalPoint.principal;
 
@@ -93,6 +99,9 @@
     els.principal.textContent = yen(finalPoint.principal);
     els.profit.textContent = (profit >= 0 ? "+" : "") + manYen(profit);
     els.netTarget.textContent = yen(netTarget);
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト " + costPct.toFixed(1) + "% を差し引いた年率 " + netRate.toFixed(1) + "% で運用する前提で試算しています。"
+      : "";
 
     var labels = yearly.map(function (d) { return (childAge + d.year) + "歳"; });
     var principalData = yearly.map(function (d) { return Math.round(d.principal); });
@@ -150,7 +159,7 @@
   }
 
   els.course.addEventListener("change", onCourseChange);
-  [els.target, els.childAge, els.initial, els.offset, els.rate].forEach(function (el) {
+  [els.target, els.childAge, els.initial, els.offset, els.rate, els.costPct].forEach(function (el) {
     el.addEventListener("input", render);
   });
 
