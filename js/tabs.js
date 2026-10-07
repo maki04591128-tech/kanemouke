@@ -16,6 +16,38 @@
 
   var storageKey = "hubTab:" + window.location.pathname;
 
+  // スマホ幅の.hub-tabsは横スクロールのチップ列になり、css/style.cssの
+  // 固定マスクで両端に常時フェードをかけ「まだ続きがある」ことを示す。
+  // しかし固定フェードだと、実際に左端・右端までスクロールし切った後も
+  // 同じフェードが残り、「まだ隠れたタブがある」という誤った手がかりに
+  // なってしまう（118回目のブラッシュアップで確認）。スクロール位置に
+  // 応じて--hub-tabs-fade-left/rightを更新し、その端まで到達したら
+  // フェードを消すことで、フェードが「実際にスクロールできる方向」だけ
+  // を正確に示すようにする。タブ数が少なく横スクロールが発生しない
+  // ページ（fire-hub・souzoku-hub等）では両端とも0になり、フェード自体
+  // が出ない。CSS側は変数未設定時のフォールバックとして20pxを使うため、
+  // JS無効環境でも従来どおりの見た目（両端フェード）のまま動作する。
+  function updateTabsScrollFade() {
+    var maxScroll = tabList.scrollWidth - tabList.clientWidth;
+    if (maxScroll <= 1) {
+      tabList.style.setProperty("--hub-tabs-fade-left", "0px");
+      tabList.style.setProperty("--hub-tabs-fade-right", "0px");
+      return;
+    }
+    var threshold = 4;
+    tabList.style.setProperty(
+      "--hub-tabs-fade-left",
+      tabList.scrollLeft <= threshold ? "0px" : "20px"
+    );
+    tabList.style.setProperty(
+      "--hub-tabs-fade-right",
+      tabList.scrollLeft >= maxScroll - threshold ? "0px" : "20px"
+    );
+  }
+  tabList.addEventListener("scroll", updateTabsScrollFade, { passive: true });
+  window.addEventListener("resize", updateTabsScrollFade);
+  updateTabsScrollFade();
+
   function panelFor(slug) {
     return panels.filter(function (p) { return p.dataset.tool === slug; })[0];
   }
