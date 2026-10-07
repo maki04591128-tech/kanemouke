@@ -25,10 +25,14 @@
     "鹿児島県": 0.1013, "沖縄県": 0.0944
   };
 
+  // 子ども・子育て支援金率（令和8年4月分〜、全国一律・労使折半）。
+  // 出典：こども家庭庁長官が定める率（2026年1月15日付け官報公示、2.3/1000）。
+  var CHILDCARE_SUPPORT_LEVY_RATE = 0.0023;
+
   function healthInsuranceRate(prefecture) {
     var totalRate = PREFECTURE_HEALTH_INSURANCE_RATES[prefecture];
-    if (totalRate === undefined) return HEALTH_INSURANCE_RATE; // 全国平均（既定）
-    return totalRate / 2; // 本人負担分（半分）
+    if (totalRate === undefined) return HEALTH_INSURANCE_RATE + CHILDCARE_SUPPORT_LEVY_RATE / 2; // 全国平均（既定）
+    return (totalRate + CHILDCARE_SUPPORT_LEVY_RATE) / 2; // 本人負担分（支援金を含めて折半）
   }
 
   // 所得税の速算表（令和2年分以降）
