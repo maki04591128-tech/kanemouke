@@ -14,7 +14,12 @@
   // 70歳以上の一般・低所得は、外来（通院）のみの場合に使う个人ごとの上限も別に定められている
   // （現役並みは外来のみの個人上限が廃止され、入院を含む世帯の限度額と同じ式を使う）。
   //
-  // 世帯合算（同じ医療保険の複数の家族の医療費を合算する仕組み）は本ツールの対象外。
+  // 世帯合算（同じ医療保険の複数の家族の医療費を合算する仕組み）は、69歳以下の家族
+  // （本人含め最大3人）に限り対応する。69歳以下の場合、1か月の窓口負担額が21,000円未満の
+  // 人はそもそも合算対象にならない制度のため、21,000円以上の人の分だけを合算して世帯の
+  // 限度額と比較する。70歳以上が含まれる世帯・69歳以下と70歳以上が混在する世帯の合算は
+  // 対象外（70歳以上は全額が合算対象になる・外来のみの個人上限と絡むなど、別の仕組みが
+  // 必要なため）。
 
   var TIERS_UNDER70 = {
     a: { label: "ア：標準報酬月額83万円以上（年収約1,160万円〜）", base: 270300, threshold: 901000, rate: 0.01, multi: 140100 },
@@ -43,6 +48,12 @@
     coPayRate: document.getElementById("kougaku-coPayRate"),
     counterPayment: document.getElementById("kougaku-counterPayment"),
     priorCount: document.getElementById("kougaku-priorCount"),
+    householdRow: document.getElementById("kougaku-householdRow"),
+    household: document.getElementById("kougaku-household"),
+    household2Row: document.getElementById("kougaku-household2Row"),
+    household3Row: document.getElementById("kougaku-household3Row"),
+    counterPayment2: document.getElementById("kougaku-counterPayment2"),
+    counterPayment3: document.getElementById("kougaku-counterPayment3"),
 
     verdict: document.getElementById("kougaku-verdict"),
     verdictSub: document.getElementById("kougaku-verdictSub"),
@@ -84,10 +95,22 @@
     return tier.base;
   }
 
+  var AGGREGATION_THRESHOLD = 21000;
+
   function updateFieldVisibility() {
     var isOver70 = els.ageGroup.value === "over70";
     els.under70Field.style.display = isOver70 ? "none" : "";
     els.over70Field.style.display = isOver70 ? "" : "none";
+    // 世帯合算は69歳以下のみ対応のため、70歳以上を選んだ場合は選択欄自体を隠す
+    // （選択値はそのまま保持されるが、render()側でisOver70なら強制的に合算しない扱いにする）。
+    els.householdRow.style.display = isOver70 ? "none" : "";
+    updateHouseholdVisibility();
+  }
+
+  function updateHouseholdVisibility() {
+    var showMembers = els.ageGroup.value !== "over70" && els.household.value === "yes";
+    els.household2Row.style.display = showMembers ? "" : "none";
+    els.household3Row.style.display = showMembers ? "" : "none";
   }
 
   function render() {
@@ -99,14 +122,25 @@
 
     var coPayRate = Number(els.coPayRate.value) || 0.3;
     var counterPayment = clampNonNegative(els.counterPayment.value);
-    var totalMedical = coPayRate > 0 ? counterPayment / coPayRate : 0;
     var priorCount = Number(els.priorCount.value) || 0;
     var isMulti = priorCount >= 3;
     var useOutpatient = isOver70 && els.outpatientOnly.value === "outpatient" && tier.outpatient != null;
+    var useHousehold = !isOver70 && els.household.value === "yes";
+
+    var payment2 = useHousehold ? clampNonNegative(els.counterPayment2.value) : 0;
+    var payment3 = useHousehold ? clampNonNegative(els.counterPayment3.value) : 0;
+    var members = [counterPayment, payment2, payment3].filter(function (p) { return p > 0; });
+    // 69歳以下の世帯合算は、1人あたりの窓口負担額が21,000円以上の人だけが合算対象になる制度。
+    // 21,000円未満の人の分は合算されず、全額その人の自己負担のまま残る。
+    var qualifying = useHousehold ? members.filter(function (p) { return p >= AGGREGATION_THRESHOLD; }) : [counterPayment];
+    var excluded = useHousehold ? members.filter(function (p) { return p < AGGREGATION_THRESHOLD; }) : [];
+    var combinedCounterPayment = qualifying.reduce(function (a, b) { return a + b; }, 0);
+    var excludedSum = excluded.reduce(function (a, b) { return a + b; }, 0);
+    var totalMedical = coPayRate > 0 ? combinedCounterPayment / coPayRate : 0;
 
     var limit = limitFor(tier, totalMedical, isMulti && !useOutpatient, useOutpatient);
-    var refund = Math.max(0, counterPayment - limit);
-    var burden = Math.min(counterPayment, limit);
+    var refund = Math.max(0, combinedCounterPayment - limit);
+    var burden = Math.min(combinedCounterPayment, limit) + excludedSum;
 
     els.resultTotalMedical.textContent = yen(totalMedical);
     els.resultLimit.textContent = yen(limit);
@@ -121,7 +155,23 @@
       els.resultOutpatientRef.textContent = "70歳未満にはこの制度はありません";
     }
 
-    if (refund > 0) {
+    if (useHousehold) {
+      var excludedNote = excludedSum > 0
+        ? "窓口負担額が21,000円未満だった分（合計" + yen(excludedSum) + "）は世帯合算の対象外のため、全額自己負担のままです。"
+        : "";
+      if (refund > 0) {
+        els.verdict.textContent = "世帯合算で高額療養費として " + yen(refund) + " が戻る計算です";
+        els.verdictSub.textContent =
+          "世帯合算の対象になった窓口負担額の合計 " + yen(combinedCounterPayment) + "（21,000円以上だった" + qualifying.length + "人分）のうち、世帯の自己負担限度額 " + yen(limit) +
+          " を超えた分が高額療養費として支給されます（" +
+          (isMulti ? "直近12か月で4回目以降の「多数回該当」の限度額を適用" : "通常の限度額を適用") +
+          "）。" + excludedNote;
+      } else {
+        els.verdict.textContent = "高額療養費の対象外です（上限に達していません）";
+        els.verdictSub.textContent =
+          "世帯合算の対象になった窓口負担額の合計 " + yen(combinedCounterPayment) + " は、世帯の自己負担限度額 " + yen(limit) + " を超えていないため、高額療養費としての追加の支給はありません。" + excludedNote;
+      }
+    } else if (refund > 0) {
       els.verdict.textContent = "高額療養費として " + yen(refund) + " が戻る計算です";
       els.verdictSub.textContent =
         "窓口での支払い " + yen(counterPayment) + " のうち、自己負担限度額 " + yen(limit) +
@@ -134,7 +184,24 @@
         "窓口での支払い " + yen(counterPayment) + " は、自己負担限度額 " + yen(limit) + " を超えていないため、高額療養費としての追加の支給はありません。";
     }
 
-    var rows = [
+    var rows = useHousehold
+      ? [
+          ["年齢区分", "69歳以下（世帯合算）"],
+          ["所得区分", tier.label],
+          ["本人の窓口負担額", yen(counterPayment)],
+        ]
+          .concat(payment2 > 0 ? [["世帯員2の窓口負担額", yen(payment2)]] : [])
+          .concat(payment3 > 0 ? [["世帯員3の窓口負担額", yen(payment3)]] : [])
+          .concat([
+            ["世帯合算の対象になった窓口負担額の合計（21,000円未満の方は対象外）", yen(combinedCounterPayment)],
+            ["総医療費（10割相当、合算対象分のみ、概算）", yen(totalMedical)],
+            ["直近12か月の該当回数（今回を含めない）", priorCount >= 3 ? "3回以上（今回が多数回該当）" : priorCount + "回"],
+            ["自己負担限度額（世帯の今回の上限額）", yen(limit)],
+            ["高額療養費として世帯に支給される金額", yen(refund)],
+          ])
+          .concat(excludedSum > 0 ? [["世帯合算の対象外の金額（21,000円未満、全額自己負担）", yen(excludedSum)]] : [])
+          .concat([["世帯の実質の自己負担額（合算対象外分を含む）", yen(burden)]])
+      : [
       ["年齢区分", isOver70 ? "70歳以上" : "69歳以下"],
       ["所得区分", tier.label],
       ["窓口で支払った金額", yen(counterPayment)],
@@ -156,7 +223,7 @@
       datasets: [
         {
           label: "金額",
-          data: [totalMedical, counterPayment, burden],
+          data: [totalMedical, useHousehold ? combinedCounterPayment : counterPayment, burden],
           backgroundColor: ["#9aa5b1", "#d98e04", "#0f5f4c"],
         },
       ],
@@ -199,6 +266,9 @@
     els.coPayRate,
     els.counterPayment,
     els.priorCount,
+    els.household,
+    els.counterPayment2,
+    els.counterPayment3,
   ].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
