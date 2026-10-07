@@ -4,7 +4,38 @@
   var RESIDENT_TAX_RATE = 0.10;
   var RESIDENT_PER_CAPITA = 5000; // 住民税均等割の目安（自治体により異なる）
   var RECONSTRUCTION_TAX_RATE = 0.021;
-  var SOCIAL_INSURANCE_RATE = 0.15; // 本人負担分の概算（年収に対する割合の目安）
+  var SOCIAL_INSURANCE_RATE = 0.15; // 本人負担分の概算（年収に対する割合の目安、全国平均・都道府県未選択時）
+
+  // 都道府県を選択した場合は、健康保険料率のみ都道府県別の値に切り替え、厚生年金・雇用保険（全国一律）と
+  // 合算した実際の負担率で近似する（js/nenshu-tedori.js等と同じ考え方）。
+  var PENSION_RATE = 0.0915; // 厚生年金保険（本人負担分）
+  var EMPLOYMENT_INSURANCE_RATE = 0.006; // 雇用保険（本人負担分・一般の事業）
+  var CHILDCARE_SUPPORT_LEVY_RATE = 0.0023; // 子ども・子育て支援金率（令和8年4月分〜、全国一律・労使折半）
+
+  // 協会けんぽの都道府県単位保険料率（令和8年度3月分〜、全体の料率。本人負担分はその半分）。
+  // 出典：全国健康保険協会「都道府県単位の保険料率」。健康保険組合に加入している場合はこれと異なる。
+  var PREFECTURE_HEALTH_INSURANCE_RATES = {
+    "北海道": 0.1028, "青森県": 0.0985, "岩手県": 0.0951, "宮城県": 0.1010, "秋田県": 0.1001,
+    "山形県": 0.0975, "福島県": 0.0950, "茨城県": 0.0952, "栃木県": 0.0982, "群馬県": 0.0968,
+    "埼玉県": 0.0967, "千葉県": 0.0973, "東京都": 0.0985, "神奈川県": 0.0992, "新潟県": 0.0921,
+    "富山県": 0.0959, "石川県": 0.0970, "福井県": 0.0971, "山梨県": 0.0955, "長野県": 0.0963,
+    "岐阜県": 0.0980, "静岡県": 0.0961, "愛知県": 0.0993, "三重県": 0.0977, "滋賀県": 0.0988,
+    "京都府": 0.0989, "大阪府": 0.1013, "兵庫県": 0.1012, "奈良県": 0.0991, "和歌山県": 0.1006,
+    "鳥取県": 0.0986, "島根県": 0.0994, "岡山県": 0.1005, "広島県": 0.0978, "山口県": 0.1015,
+    "徳島県": 0.1024, "香川県": 0.1002, "愛媛県": 0.0998, "高知県": 0.1005, "福岡県": 0.1011,
+    "佐賀県": 0.1055, "長崎県": 0.1006, "熊本県": 0.1008, "大分県": 0.1008, "宮崎県": 0.0977,
+    "鹿児島県": 0.1013, "沖縄県": 0.0944
+  };
+
+  // 都道府県が選択された場合のみ、健康保険料率を都道府県別の値（支援金込み・本人負担分）に差し替えた
+  // 実際の社会保険料率を返す。未選択の場合は、従来どおりSOCIAL_INSURANCE_RATE（15%の概算）のままとし、
+  // 既存の試算結果・共有URLの値を変更しない。
+  function socialInsuranceRateOf(prefecture) {
+    var totalHealthRate = PREFECTURE_HEALTH_INSURANCE_RATES[prefecture];
+    if (totalHealthRate === undefined) return SOCIAL_INSURANCE_RATE;
+    var healthRatePersonal = (totalHealthRate + CHILDCARE_SUPPORT_LEVY_RATE) / 2;
+    return healthRatePersonal + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
+  }
 
   // 所得税の速算表（令和2年分以降。税率区分そのものは今回の改正で変更なし）
   var TAX_BRACKETS = [
@@ -76,6 +107,7 @@
     income: document.getElementById("kabe-income"),
     insuranceApplies: document.getElementById("kabe-insuranceApplies"),
     singleParentStatus: document.getElementById("kabe-singleParentStatus"),
+    prefecture: document.getElementById("kabe-prefecture"),
     verdict: document.getElementById("kabe-verdict"),
     verdictSub: document.getElementById("kabe-verdictSub"),
     salaryIncome: document.getElementById("kabe-result-salary-income"),
@@ -147,7 +179,7 @@
   }
 
   // 年収から所得税・住民税・社会保険料（概算）を差し引いた手取り額を試算
-  function takeHomeOf(income, insuranceApplies, singleParentStatus) {
+  function takeHomeOf(income, insuranceApplies, singleParentStatus, prefecture) {
     var salaryIncomeForIncomeTax = Math.max(0, income - salaryDeductionIncomeTax(income));
     var taxableIncomeTax = Math.max(0, salaryIncomeForIncomeTax - incomeBasicDeduction(income) - extraIncomeDeductionOf(singleParentStatus));
     var incomeTax = taxByBracket(taxableIncomeTax) * (1 + RECONSTRUCTION_TAX_RATE);
@@ -157,9 +189,10 @@
     var residentTax = taxableResidentTax > 0 ? taxableResidentTax * RESIDENT_TAX_RATE + RESIDENT_PER_CAPITA : 0;
 
     // 加入条件に該当する場合は、2026年10月の賃金要件撤廃により年収に関わらず社会保険料が発生する
+    var socialInsuranceRate = socialInsuranceRateOf(prefecture);
     var socialInsurance = insuranceApplies
-      ? income * SOCIAL_INSURANCE_RATE
-      : (income > WALL_130 ? income * SOCIAL_INSURANCE_RATE : 0);
+      ? income * socialInsuranceRate
+      : (income > WALL_130 ? income * socialInsuranceRate : 0);
 
     var takeHome = income - incomeTax - residentTax - socialInsurance;
 
@@ -203,8 +236,9 @@
     var income = clampNonNegative(els.income.value);
     var insuranceApplies = els.insuranceApplies.value === "yes";
     var singleParentStatus = els.singleParentStatus.value;
+    var prefecture = els.prefecture.value;
 
-    var r = takeHomeOf(income, insuranceApplies, singleParentStatus);
+    var r = takeHomeOf(income, insuranceApplies, singleParentStatus, prefecture);
     var incomeWall = incomeTaxWallOf(singleParentStatus);
     var residentWall = residentTaxWallOf(singleParentStatus);
     var hasSingleParentDeduction = singleParentStatus !== "none";
@@ -263,7 +297,7 @@
     var curve = [];
     var faceValue = [];
     for (var x = minX; x <= maxX; x += stepX) {
-      var res = takeHomeOf(x, insuranceApplies, singleParentStatus);
+      var res = takeHomeOf(x, insuranceApplies, singleParentStatus, prefecture);
       curve.push({ x: x, y: Math.round(res.takeHome) });
       faceValue.push({ x: x, y: x });
     }
@@ -341,7 +375,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("kabe-growthDataTable", chart);
   }
 
-  [els.income, els.insuranceApplies, els.singleParentStatus].forEach(function (el) {
+  [els.income, els.insuranceApplies, els.singleParentStatus, els.prefecture].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
