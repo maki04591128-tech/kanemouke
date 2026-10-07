@@ -193,6 +193,17 @@
     return tab ? tab.textContent.trim() : "";
   }
 
+  // activeToolLabel()はタブ切り替えUIを持たない単体ツールページでは
+  // 常に空文字を返す。その場合のフォールバックとして、ページの見出し
+  // （<h1>）、無ければ<title>の「|」より前の部分をtoolLabelとして使う。
+  // タブがあるページの挙動は変えない（activeToolLabel()が空文字を
+  // 返さない限りこの関数は呼ばれない）。
+  function fallbackToolLabel() {
+    var h1 = document.querySelector(".page-title h1");
+    if (h1 && h1.textContent.trim()) return h1.textContent.trim();
+    return document.title.split("|")[0].trim();
+  }
+
   // 一覧に出す見出し文言：診断バナー（達成/未達成等の判定があるツール）が
   // あれば優先し、なければ最初の（多くはaccent強調の）結果カードの
   // ラベル＋値を使う。
@@ -632,7 +643,7 @@
       path: window.location.pathname,
       url: buildUrl(),
       savedAt: Date.now(),
-      toolLabel: activeToolLabel(),
+      toolLabel: activeToolLabel() || fallbackToolLabel(),
       headline: headline,
       inputs: collectInputRows(),
       results: collectResultRows(resultCol)
