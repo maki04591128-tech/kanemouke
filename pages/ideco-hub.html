@@ -648,6 +648,11 @@
 <input id="yuusen-rate" max="8" min="0" step="0.1" type="range" value="5"/>
 </div>
 <div class="field">
+<label for="yuusen-costPct">運用コスト（信託報酬等、年率） <span class="unit" id="yuusen-costPctOut">0.0 %</span></label>
+<input id="yuusen-costPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint">投資信託の信託報酬など保有中にかかる年率コストを、上の想定利回りから差し引いて試算します。0%なら従来どおりコストを考慮しない試算になります（運用益への課税や売買手数料は含みません）。</p>
+</div>
+<div class="field">
 <label for="yuusen-years">積立期間 <span class="unit" id="yuusen-yearsOut">20 年</span></label>
 <input id="yuusen-years" max="40" min="5" step="1" type="range" value="20"/>
 </div>
@@ -699,6 +704,7 @@
 <span><span class="legend-dot" style="background:#0f5f4c"></span>節税額の再投資なし／<span class="legend-dot" style="background:#d98e04"></span>節税額を毎年NISAに再投資</span>
 </div>
 </div>
+<p class="field-hint" id="yuusen-costNote"></p>
 <details class="chart-data-details"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="yuusen-growthDataTable"></table></div></details>
 </div>
 </div>

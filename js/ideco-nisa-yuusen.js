@@ -35,6 +35,9 @@
     taxableIncome: document.getElementById("yuusen-taxableIncome"),
     rate: document.getElementById("yuusen-rate"),
     rateOut: document.getElementById("yuusen-rateOut"),
+    costPct: document.getElementById("yuusen-costPct"),
+    costPctOut: document.getElementById("yuusen-costPctOut"),
+    costNote: document.getElementById("yuusen-costNote"),
     years: document.getElementById("yuusen-years"),
     yearsOut: document.getElementById("yuusen-yearsOut"),
     liquidityNeed: document.getElementById("yuusen-liquidityNeed"),
@@ -136,15 +139,21 @@
     var budget = clampNonNegative(els.budget.value);
     var taxableIncome = clampNonNegative(els.taxableIncome.value);
     var ratePct = Number(els.rate.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netRatePct = ratePct - costPct;
     var years = Number(els.years.value);
     var liquidityNeed = els.liquidityNeed.value;
 
     els.rateOut.textContent = ratePct.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト " + costPct.toFixed(1) + "% を差し引いた年率 " + netRatePct.toFixed(1) + "% で運用する前提で試算しています。"
+      : "";
     els.yearsOut.textContent = years + " 年";
 
     var marginalRate = marginalIncomeTaxRate(taxableIncome);
     var combinedRate = marginalRate + RESIDENT_TAX_RATE;
-    var monthlyRate = ratePct / 100 / 12;
+    var monthlyRate = netRatePct / 100 / 12;
     var months = years * 12;
 
     els.idecoCap.textContent = yen(idecoCap) + " / 月";
@@ -157,7 +166,7 @@
       var baseAsset = idecoBalance + nisaBalance;
       var annualTaxSaving = split.ideco * 12 * combinedRate;
       var totalTaxSavingSimple = annualTaxSaving * years;
-      var bonus = reinvestedTaxSavingBonus(annualTaxSaving, ratePct / 100, years);
+      var bonus = reinvestedTaxSavingBonus(annualTaxSaving, netRatePct / 100, years);
       return {
         strategy: s,
         split: split,
@@ -267,7 +276,7 @@
     updateOffsetVisibility();
     render();
   });
-  [els.offsetAmount, els.budget, els.taxableIncome, els.rate, els.years, els.liquidityNeed].forEach(function (el) {
+  [els.offsetAmount, els.budget, els.taxableIncome, els.rate, els.costPct, els.years, els.liquidityNeed].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });
