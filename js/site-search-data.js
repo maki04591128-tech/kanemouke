@@ -102,7 +102,7 @@ window.SITE_SEARCH_DATA = [
   },
   {
     "title": "iDeCo・小規模企業共済シミュレーター まとめ",
-    "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済・付加年金の6ツールをタブ切り替えで使えます。",
+    "desc": "iDeCo節税・拠出限度額・受け取り方・iDeCovsNISA優先度・小規模企業共済・経営セーフティ共済・付加年金の7ツールをタブ切り替えで使えます。",
     "href": "pages/ideco-hub.html?tool=setsuzei",
     "category": "iDeCo・小規模企業共済",
     "type": "hub"
@@ -160,6 +160,13 @@ window.SITE_SEARCH_DATA = [
     "title": "小規模企業共済とは？掛金・節税額・共済金の受け取り方 完全ガイド",
     "desc": "自営業者・フリーランス向けの退職金制度「小規模企業共済」の掛金の決め方、節税の仕組み、一括受取vs分割受取の税金の違い、iDeCoとの違いを解説します。",
     "href": "pages/shoukibo-kyosai-guide.html",
+    "category": "iDeCo・小規模企業共済",
+    "type": "guide"
+  },
+  {
+    "title": "経営セーフティ共済とは？節税ではなく「先送り」である理由 完全ガイド",
+    "desc": "取引先の倒産に備える共済制度「経営セーフティ共済」の掛金の決め方、損金・必要経費による税負担の先送りの仕組み、解約手当金の支給率表、小規模企業共済との違いを解説します。",
+    "href": "pages/keiei-safety-kyosai-guide.html",
     "category": "iDeCo・小規模企業共済",
     "type": "guide"
   },
@@ -692,6 +699,13 @@ window.SITE_SEARCH_DATA = [
     "title": "小規模企業共済",
     "desc": "「小規模企業共済」は、自営業者・フリーランスや中小企業の役員が加入できる、いわば経営者・個人事業主向けの退職金制度です。掛金の全額が所得控除の対象になるため、iDeCoと並ぶ代表的な節税手段として知られています。掛金月額・加入年数・課税所得を入力するだけで、加入期間中の節税額と、共済金を受け取るときの税金の目安がわかります。",
     "href": "pages/ideco-hub.html?tool=kyosai",
+    "category": "iDeCo・小規模企業共済",
+    "type": "tool"
+  },
+  {
+    "title": "経営セーフティ共済",
+    "desc": "取引先の倒産に備える共済制度「経営セーフティ共済」は、掛金全額を損金・必要経費にできますが、解約手当金は全額が収益として課税されるため実質は税金の「先送り」です。掛金月額・加入年数・事業形態・加入時と解約時の実効税率から、累計節税額と出口まで含めた実質的な損益を試算します。",
+    "href": "pages/ideco-hub.html?tool=safety",
     "category": "iDeCo・小規模企業共済",
     "type": "tool"
   },
