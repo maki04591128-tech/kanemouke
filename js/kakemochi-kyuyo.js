@@ -10,6 +10,27 @@
   var PENSION_RATE = 0.0915;
   var EMPLOYMENT_INSURANCE_RATE = 0.006;
 
+  // 協会けんぽの都道府県単位保険料率（令和8年度3月分〜、全体の料率。本人負担分はその半分）。
+  // js/nenshu-tedori.jsと同一のデータ（出典：全国健康保険協会「都道府県単位の保険料率」）。
+  var PREFECTURE_HEALTH_INSURANCE_RATES = {
+    "北海道": 0.1028, "青森県": 0.0985, "岩手県": 0.0951, "宮城県": 0.1010, "秋田県": 0.1001,
+    "山形県": 0.0975, "福島県": 0.0950, "茨城県": 0.0952, "栃木県": 0.0982, "群馬県": 0.0968,
+    "埼玉県": 0.0967, "千葉県": 0.0973, "東京都": 0.0985, "神奈川県": 0.0992, "新潟県": 0.0921,
+    "富山県": 0.0959, "石川県": 0.0970, "福井県": 0.0971, "山梨県": 0.0955, "長野県": 0.0963,
+    "岐阜県": 0.0980, "静岡県": 0.0961, "愛知県": 0.0993, "三重県": 0.0977, "滋賀県": 0.0988,
+    "京都府": 0.0989, "大阪府": 0.1013, "兵庫県": 0.1012, "奈良県": 0.0991, "和歌山県": 0.1006,
+    "鳥取県": 0.0986, "島根県": 0.0994, "岡山県": 0.1005, "広島県": 0.0978, "山口県": 0.1015,
+    "徳島県": 0.1024, "香川県": 0.1002, "愛媛県": 0.0998, "高知県": 0.1005, "福岡県": 0.1011,
+    "佐賀県": 0.1055, "長崎県": 0.1006, "熊本県": 0.1008, "大分県": 0.1008, "宮崎県": 0.0977,
+    "鹿児島県": 0.1013, "沖縄県": 0.0944
+  };
+
+  function healthInsuranceRate(prefecture) {
+    var totalRate = PREFECTURE_HEALTH_INSURANCE_RATES[prefecture];
+    if (totalRate === undefined) return HEALTH_INSURANCE_RATE; // 全国平均（既定）
+    return totalRate / 2; // 本人負担分（半分）
+  }
+
   // 所得税の速算表（令和2年分以降）
   var TAX_BRACKETS = [
     { limit: 1950000, rate: 0.05, deduct: 0 },
@@ -67,6 +88,7 @@
   var els = {
     mainIncome: document.getElementById("kakemochi-mainIncome"),
     subIncome: document.getElementById("kakemochi-subIncome"),
+    prefecture: document.getElementById("kakemochi-prefecture"),
     hasSpouse: document.getElementById("kakemochi-hasSpouse"),
     dependents: document.getElementById("kakemochi-dependents"),
     singleParentStatus: document.getElementById("kakemochi-singleParentStatus"),
@@ -128,8 +150,8 @@
   // 掛け持ち先が複数あっても、この関数には合算後の給与収入を渡す（分けて2回呼び出して合計してはいけない）。
   // 配偶者控除・扶養控除・ひとり親控除・寡婦控除は、主たる勤務先が年末調整の時点で把握している家族構成に
   // 基づくため、年末調整時（mainIncomeのみ）・確定申告後（合算後）のどちらでも同じ条件で適用する。
-  function calcSingle(income, hasSpouse, dependents, singleParentStatus, singleParentApplies) {
-    var socialInsuranceRate = HEALTH_INSURANCE_RATE + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
+  function calcSingle(income, prefecture, hasSpouse, dependents, singleParentStatus, singleParentApplies) {
+    var socialInsuranceRate = healthInsuranceRate(prefecture) + PENSION_RATE + EMPLOYMENT_INSURANCE_RATE;
     var socialInsurance = income * socialInsuranceRate;
 
     var salaryTaxable = Math.max(0, income - salaryDeduction(income, SALARY_DEDUCTION_BRACKETS_INCOME_TAX));
@@ -165,6 +187,7 @@
     var mainIncome = clampNonNegative(els.mainIncome.value) * 10000;
     var subIncome = clampNonNegative(els.subIncome.value) * 10000;
     var totalIncome = mainIncome + subIncome;
+    var prefecture = els.prefecture ? els.prefecture.value : "";
     var hasSpouse = els.hasSpouse.value === "yes";
     var dependents = Math.max(0, Math.min(5, Math.round(Number(els.dependents.value) || 0)));
     var singleParentStatus = els.singleParentStatus.value;
@@ -188,9 +211,9 @@
     }
 
     // 「年末調整のみ」＝主たる勤務先1社分の給与だけで年末調整が完了した場合に源泉徴収されている所得税額の目安。
-    var mainOnly = calcSingle(mainIncome, hasSpouse, dependents, singleParentStatus, singleParentApplies);
+    var mainOnly = calcSingle(mainIncome, prefecture, hasSpouse, dependents, singleParentStatus, singleParentApplies);
     // 「確定申告後」＝すべての勤務先の給与収入を合算し、給与所得控除・基礎控除を1回だけ適用して計算し直した、本来納めるべき所得税額・住民税額。
-    var combined = calcSingle(totalIncome, hasSpouse, dependents, singleParentStatus, singleParentApplies);
+    var combined = calcSingle(totalIncome, prefecture, hasSpouse, dependents, singleParentStatus, singleParentApplies);
 
     var taxGap = Math.max(0, combined.incomeTax - mainOnly.incomeTax);
 
@@ -291,7 +314,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("kakemochi-growthDataTable", chart);
   }
 
-  [els.mainIncome, els.subIncome, els.hasSpouse, els.dependents, els.singleParentStatus].forEach(function (el) {
+  [els.mainIncome, els.subIncome, els.prefecture, els.hasSpouse, els.dependents, els.singleParentStatus].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });

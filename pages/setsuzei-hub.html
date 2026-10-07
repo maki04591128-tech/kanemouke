@@ -196,6 +196,14 @@
     },
     {
       "@type": "Question",
+      "name": "社会保険料率が実際と違う気がします",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "健康保険料率は加入している健康保険組合や都道府県によって異なります。「健康保険料率（勤務先の都道府県）」欄で都道府県を選ぶと、協会けんぽの都道府県単位保険料率（令和8年度3月分〜）に基づく概算に切り替わります。ただし健康保険組合に加入している場合や、令和8年4月分以降に加算される「子ども・子育て支援金」は反映していないため、実際の給与明細の金額とは差が生じます。"
+      }
+    },
+    {
+      "@type": "Question",
       "name": "この試算は正確ですか？",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -799,6 +807,60 @@
 <p class="field-hint">扶養控除等申告書を提出していない勤務先（掛け持ち先）すべての年間の給与収入（額面）の合計です。3社以上の場合は合計額を入力してください。</p>
 </div>
 <div class="field">
+<label for="kakemochi-prefecture">健康保険料率（勤務先の都道府県）</label>
+<select id="kakemochi-prefecture">
+<option value="">全国平均（目安）</option>
+<option value="北海道">北海道</option>
+<option value="青森県">青森県</option>
+<option value="岩手県">岩手県</option>
+<option value="宮城県">宮城県</option>
+<option value="秋田県">秋田県</option>
+<option value="山形県">山形県</option>
+<option value="福島県">福島県</option>
+<option value="茨城県">茨城県</option>
+<option value="栃木県">栃木県</option>
+<option value="群馬県">群馬県</option>
+<option value="埼玉県">埼玉県</option>
+<option value="千葉県">千葉県</option>
+<option value="東京都">東京都</option>
+<option value="神奈川県">神奈川県</option>
+<option value="新潟県">新潟県</option>
+<option value="富山県">富山県</option>
+<option value="石川県">石川県</option>
+<option value="福井県">福井県</option>
+<option value="山梨県">山梨県</option>
+<option value="長野県">長野県</option>
+<option value="岐阜県">岐阜県</option>
+<option value="静岡県">静岡県</option>
+<option value="愛知県">愛知県</option>
+<option value="三重県">三重県</option>
+<option value="滋賀県">滋賀県</option>
+<option value="京都府">京都府</option>
+<option value="大阪府">大阪府</option>
+<option value="兵庫県">兵庫県</option>
+<option value="奈良県">奈良県</option>
+<option value="和歌山県">和歌山県</option>
+<option value="鳥取県">鳥取県</option>
+<option value="島根県">島根県</option>
+<option value="岡山県">岡山県</option>
+<option value="広島県">広島県</option>
+<option value="山口県">山口県</option>
+<option value="徳島県">徳島県</option>
+<option value="香川県">香川県</option>
+<option value="愛媛県">愛媛県</option>
+<option value="高知県">高知県</option>
+<option value="福岡県">福岡県</option>
+<option value="佐賀県">佐賀県</option>
+<option value="長崎県">長崎県</option>
+<option value="熊本県">熊本県</option>
+<option value="大分県">大分県</option>
+<option value="宮崎県">宮崎県</option>
+<option value="鹿児島県">鹿児島県</option>
+<option value="沖縄県">沖縄県</option>
+</select>
+<p class="field-hint">協会けんぽの都道府県単位保険料率（令和8年度3月分〜）に基づく概算です。健康保険組合に加入している場合や、令和8年4月分以降に加算される「子ども・子育て支援金」は反映していません。</p>
+</div>
+<div class="field">
 <label for="kakemochi-hasSpouse">配偶者控除の対象となる配偶者</label>
 <select id="kakemochi-hasSpouse">
 <option value="no">いない</option>
@@ -889,13 +951,17 @@
 <dd>所得税の確定申告は不要ですが、住民税にはこの20万円の特例がないため、所得が発生している以上、お住まいの市区町村へ住民税の申告が別途必要です。この点は副業の「20万円ルール」と共通の注意点です。</dd>
 </div>
 <div class="faq-item">
+<dt>社会保険料率が実際と違う気がします</dt>
+<dd>健康保険料率は加入している健康保険組合や都道府県によって異なります。「健康保険料率（勤務先の都道府県）」欄で都道府県を選ぶと、協会けんぽの都道府県単位保険料率（令和8年度3月分〜）に基づく概算に切り替わります。ただし健康保険組合に加入している場合や、令和8年4月分以降に加算される「子ども・子育て支援金」は反映していないため、実際の給与明細の金額とは差が生じます。</dd>
+</div>
+<div class="faq-item">
 <dt>この試算は正確ですか？</dt>
 <dd>給与所得者を前提とした一般的な近似計算です。配偶者控除・扶養控除・ひとり親控除・寡婦控除は試算に反映していますが、従たる給与から実際に源泉徴収された所得税額は勤務先・支払時期によって異なるため、本ツールでは含めていません。社会保険料の細かい違いも考慮していない目安の金額であり、実際の税額とは差が生じます。正確な金額は源泉徴収票・税務署・税理士にご確認ください。</dd>
 </div>
 </dl>
 </section>
 <div class="disclaimer">
-    本シミュレーターの試算結果は入力条件に基づく参考値です。給与所得控除はすべての勤務先の給与収入を合算した金額に対して1回だけ適用される前提で試算しており、従たる給与から実際に源泉徴収されている所得税額（乙欄による源泉徴収額）は含めていません。そのため「年末調整との差額の目安」は、確定申告で実際に追加納付・還付となる金額そのものではなく、主たる給与だけで年末調整が完了した場合との理論上の差額です。実際の過不足額は源泉徴収票に記載された源泉徴収税額をもとにご確認ください。社会保険料率・給与所得控除・所得税速算表は既存ツールと共通の概算値を用いており、配偶者控除・扶養控除・青色申告特別控除等は考慮していません。正確な要否判定・税額は税務署・税理士にご確認ください。本サイトは税務に関する助言を目的とするものではありません。
+    本シミュレーターの試算結果は入力条件に基づく参考値です。給与所得控除はすべての勤務先の給与収入を合算した金額に対して1回だけ適用される前提で試算しており、従たる給与から実際に源泉徴収されている所得税額（乙欄による源泉徴収額）は含めていません。そのため「年末調整との差額の目安」は、確定申告で実際に追加納付・還付となる金額そのものではなく、主たる給与だけで年末調整が完了した場合との理論上の差額です。実際の過不足額は源泉徴収票に記載された源泉徴収税額をもとにご確認ください。健康保険料率は、都道府県を選択すると協会けんぽの都道府県単位保険料率（令和8年度3月分〜）による概算、未選択の場合は全国平均目安による概算です。いずれも健康保険組合に加入している場合や、令和8年4月分以降に加算される「子ども・子育て支援金」は反映していません。給与所得控除・所得税速算表は既存ツールと共通の概算値を用いており、青色申告特別控除等は考慮していません。正確な要否判定・税額は税務署・税理士にご確認ください。本サイトは税務に関する助言を目的とするものではありません。
   </div>
   </section>
 
