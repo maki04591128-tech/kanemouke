@@ -1065,5 +1065,12 @@ window.SITE_SEARCH_DATA = [
     "href": "pages/souzoku-hub.html?tool=zouyo",
     "category": "相続・贈与",
     "type": "tool"
+  },
+  {
+    "title": "遺留分計算シミュレーター",
+    "desc": "「全財産を長男に相続させる」といった偏った遺言があっても、配偶者・子・直系尊属には最低限の取り分「遺留分」が保障されています（兄弟姉妹には遺留分はありません）。遺産額と家族構成を入力するだけで、個人の遺留分の金額と、実際の取得額との差である遺留分侵害額の目安を試算できます。",
+    "href": "pages/souzoku-hub.html?tool=iryubun",
+    "category": "相続・贈与",
+    "type": "tool"
   }
 ];

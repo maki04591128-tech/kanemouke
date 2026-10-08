@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>相続・贈与シミュレーター まとめ | ふやすノート</title>
-<meta name="description" content="相続税シミュレーター・生前贈与vs相続比較まで、相続・贈与に関する2つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta name="description" content="相続税シミュレーター・生前贈与vs相続比較・遺留分計算まで、相続・贈与に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
 <link rel="canonical" href="https://maki04591128-tech.github.io/kanemouke/pages/souzoku-hub.html">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
@@ -14,14 +14,14 @@
 <meta property="og:site_name" content="ふやすノート">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:title" content="相続・贈与シミュレーター まとめ | ふやすノート">
-<meta property="og:description" content="相続税シミュレーター・生前贈与vs相続比較まで、相続・贈与に関する2つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta property="og:description" content="相続税シミュレーター・生前贈与vs相続比較・遺留分計算まで、相続・贈与に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
 <meta property="og:url" content="https://maki04591128-tech.github.io/kanemouke/pages/souzoku-hub.html">
 <meta property="og:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="相続・贈与シミュレーター まとめ | ふやすノート">
-<meta name="twitter:description" content="相続税シミュレーター・生前贈与vs相続比較まで、相続・贈与に関する2つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
+<meta name="twitter:description" content="相続税シミュレーター・生前贈与vs相続比較・遺留分計算まで、相続・贈与に関する3つの無料シミュレーターをタブ切り替えで1ページにまとめました。">
 <meta name="twitter:image" content="https://maki04591128-tech.github.io/kanemouke/assets/ogp-default.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -201,6 +201,46 @@
         "@type": "Answer",
         "text": "相続財産総額・贈与額・贈与を続ける年数などの条件を変えずに、生前贈与を始めるタイミングだけを2年・5年・10年遅らせた場合に、負担額合計（贈与税＋相続税）がどれだけ変わるかを示しています。開始を遅らせるほど相続開始までに贈与できる年数が短くなり、暦年贈与では生前贈与加算（持ち戻し）の対象になりやすくなるため、一般に早く始めるほど負担額を抑えやすくなります。遅らせた年数が「相続開始までの残り年数」を超える場合、生前贈与を行う時間が無くなるため、生前贈与なしの場合と同じ負担額になります。"
       }
+    },
+    {
+      "@type": "Question",
+      "name": "遺留分はどうやって計算されますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "相続人全体の遺留分（直系尊属のみが相続人の場合は遺産全体の3分の1、それ以外は2分の1）に、各相続人の法定相続分をかけて、個人の遺留分を求めます。本ツールでは「遺留分算定の基礎となる財産」「配偶者の有無」「相続人のパターン」「子・父母の人数」を入力するだけで、配偶者・子（または父母・祖父母）それぞれの個人の遺留分の金額を自動で計算します。計算の仕組みの詳細は「遺留分とは？完全ガイド」で解説しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "兄弟姉妹には遺留分がないのはなぜですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "民法が遺留分を認めているのは配偶者・子（またはその代襲相続人）・直系尊属（父母・祖父母）に限られ、兄弟姉妹（および代襲相続人の甥・姪）には遺留分がありません。本ツールで「相続人のパターン」を「兄弟姉妹が相続人（第3順位）」に設定すると、兄弟姉妹の遺留分は常に0円として試算され、配偶者がいる場合はその人の遺留分だけを計算します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「遺留分算定の基礎となる財産」には何を入力すればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "原則として、相続開始時に残っていた遺産（相続税評価額ベース）に、相続人への特別受益にあたる生前贈与（原則として相続開始前10年以内）や第三者への生前贈与（原則として相続開始前1年以内）を加算し、債務を差し引いた金額です。生前贈与がない場合は、遺産総額から債務を差し引いた金額をそのまま入力してください。生前贈与の算入範囲の詳細な例外ルールは「遺留分とは？完全ガイド」で解説しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "「遺留分侵害額」はどうやって計算されますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "個人の遺留分の金額から、その人が遺言や生前贈与によって実際に取得する（した）財産額を差し引いた金額です。実際の取得額が個人の遺留分を下回っている場合、その差額が「遺留分侵害額請求」によって請求できる可能性のある金額の目安になります。実際の取得額の欄を0のままにすると、個人の遺留分の金額だけを確認できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "この試算結果どおりの金額を必ず請求できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "いいえ、本ツールは民法の基本的な計算構造（相続人全体の遺留分割合・法定相続分）に基づく概算です。生前贈与の算入範囲の判定（1年・10年ルールの例外を含む）、不動産・自社株などの評価額、遺留分侵害額請求の相手方の順序（受遺者→受贈者、複数いる場合の按分ルールなど）には対応していません。実際の金額や請求の進め方は弁護士にご確認ください。遺留分侵害額請求の流れや時効（1年・10年）は「遺留分とは？完全ガイド」で詳しく解説しています。"
+      }
     }
   ]
 }
@@ -262,7 +302,7 @@
 
   <div class="page-title">
     <h1>相続・贈与シミュレーター まとめ</h1>
-    <p>遺産総額と家族構成から相続税の目安を試算し、生前贈与と相続のどちらが有利かを比較する、相続・贈与に関する2つのシミュレーターを1ページにまとめました。上のタブを切り替えるだけで、目的に合わせて使い分けられます。</p>
+    <p>遺産総額と家族構成から相続税の目安を試算し、生前贈与と相続のどちらが有利かを比較し、遺言で取り分を減らされた場合に最低限主張できる「遺留分」の金額を確認する、相続・贈与に関する3つのシミュレーターを1ページにまとめました。上のタブを切り替えるだけで、目的に合わせて使い分けられます。</p>
   </div>
 
   <div class="ad-slot"><!-- AdSense placeholder: ハブページ上部 --></div>
@@ -270,6 +310,7 @@
   <div class="hub-tabs" id="hub-tabs" role="tablist" aria-label="ツールを選択">
         <button type="button" class="hub-tab" role="tab" id="tab-btn-souzokuzei" aria-controls="tabpanel-souzokuzei" aria-selected="true" data-tool="souzokuzei">相続税</button>
     <button type="button" class="hub-tab" role="tab" id="tab-btn-zouyo" aria-controls="tabpanel-zouyo" aria-selected="false" data-tool="zouyo">生前贈与vs相続</button>
+    <button type="button" class="hub-tab" role="tab" id="tab-btn-iryubun" aria-controls="tabpanel-iryubun" aria-selected="false" data-tool="iryubun">遺留分計算</button>
   </div>
 
   <section class="tab-panel" id="tabpanel-souzokuzei" role="tabpanel" aria-labelledby="tab-btn-souzokuzei" data-tool="souzokuzei">
@@ -796,6 +837,125 @@
     本シミュレーターの試算結果は入力条件に基づく参考値であり、実際の贈与税額・相続税額を保証するものではありません。生前贈与加算（持ち戻し）の対象期間は、税制改正の経過措置により相続開始時期ごとに異なり、本ツールは正確な年ごとのスケジュールを反映しない簡略化モデルです。各種非課税特例も考慮していません。正確な税額・対策の要否は税理士等の専門家にご確認ください。本サイトは特定の商品・サービスの勧誘を目的とするものではありません。
   </div>
   </section>
+  <section class="tab-panel" id="tabpanel-iryubun" role="tabpanel" aria-labelledby="tab-btn-iryubun" data-tool="iryubun" hidden>
+    <p class="tab-panel-intro">「全財産を長男に相続させる」といった偏った遺言や生前贈与があっても、配偶者・子（またはその代襲相続人の孫）・直系尊属（父母・祖父母）には、法律で最低限の取り分「遺留分」が保障されています（兄弟姉妹には遺留分はありません）。遺留分算定の基礎となる財産と家族構成を入力するだけで、個人の遺留分の金額と、実際に取得する財産額との差である「遺留分侵害額」の目安を試算できます。遺留分が認められる人・認められない人の違い、生前贈与が算入される1年・10年ルール、遺留分侵害額請求の流れと時効は「<a href="iryubun-guide.html">遺留分とは？割合の計算方法・請求できる相手・時効1年と10年を完全ガイド</a>」で詳しく解説しています。</p>
+    <div class="calc-layout">
+<div class="panel">
+<h2>条件を入力</h2>
+<div class="field">
+<label for="iryubun-baseAmount">遺留分算定の基礎となる財産 <span class="unit">万円</span></label>
+<input id="iryubun-baseAmount" inputmode="numeric" max="500000" min="0" step="100" type="number" value="6000"/>
+<p class="field-hint">相続開始時に残っていた遺産（相続税評価額ベース）に、相続人への特別受益にあたる生前贈与（原則10年以内）・第三者への生前贈与（原則1年以内）を加え、債務を差し引いた金額です。生前贈与がない場合は、遺産総額から債務を差し引いた金額をそのまま入力してください。</p>
+</div>
+<div class="field">
+<label for="iryubun-hasSpouse">配偶者の有無</label>
+<select id="iryubun-hasSpouse">
+<option selected="" value="yes">いる</option>
+<option value="no">いない</option>
+</select>
+</div>
+<div class="field">
+<label for="iryubun-heirPattern">相続人のパターン</label>
+<select id="iryubun-heirPattern">
+<option selected="" value="child">子（またはその代襲相続人の孫）がいる（第1順位）</option>
+<option value="parent">子もおらず父母・祖父母が相続人（第2順位）</option>
+<option value="sibling">子も父母もいない・兄弟姉妹が相続人（第3順位）</option>
+</select>
+<p class="field-hint">兄弟姉妹（またはその代襲相続人である甥・姪）には遺留分がありません。「兄弟姉妹が相続人」を選んだ場合、配偶者がいればその人の遺留分のみを試算します。</p>
+</div>
+<div class="field" id="iryubun-childCountRow">
+<label for="iryubun-childCount">子の人数 <span class="unit">人</span></label>
+<input id="iryubun-childCount" inputmode="numeric" max="10" min="0" step="1" type="number" value="2"/>
+</div>
+<div class="field" id="iryubun-parentCountRow">
+<label for="iryubun-parentCount">存命の父母・祖父母（直系尊属）の人数 <span class="unit">人</span></label>
+<input id="iryubun-parentCount" inputmode="numeric" max="4" min="0" step="1" type="number" value="2"/>
+<p class="field-hint">父母が1人でも存命なら祖父母は相続人にならないため、通常は存命の父母の人数を入力してください。</p>
+</div>
+<div class="field" id="iryubun-spouseActualRow">
+<label for="iryubun-spouseActual">配偶者が実際に受け取る（受け取った）財産額 <span class="unit">万円</span></label>
+<input id="iryubun-spouseActual" inputmode="numeric" max="500000" min="0" step="10" type="number" value="0"/>
+<p class="field-hint">遺言や生前贈与により配偶者が実際に取得する財産額を入力すると、遺留分侵害額（請求できる可能性のある金額）を試算します。わからない場合は0のままで、個人の遺留分の金額だけを確認できます。</p>
+</div>
+<div class="field" id="iryubun-childActualRow">
+<label for="iryubun-childActualEach">子1人あたりが実際に受け取る財産額 <span class="unit">万円</span></label>
+<input id="iryubun-childActualEach" inputmode="numeric" max="500000" min="0" step="10" type="number" value="0"/>
+</div>
+<div class="field" id="iryubun-parentActualRow">
+<label for="iryubun-parentActualEach">父母・祖父母1人あたりが実際に受け取る財産額 <span class="unit">万円</span></label>
+<input id="iryubun-parentActualEach" inputmode="numeric" max="500000" min="0" step="10" type="number" value="0"/>
+</div>
+</div>
+<div>
+<div class="verdict-banner">
+<span id="iryubun-verdict">-</span>
+<span class="sub" id="iryubun-verdictSub"></span>
+</div>
+<div class="result-summary">
+<div class="result-card accent">
+<div class="label">遺留分侵害額の合計</div>
+<div class="value" id="iryubun-result-shortfall-total">-</div>
+</div>
+<div class="result-card">
+<div class="label">相続人全体の遺留分の割合</div>
+<div class="value" id="iryubun-result-overall-ratio">-</div>
+</div>
+<div class="result-card">
+<div class="label">配偶者の遺留分</div>
+<div class="value" id="iryubun-result-spouse-reserve">-</div>
+</div>
+<div class="result-card">
+<div class="label" id="iryubun-result-other-label">子の遺留分（1人あたり）</div>
+<div class="value" id="iryubun-result-other-reserve">-</div>
+</div>
+</div>
+<div class="chart-wrap" id="iryubun-chartSection">
+<div class="chart-canvas-wrap" style="height:280px">
+<canvas aria-hidden="true" height="280" id="iryubun-growthChart"></canvas>
+</div>
+</div>
+<details class="chart-data-details" id="iryubun-chartDataDetails"><summary class="chart-data-summary">グラフの数値データを表で見る</summary><div class="table-wrap"><table class="data-table" id="iryubun-growthDataTable"></table></div></details>
+<div class="table-wrap">
+<table class="data-table data-table--result">
+<thead>
+<tr><th scope="col">区分</th><th scope="col">金額・割合</th></tr>
+</thead>
+<tbody id="iryubun-breakdown-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<section class="article-section">
+<h2>遺留分はどう計算される？</h2>
+<p>個人の遺留分は、まず「相続人全体の遺留分」の割合（直系尊属のみが相続人の場合は遺産全体の3分の1、それ以外は2分の1）を求め、そこに各相続人の法定相続分をかけて計算します。兄弟姉妹（および代襲相続人の甥・姪）には遺留分がないため、兄弟姉妹が相続人になるケースでは配偶者の遺留分のみが保障されます。計算のもとになる「遺留分算定の基礎となる財産」は、相続開始時の遺産に一定範囲の生前贈与を加え、債務を差し引いた金額です。個人の遺留分から、実際に取得する（した）財産額を差し引いた金額がプラスであれば、その差額が「遺留分侵害額請求」で請求できる可能性のある金額の目安になります。</p>
+<h3>よくある質問</h3>
+<dl>
+<div class="faq-item">
+<dt>遺留分はどうやって計算されますか？</dt>
+<dd>相続人全体の遺留分（直系尊属のみが相続人の場合は遺産全体の3分の1、それ以外は2分の1）に、各相続人の法定相続分をかけて、個人の遺留分を求めます。本ツールでは「遺留分算定の基礎となる財産」「配偶者の有無」「相続人のパターン」「子・父母の人数」を入力するだけで、配偶者・子（または父母・祖父母）それぞれの個人の遺留分の金額を自動で計算します。計算の仕組みの詳細は「<a href="iryubun-guide.html">遺留分とは？完全ガイド</a>」で解説しています。</dd>
+</div>
+<div class="faq-item">
+<dt>兄弟姉妹には遺留分がないのはなぜですか？</dt>
+<dd>民法が遺留分を認めているのは配偶者・子（またはその代襲相続人）・直系尊属（父母・祖父母）に限られ、兄弟姉妹（および代襲相続人の甥・姪）には遺留分がありません。本ツールで「相続人のパターン」を「兄弟姉妹が相続人（第3順位）」に設定すると、兄弟姉妹の遺留分は常に0円として試算され、配偶者がいる場合はその人の遺留分だけを計算します。</dd>
+</div>
+<div class="faq-item">
+<dt>「遺留分算定の基礎となる財産」には何を入力すればいいですか？</dt>
+<dd>原則として、相続開始時に残っていた遺産（相続税評価額ベース）に、相続人への特別受益にあたる生前贈与（原則として相続開始前10年以内）や第三者への生前贈与（原則として相続開始前1年以内）を加算し、債務を差し引いた金額です。生前贈与がない場合は、遺産総額から債務を差し引いた金額をそのまま入力してください。生前贈与の算入範囲の詳細な例外ルールは「<a href="iryubun-guide.html">遺留分とは？完全ガイド</a>」で解説しています。</dd>
+</div>
+<div class="faq-item">
+<dt>「遺留分侵害額」はどうやって計算されますか？</dt>
+<dd>個人の遺留分の金額から、その人が遺言や生前贈与によって実際に取得する（した）財産額を差し引いた金額です。実際の取得額が個人の遺留分を下回っている場合、その差額が「遺留分侵害額請求」によって請求できる可能性のある金額の目安になります。実際の取得額の欄を0のままにすると、個人の遺留分の金額だけを確認できます。</dd>
+</div>
+<div class="faq-item">
+<dt>この試算結果どおりの金額を必ず請求できますか？</dt>
+<dd>いいえ、本ツールは民法の基本的な計算構造（相続人全体の遺留分割合・法定相続分）に基づく概算です。生前贈与の算入範囲の判定（1年・10年ルールの例外を含む）、不動産・自社株などの評価額、遺留分侵害額請求の相手方の順序（受遺者→受贈者、複数いる場合の按分ルールなど）には対応していません。実際の金額や請求の進め方は弁護士にご確認ください。遺留分侵害額請求の流れや時効（1年・10年）は「<a href="iryubun-guide.html">遺留分とは？完全ガイド</a>」で詳しく解説しています。</dd>
+</div>
+</dl>
+</section>
+<div class="disclaimer">
+    本シミュレーターの試算結果は入力条件に基づく参考値であり、実際に請求できる遺留分侵害額を保証するものではありません。生前贈与の算入範囲の判定、不動産・自社株などの評価額、遺留分侵害額請求の相手方が複数いる場合の按分ルールには対応していません。正確な金額や請求の進め方は弁護士等の専門家にご確認ください。本サイトは特定の商品・サービスの勧誘を目的とするものではありません。
+  </div>
+  </section>
 
   <div class="share-box" id="share-box">
     <div class="share-box-text">
@@ -892,6 +1052,7 @@
 
 <script src="../js/souzokuzei.js"></script>
 <script src="../js/zouyo-souzoku.js"></script>
+<script src="../js/iryubun.js"></script>
 <script src="../js/recent-tools.js"></script>
 <script src="../js/favorites.js"></script>
 <script src="../js/tabs.js"></script>
