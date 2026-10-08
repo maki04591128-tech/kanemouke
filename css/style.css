@@ -975,6 +975,14 @@ a { color: var(--color-primary); }
   padding: 3px 10px;
   margin-bottom: 10px;
 }
+.tool-card .badge.new-badge {
+  color: #fff;
+  background: var(--color-error);
+}
+.tool-card .badge.featured-badge {
+  color: var(--color-accent);
+  background: #fbf1de;
+}
 .tool-card h3 {
   margin: 0 0 8px;
   font-size: 1.1rem;
