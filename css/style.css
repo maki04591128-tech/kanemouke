@@ -903,6 +903,27 @@ a { color: var(--color-primary); }
 [id^="goal-"][id$="-target"] {
   scroll-margin-top: 132px;
 }
+/* ジャンプ直後、長いカード一覧の中のどのカードが目的地か一目でわかるよう、
+   数秒だけ枠線・背景を強調してから自然に元の見た目へ戻す。 */
+[id^="goal-"][id$="-target"]:target {
+  animation: goal-target-highlight 2.6s ease;
+}
+@keyframes goal-target-highlight {
+  0%, 20% {
+    box-shadow: 0 0 0 3px var(--color-primary), 0 10px 28px rgba(15, 30, 45, 0.1);
+    background: #eaf6f1;
+  }
+  100% {
+    box-shadow: var(--shadow);
+    background: var(--color-surface);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [id^="goal-"][id$="-target"]:target {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--color-primary), 0 10px 28px rgba(15, 30, 45, 0.1);
+  }
+}
 .tool-category + .tool-category {
   margin-top: 8px;
 }
