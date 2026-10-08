@@ -112,13 +112,35 @@
     "</svg>" +
     '<span class="sr-only">ツールを検索</span>';
 
-  // 既存の.nav-toggleを.site-header-actionsでラップし直し、検索ボタンと
-  // 隣り合わせに配置する（appendChildは既存ノードを元の位置から移動させるだけ
-  // なので、nav-toggle.jsが参照しているボタン自体には手を加えない）。
+  // 「マイページ」（お気に入り・前回の続きから・保存した試算結果）は従来、
+  // 折りたたみメニュー（.nav-toggleの「メニュー」）を開いた先の「サイト全体」
+  // グループ内に他の50件超のリンクと並んで埋もれており、ヘッダーからワンタップ
+  // では到達できなかった。個人の保存データに戻る導線として他のリンクより
+  // 優先度が高いと判断し、検索アイコンと並べてヘッダーに常時表示する
+  // アイコン付きリンクを追加する。メニュー内の既存リンクはそのまま残し、
+  // 「メニューを開かなくても使える近道」として追加する位置づけ（削除はしない）。
+  var mypageLink = document.createElement("a");
+  mypageLink.className = "site-header-mypage-link";
+  mypageLink.href = resolveHref("mypage.html");
+  if (/\/mypage\.html$/.test(location.pathname)) {
+    mypageLink.setAttribute("aria-current", "page");
+  }
+  mypageLink.innerHTML =
+    '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">' +
+    '<circle cx="10" cy="6.2" r="3.2" stroke="currentColor" stroke-width="1.8"></circle>' +
+    '<path d="M3.6 17c0-3.6 2.9-6.1 6.4-6.1s6.4 2.5 6.4 6.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>' +
+    "</svg>" +
+    "<span>マイページ</span>";
+
+  // 既存の.nav-toggleを.site-header-actionsでラップし直し、検索ボタン・
+  // マイページリンクと隣り合わせに配置する（appendChildは既存ノードを元の
+  // 位置から移動させるだけなので、nav-toggle.jsが参照しているボタン自体には
+  // 手を加えない）。
   var actions = document.createElement("div");
   actions.className = "site-header-actions";
   header.insertBefore(actions, navToggle);
   actions.appendChild(toggle);
+  actions.appendChild(mypageLink);
   actions.appendChild(navToggle);
 
   var panel = document.createElement("div");
