@@ -186,8 +186,9 @@ a { color: var(--color-primary); }
 }
 
 /* ヘッダーからいつでもツールを検索できる機能（js/site-search.js が動的に生成）。
-   既存の.nav-toggleをこの.site-header-actionsでラップし直し、検索ボタンと
-   隣り合わせに表示する（HTMLは編集せず、JS側でDOM構造だけ組み替えている）。 */
+   既存の.nav-toggleをこの.site-header-actionsでラップし直し、検索ボタン・
+   マイページへの近道リンクと隣り合わせに表示する
+   （HTMLは編集せず、JS側でDOM構造だけ組み替えている）。 */
 .site-header-actions {
   display: flex;
   align-items: center;
@@ -214,6 +215,37 @@ a { color: var(--color-primary); }
 .site-search-toggle[aria-expanded="true"] {
   border-color: var(--color-primary);
   color: var(--color-primary);
+}
+/* マイページ（お気に入り・前回の続きから・保存した試算結果）への近道。
+   折りたたみメニューの奥に埋もれていた既存のリンクはそのまま残し、ヘッダーに
+   常時表示するアイコン付きリンクを別途追加する。他のツールの固定CTA
+   （.hero-cta等）のような塗りの強いボタンにはせず、個人の保存データに戻る
+   場所だとひと目でわかる程度の控えめな強調（淡い緑の背景・枠線）にとどめる。 */
+.site-header-mypage-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 14px;
+  flex-shrink: 0;
+  border: 1px solid rgba(15, 95, 76, 0.35);
+  border-radius: 999px;
+  background: rgba(15, 95, 76, 0.07);
+  color: var(--color-primary-dark);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.site-header-mypage-link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.site-header-mypage-link:hover,
+.site-header-mypage-link[aria-current="page"] {
+  border-color: var(--color-primary);
+  background: rgba(15, 95, 76, 0.14);
 }
 .site-search-panel {
   flex-basis: 100%;
