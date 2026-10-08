@@ -10,6 +10,9 @@
     extra: document.getElementById("roan-extra"),
     investRate: document.getElementById("roan-investRate"),
     investRateOut: document.getElementById("roan-investRateOut"),
+    costPct: document.getElementById("roan-costPct"),
+    costPctOut: document.getElementById("roan-costPctOut"),
+    costNote: document.getElementById("roan-costNote"),
     payoffNormal: document.getElementById("roan-result-payoff-normal"),
     payoffPrepay: document.getElementById("roan-result-payoff-prepay"),
     interestSaved: document.getElementById("roan-result-interest-saved"),
@@ -104,10 +107,16 @@
     var years = Number(els.years.value);
     var extra = Math.max(0, Number(els.extra.value) || 0);
     var investRate = Number(els.investRate.value);
+    var costPct = Math.max(0, Number(els.costPct.value) || 0);
+    var netInvestRate = investRate - costPct;
 
     els.loanRateOut.textContent = loanRate.toFixed(2) + " %";
     els.yearsOut.textContent = years + " 年";
     els.investRateOut.textContent = investRate.toFixed(1) + " %";
+    els.costPctOut.textContent = costPct.toFixed(1) + " %";
+    els.costNote.textContent = costPct > 0
+      ? "運用コスト " + costPct.toFixed(1) + "% を差し引いた年率 " + netInvestRate.toFixed(1) + "% で運用する前提で試算しています。"
+      : "";
 
     var months = Math.round(years * 12);
 
@@ -115,7 +124,7 @@
     var prepay = simulateLoan(balance, loanRate, months, extra);
     var interestSaved = normal.totalInterest - prepay.totalInterest;
 
-    var invest = simulateInvestment(extra, investRate, prepay.months);
+    var invest = simulateInvestment(extra, netInvestRate, prepay.months);
     var investProfit = invest.balance - invest.principal;
 
     els.payoffNormal.textContent = (months / 12).toFixed(1) + " 年";
@@ -146,13 +155,15 @@
       els.verdictBody.innerHTML =
         "積立投資の運用益は" + manYen(investProfit) + "、繰り上げ返済による利息軽減額は" + manYen(interestSaved) +
         "で、差は" + manYen(diff) + "です。ただし投資の運用益は想定利回り" + investRate.toFixed(1) +
-        "%が実現した場合の試算であり、元本割れの可能性がある点に注意してください。";
+        "%" + (costPct > 0 ? "（運用コスト" + costPct.toFixed(1) + "%差引後の実効" + netInvestRate.toFixed(1) + "%）" : "") +
+        "が実現した場合の試算であり、元本割れの可能性がある点に注意してください。";
       els.verdictBox.classList.add("accent");
     } else {
       els.verdictTitle.textContent = "この条件では「繰り上げ返済」が有利な試算です";
       els.verdictBody.innerHTML =
         "繰り上げ返済による利息軽減額は" + manYen(interestSaved) + "、積立投資の運用益（想定" + investRate.toFixed(1) +
-        "%）は" + manYen(investProfit) + "で、差は" + manYen(-diff) +
+        "%" + (costPct > 0 ? "、運用コスト差引後実効" + netInvestRate.toFixed(1) + "%" : "") +
+        "）は" + manYen(investProfit) + "で、差は" + manYen(-diff) +
         "です。繰り上げ返済は住宅ローン金利分の負担軽減が確定する一方、完済までの流動性（手元資金）は減る点も考慮しましょう。";
     }
 
@@ -216,7 +227,7 @@
     if (window.renderChartDataTable) window.renderChartDataTable("roan-loanDataTable", chart);
   }
 
-  [els.balance, els.loanRate, els.years, els.extra, els.investRate].forEach(function (el) {
+  [els.balance, els.loanRate, els.years, els.extra, els.investRate, els.costPct].forEach(function (el) {
     el.addEventListener("input", render);
   });
 

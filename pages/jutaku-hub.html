@@ -52,6 +52,14 @@
     },
     {
       "@type": "Question",
+      "name": "投資信託の信託報酬などの運用コストは考慮できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "「運用コスト（信託報酬等、年率）」欄に入力すると、積立投資の想定利回りからその分を差し引いた実質利回りで運用益を試算します（既定値は0%で、入力しない場合は従来どおり想定利回りそのままで試算します）。売買手数料や運用益への税金は考慮していません。"
+      }
+    },
+    {
+      "@type": "Question",
       "name": "まとまった資金（ボーナスなど）を繰上返済に使う場合も試算できますか？",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -403,6 +411,11 @@
 <label for="roan-investRate">積立投資の想定利回り（年率） <span class="unit" id="roan-investRateOut">5.0 %</span></label>
 <input id="roan-investRate" max="10" min="0" step="0.1" type="range" value="5"/>
 </div>
+<div class="field">
+<label for="roan-costPct">運用コスト（信託報酬等、年率） <span class="unit" id="roan-costPctOut">0.0 %</span></label>
+<input id="roan-costPct" max="2" min="0" step="0.1" type="range" value="0"/>
+<p class="field-hint" id="roan-costNote"></p>
+</div>
 </div>
 <div>
 <div class="result-summary">
@@ -479,6 +492,10 @@
 <div class="faq-item">
 <dt>積立投資の運用益は、どの期間で計算していますか？</dt>
 <dd>「繰り上げ返済で完済するまでの期間」と同じ月数だけ、同じ月額を積立投資に回したと仮定して計算しています。繰り上げ返済シナリオで毎月の余裕資金が実際に使われる期間に合わせることで、両者を同じ条件で比較できるようにしています。</dd>
+</div>
+<div class="faq-item">
+<dt>投資信託の信託報酬などの運用コストは考慮できますか？</dt>
+<dd>「運用コスト（信託報酬等、年率）」欄に入力すると、積立投資の想定利回りからその分を差し引いた実質利回りで運用益を試算します（既定値は0%で、入力しない場合は従来どおり想定利回りそのままで試算します）。売買手数料や運用益への税金は考慮していません。</dd>
 </div>
 <div class="faq-item">
 <dt>まとまった資金（ボーナスなど）を繰上返済に使う場合も試算できますか？</dt>
