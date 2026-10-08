@@ -65,6 +65,14 @@
         "@type": "Answer",
         "text": "各ツールカード右上の★ボタンを押すとお気に入りに登録されます。ツールを開くだけで「前回の続きから」欄に自動的に記録されます。いずれもこのマイページとトップページの両方に表示されます。"
       }
+    },
+    {
+      "@type": "Question",
+      "name": "違うツールで保存した結果どうしも比較できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。「保存した試算結果（全ツール）」のチェックボックスで2件以上選び、「選択した結果を比較する」ボタンを押すと、違うツールで保存した結果どうしでも入力条件・試算結果を1つの表にまとめて見比べられます。片方の項目がもう片方に存在しない場合は「（該当なし）」と表示され、2件だけを選んだ場合は数値の単位が一致する項目に限り増減の差分も表示されます。比較表はCSVファイルでもダウンロードできます。"
+      }
     }
   ]
 }
@@ -153,8 +161,14 @@
       <h2 class="section-lead" id="mypage-history-heading">保存した試算結果（全ツール）</h2>
       <button type="button" id="mypage-history-clear" class="recent-tools-clear">すべて削除</button>
     </div>
-    <p class="favorite-tools-lead">各ツールの試算結果欄にある「この結果を保存して比較」で保存した結果を、ツールをまたいで新しい順にまとめて表示します（このブラウザだけに保存され、他の人には見えません）。</p>
+    <p class="favorite-tools-lead">各ツールの試算結果欄にある「この結果を保存して比較」で保存した結果を、ツールをまたいで新しい順にまとめて表示します（このブラウザだけに保存され、他の人には見えません）。下のチェックボックスで2件以上選ぶと、違うツール同士でも入力条件・試算結果を並べて比較できます。</p>
     <ul class="result-history-list" id="mypage-history-list"></ul>
+    <div class="result-compare-controls" id="mypage-compare-controls" hidden>
+      <button type="button" id="mypage-compare-btn" class="share-btn secondary" disabled>選択した結果を比較する</button>
+      <span class="result-compare-hint">2件以上チェックすると、ツールをまたいで入力条件・試算結果を並べて比較できます。</span>
+    </div>
+    <div class="result-compare" id="mypage-compare" hidden></div>
+    <span id="mypage-history-feedback" class="share-feedback" role="status"></span>
     <p class="result-history-hint">この端末のブラウザにのみ保存され、他の人には共有されません。端末全体で最大20件まで保存でき、超えると古いものから自動的に削除されます。</p>
   </div>
 
@@ -206,6 +220,10 @@
         <dt>お気に入りや前回の続きからはどうやって登録されますか？</dt>
         <dd>各ツールカード右上の★ボタンを押すとお気に入りに登録されます。ツールを開くだけで「前回の続きから」欄に自動的に記録されます。いずれもこのマイページとトップページの両方に表示されます。</dd>
       </div>
+      <div class="faq-item">
+        <dt>違うツールで保存した結果どうしも比較できますか？</dt>
+        <dd>はい。「保存した試算結果（全ツール）」のチェックボックスで2件以上選び、「選択した結果を比較する」ボタンを押すと、違うツールで保存した結果どうしでも入力条件・試算結果を1つの表にまとめて見比べられます。片方の項目がもう片方に存在しない場合は「（該当なし）」と表示され、2件だけを選んだ場合は数値の単位が一致する項目に限り増減の差分も表示されます。比較表はCSVファイルでもダウンロードできます。</dd>
+      </div>
     </dl>
   </section>
 </main>
@@ -233,6 +251,7 @@
 <script src="js/site-search.js"></script>
 <script src="js/recent-tools.js"></script>
 <script src="js/favorites.js"></script>
+<script src="js/table-a11y.js"></script>
 <script src="js/mypage-history.js"></script>
 </body>
 </html>

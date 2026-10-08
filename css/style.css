@@ -1826,7 +1826,8 @@ a { color: var(--color-primary); }
 #csv-export-btn::before { content: "📥"; }
 #history-save-btn::before { content: "💾"; }
 #reset-inputs-btn::before { content: "↺"; }
-#result-compare-btn::before { content: "📊"; }
+#result-compare-btn::before,
+#mypage-compare-btn::before { content: "📊"; }
 .share-feedback {
   display: block;
   margin-top: 8px;
@@ -1935,6 +1936,12 @@ a { color: var(--color-primary); }
 }
 
 /* 保存した2件以上を並べて見比べる比較表（js/result-history.js） */
+/* display:flexを先に指定しているため、hidden属性だけではブラウザ既定の
+   [hidden]{display:none}よりこの詳細度の同じ自前のdisplay指定が後勝ちしてしまい、
+   保存件数が1件以下でcompareControls.hidden=trueにしても表示され続けてしまう
+   （特にハブページで試算結果を1件だけ保存した直後に発生）。[hidden]を明示的に
+   上書きして、hidden属性が付いている間は確実に非表示にする。 */
+.result-compare-controls[hidden] { display: none; }
 .result-compare-controls {
   display: flex;
   align-items: center;
